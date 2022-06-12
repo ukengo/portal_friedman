@@ -1,0 +1,207 @@
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous">
+  </script>
+
+<!-- dataTables -->
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+
+<!-- dataTables responsive-->
+<link rel="stylesheet" type="text/css"
+  href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+
+
+<script>
+
+  function spinner(elemId) {
+    document.getElementById(elemId).innerHTML = "<div class=\"d-flex justify-content-center\"><div class=\"spinner-border text-danger mb-4 mt-2\" role=\"status\"><span class=\"visually-hidden\"></span></div>Идет поиск...</div>";
+  }
+
+  function afterDropDownReturned(arrayOfArrays, datalist) {
+    let firma = document.getElementById(datalist)
+    arrayOfArrays.forEach((r) => {
+      const option = document.createElement('option')
+      option.textContent = r
+      firma.appendChild(option)
+    })
+  }
+
+  //автоскрытие разворачивающегося меню 
+  $(function () {
+    var navMain = $(".navbar-collapse");
+    navMain.on("click", "a:not([data-toggle])", null, function () {
+      navMain.collapse('hide');
+    });
+  });
+
+  function hideBtnBuh() {
+    searchMobileNot(() => $('#btnBuh').hide(1000)
+
+    );
+  }
+
+  function showBtnBuh() {
+    $('#btnBuh').show(500)
+  }
+
+  // остановка скриипта, если не выбраны критерии поиска в инпутах
+  function searchStop(dataArr) {
+    let evalRows = [];
+    dataArr.forEach(elem => {
+      if (elem === '' || elem === false) {
+        evalRows.push('no')
+      } else {
+        evalRows.push('yes')
+      }
+    })
+    if (evalRows.indexOf('yes') === -1) {
+      return true
+    }
+  }
+
+  // текст в дату 
+  function strongToDate(st) {
+    const pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+    return new Date(st.replace(pattern, '$3-$2-$1'));
+  }
+
+  //форматирование даты в вид гггг-mm-dd 
+  function formatDateYYYYtireMMtireDD(date) {
+    return date.getFullYear() + '-'
+      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
+      + ((date.getDate()) < 10 ? '0' : '') + (date.getDate());
+  }
+
+  //форматирование даты в вид dd-mm-гггг 
+  function formatDateDDtireMMtireYYYY(date) {
+    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '-'
+      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
+      + date.getFullYear();
+  }
+
+  /* // функция поиска по таблице
+  $(document).ready(readyTable);
+  function readyTable() {
+      $(".input-search").keyup(function () {
+          var value = this.value.toLowerCase().trim();
+  
+          $("table tr").each(function (index) {
+              if (!index) return;
+              $(this).find("td").each(function () {
+                  var id = $(this).text().toLowerCase().trim();
+                  var not_found = (id.indexOf(value) == -1);
+                  $(this).closest('tr').toggle(!not_found);
+                  return not_found;
+              });
+          });
+      });
+  }
+   */
+
+  // функция поиска по таблице
+  $(document).ready(readyTable);
+  function readyTable() {
+    $('.input-search').on('keyup mouseup', function () {
+      _this = this;
+      $.each($(this.getAttribute('somethingSearch')), function () {
+        if ($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      });
+    });
+  };
+
+  //строка в число
+  function strongToNumber(str) {
+    const replaceSpace = str.replace(/\s+/g, ''); // удаляем пробелы
+    const replacePoint = replaceSpace.replace(/,/, '.'); // запятую на точку
+    const parsFlo = parseFloat(replacePoint); // строка в число
+    const toFixTwu = parsFlo.toFixed(2); // округляем до 2 знаков после запятой
+    return toFixTwu
+  }
+
+  // функция проверяет устройство и срабатывает, если не мобильное
+  function searchMobile(func) {
+    if (!navigator.userAgent.toLowerCase().match(/mobile/i)) {
+      func();
+    } else {
+      return;
+    }
+  }
+
+  // функция проверяет устройство и срабатывает, если мобильное
+  function searchMobileNot(func) {
+    if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
+      func();
+    } else {
+      return;
+    }
+  }
+
+  //полосы в таблице
+  function tableLineSelection() {
+    $(".table-line-selection tr").click(function () {
+      if (this.style.background != "rgb(255, 228, 225)") {
+        $(this).css("background", "#FFE4E1"); //apply the new color  
+      } else {
+        $(this).css("background", 'transparent');
+      }
+    });
+  }
+
+  // обработка кнопок Edit для перекидки данных в инпуты  
+  function editReestrFinance(data, col) {
+    switch (+col) {
+      case 1:
+        ClearRecordReestr();
+        $('.input-paste-reestr').val(data);
+        $('#data-table_filter input').val(data);
+        $('#nav-reestr-tab')[0].click();
+        break;
+      case 2:
+        ClearRecordFin()
+        $('.input-paste-finance').val(data);
+        $('#nav-fin-tab')[0].click();
+        break;
+    };
+  };
+
+  //обрабатывает клик и тап на таблице для возврата текста из ячейки
+  function clickTables(sel, fun) {
+    const el = document.querySelector(sel);
+    if (el) {
+      el.addEventListener("click", fun);
+      el.addEventListener('touchcancel', fun);
+    };
+  }
+
+  // достаем текст из набора TD
+  function getDataFromTd(tdArr) {
+    return tdArr.map(item => item.textContent);
+  }
+
+  // достаем все числа с концы строки
+  function numEndStrong(string) {
+    const res = string.match(/\d+$/);
+    return res[0];
+  }
+
+  // эмуляция отпускания кнопки, при щелчке поиск по таблице (автопоиск при открытии)
+  function autoSearchOnOpen(selektor) {
+    $(selektor).triggerHandler('keyup');
+  }
+
+</script>

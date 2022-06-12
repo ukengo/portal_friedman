@@ -1,0 +1,153 @@
+<div class="container">
+  <div class="row">
+    <h5>Расход - Приход</h5>
+  </div>
+  <div class="row">
+
+    <div class="col-xl-5">
+      <div class="radius p-2">
+        <div class="form mb-1 mt-1">
+          <label for="date">Дата</label>
+          <input type="date" class="form-control" id="date" />
+        </div>
+
+        <div class="form mb-1 mt-1">
+          <div class="row">
+            <div class="col">
+              <label for="summa">Сумма</label>
+              <input type="number" class="form-control" id="summa" />
+            </div>
+            <div class="col">
+              <label for="summaPrivat" class="text-nowrap">Количество приват</label>
+              <input type="number" class="form-control" id="summaPrivat" onkeypress="clickPressAwPrivat(event)" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form mb-1 mt-1">
+          <label for="forma">Форма собственности</label>
+          <select class="form-control" id="forma">
+            <option>нал</option>
+            <option>ооо</option>
+            <option>оооАксон</option>
+            <option>флп</option>
+          </select>
+        </div>
+
+        <div class="form mb-1 mt-1">
+          <label for="firmaArrivalWaste">Фирма</label>
+          <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWaste" />
+          <datalist id="firmaArrivalWaste-datalist"></datalist>
+        </div>
+
+        <div class="form mb-1 mt-1">
+          <label for="waste">Статья расхода</label>
+          <input type="text" class="form-control" list="waste-datalist" id="waste" />
+          <datalist id="waste-datalist"></datalist>
+        </div>
+
+        <div class="form-group mb-1 mt-1">
+          <label for="termkar">Терминал-Карантин</label>
+          <select class="form-control" id="termkar">
+            <option></option>
+            <option>терминал</option>
+            <option>карантин</option>
+          </select>
+        </div>
+
+        <div class="form mb-1 mt-1">
+          <label for="sftermkar">Сф Терминал-Карантин</label>
+          <input class="form-control" id="sftermkar">
+        </div>
+      </div>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWaste">Расход</button>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrival">Приход</button>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWasteTab">Траты</button>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrivalTab">Поступления</button>
+
+    </div>
+    <div class="col-xl radius" style="height: 484px;">
+      <p id="vrabotevseArriwalWaste" class="h4 mb-4 text-center"></p>
+      <div class="row">
+        <div class="form my-2">
+          <input type="search" class="form-control input-search" id="search"
+            somethingSearch="#dataTableArriwalWaste tbody tr" placeholder="Поиск по таблице">
+        </div>
+      </div>
+      <div id="divDataTableArriwalWaste" class="row" style="overflow: auto;">
+        <div id="dataTableArriwalWaste" class="table-responsive-xs radius"></div>
+      </div>
+
+
+    </div>
+
+  </div>
+  <div id='arriwalwasteatrong'></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="container" onkeypress="clickPressAW(event)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="awModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form mb-1 mt-1">
+            <label for="dateModal">Дата</label>
+            <input type="date" class="form-control" id="dateModal" />
+          </div>
+
+          <div class="form mb-1 mt-1">
+            <label for="summaModal">Сумма</label>
+            <input type="number" class="form-control" id="summaModal" />
+          </div>
+
+          <div class="form mb-1 mt-1">
+            <label for="formaModal">Форма собственности</label>
+            <select class="form-control" id="formaModal">
+              <option>нал</option>
+              <option>ооо</option>
+              <option>оооАксон</option>
+              <option>флп</option>
+            </select>
+          </div>
+
+          <div class="form mb-1 mt-1">
+            <label for="firmaArrivalWasteModal">Фирма</label>
+            <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWasteModal" />
+            <datalist id="firmaArrivalWaste-datalist"></datalist>
+          </div>
+
+          <div class="form mb-1 mt-1">
+            <label for="wasteModal">Статья расхода</label>
+            <input type="text" class="form-control" list="waste-datalist" id="wasteModal" />
+            <datalist id="waste-datalist"></datalist>
+          </div>
+
+          <div class="form mb-1 mt-1">
+            <label for="termkarModal">Терминал-Карантин</label>
+            <select class="form-control" id="termkarModal">
+              <option></option>
+              <option>терминал</option>
+              <option>карантин</option>
+            </select>
+          </div>
+
+          <div class="form mb-1 mt-1">
+            <label for="sftermkarModal">Сф Терминал-Карантин</label>
+            <input class="form-control" id="sftermkarModal">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="btnSaveModalAW">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnDeleteModalAW">Delete</button>
+          <div id="numRowFinanceModal"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

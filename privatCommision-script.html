@@ -1,0 +1,36 @@
+<script>
+
+  function rowDataRangePrivat() {
+    const datePriv = document.getElementById('datePriv')
+    const qtt = document.getElementById('qtt')
+    const formaPriv = document.getElementById('formaPriv')
+    return rowData =
+      [
+        datePriv.value,
+        +qtt.value * 3,
+        formaPriv.value,
+        '',
+        'Приват комиссия'
+      ]
+  }
+
+  function buttonClickPrivat() {
+    if (rowDataRangePrivat()[1]) {
+      google.script.run.addNewRowMinusThreee(rowDataRangePrivat())
+      document.getElementById('divprivat').innerHTML = 'Внесено ' + rowDataRangePrivat()[1] + ' грн'
+      document.getElementById('qtt').value = ""
+    } else {
+      document.getElementById('divprivat').innerHTML = 'Не заполено количество списаний'
+    }
+  }
+
+  document.getElementById('buttonPrivat').addEventListener('click', buttonClickPrivat)
+  document.getElementById('datePriv').valueAsDate = new Date()
+
+  function clickPressPrivat(event) {
+    if (event.keyCode == 13) {
+      buttonClickPrivat()
+    }
+  }
+
+</script>

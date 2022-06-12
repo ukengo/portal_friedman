@@ -1,0 +1,83 @@
+<script>
+
+  // подсветка инпута при наличии данных (фон инпута)
+  /* $(".form-background-color input").change(function(){
+    
+      const val = $(this).val();
+      if(val) {
+        $(this).css('backgroundColor', '#F7DBE6');
+      } else {
+        $(this).css('backgroundColor', '');
+      }
+  }); */
+
+  // подсветка инпута при наличии данных при вводе (шрифт лабела)
+  /* $(".form-background-color input").change(function(){
+      const val = $(this).val();
+      if(val) {
+        $("label[for='" + $(this).attr('id') + "']").css('color', 'red');
+      } else {
+        $("label[for='" + $(this).attr('id') + "']").css('color', '');
+      }
+  }); */
+
+  // подсветка инпута при наличии данных при щелчке любом (шрифт лабела)
+  document.querySelector("body").addEventListener("input", labelred);
+
+  function labelred() {
+    const nodes = document.querySelectorAll('.form-background-color input, .form-background-color select');
+    const values = Array.from(nodes).map(inputElement => inputElement.value);
+    const noRed = Array.from($('.checkbox-finance .form-check-label'));
+    values.forEach((item, el) => {
+      item = item == 'on' ? '' : item;
+      if (item) {
+        document.querySelector("label[for='" + document.querySelectorAll('.form-background-color input, .form-background-color select')[el]
+          .getAttribute('id') + "']").style.color = '#dc3545';
+      } else {
+        document.querySelector("label[for='" + document.querySelectorAll('.form-background-color input, .form-background-color select')[el]
+          .getAttribute('id') + "']").style.color = '';
+      }
+    });
+    noRed.forEach((item) => {
+      item.style.color = '';
+    });
+  };
+
+  // перехват события вставки и обрезка пробелов в поле input[type="search"]
+  $(document).ready(trimmingSpaces);
+  function trimmingSpaces() {
+    var lastKeyCode = 0;
+    $('input[type="search"]').bind('keydown', function (e) {
+      lastKeyCode = e.keyCode;
+    });
+    // Bind on the input having changed.  As long as the previous character
+    // was not a space, BS or Del, trim the input.
+    $('input[type="search"]').bind('input', function (e) {
+      if (lastKeyCode != 32 && lastKeyCode != 8 && lastKeyCode != 46) {
+        $(this).val($(this).val().replace(/^\s+|\s+$/g, ''));
+      }
+    });
+  }
+
+  //очистка inputa щелчком по label и удаление красной расскраски
+  $("label").click(function () {
+    $(this).next().val('');
+    $(this).removeAttr('style');
+  })
+
+  // очистка поля поиска прищелчке на крестике
+  document.querySelector('body').addEventListener('input', () => {
+    $('.input-search').triggerHandler('keyup');
+  })
+
+  // Функция удаления всего кроме текста (регулярное выражение)
+  function deleteExceptText(data) {
+    return data.replace(/[^a-zа-яё]/gi, '');
+  }
+
+  //Получаем значение определеннной ячейки определенного столбца таблицы при клике на таблицу
+  function valueCellCol(this_, colIndex) {
+    return $(this_).parent()[colIndex].childNodes[colIndex].innerHTML;
+  }
+
+</script>

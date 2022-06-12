@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+
+  <!-- Bootstrap CSS -->
+  <?!= include("bootstrap-css") ?>
+  <?!= include("css") ?>
+  <?!= include("bootstrap-script") ?>
+
+</head>
+
+
+
+<body>
+  <header id="header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-danger bg-danger sticky-top" role="navigation">
+      <div class="container-fluid">
+        <a href="#" class="navbar-brand">FRIEDMAN</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"
+          aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navContent">
+          <ul class="nav navbar-nav mr-auto mb-3 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-newproekt-tab" data-bs-toggle="tab" data-bs-target="#nav-newproekt"
+                type="button" role="tab" aria-controls="nav-newproekt" aria-selected="true">Внесение нового проекта</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="nav-arriwalwaste-tab" data-bs-toggle="tab" data-bs-target="#nav-arriwalwaste"
+                type="button" role="tab" aria-controls="nav-arriwalwaste" aria-selected="true">Приход-расход</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="nav-privat-tab" data-bs-toggle="tab" data-bs-target="#nav-privat" type="button"
+                role="tab" aria-controls="nav-privat" aria-selected="true">Приват комиссия</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link active" id="nav-buhgalter-tab" data-bs-toggle="tab" data-bs-target="#nav-buhgalter"
+                type="button" role="tab" aria-controls="nav-buhgalter" aria-selected="true"
+                onclick="showBtnBuh()">BUHGALTER</a>
+            </li>
+            <!--               <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">BUHGALTER</a>
+                <ul class="dropdown-menu" aria-labelledby="navDrop">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li> -->
+
+            <li class="nav-item">
+              <a class="nav-link" id="nav-fin-tab" data-bs-toggle="tab" data-bs-target="#nav-fin" type="button"
+                role="tab" aria-controls="nav-fin" aria-selected="true">Финансы</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="nav-reestr-tab" data-bs-toggle="tab" data-bs-target="#nav-reestr" type="button"
+                role="tab" aria-controls="nav-reestr" aria-selected="true">тРеестр</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="nav-job-tab" data-bs-toggle="tab" data-bs-target="#nav-job" type="button"
+                role="tab" aria-controls="nav-job" aria-selected="true">job</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <header>
+
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade" id="nav-newproekt" role="tabpanel" aria-labelledby="nav-newproekt-tab">
+          <?!= loadNewProektView() ?>
+        </div>
+        <div class="tab-pane fade" id="nav-arriwalwaste" role="tabpanel" aria-labelledby="nav-arriwalwaste-tab">
+          <?!= loadArriwalWasteView() ?>
+        </div>
+        <div class="tab-pane fade" id="nav-privat" role="tabpanel" aria-labelledby="nav-privat-tab">
+          <?!= loadAddPrivateCommissionView() ?>
+        </div>
+        <div class="tab-pane active" id="nav-buhgalter" role="tabpanel" aria-labelledby="nav-buhgalter-tab">
+          <?!= loadBuhgalterView() ?>
+        </div>
+
+        <div class="tab-pane fade" id="nav-fin" role="tabpanel" aria-labelledby="nav-fin-tab">
+          <?!= loadTableFinanceView() ?>
+        </div>
+        <div class="tab-pane fade" id="nav-reestr" role="tabpanel" aria-labelledby="nav-reestr-tab">
+          <?!= loadTableReestrView() ?>
+        </div>
+        <div class="tab-pane fade" id="nav-job" role="tabpanel" aria-labelledby="nav-job-tab">
+          <?!= loadTableJobView() ?>
+        </div>
+      </div>
+
+      <div id="app"></div>
+
+      <?!= include("privatCommision-script") ?>
+      <?!= include("arrivalWaste-script") ?>
+      <?!= include("newProekt-script") ?>
+
+      <?!= include("finance-script") ?>
+      <?!= include("tableReestr-script") ?>
+      <?!= include("job-script") ?>
+      <?!= include("cashe-script") ?>
+      <?!= include("cashe-html") ?>
+      <?!= include("snippets") ?>
+
+      <script>
+        "use strict";
+        window.onload = function () {
+          lastPageOnReload();
+          ifLastBuc();
+          startTableNewProekt();
+          startTableReestr();
+          startTableFinance();
+          startArrivalWaste();
+        }
+
+
+        // функция, которая при перезагрузке открывает последнюю просмотренную страницу
+        function lastPageOnReload() {
+          const elem = $('.nav-link').click(function () {
+            sessionStorage.setItem('idElemNavLink', this.id);
+          });
+          const getItemStorage = sessionStorage.getItem('idElemNavLink');
+          if (getItemStorage) {
+            $(`#${getItemStorage}`)[0].click();
+          } else {
+            $('#nav-buhgalter-tab')[0].click();
+          }
+        }
+
+        // функция, которая проверяет, если последняя сраница была Бухгалтер, запускает последнюю нажатую кнопку
+        function ifLastBuc() {
+          //if(sessionStorage.getItem('idElemNavLink') === 'nav-buhgalter-tab') {
+          $(sessionStorage.getItem('buttonsBuhLiButton')).click();
+          // } 
+        }
+
+
+      </script>
+
+</body>
+
+</html>

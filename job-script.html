@@ -1,0 +1,302 @@
+<script>
+
+  google.script.run.withSuccessHandler(function childFin(arrayOfArrays) {
+    afterDropDownReturned(arrayOfArrays, 'proektjob-datalist')
+  }).getDropDownArrayProekt()
+
+  google.script.run.withSuccessHandler(function childFin(arrayOfArrays) {
+    afterDropDownReturned(arrayOfArrays, 'rabotajob-datalist')
+  }).getDropDownArrayRabotaJob()
+
+  google.script.run.withSuccessHandler(function childFin(arrayOfArrays) {
+    afterDropDownReturned(arrayOfArrays, 'opisaniejob-datalist')
+  }).getDropDownArrayOpisanieJob()
+
+  google.script.run.withSuccessHandler(function childFin(arrayOfArrays) {
+    afterDropDownReturned(arrayOfArrays, 'firmajob-datalist')
+  }).getDropDownArrayFirma()
+
+  function arrayJob(ar) {
+    var row_number_job = 0;
+    var displayTableJob = '<form>';
+    displayTableJob += '<table class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTablejob\" >';
+    displayTableJob += "<tr>";
+    displayTableJob += "<th></th>";
+
+    displayTableJob += "</tr>";
+
+    ar.forEach(function (item, index) {
+
+      displayTableJob += "<tr id=\"ROWNUMBER:" + row_number_job + "\" >";
+
+      displayTableJob += "<td>"
+      displayTableJob += "<div class=\"row\">"
+
+      displayTableJob += "<div class=\"col-md-2\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<label for=\"up_proektjob\">Проект</label>  ";
+      displayTableJob += "<input type=\"number\" id=\"up_proektjob" + row_number_job + "\" value=\"" + item[0] + "\" class=\"form-control\" /></div></div> ";
+
+      displayTableJob += "<div class=\"col-md-4\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<label for=\"up_rabotajob\">Работа</label> ";
+      displayTableJob += "<input type=\"text\" id=\"up_rabotajob" + row_number_job + "\" value=\"" + item[1] + "\" class=\"form-control\" /></div></div> ";
+
+      displayTableJob += "<div class=\"col-md-2\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<label for=\"up_datestartjob\">Дата начало</label> ";
+      displayTableJob += "<input type=\"date\" id=\"up_datestartjob" + row_number_job + "\" value=\"" + item[2] + "\" class=\"form-control\" /></div></div> ";
+
+      displayTableJob += "<div class=\"col-md-2\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<label for=\"up_dateendjob\">Дата конец</label> ";
+      displayTableJob += "<input type=\"date\" id=\"up_dateendjob" + row_number_job + "\" value=\"" + item[3] + "\" class=\"form-control\" /></div></div> ";
+
+      displayTableJob += "<div class=\"col-md-6\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<label for=\"up_opisaniejob\">Описание</label> ";
+      displayTableJob += "<input type=\"text\" id=\"up_opisaniejob" + row_number_job + "\" value=\"" + item[4] + "\" class=\"form-control\" /></div></div> ";
+
+      displayTableJob += "<div class=\"col-md-1\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<label for=\"up_idjob\">ID</label> ";
+      displayTableJob += "<input type=\"number\" id=\"up_idjob" + row_number_job + "\" value=\"" + item[6] + "\" class=\"form-control\" /></div></div> ";
+
+      displayTableJob += "<div class=\"col-md-5\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<label for=\"up_firmajob\">Фирма</label> ";
+      displayTableJob += "<input type=\"text\" disabled id=\"up_firmajob" + row_number_job + "\" value=\"" + item[7] + "\" class=\"form-control\" /></div></div> ";
+
+      displayTableJob += "<div class=\"col-auto\">"
+      displayTableJob += "<div class=\"form-check bg-light  mb-1 mt-1\">"
+      displayTableJob += "<label for=\"up_originaljob\">Оригинал</label> ";
+      displayTableJob += "<input type=\"checkbox\" id=\"up_originaljob" + row_number_job + "\" value=\"" + item[5] + "\" class=\"form-check-input\" ";
+      displayTableJob += check(item[5])
+      displayTableJob += "/> </div></div> ";
+
+      displayTableJob += "<div class=\"col-md-1\">"
+      displayTableJob += "<div class=\"form-label\">"
+
+      displayTableJob += "<input type=\"button\" id=\"update_button_job" + row_number_job + "\" value=\"Update\" class=\"btn btn-danger\" ";
+      displayTableJob += "onclick=\"UpdateRecordjob(" + row_number_job + ")\" /></div></div> ";
+      // displayTableJob += "<div></div> ";
+
+      displayTableJob += "<div class=\"col-md-1\">"
+      displayTableJob += "<div class=\"form-label\">"
+      displayTableJob += "<input type=\"button\" id=\"naotdachu_button_job" + row_number_job + "\" value=\"Na otdachu\" class=\"btn btn-danger\" ";
+      displayTableJob += "onclick=\"NaOtdachuJob(" + row_number_job + ")\" /></div></div> ";
+      displayTableJob += "<div class=\"text-danger\" id=\"returnjob" + row_number_job + "\">";
+      displayTableJob += "</div><div></div>";
+
+      displayTableJob += "</tr>";
+      row_number_job++;
+    });
+
+    displayTableJob += '</table></form>';
+    document.getElementById("rowdatajob").innerHTML = displayTableJob;
+    $("#rowdatajob").attr("tabindex", -1).focus();
+    $('#btnSearchJob').prop("disabled", false);
+
+  }
+
+  function SearchRecordsjob() {
+    $("#btnSearchJob").prop("disabled", true)
+    var proektJob = document.getElementById("proektjob").value;
+    var rabotaJob = document.getElementById("rabotajob").value;
+    var datestartJob = document.getElementById("datestartjob").value;
+    var dateendJob = document.getElementById("dateendjob").value;
+    var opisanieJob = document.getElementById("opisaniejob").value;
+    var idJob = document.getElementById("idjob").value;
+    var firmaJob = document.getElementById("firmajob").value;
+    var originalJob = document.getElementById("originaljob").checked;
+    // остановка скриипта, если не выбраны критерии поиска в инпутах
+    const dataArr =
+      [
+        proektJob, rabotaJob, datestartJob, dateendJob, opisanieJob, idJob, firmaJob, originalJob
+      ]
+    let selector = '#rowdatajob';
+    if (searchStop(dataArr, selector)) {
+      searchStop(dataArr, selector)
+      return
+    }
+
+    spinner('rowdatajob');
+    google.script.run.withSuccessHandler(arrayJob).searchRecordsJob(proektJob, rabotaJob, datestartJob, dateendJob, opisanieJob, idJob, firmaJob, originalJob);
+  }
+
+  function SearchRecordsjobProekt() {
+    var proektJob = document.getElementById("proektjob").value;
+    var rabotaJob = document.getElementById("rabotajob").value;
+    var datestartJob = document.getElementById("datestartjob").value;
+    var dateendJob = document.getElementById("dateendjob").value;
+    var opisanieJob = document.getElementById("opisaniejob").value;
+    var idJob = document.getElementById("idjob").value;
+    var firmaJob = document.getElementById("firmajob").value;
+    var originalJob = document.getElementById("originaljob").checked;
+    spinner("rowdatajob")
+    google.script.run.withSuccessHandler(arrayJob).searchRecordsJob(proektJob, rabotaJob, datestartJob, dateendJob, opisanieJob, idJob, firmaJob, originalJob);
+  }
+
+  function ClearRecordjob() {
+    document.getElementById("proektjob").value = '';
+    document.getElementById("rabotajob").value = '';
+    document.getElementById("datestartjob").value = '';
+    document.getElementById("dateendjob").value = '';
+    document.getElementById("opisaniejob").value = '';
+    document.getElementById("idjob").value = '';
+    document.getElementById("firmajob").value = '';
+    document.getElementById("originaljob").checked = false;
+    labelred();
+  }
+
+  function UpdateRecordjob(row_number_job) {
+    document.getElementById("update_button_job" + row_number_job).disabled = true;
+
+    var proektJob = document.getElementById("up_proektjob" + row_number_job).value;
+    var rabotaJob = document.getElementById("up_rabotajob" + row_number_job).value;
+    var datestartJob = document.getElementById("up_datestartjob" + row_number_job).value;
+    var dateendJob = document.getElementById("up_dateendjob" + row_number_job).value;
+    var opisanieJob = document.getElementById("up_opisaniejob" + row_number_job).value;
+    var idJob = document.getElementById("up_idjob" + row_number_job).value;
+    var firmaJob = document.getElementById("up_firmajob" + row_number_job).value;
+    var originalJob = document.getElementById("up_originaljob" + row_number_job).checked;
+
+    google.script.run.withSuccessHandler(function (return_string) {
+      document.getElementById("update_button_job" + row_number_job).disabled = false;
+
+    }).UpdateRecordjobGs(proektJob, rabotaJob, datestartJob, dateendJob, opisanieJob, idJob, firmaJob, originalJob);
+  }
+
+  function AddRowjob() {
+    if (!window.confirm('Добавить запись?')) {
+      return
+    }
+    document.getElementById("btnAddRecord").disabled = true;
+    var proektJob = document.getElementById("proektjob").value;
+    var rabotaJob = document.getElementById("rabotajob").value;
+    var datestartJob = document.getElementById("datestartjob").value;
+    var dateendJob = document.getElementById("dateendjob").value;
+    var opisanieJob = document.getElementById("opisaniejob").value;
+    var idJob = document.getElementById("idjob").value;
+    var firmaJob = document.getElementById("firmajob").value;
+    var originalJob = document.getElementById("originaljob").checked;
+
+    google.script.run.withSuccessHandler(function (return_string) {
+      //ClearRecordjob()
+      document.getElementById("proektjob").value = proektJob;
+      SearchRecordsjobProekt();
+
+      document.getElementById("btnAddRecord").disabled = false;
+    }).AddRecordjobGs(proektJob, rabotaJob, datestartJob, dateendJob, opisanieJob, idJob, firmaJob, originalJob);
+
+  }
+
+  function clickPressJobSearch(event) {
+    if (event.keyCode == 13) {
+      SearchRecordsjob()
+    }
+  }
+
+  function check(item) {
+    if (item === 1) {
+      return 'checked'
+    } else {
+      return ''
+    }
+
+  }
+
+  function NaOtdachuJob(row_number_job) {
+    document.getElementById("naotdachu_button_job" + row_number_job).disabled = true;
+    var proektJob = document.getElementById("up_proektjob" + row_number_job).value;
+    var dateendJob = document.getElementById("up_dateendjob" + row_number_job).value;
+    var opisanieJob = document.getElementById("up_opisaniejob" + row_number_job).value;
+    var firmaJob = document.getElementById("up_firmajob" + row_number_job).value;
+    google.script.run.withSuccessHandler(function (return_string) {
+      if (return_string) {
+        document.getElementById("returnjob" + row_number_job).innerHTML = 'Данные уже вносились'
+      } else {
+        window.open('https://docs.google.com/spreadsheets/d/1GLczVuSi-wbQeOb2IvPgZ0KLm9xXakPLb2pqBO2EqjM/edit#gid=0')
+        document.getElementById("returnjob" + row_number_job).innerHTML = ''
+      }
+
+      document.getElementById("naotdachu_button_job" + row_number_job).disabled = false;
+
+    }).NaOtdachuJobGs(proektJob, dateendJob, opisanieJob, firmaJob);
+  }
+
+  function showDataJob(dataArray) {
+    var result = "<table class='table table-bordered table-hover table-line-selection' style='font-size:0.9em'>"
+    // строим таблицу
+    for (var i = 0; i < dataArray.length; i++) {
+      result += "<tr>";
+      for (var j = 0; j < dataArray[i].length; j++) {
+        if (j == 4 && dataArray[i][j] == 1) {
+          result += "<td>" + '&#10003' + "</td>";  //подмена на галочку
+        } else {
+          result += "<td>" + dataArray[i][j] + "</td>";
+        }
+      }
+      result += "<td><button type=\"button\" id=\"buttonModalJob" + i + "\"  something= " + i + " class=\"btn btn-sm btn-light btnbtnfin\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModalJob\"  />Edit</button></td>";
+      result += "</tr>";
+    }
+    result += "</table>";
+    var div = document.getElementById('data-table-job');
+    div.innerHTML = result;
+    $('#btnTableJob').prop("disabled", false);
+    $("#div-data-tablejob-spinner").remove();
+    tableLineSelection() //полосы в таблице
+    $('#data-table-job').hide(); // скрытие таблицы при загрузке страницы
+    $('#searchJob').mouseup(autoSearchOnOpen('#searchJob')).keyup(dataSearchJob);
+    //$('#searchJob').keyup(dataSearchJob);
+  }
+
+  // отображение скрытие таблицы с учетом результатов поиска, если поле Ппоиска заполнено, показывает результаты ,если пусто, скрывает
+  function dataSearchJob() {
+    if (this.value) {
+      $('#data-table-job').show();   // если в поле поиска нажимается клавиша, таблица отображается (с учетом поиска)
+    } else {
+      $('#data-table-job').hide();
+    }
+  }
+
+  function btnTableJob() {
+    $('#btnTableJob').prop("disabled", true);
+    $('#div-data-table-job').remove();
+    $('<div id="div-data-tablejob-spinner"></div><div id="div-data-table-job"><div id="data-table-job" class="radius pt-4 px-4 pb-1 mb-4" </div>').appendTo('#div-data-tablejob-row');
+    $("#div-data-tablejob-spinner").attr("tabindex", -1).focus();
+    spinner('div-data-tablejob-spinner');
+    google.script.run.withSuccessHandler(showDataJob).getDataTableJob();
+  };
+
+  // открытие полной таблицы финансов при загрузке окна (автооткрытие)
+  searchMobile(btnTableJob);
+
+  $('#clearBtnTableJob').click(function () {
+    $('#clearBtnTableJob').prop("disabled", true);
+    $('#div-data-table-job').remove();
+    $('#clearBtnTableJob').prop("disabled", false);
+  })
+
+  // обработка кнопок 
+  $("#btnSearchJob").click(SearchRecordsjob);
+  $("#btnAddRecord").click(AddRowjob);
+  $('#btnClearSearchJob').click(function () {
+    $('#btnClearSearchJob').prop("disabled", true);
+    $('#rowdatajob').empty();
+    $('#btnClearSearchJob').prop("disabled", false);
+    $('#btnSearchJob').prop("disabled", false);
+  });
+  $("#btnTableJob").click(btnTableJob);
+
+  //перехват кнопки (job с переходом)
+  $('.btn-job-transition').click(function () {
+    console.log('btnSearchFinanceJobInfo');
+    $('#proektjob').val(numEndStrong((this.textContent)));
+    $('#searchJob').val(numEndStrong((this.textContent)));
+    $('#nav-job-tab')[0].click();
+    labelred();
+    autoSearchOnOpen('#searchJob');
+  });
+
+</script>

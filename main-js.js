@@ -81,6 +81,7 @@ function addNewTableWaste(rowData) {
   return lastTenRows
 } */
 
+// вставка строки с данными комиссии привата в расход 
 function addNewRowMinusThreee(rowData) {
   const privDate = String(rowData.splice(0, 1))
   rowData.splice(0, 0, Utilities.formatDate(new Date(privDate), 'Europe/Kiev', 'dd.MM.yyyy'))
@@ -269,8 +270,8 @@ function addDate() {
 }
 
 ////////////////////////////////////////////////
-// Создание папки с проектом в Аф
 
+// Создание папки с проектом в Аф пустой
 function createNewFolder(proekt, firma, prim) {
   //const afFolderId = '13N9QgYZDA81L6zuZhq5fzqTR1s9XSZ_d'
   const afFolderId = '1zN_QXpVkrEDzl3zegha1YMSawCGVjyeE'

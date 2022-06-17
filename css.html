@@ -187,9 +187,15 @@
     border-color: #dc3545 !important;
   }
 
-  input:focus {
+  input:focus, input:active {
     border-color: #ffa8b1 !important;
-    box-shadow: 0 0 0 0 !important;
+    box-shadow: 0 0 0 0 !important;    
+  }
+
+  /* удаляет фон подложки в полях поиска по таблицам */
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
   }
 
 </style>

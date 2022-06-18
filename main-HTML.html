@@ -166,20 +166,9 @@
         }
 
         // имитация клика на Бренд
-        document.getElementById("nav-brand-tab").addEventListener("click", () =>
-          document.getElementById("nav-buhgalter-tab").click());
-
-        // вставка дати на головну
-        (function addDate() {
-          document.querySelector('.nav-maim-data-date').innerText = formatDateTime(new Date(), `dd.mm.yyyy`);
-          document.querySelector('.nav-maim-data-time').innerText = formatDateTime(new Date(), `hh:mm`);
-          setTimeout(addDate, 30000);
-        })();
-
-        // Імітація кліка на календар
-        /*        document.getElementById("nav_finance_data").addEventListener("click", () =>
-                  document.getElementById("calendar").click());
-         */
+            document.getElementById("nav-brand-tab").addEventListener("click", () => 
+              document.getElementById("nav-buhgalter-tab").click());          
+        
 
       </script>
 

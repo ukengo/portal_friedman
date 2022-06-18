@@ -18,7 +18,7 @@
   <header id="header">
     <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-danger bg-danger sticky-top" role="navigation">
       <div class="container-fluid">
-        <a href="#" class="navbar-brand">FRIEDMAN</a>
+        <a href="#" class="navbar-brand" id="nav-brand-tab">FRIEDMAN</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"
           aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -41,15 +41,6 @@
               <a class="nav-link active" id="nav-buhgalter-tab" data-bs-toggle="tab" data-bs-target="#nav-buhgalter"
                 type="button" role="tab" aria-controls="nav-buhgalter" aria-selected="true">BUHGALTER</a>
             </li>
-            <!--               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">BUHGALTER</a>
-                <ul class="dropdown-menu" aria-labelledby="navDrop">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li> -->
 
             <li class="nav-item">
               <a class="nav-link" id="nav-fin-tab" data-bs-toggle="tab" data-bs-target="#nav-fin" type="button"
@@ -139,6 +130,10 @@
           // } 
         }
 
+        // имитация клика на Бренд
+            document.getElementById("nav-brand-tab").addEventListener("click", () => 
+              document.getElementById("nav-buhgalter-tab").click());          
+        
 
       </script>
 

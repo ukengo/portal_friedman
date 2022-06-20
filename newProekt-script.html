@@ -70,28 +70,42 @@
 
   function buttonClickAf() {
     startTableNewProekt() // формирование раскрывающихся списков
-    google.script.run.createNewFolder(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
+    document.getElementById("buttonAf").disabled = true;
+    google.script.run.withSuccessHandler(() => {
+      document.getElementById("buttonAf").disabled = false;
+    })
+    .createNewFolder(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
   }
 
   function buttonClickEnter() {
     startTableNewProekt() // формирование раскрывающихся списков
-    google.script.run.addNewRow(rowDataRangeProekt())
+    document.getElementById("mainButton").disabled = true;
+    google.script.run.withSuccessHandler(() => {
+      document.getElementById("mainButton").disabled = false;
+    })
+    .addNewRow(rowDataRangeProekt())
     buttonClickAf()
   }
 
   function buttonClickBezAf() {
     startTableNewProekt() // формирование раскрывающихся списков
-    google.script.run.addNewRow(rowDataRangeProekt())
+    document.getElementById("buttonBezAf").disabled = true;
+    google.script.run.withSuccessHandler(() => {
+      document.getElementById("buttonBezAf").disabled = false;
+    }).addNewRow(rowDataRangeProekt());
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
   }
 
   function buttonClickOtOrgana() {
+    document.getElementById("buttonOtOrgana").disabled = true;
     startTableNewProekt() // формирование раскрывающихся списков
     google.script.run.createNewFolderOtOrgana(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
-    google.script.run.addNewRow(rowDataRangeProekt())
+    google.script.run.withSuccessHandler(() => {
+      document.getElementById("buttonOtOrgana").disabled = false;
+    }).addNewRow(rowDataRangeProekt())
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
 
@@ -113,7 +127,7 @@
   document.getElementById('buttonOtOrgana').addEventListener('click', buttonClickOtOrgana)
   document.getElementById('buttonOchistka').addEventListener('click', buttonClickOchistka)
   document.getElementById('buttonBezAf').addEventListener('click', buttonClickBezAf)
-  
+
   document.getElementById('date-nach').valueAsDate = new Date();
 
 </script>

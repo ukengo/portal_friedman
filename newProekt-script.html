@@ -1,7 +1,7 @@
 <script>
 
-// формирование раскрывающихся списков  
-function startTableNewProekt() {
+  // формирование раскрывающихся списков  
+  function startTableNewProekt() {
 
     $("#firma-datalist").empty();
     google.script.run.withSuccessHandler((arrayOfArrays) => {
@@ -75,12 +75,6 @@ function startTableNewProekt() {
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
   }
 
-  function buttonClickClose() {
-    startTableNewProekt() // формирование раскрывающихся списков
-    buttonClickEnter()
-    setTimeout(google.script.host.close, 250);
-  }
-
   function buttonClickEnter() {
     startTableNewProekt() // формирование раскрывающихся списков
     google.script.run.addNewRow(rowDataRangeProekt())
@@ -115,12 +109,11 @@ function startTableNewProekt() {
   }
 
   document.getElementById('mainButton').addEventListener('click', buttonClickEnter)
-  document.getElementById('buttonEnterAndClose').addEventListener('click', buttonClickClose)
   document.getElementById('buttonAf').addEventListener('click', buttonClickAf)
   document.getElementById('buttonOtOrgana').addEventListener('click', buttonClickOtOrgana)
   document.getElementById('buttonOchistka').addEventListener('click', buttonClickOchistka)
   document.getElementById('buttonBezAf').addEventListener('click', buttonClickBezAf)
-
+  
   document.getElementById('date-nach').valueAsDate = new Date();
 
 </script>

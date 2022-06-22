@@ -172,18 +172,18 @@
       let result = `<div class='radius p-2'><table class='table table-sm table-line-selection table-btn-edit table-responsive d-grid'>` +
         `<tr>`;
       result += `<th class="table-light">Проект</th>`;
-      result += `<th class="table-light">Фирма</th>`;
+      result += `<th class="table-light align-middle text-center">Фирма</th>`;
       result += `<th class="table-light">Работа</th>`;
-      result += `<th class="table-light">В реестр</th>`;
       result += `<th class="table-light">В финансы</th>`;
+      result += `<th class="table-light">В реестр</th>`;
       result += "</tr>";
       for (let i = 1; i < dataArray.length; i++) {
         result += `<tr valign="middle">`;
         for (var j = 0; j < dataArray[i].length; j++) {
           result += "<td>" + dataArray[i][j] + "</td>";
         }
-        result += `<td align="center"><button type="button" id="buttonNevistavlenoReestr${i}" something-row= "${i}" something-col= "1" class="btn btn-light btn-nevistavleno-reestr btn-edit"/>Edit</button></td>`;
         result += `<td align="center"><button type="button" id="buttonNevistavlenoFinance${j}" something-row= "${i}" something-col= "2" class="btn btn-light btn-nevistavleno-finance btn-edit"/>Edit</button></td>`;
+        result += `<td align="center"><button type="button" id="buttonNevistavlenoReestr${i}" something-row= "${i}" something-col= "1" class="btn btn-light btn-nevistavleno-reestr btn-edit"/>Edit</button></td>`;
         result += "</tr>";
       }
       result += "</table></div>";
@@ -204,12 +204,12 @@
     dataArray = dataArray.map(x => [x[0], x[1], x[2], x[3]])
     if (dataArray) {
       let result = `<div class='p-2'><table class='table table-sm table-line-selection table-btn-edit table-responsive d-grid'>`;
-      result += `<th class="table-light">Проект</th>`;
-      result += `<th class="table-light">Сумма</th>`;
-      result += `<th class="table-light">Фирма</th>`;
-      result += `<th class="table-light">Дата конца</th>`;
-      result += `<th class="table-light">В реестр</th>`;
-      result += `<th class="table-light">В финансы</th>`;
+      result += `<th class="table-light align-middle">Проект</th>`;
+      result += `<th class="table-light align-middle">Сумма</th>`;
+      result += `<th class="table-light align-middle">Фирма</th>`;
+      result += `<th class="table-light align-middle text-center">Дата конца</th>`;
+      result += `<th class="table-light align-middle text-center">В финансы</th>`;
+      result += `<th class="table-light align-middle text-center">В реестр</th>`;
       result += "</tr>";
       for (let i = 1; i < dataArray.length; i++) {
         result += `<tr valign="middle">`;
@@ -217,7 +217,8 @@
           result += "<td>" + dataArray[i][j] + "</td>";
         }
         if (i < dataArray.length - 3) {
-          result += `<td align="center"><button type="button" id="buttonNeoplachenoReestr${i}" something-row= "${i}" something-col= "1" class="btn btn-light btn-Neoplacheno-reestr btn-edit"/>Edit</button></td>`;
+          result += `<td align="center"><button type="button" id="buttonNeoplachenoReestr${i}" 
+          something-row= "${i}" something-col= "1" class="btn btn-light btn-Neoplacheno-reestr btn-edit"/>Edit</button></td>`;
           result += `<td align="center"><button type="button" id="buttonNeoplachenoFinance${j}" something-row= "${i}" something-col= "2" class="btn btn-light btn-Neoplacheno-finance btn-edit"/>Edit</button></td>`;
         }
         result += "</tr>";

@@ -10,12 +10,12 @@
   } */
 
   // функция очистки полей
-  function clearCashe() {
+/*   function clearCashe() {
     document.querySelector('#summa_cashe').value = '';
     document.querySelector('#waste_cashe').value = '';
     document.querySelector('#arrival_cashe').value = '';
     document.querySelector('#prim_cashe').value = '';
-  }
+  } */
 
   // строим форму ввода
   const buttonClickCashe = () => {
@@ -53,7 +53,7 @@
     
     google.script.run.withSuccessHandler(() => {
       document.getElementById("button_cashe_input").disabled = false;
-      clearCashe();
+     // clearCashe();
     }).insertRowCache(data);
   }
 

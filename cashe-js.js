@@ -51,4 +51,4 @@ function preIndex(spredSheet, key, col) {
 function cellIndex(spredSheet, key) {
     const dataArr = spredSheet.getRange('A1:A').getValues();
     return dataArr.flat().indexOf(key) + 1;
-}}
+}

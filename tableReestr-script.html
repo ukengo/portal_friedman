@@ -175,7 +175,7 @@
           <div class="col-auto">
             <div class="form-check">
               <span class="check-style"></span>
-              <label class="form-check-label" for="up_issuepartreestr">Выставлено частично</label> 
+              <label class="form-check-label" for="up_issuepartreestr${row_number_reestr}">Выставлено частично</label> 
               <input type="checkbox" id="up_issuepartreestr${row_number_reestr}" class="form-check-input"${check1(item[12])}/>
               
             </div>
@@ -183,14 +183,14 @@
           <div class="col-auto">
             <div class="form-check">
               <span class="check-style"></span>
-              <label class="form-check-label" for="up_withoutaccountreestr">Без счета</label> 
+              <label class="form-check-label" for="up_withoutaccountreestr${row_number_reestr}">Без счета</label> 
               <input type="checkbox" id="up_withoutaccountreestr${row_number_reestr}" class="form-check-input"${check1(item[13])}/>
             </div>
           </div>
           <div class="col-auto">
             <div class="form-check">
               <span class="check-style"></span>
-              <label class="form-check-label" for="up_stoppedreestr">Остановлено</label> 
+              <label class="form-check-label" for="up_stoppedreestr${row_number_reestr}">Остановлено</label> 
               <input type="checkbox" id="up_stoppedreestr${row_number_reestr}" class="form-check-input"${check1(item[14])}/>
             </div>
           </div>

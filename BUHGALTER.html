@@ -541,7 +541,7 @@
       for (let ii = 0; ii < dataArrayRes3.length; ii++) {
         let dataArrayResFilter = dataArrayRes2.filter(x => x[0] === dataArrayRes3[ii])
         dataArrayResFilter = dataArrayResFilter.map(x => [x[4], x[2], x[3]])
-        result += `<div class='radius p-2 my-3'><table id="tablesotr2${ii}" class="table table-sm tablesotr2" >`
+        result += `<div class='radius p-2 my-3 table-responsive'><table id="tablesotr2${ii}" class="table table-sm tablesotr2" >`
         result += "<tr valign=\"middle\"><th valign=\"middle\" colspan=\"4\">" + dataArrayRes1[ii] + "</th><th></th><th></th><th></th><th></th></tr>";
         for (let i = 0; i < dataArrayResFilter.length; i++) {
           result += `<tr valign="middle">`;

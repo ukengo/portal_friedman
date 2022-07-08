@@ -182,8 +182,8 @@
         for (var j = 0; j < dataArray[i].length; j++) {
           result += "<td>" + dataArray[i][j] + "</td>";
         }
-        result += `<td align="center"><button type="button" id="buttonNevistavlenoFinance${j}" something-row= "${i}" something-col= "2" class="btn btn-light btn-nevistavleno-finance btn-edit"/>Edit</button></td>`;
-        result += `<td align="center"><button type="button" id="buttonNevistavlenoReestr${i}" something-row= "${i}" something-col= "1" class="btn btn-light btn-nevistavleno-reestr btn-edit"/>Edit</button></td>`;
+        result += `<td align="center"><button type="button" id="buttonNevistavlenoFinance${j}" something-row= "${i}" something-col= "2" class="btn btn-light btn-nevistavleno-finance btn-edit text-nowrap"/>В фин</button></td>`;
+        result += `<td align="center"><button type="button" id="buttonNevistavlenoReestr${i}" something-row= "${i}" something-col= "1" class="btn btn-light btn-nevistavleno-reestr btn-edit text-nowrap"/>В реестр</button></td>`;
         result += "</tr>";
       }
       result += "</table></div>";
@@ -217,9 +217,9 @@
           result += "<td>" + dataArray[i][j] + "</td>";
         }
         if (i < dataArray.length - 3) {
-          result += `<td align="center"><button type="button" id="buttonNeoplachenoFinance${j}" something-row= "${i}" something-col= "2" class="btn btn-light btn-Neoplacheno-finance btn-edit"/>Edit</button></td>`;
+          result += `<td align="center"><button type="button" id="buttonNeoplachenoFinance${j}" something-row= "${i}" something-col= "2" class="btn btn-light btn-Neoplacheno-finance btn-edit text-nowrap"/>В фин</button></td>`;
           result += `<td align="center"><button type="button" id="buttonNeoplachenoReestr${i}" 
-          something-row= "${i}" something-col= "1" class="btn btn-light btn-Neoplacheno-reestr btn-edit"/>Edit</button></td>`;
+          something-row= "${i}" something-col= "1" class="btn btn-light btn-Neoplacheno-reestr btn-edit text-nowrap"/>В реестр</button></td>`;
         }
         result += "</tr>";
       }

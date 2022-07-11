@@ -7,6 +7,13 @@
         hideBtnBuh();
     }
 
+    // cрабатывание по кнопке Enter Datesost
+    function clickPressDatesost(event) {
+        if (event.keyCode == 13) {
+            updateDateSost();
+        }
+    }
+
     //функция формирования формы заполения и кнопок
     function bildHtmlDateSost() {
         google.script.run.withSuccessHandler(dataDateSost => {

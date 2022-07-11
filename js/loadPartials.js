@@ -17,7 +17,7 @@ function loadNewProektView() {
 }
 
 function loadBuhgalterView() {
-  return loadPartialHTML_('BUHGALTER');
+  return loadPartialHTML_('BUHGALTER/BUHGALTER');
 }
 
 /* function loadTableUpravlenieView() {

@@ -1,0 +1,44 @@
+<script>
+
+    function startDataNevistvleno() {
+        clearDiv();
+        spinner('results');
+        hideBtnBuh();
+        google.script.run.withSuccessHandler(createTableNevistavleno).startDataNevistvleno();
+    }
+
+    function createTableNevistavleno(dataArray) {
+        const nameTable = dataArray.slice();
+        dataArray.splice(0, 2);
+        dataArray = dataArray.map(x => [x[4], x[2], x[3]]);
+        if (dataArray) {
+            let result = `<div class='radius p-2'><table class='table table-sm table-line-selection table-btn-edit table-responsive d-grid'>` +
+                `<tr>`;
+            result += `<th class="table-light">Проект</th>`;
+            result += `<th class="table-light align-middle text-center">Фирма</th>`;
+            result += `<th class="table-light">Работа</th>`;
+            result += `<th class="table-light">В финансы</th>`;
+            result += `<th class="table-light">В реестр</th>`;
+            result += "</tr>";
+            for (let i = 1; i < dataArray.length; i++) {
+                result += `<tr valign="middle">`;
+                for (var j = 0; j < dataArray[i].length; j++) {
+                    result += "<td>" + dataArray[i][j] + "</td>";
+                }
+                result += `<td align="center"><button type="button" id="buttonNevistavlenoFinance${j}" something-row= "${i}" something-col= "2" class="btn btn-light btn-nevistavleno-finance btn-edit"/>Edit</button></td>`;
+                result += `<td align="center"><button type="button" id="buttonNevistavlenoReestr${i}" something-row= "${i}" something-col= "1" class="btn btn-light btn-nevistavleno-reestr btn-edit"/>Edit</button></td>`;
+                result += "</tr>";
+            }
+            result += "</table></div>";
+            result = "<h5 class='d-flex justify-content-center'>Не выставлено</h5>" + result;
+            let div = document.getElementById('results');
+            div.innerHTML = result;
+        } else {
+            let div = document.getElementById('results');
+            div.innerHTML = "Data not found!";
+        }
+        tableLineSelection(); //полосы в таблице
+        btnEdit(dataArray);
+    }
+
+</script>

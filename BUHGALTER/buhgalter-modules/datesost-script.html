@@ -24,21 +24,20 @@
     }
 
     function displayResultsDateSost() {
-        // const elementValue = document.getElementById("results").innerHTML;
-        let result = "<div class=\"col-md-4 radius p-2\" onkeypress=\"clickPressDatesost(event)\">";
-        result += "<input type=\"date\" id=\"up_datesost\" value=\"\" class=\"form-control\" /> ";
-        result += "</div> ";
-        result += "<input type=\"button\" id=\"update_button_datesost\" value=\"Update\" class=\"btn btn-danger mb-2\"  ";
-        result += "onclick=\"updateDateSost()\" /></div> ";
-        result += "<input type=\"button\" id=\"clear_button_datesost\" value=\"Clear\" class=\"btn btn-danger mb-2\"  ";
-        result += "onclick=\"clearDateSost()\" /></div> ";
-        result += "<input type=\"button\" id=\"yesterday_button_datesost\" value=\"Yesterday\" class=\"btn btn-danger mb-2\"  ";
-        result += "onclick=\"yesterdayDateSost()\" /></div> ";
-        result += "<input type=\"button\" id=\"today_button_datesost\" value=\"Today\" class=\"btn btn-danger mb-2\"  ";
-        result += "onclick=\"todayDateSost()\" /></div> ";
+        const result = `
+            <div class="col-md-4 radius p-2" onkeypress="clickPressDatesost(event)">
+                <input type="date" id="up_datesost" value="" class="form-control">
+            </div>
+                <input type="button" id="update_button_datesost" value="Update" class="btn btn-danger mb-2" onclick="updateDateSost()">
+            </div> 
+                <input type="button" id="clear_button_datesost" value="Clear" class="btn btn-danger mb-2" onclick="clearDateSost()">
+            </div>
+                <input type="button" id="yesterday_button_datesost" value="Yesterday" class="btn btn-danger mb-2" onclick=\"yesterdayDateSost()">
+            </div>
+                <input type="button" id="today_button_datesost" value="Today" class="btn btn-danger mb-2" onclick="todayDateSost()">
+            </div>
+        `
         return result;
-        //result += elementValue;
-        //elementValue = result;
     }
 
     function clearDateSost() {

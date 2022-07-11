@@ -1,0 +1,85 @@
+<script>
+    //Sotr2
+    function startDataSotr2() {
+        clearDiv();
+        spinner('results');
+        hideBtnBuh();
+        startDataSotrCount2();
+    }
+
+    function startDataSotrCount2() {
+        google.script.run.withSuccessHandler(createTableSotrCount2).testSotrCount();
+    }
+
+    function createTableSotrCount2(dataArray) {
+        const dataArrayRes1 = dataArray.res1; // фамилия сотрудника + количество работ
+        const dataArrayRes2 = dataArray.res2; // вся таблица Sotr
+        const dataArrayRes3 = dataArray.res3; // только фамилии
+        const dataChel = dataArray.res2.map(x => [x[0]]);
+        const dataChelLength = dataArray.res2.map(x => [x[1]]);
+        const dataArrayRes1Len = dataArrayRes1.length
+        let result;
+        if (dataArrayRes1) {
+            result = "<div class='radius p-2'><table class='table table-sm tablesotr2' >"
+            for (let i = 0; i < dataArrayRes1.length; i++) {
+                result += `<tr valign="middle">`;
+                result += "<td>" + dataArrayRes1[i] + "</td>";
+                result += "</tr>";
+            }
+            result += "</table></div>";
+            result = "<h5 class='d-flex justify-content-center'>Sotr2</h5>" + result;
+        } else {
+            const div = document.getElementById('results');
+            div.innerHTML = "Data not found!";
+        }
+        if (dataArrayRes2) {
+            for (let ii = 0; ii < dataArrayRes3.length; ii++) {
+                let dataArrayResFilter = dataArrayRes2.filter(x => x[0] === dataArrayRes3[ii])
+                dataArrayResFilter = dataArrayResFilter.map(x => [x[4], x[2], x[3]])
+                result += `<div class='radius p-2 my-3'><table id="tablesotr2${ii}" class="table table-sm tablesotr2" >`
+                result += "<tr valign=\"middle\"><th valign=\"middle\" colspan=\"4\">" + dataArrayRes1[ii] + "</th><th></th><th></th><th></th><th></th></tr>";
+                for (let i = 0; i < dataArrayResFilter.length; i++) {
+                    result += `<tr valign="middle">`;
+                    for (let j = 0; j < dataArrayResFilter[i].length; j++) {
+                        result += "<td class='tablesotr2col" + j + "'>" + dataArrayResFilter[i][j] + "</td>";
+                    }
+                    result += `<td width="20%" align="center"><button type="button" something-col= "2" class="btn btn-light btn-edit-sotr2">В&nbsp;финансы</button></td>`;
+                    result += `<td width="20%" align="center"><button type="button" something-col= "1" class="btn btn-light btn-edit-sotr2 btn-reestr-transition">В&nbsp;реестр</button></td>`;
+                    result += "</tr>";
+                }
+                result += "</table></div>";
+            }
+            const div2 = document.getElementById('results');
+            div2.innerHTML = result;
+        } else {
+            const div = document.getElementById('results');
+            div.innerHTML = "Data not found!";
+        }
+        btnEditSotr2();
+    }
+
+    // обработка кнопок Edit на sotr2
+    function btnEditSotr2() {
+        $('.btn-edit-sotr2').click(function () {
+            const data = Array.from(this.parentNode.parentNode.children);
+            const text = getDataFromTd(data);
+            const col = this.getAttribute('something-col');
+            editReestrFinance(text[0], col);
+            autoSearchOnOpen('.dataTables_filter input');
+            autoSearchOnOpen('#searchFinance');
+
+        });
+    }
+
+    //обработка кнопок Edit на не выставлено и не оплачено
+    function btnEdit(data) {
+        $('.btn-edit').click(function () {
+            const row = this.getAttribute('something-row');
+            const col = this.getAttribute('something-col');
+            const tdata = data[row][0];
+            editReestrFinance(tdata, col);
+            autoSearchOnOpen('.dataTables_filter input');
+            autoSearchOnOpen('#searchFinance');
+        });
+    }    
+</script>

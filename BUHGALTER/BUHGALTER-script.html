@@ -162,31 +162,6 @@
       btnEdit(dataArray);
     }
   
-    //TermSum
-    function buttonClickTermSum() {
-      clearDiv();
-      spinner('results');
-      hideBtnBuh();
-      google.script.run.withSuccessHandler(function displayResultsTermSum(dataTermSum) {
-        let result = "<div class='col-xl-5 radius p-2'><table class='table table-sm' >";
-        result += "<tr>";
-        result += "<td><b>Терминал Новопироговская:</b></td>";
-        result += "</tr>";
-        result += "<tr>";
-        result += "<td>" + dataTermSum[0] + "</td>";
-        result += "</tr>";
-        result += "<tr>";
-        result += "<td>" + "остаток " + dataTermSum[1] + " грн." + "</td>";
-        result += "</tr>";
-        result += "</table></div>";
-        document.getElementById('results').innerHTML = result;
-        /* document.getElementById('vrabotevse1').innerHTML = dataTermSum[0]
-        document.getElementById('vrabotevse2').innerHTML = 'остаток денег: '
-        document.getElementById('vrabotevse3').innerHTML = dataTermSum[1] + 'грн.' */
-      }).dataTermSum();
-    }
-  
-  
     //DATESOSOT
     function buttonClickDateSost() {
       clearDiv();

@@ -52,3 +52,10 @@ function cellIndex(spredSheet, key) {
     const dataArr = spredSheet.getRange('A1:A').getValues();
     return dataArr.flat().indexOf(key) + 1;
 }
+
+//форматирование даты в вид dd-mm-гггг 
+function formatDateDDtireMMtireYYYY(date) {
+    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '-'
+        + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
+        + date.getFullYear();
+}

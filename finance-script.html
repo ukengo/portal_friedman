@@ -165,6 +165,15 @@
     }
   }
 
+  // отмена cрабатывания по кнопке Enter в поле поиска
+  function clickPressFinanceShearh(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  }
+
+
   function SearchRecordsFin(valSfFin) {
     var proektFin = document.getElementById("proektfin").value;
     var summaFin = document.getElementById("summafin").value;

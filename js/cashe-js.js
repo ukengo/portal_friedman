@@ -13,7 +13,7 @@ function insertRowCache(data) {
     const key = 'PRHisAGc';
     const colA = 'A';
     const colB = 'B';
-    if (formatDateDDtireMMtireYYYY((preIndex(spredSheet, key, colA)[1][0])) != formatDateDDtireMMtireYYYY(new Date())) {
+    if (formatDateYYYYdotMMdotDD((preIndex(spredSheet, key, colA)[1][0])) != formatDateYYYYdotMMdotDD(new Date())) {
         spredSheet.insertRows((preIndex(spredSheet, key, colB)[0]) + 1, 2);
         spredSheet.getRange((preIndex(spredSheet, key, colB)[0]) + 2, 1, 1, 1).setValue(new Date());
     }
@@ -51,11 +51,4 @@ function preIndex(spredSheet, key, col) {
 function cellIndex(spredSheet, key) {
     const dataArr = spredSheet.getRange('A1:A').getValues();
     return dataArr.flat().indexOf(key) + 1;
-}
-
-//форматирование даты в вид dd-mm-гггг 
-function formatDateDDtireMMtireYYYY(date) {
-    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '-'
-        + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
-        + date.getFullYear();
 }

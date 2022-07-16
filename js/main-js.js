@@ -29,21 +29,21 @@ function addNewRowMinusThreee(rowData) {
 
 function addNewRowWaste(rowData) {
   const vasteDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, Utilities.formatDate(new Date(vasteDate), 'Europe/Kiev', 'dd.MM.yyyy'))
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate))
   dataWaste().appendRow(rowData)
   return true
 }
 
 function addNewRowArrival(rowData) {
   const arrivalDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, Utilities.formatDate(new Date(arrivalDate), 'Europe/Kiev', 'dd.MM.yyyy'))
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate))
   dataArriwal().appendRow(rowData)
   return true
 }
 
 function addNewTableArriwalWaste(rowData, sheet) {
   const arrivalDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, Utilities.formatDate(new Date(arrivalDate), 'Europe/Kiev', 'dd.MM.yyyy'))
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate))
   const arrivalSumma = rowData.splice(1, 1)
   rowData.splice(1, 0, (new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(arrivalSumma)))
   const lastTenRows = getLastTenRows(sheet)
@@ -84,7 +84,7 @@ function addNewTableWaste(rowData) {
 // вставка строки с данными комиссии привата в расход 
 function addNewRowMinusThreee(rowData) {
   const privDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, Utilities.formatDate(new Date(privDate), 'Europe/Kiev', 'dd.MM.yyyy'))
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(privDate))
   dataWaste().appendRow(rowData)
   return true
 }
@@ -149,11 +149,11 @@ function addNewRow(rowData) {
   const sheet = ss.getSheetByName('База')
   const spl0 = String(rowData.splice(0, 1))
   const spl1 = String(rowData.splice(0, 1))
-  const dat1 = Utilities.formatDate(new Date(spl1), 'Europe/Kiev', 'dd.MM.yyyy')
+  const dat1 = formatDateDDdotMMdotYYYY(spl1)
   if (!spl0) {
     rowData.splice(0, 0, '', dat1)
   } else {
-    const dat0 = Utilities.formatDate(new Date(spl0), 'Europe/Kiev', 'dd.MM.yyyy')
+    const dat0 = formatDateDDdotMMdotYYYY(spl0)
     rowData.splice(0, 0, dat0, dat1)
   }
   sheet.appendRow(rowData)
@@ -266,7 +266,7 @@ function getDropDownArrayPriznak() {
 
 //автовставка даты в форму
 function addDate() {
-  return Utilities.formatDate(new Date(), 'Europe/Kiev', 'dd.MM.yyyy')
+  return formatDateDDdotMMdotYYYY((new Date()))
 }
 
 ////////////////////////////////////////////////
@@ -393,9 +393,9 @@ function AddRecordUprav(dateendUprav, datestartUprav, firmaUprav, rabotaUprav, c
   let arr = [dateendUprav, datestartUprav, firmaUprav, rabotaUprav, coderabotaUprav, proektUprav, ispolUprav, schUprav, primUprav]
   const spl0 = String(arr.splice(0, 1))
   const spl1 = String(arr.splice(0, 1))
-  const dateendUprav1 = Utilities.formatDate(new Date(spl0), 'Europe/Kiev', 'dd.MM.yyyy')
-  const datestartUprav1 = Utilities.formatDate(new Date(spl1), 'Europe/Kiev', 'dd.MM.yyyy')
-  const tData = Utilities.formatDate(new Date(), 'Europe/Kiev', 'dd.MM.yyyy')
+  const dateendUprav1 = formatDateDDdotMMdotYYYY(spl0)
+  const datestartUprav1 = formatDateDDdotMMdotYYYY(spl1)
+  const tData = formatDateDDdotMMdotYYYY(new Date())
 
   if (!spl0) {
     arr.splice(0, 0, '')
@@ -421,7 +421,7 @@ function searchRecordsUpravGs(dateendUprav, datestartUprav, firmaUprav, rabotaUp
     var evalRows = [];
 
     if (dateendUprav != '') {
-      if (Utilities.formatDate(new Date(value[0]), 'Europe/Kiev', 'dd.MM.yyyy') == Utilities.formatDate(new Date(dateendUprav), 'Europe/Kiev', 'dd.MM.yyyy')) {
+      if (formatDateDDdotMMdotYYYY(value[0]) == formatDateDDdotMMdotYYYY(dateendUprav)) {
         evalRows.push('true');
       } else {
         evalRows.push('false');
@@ -432,7 +432,7 @@ function searchRecordsUpravGs(dateendUprav, datestartUprav, firmaUprav, rabotaUp
     }
 
     if (datestartUprav != '') {
-      if (Utilities.formatDate(new Date(value[1]), 'Europe/Kiev', 'dd.MM.yyyy') == Utilities.formatDate(new Date(datestartUprav), 'Europe/Kiev', 'dd.MM.yyyy')) {
+      if (formatDateDDdotMMdotYYYY(value[1]) == formatDateDDdotMMdotYYYY(datestartUprav)) {
         evalRows.push('true');
       } else {
         evalRows.push('false');
@@ -724,14 +724,14 @@ function getRecordsFin() {
    return dataFilterMap; */
   return getDataTableFinance();
 }
-
+/* 
 function getDateFin(date) {
   if (date) {
     return Utilities.formatDate(new Date(date), 'Europe/Kiev', 'yyyy-MM-dd')
   } else {
     return ''
   }
-}
+} */
 
 function UpdateRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, sumIspolFin, oplataIspolFin, checkBox) {
   console.log(checkBox)
@@ -920,8 +920,7 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
 
     if (!checkDateReestr) {
       if (dateendReestr != '') {
-        if (Utilities.formatDate(new Date(value[0]), 'Europe/Kiev', 'dd.MM.yyyy') ==
-          Utilities.formatDate(new Date(dateendReestr), 'Europe/Kiev', 'dd.MM.yyyy')) {
+        if (formatDateDDdotMMdotYYYY(value[0]) == formatDateDDdotMMdotYYYY(dateendReestr)) {
           evalRows.push('yes');
         } else {
           evalRows.push('no');
@@ -931,7 +930,7 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
       }
 
       if (datestartReestr != '') {
-        if (Utilities.formatDate(new Date(value[1]), 'Europe/Kiev', 'dd.MM.yyyy') == Utilities.formatDate(new Date(datestartReestr), 'Europe/Kiev', 'dd.MM.yyyy')) {
+        if (formatDateDDdotMMdotYYYY(value[1]) == formatDateDDdotMMdotYYYY(datestartReestr)) {
           evalRows.push('yes');
         } else {
           evalRows.push('no');
@@ -1199,7 +1198,7 @@ function searchRecordsJob(proektJob, rabotaJob, datestartJob, dateendJob, opisan
     }
 
     if (datestartJob != '') {
-      if (Utilities.formatDate(new Date(value[2]), 'Europe/Kiev', 'dd.MM.yyyy') == Utilities.formatDate(new Date(datestartJob), 'Europe/Kiev', 'dd.MM.yyyy')) {
+      if (formatDateDDdotMMdotYYYY(value[2]) == formatDateDDdotMMdotYYYY(datestartJob)) {
         evalRows.push('yes');
       } else {
         evalRows.push('no');
@@ -1210,7 +1209,7 @@ function searchRecordsJob(proektJob, rabotaJob, datestartJob, dateendJob, opisan
     }
 
     if (dateendJob != '') {
-      if (Utilities.formatDate(new Date(value[3]), 'Europe/Kiev', 'dd.MM.yyyy') == Utilities.formatDate(new Date(dateendJob), 'Europe/Kiev', 'dd.MM.yyyy')) {
+      if (formatDateDDdotMMdotYYYY(value[3]) == formatDateDDdotMMdotYYYY(dateendJob)) {
         evalRows.push('yes');
       } else {
         evalRows.push('no');
@@ -1317,7 +1316,7 @@ function getRecordsJob() {
 
 function getDateFin(date) {
   if (date) {
-    return Utilities.formatDate(new Date(date), 'Europe/Kiev', 'yyyy-MM-dd')
+    return formatDateDDdotMMdotYYYY(date)
   } else {
     return ''
   }
@@ -1386,7 +1385,7 @@ function NaOtdachuJobGs(proektJob, dateendJob, opisanieJob, firmaJob) {
   let dataFirma = firmaJob; //фирма работ из job
   let dataDate
   if (dataDate) {
-    dataDate = Utilities.formatDate(new Date(dateendJob), 'Europe/Kiev', 'dd.MM.yyyy');//даты работ из job 
+    dataDate = formatDateDDdotMMdotYYYY(dateendJob);//даты работ из job 
   } else {
     dataDate = ''
   }
@@ -1478,7 +1477,7 @@ function testSotrCount() {
     if (sotr(elem) != '') {
       res1 = res1.concat(elem + '-' + sotr(elem).length)
       res3 = res3.concat(elem)
-      res2 = res2.concat(sotr(elem).map(x => [elem, (Utilities.formatDate(x[1], 'Europe/Kiev', 'dd.MM.yyyy')), x[2], x[3], x[5]]));
+      res2 = res2.concat(sotr(elem).map(x => [elem, formatDateDDdotMMdotYYYY(x[1]), x[2], x[3], x[5]]));
     }
   })
   let res = { res1: res1, res2: res2, res3: res3 }

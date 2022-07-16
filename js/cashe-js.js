@@ -1,11 +1,11 @@
-/* function getDropDownArrayDescriptionCashe() {
+function getDropDownArrayDescriptionCashe() {
     const arr = getDropDownArray(dataList1(), 6, 2);
-    return arr.splice(0, arr.length-1600);
+    return arr.splice(0, arr.length-2500);
 }
 
 function getDropDownArrayremarkCashe() {
     return getDropDownArray(dataList1(), 6, 5);
-} */
+}
 
 // отправка данных в таблицу
 function insertRowCache(data) {

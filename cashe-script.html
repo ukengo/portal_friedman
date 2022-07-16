@@ -1,5 +1,5 @@
 <script>
-/*   function buildDatalistCashe() {
+  function buildDatalistCashe() {
     google.script.run.withSuccessHandler((arrayOfArrays) => {
       afterDropDownReturned(arrayOfArrays, 'description_cashe-datalist')
     }).getDropDownArrayDescriptionCashe();
@@ -7,19 +7,19 @@
     google.script.run.withSuccessHandler((arrayOfArrays) => {
       afterDropDownReturned(arrayOfArrays, 'remark_cashe-datalist')
     }).getDropDownArrayremarkCashe();
-  } */
+  }
 
   // функция очистки полей
-/*   function clearCashe() {
-    document.querySelector('#summa_cashe').value = '';
-    document.querySelector('#waste_cashe').value = '';
-    document.querySelector('#arrival_cashe').value = '';
-    document.querySelector('#prim_cashe').value = '';
-  } */
+  /*   function clearCashe() {
+      document.querySelector('#summa_cashe').value = '';
+      document.querySelector('#waste_cashe').value = '';
+      document.querySelector('#arrival_cashe').value = '';
+      document.querySelector('#prim_cashe').value = '';
+    }*/
 
   // строим форму ввода
   const buttonClickCashe = () => {
-    // buildDatalistCashe();
+    buildDatalistCashe();
     spinner('results');
     hideBtnBuh(); // включение выпадающего окна со стрелкой на мобильном
     const temp = document.querySelector('#cashe_forma');
@@ -42,7 +42,7 @@
     const arrival = document.querySelector('#arrival_cashe').value;
     const prim = document.querySelector('#prim_cashe').value;
     const data = [[description, waste, arrival, prim]];
-    
+
     // проверяем на пустые поля
     if (searchStop(data.flat())) {
       alert('Не введены данные')
@@ -50,10 +50,10 @@
       return;
     }
     // конец проверки на пустые поля
-    
+
     google.script.run.withSuccessHandler(() => {
       document.getElementById("button_cashe_input").disabled = false;
-     // clearCashe();
+      // clearCashe();
     }).insertRowCache(data);
   }
 

@@ -5,6 +5,8 @@
         spinner('results');
         hideBtnBuh();
         startDataSotrCount2();
+        // все кнопки с бухгалтера enabled
+        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }
 
     function startDataSotrCount2() {

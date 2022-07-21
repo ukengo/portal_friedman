@@ -5,6 +5,8 @@
         spinner('results');
         bildHtmlDateSost();
         hideBtnBuh();
+        // все кнопки с бухгалтера enabled
+        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }
 
     // cрабатывание по кнопке Enter Datesost

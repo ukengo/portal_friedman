@@ -26,5 +26,7 @@
             let div = document.getElementById('results');
             div.innerHTML = "Data not found!";
         }
+        // все кнопки с бухгалтера enabled
+        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }
 </script>

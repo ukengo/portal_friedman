@@ -1,83 +1,85 @@
 <script>
-      ////INSPEKTOR
-      function buttonClickInspektor() {
-      clearDiv();
-      spinner('results');
-      hideBtnBuh();
-      google.script.run.withSuccessHandler(function displayResultsInspektor(dataArray) {
-        if (dataArray) {
-          var result = "<div class='col-xl-6 radius p-2'><table id='tableInspektor' data-bs-toggle=\"modal\" data-bs-target=\"#inspektorModal\" class='table table-sm'>";
-          result += "<tr><th>Исполнитель</th><th>Сумма, грн</th><td>"
-          for (let i = 0; i < dataArray.length; i++) {
-            result += "<tr>";
-            for (let j = 0; j < dataArray[i].length; j++) {
-              result += "<td>" + dataArray[i][j] + "</td>";
-            }
-            result += "</tr>";
+  ////INSPEKTOR
+  function buttonClickInspektor() {
+    clearDiv();
+    spinner('results');
+    hideBtnBuh();
+    google.script.run.withSuccessHandler(function displayResultsInspektor(dataArray) {
+      if (dataArray) {
+        var result = "<div class='col-xl-6 radius p-2'><table id='tableInspektor' data-bs-toggle=\"modal\" data-bs-target=\"#inspektorModal\" class='table table-sm'>";
+        result += "<tr><th>Исполнитель</th><th>Сумма, грн</th><td>"
+        for (let i = 0; i < dataArray.length; i++) {
+          result += "<tr>";
+          for (let j = 0; j < dataArray[i].length; j++) {
+            result += "<td>" + dataArray[i][j] + "</td>";
           }
-          result += "</table></div>";
-          var div2 = document.getElementById('results');
-          div2.innerHTML = result;
-        } else {
-          var div = document.getElementById('results');
-          div.innerHTML = "Data not found!";
+          result += "</tr>";
         }
-        btnInsp();
-      }).inspektorGs();
-    }
-  
-    function debtsToInspectors(dataArray) {
-      let result = "<table id='tableInspektorModal'  class='table table-sm'>";
-      result += "<tr><th>Проект</th><th>Фирма</th><th>Исполнитель</th><th>Сумма</th><td>"
-      for (let i = 0; i < dataArray.length; i++) {
-        result += "<tr>";
-        for (let j = 0; j < dataArray[i].length; j++) {
-          result += "<td>" + dataArray[i][j] + "</td>";
-        } result += "</tr>";
+        result += "</table></div>";
+        var div2 = document.getElementById('results');
+        div2.innerHTML = result;
+      } else {
+        var div = document.getElementById('results');
+        div.innerHTML = "Data not found!";
       }
-      result += "</table>";
-      document.getElementById('results-modal').innerHTML = result;
-      btnInspModal();
+      btnInsp();
+      // все кнопки с бухгалтера enabled
+      document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
+    }).inspektorGs();
+  }
+
+  function debtsToInspectors(dataArray) {
+    let result = "<table id='tableInspektorModal'  class='table table-sm'>";
+    result += "<tr><th>Проект</th><th>Фирма</th><th>Исполнитель</th><th>Сумма</th><td>"
+    for (let i = 0; i < dataArray.length; i++) {
+      result += "<tr>";
+      for (let j = 0; j < dataArray[i].length; j++) {
+        result += "<td>" + dataArray[i][j] + "</td>";
+      } result += "</tr>";
     }
-  
-    // клик по таблице инспектора и открытие модалки
-    function btnInsp() {
-      $('#tableInspektor tr td').bind('click', function () {
-        spinner('results-modal');
-        const insp = valueCellCol(this, 0);
-        google.script.run.withSuccessHandler(debtsToInspectors).debtsToInspectorsGs(insp);
-      })
-    }
-  
-    // клик по таблице модалки, запоминание номера проекта и переход на финансы
-    function btnInspModal() {
-      $('#tableInspektorModal tr td').bind('click', function () {
-        const proekt = valueCellCol(this, 0);
-        localStorage.removeItem('proekt')
-        sessionStorage.setItem('proekt', proekt);
-        const dataTarget = event.target.textContent;
-        console.log(dataTarget);
-        $('.btn-close').click();
-        $('#btnSearchFinMinus').click();
-        $('#btnClearSearchFinance').click();
-        $('#proektreestr').val(proekt);
-        $('#data-table_filter input').val(dataTarget);
-        $('#btnSearchReestrInfo').html(proekt);
-        $('#btnSearchFinInfo').html('fin ' + proekt);
-        $('#btnSearchFinPlus').html('fin+');
-        $('#btnSearchFinMinus').html('fin-');
-        $('#btnSearchJobInfo').html('job ' + proekt);
-        $('#nav-reestr-tab')[0].click();
-        $('#btnClearSearchReestr').click();
-        autoSearchOnOpen('.dataTables_filter input');
-        /* $('.btn-close').click();
-        $('#btnClearSearchFinance').click();
-        $('#nav-fin-tab')[0].click();
-        $('#proektfin').val(proekt);  
-        $('#searchFinance').val(proekt);
-        autoSearchOnOpen('#searchFinance'); */
-      })
-    }
-  
+    result += "</table>";
+    document.getElementById('results-modal').innerHTML = result;
+    btnInspModal();
+  }
+
+  // клик по таблице инспектора и открытие модалки
+  function btnInsp() {
+    $('#tableInspektor tr td').bind('click', function () {
+      spinner('results-modal');
+      const insp = valueCellCol(this, 0);
+      google.script.run.withSuccessHandler(debtsToInspectors).debtsToInspectorsGs(insp);
+    })
+  }
+
+  // клик по таблице модалки, запоминание номера проекта и переход на финансы
+  function btnInspModal() {
+    $('#tableInspektorModal tr td').bind('click', function () {
+      const proekt = valueCellCol(this, 0);
+      localStorage.removeItem('proekt')
+      sessionStorage.setItem('proekt', proekt);
+      const dataTarget = event.target.textContent;
+      console.log(dataTarget);
+      $('.btn-close').click();
+      $('#btnSearchFinMinus').click();
+      $('#btnClearSearchFinance').click();
+      $('#proektreestr').val(proekt);
+      $('#data-table_filter input').val(dataTarget);
+      $('#btnSearchReestrInfo').html(proekt);
+      $('#btnSearchFinInfo').html('fin ' + proekt);
+      $('#btnSearchFinPlus').html('fin+');
+      $('#btnSearchFinMinus').html('fin-');
+      $('#btnSearchJobInfo').html('job ' + proekt);
+      $('#nav-reestr-tab')[0].click();
+      $('#btnClearSearchReestr').click();
+      autoSearchOnOpen('.dataTables_filter input');
+      /* $('.btn-close').click();
+      $('#btnClearSearchFinance').click();
+      $('#nav-fin-tab')[0].click();
+      $('#proektfin').val(proekt);  
+      $('#searchFinance').val(proekt);
+      autoSearchOnOpen('#searchFinance'); */
+    })
+  }
+
     ////END INSPEKTOR
 </script>

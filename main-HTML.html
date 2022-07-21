@@ -116,6 +116,8 @@
         function ifLastBuc() {
           //if(sessionStorage.getItem('idElemNavLink') === 'nav-buhgalter-tab') {
           $(sessionStorage.getItem('buttonsBuhLiButton')).click();
+          // все кнопки с бухгалтера enabled
+          document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
           // } 
         }
 

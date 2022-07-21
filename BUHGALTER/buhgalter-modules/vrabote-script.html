@@ -17,11 +17,11 @@
     let typeOfWork
     if (dataArray[1][0] === 'В работе р') {
       typeOfWork = "В работе разрешиловка"
-      } else if (dataArray[1][0] === 'В работе т') {
-        typeOfWork = "В работе таможня"
-      } else {
-        typeOfWork = "Data not found!"        
-      }
+    } else if (dataArray[1][0] === 'В работе т') {
+      typeOfWork = "В работе таможня"
+    } else {
+      typeOfWork = "Data not found!"
+    }
     const nameTable = dataArray.slice()
     dataArray.splice(0, 2)
     dataArray = dataArray.map(x => [x[1], x[2], x[3], x[4]])
@@ -47,6 +47,8 @@
       var div = document.getElementById('results');
       div.innerHTML = "Data not found!";
     }
+    // все кнопки с бухгалтера enabled
+    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     tableLineSelection(); //полосы в таблице
   }
 </script>

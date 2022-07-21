@@ -32,6 +32,8 @@
     }
     result.appendChild(clon);
     document.getElementById('button_cashe_input').addEventListener('click', buttonInput);
+    // все кнопки с бухгалтера enabled
+    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
   }
 
   // обработка кнопки ввод

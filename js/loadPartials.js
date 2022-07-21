@@ -4,7 +4,7 @@ function loadPartialHTML_(partial) {
 }
 
 function loadArriwalWasteView() {
-  return loadPartialHTML_('arriwalWaste');
+  return loadPartialHTML_('arriwalwaste/arriwalWaste');
 }
 
 
@@ -13,7 +13,7 @@ function loadAddPrivateCommissionView() {
 }
 
 function loadNewProektView() {
-  return loadPartialHTML_('newProekt');
+  return loadPartialHTML_('newproekt/newProekt');
 }
 
 function loadBuhgalterView() {
@@ -25,13 +25,13 @@ function loadBuhgalterView() {
 } */
 
 function loadTableFinanceView() {
-  return loadPartialHTML_('finance');
+  return loadPartialHTML_('finance/finance');
 }
 
 function loadTableReestrView() {
-  return loadPartialHTML_('tableReestr');
+  return loadPartialHTML_('reestr/tableReestr');
 }
 
 function loadTableJobView() {
-  return loadPartialHTML_('job');
+  return loadPartialHTML_('/jobjob');
 }

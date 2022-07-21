@@ -33,5 +33,5 @@ function loadTableReestrView() {
 }
 
 function loadTableJobView() {
-  return loadPartialHTML_('/jobjob');
+  return loadPartialHTML_('job/job');
 }

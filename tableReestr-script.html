@@ -369,12 +369,9 @@
       });
       trimmingSpaces();
       clickTableReestr();
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').classList.add("form-control");
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').style =
-        `border-radius: 20px;
-    width: 400px;
-    padding: 5px 14px`;
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Поиск по таблице';
+      document.querySelector('.dataTables_wrapper .dataTables_filter label').innerHTML = `
+        <input type="search" class="form-control" placeholder="Поиск по таблице" aria-controls="data-table" style="border-radius: 20px; width: 400px; padding: 5px 14px;">
+      `
       // считывваем из кеша данные для поиска и вставляем в поле поиска
       const valueSearch = sessionStorage.getItem('dataTables_filter_input');
       $('.dataTables_filter input').val(valueSearch);

@@ -4,8 +4,6 @@
         spinner('results');
         hideBtnBuh();
         google.script.run.withSuccessHandler(createTableNeoplacheno).startDataNeoplacheno();
-        // все кнопки с бухгалтера enabled
-        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }
 
     function createTableNeoplacheno(dataArray) {
@@ -58,5 +56,7 @@
         }
         tableLineSelection(); //полосы в таблице
         btnEdit(dataArray);
+        // все кнопки с бухгалтера enabled
+        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }
 </script>

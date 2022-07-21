@@ -5,8 +5,6 @@
         spinner('results');
         hideBtnBuh();
         google.script.run.withSuccessHandler(createTableNevistavleno).startDataNevistvleno();
-        // все кнопки с бухгалтера enabled
-        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }
 
     function createTableNevistavleno(dataArray) {
@@ -57,6 +55,8 @@
         }
         tableLineSelection(); //полосы в таблице
         btnEdit(dataArray);
+        // все кнопки с бухгалтера enabled
+        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }
 
 </script>

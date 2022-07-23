@@ -42,8 +42,8 @@
   const buttonInput = () => {
     document.getElementById("button_cashe_input").disabled = true;
     const description = document.querySelector('#summa_cashe').value;
-    const waste = document.querySelector('#waste_cashe').value;
-    const arrival = document.querySelector('#arrival_cashe').value;
+    const waste = document.querySelector('#waste_cashe').value ? +document.querySelector('#waste_cashe').value : "";
+    const arrival = document.querySelector('#arrival_cashe').value ? +document.querySelector('#arrival_cashe').value : "";
     const prim = document.querySelector('#prim_cashe').value;
     const data = [[description, waste, arrival, prim]];
 

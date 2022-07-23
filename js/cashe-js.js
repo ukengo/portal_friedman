@@ -1,6 +1,8 @@
 function getDropDownArrayDescriptionCashe() {
-    const arr = getDropDownArray(dataList1(), 6, 2);
-    return arr.splice(0, arr.length-2500);
+    let arr = getDropDownArray(dataList1(), 6, 2);
+    //return arr.splice(0, arr.length-2500);
+    //return arr.splice(-1500);
+    return arr;
 }
 
 function getDropDownArrayremarkCashe() {
@@ -32,7 +34,7 @@ const cashe = () => {
 
 // получаем лист "Лист1" по имени
 const dataList1 = () => {
-    const ret = SpreadsheetApp.openByUrl(cashe()).getSheetByName('Лист1')
+    const ret = SpreadsheetApp.openByUrl(cashe()).getSheetByName('1')
     return ret
 }
 

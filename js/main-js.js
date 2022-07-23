@@ -164,9 +164,15 @@ function addNewRow(rowData) {
 // Выбор для формирования выпадающих списков
 
 // Общая функция
-function getDropDownArray(sheet, row, col) {
-  return [...new Set(sheet.getRange(row, col, sheet.getLastRow() - 1, 1).getValues().filter(String).flat())]
+/**
+flagNonUnique - это флаг, отвечающий за не уникальность. Если он true, то берется массив всех данных. Если он пропущен, то берется массив только уникальных данных.
+*/
+function getDropDownArray(sheet, row, col, flagNonUnique) {
+  let arr = sheet.getRange(row, col, sheet.getLastRow() - 1, 1).getValues().filter(String).flat();
+  const result = flagNonUnique ? arr : [...new Set(arr)];
+  return result;
 }
+// Конец общей функции
 
 //таблица Управление - Фирмы
 function getDropDownArrayFirma() {

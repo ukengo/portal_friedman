@@ -6,7 +6,16 @@ function getDropDownArrayDescriptionCashe() {
 }
 
 function getDropDownArrayremarkCashe() {
-    return getDropDownArray(dataList1(), 6, 5);
+    let arr1 = getDropDownArray(dataList1(), 6, 4, true);
+    let arr2 = getDropDownArray(dataList1(), 6, 5, true);
+    const res = [...new Set([...rebrendArrs(arr1), ...rebrendArrs(arr2)])];
+    return res;
+}
+
+function rebrendArrs(arr) {
+    const iOff = arr.indexOf("PRHisAGc");
+    arr = arr.splice(0, iOff).filter(e => typeof e === 'string');
+    return arr;
 }
 
 // отправка данных в таблицу

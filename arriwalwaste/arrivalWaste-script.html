@@ -1,4 +1,7 @@
 <script>
+
+  formFromTemplateArw();
+
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
     if (event.keyCode == 13) {
@@ -143,7 +146,7 @@
       .getLastTenRowsWaste();
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Прочие траты";
-    document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
+    //   document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
   }
 
@@ -154,7 +157,7 @@
       .getLastTenRowsArriwal();
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Прочие поступления";
-    document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
+    //  document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
   }
 
@@ -240,15 +243,18 @@
         const formaModal = allModal[2];
         const firmaModal = allModal[3];
         const wasteModal = allModal[4];
+        modalFromTemplateArw();
+
         $("#exampleModal").on("shown.bs.modal", () => {
-          $("#dateModal").val(dateModal);
-          $("#summaModal").val(summaModal);
-          $("#formaModal").val(formaModal);
-          $("#firmaArrivalWasteModal").val(firmaModal);
-          $("#wasteModal").val(wasteModal);
+          $(".date-aw").val(dateModal);
+          $(".summa-aw").val(summaModal);
+          $(".forma-aw").val(formaModal);
+          $(".firmaArrivalWaste-aw").val(firmaModal);
+          $(".waste-aw").val(wasteModal);
           //$('#awModalLabel').text(dataArray.length+row-15)
           $("#awModalLabel").text(row + 2);
         });
+        //  document.querySelector('#modal-body-arw').innerHTML = '';
       });
     } else {
       var div = document.getElementById("dataTableArriwalWaste");
@@ -333,5 +339,23 @@
         })
         .changesRowWasteModal(id, data);
     }
-  } //
+  }
+
+  //работаем с шаблоном
+  function formFromTemplateArw() {
+    const temp = document.querySelector('#arriwalwaste_forma');
+    const clon = temp.content.cloneNode(true);
+    const result = document.querySelector('#for-template-aw');
+    result.appendChild(clon);
+  }
+
+  //работаем с модалкой
+  function modalFromTemplateArw() {
+    const temp = document.querySelector('#arriwalwaste_forma');
+    const clon = temp.content.cloneNode(true);
+    const result = document.querySelector('#modal-body-arw');
+    if (!result.firstChild) {
+      result.appendChild(clon);
+    }
+  }
 </script>

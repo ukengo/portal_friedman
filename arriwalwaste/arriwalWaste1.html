@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="row">
+      <h5>Расход-Приход</h5>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+      <div class="col-lg-5">
+          <div class="radius">
+              <form>
+                  <label class="d-block">
+                      Дата
+                      <input type="date" class="form-control" id="date">
+                  </label>
+                  <div class="row">
+                      <div class="col">
+                          <label class="d-block">
+                              Сумма
+                              <input type="number" class="form-control" id="summa">
+                          </label>
+                      </div>
+                      <div class="col">
+                          <label class="text-nowrap d-block">
+                              Количество приват
+                              <input type="number" class="form-control" id="summaPrivat"
+                                  onkeypress="clickPressAwPrivat(event)">
+                          </label>
+                      </div>
+                  </div>
+                  <div>
+                      <label class="d-block">
+                          Форма собственности
+                          <select class="form-control" id="forma">
+                              <option>нал</option>
+                              <option>ооо</option>
+                              <option>оооАксон</option>
+                              <option>флп</option>
+                          </select>
+                      </label>
+                  </div>
+                  <label class="d-block">
+                      Фирма
+                      <input type="text" class="form-control" list="firmaArrivalWaste-datalist"
+                          id="firmaArrivalWaste">
+                      <datalist id="firmaArrivalWaste-datalist"></datalist>
+                  </label>
+                  <label class="d-block">
+                      Статья расхода
+                      <input type="text" class="form-control" list="waste-datalist" id="waste" />
+                      <datalist id="waste-datalist"></datalist>
+                  </label>
+                  <label class="d-block">
+                      Терминал-Карантин
+                      <select class="form-control" id="termkar">
+                          <option></option>
+                          <option>терминал</option>
+                          <option>карантин</option>
+                      </select>
+                  </label>
+                  <label class="d-block">
+                      Сф Терминал-Карантин
+                      <input class="form-control" id="sftermkar">
+                  </label>
+              </form>
+          </div>
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWaste">Расход</button>
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrival">Приход</button>
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWasteTab">Траты</button>
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrivalTab">Поступления</button>
+      </div>
+      <div class="col-lg-7">
+          <div class="radius arw-table">
+              <h6 id="vrabotevseArriwalWaste" class="mb-4 text-center"></h6>
+              <input type="search" class="form-control input-search mb-2" id="search"
+              somethingSearch="#dataTableArriwalWaste tbody tr" placeholder="Поиск по таблице">
+              <div id="dataTableArriwalWaste" class="table-responsive-xs "></div>
+          </div>
+      </div>
+  </div>
+</div>

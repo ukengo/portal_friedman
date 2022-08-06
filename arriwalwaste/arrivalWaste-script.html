@@ -1,6 +1,6 @@
 <script>
 
-  formFromTemplateArw();
+  fromTemplateArw('#for-template-aw');
 
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
@@ -17,8 +17,8 @@
   }
 
   function startArrivalWasteClear() {
-    $("#firmaArrivalWaste-datalist").empty();
-    $("#waste-datalist").empty();
+    document.getElementById("firmaArrivalWaste-datalist").innerText = '';
+    document.getElementById("waste-datalist").innerText = '';
   }
 
   function startArrivalWaste() {
@@ -38,12 +38,12 @@
   }
 
   function rowDataRangeArrivalWaste() {
-    const date = document.getElementById("date").value;
-    let summa = +document.getElementById("summa").value;
-    const summaPrivat = +document.getElementById("summaPrivat").value;
-    let forma = document.getElementById("forma").value;
-    let firmaArrivalWaste = document.getElementById("firmaArrivalWaste").value;
-    let waste = document.getElementById("waste").value;
+    const date = document.querySelector(".date-aw").value;
+    let summa = +document.querySelector(".summa-aw").value;
+    const summaPrivat = +document.querySelector(".summaPrivat-aw").value;
+    let forma = document.querySelector(".forma-aw").value;
+    let firmaArrivalWaste = document.querySelector(".firmaArrivalWaste-aw").value;
+    let waste = document.querySelector(".waste-aw").value;
     if (!summaPrivat && !summa) {
       summa = "";
       waste = "Не заполнено ни одно поле суммы";
@@ -117,12 +117,12 @@
   }
 
   function buttonClickOchistkaAW() {
-    document.getElementById("summa").value = "";
-    document.getElementById("summaPrivat").value = "";
-    document.getElementById("firmaArrivalWaste").value = "";
-    document.getElementById("waste").value = "";
-    document.getElementById("termkar").value = "";
-    document.getElementById("sftermkar").value = "";
+    document.("summa-aw").value = "";
+    document.getElementsByClassName("summaPrivat-aw").value = "";
+    document.getElementsByClassName("firmaArrivalWaste-aw").value = "";
+    document.getElementsByClassName("waste-aw").value = "";
+    document.getElementsByClassName("termkar-aw").value = "";
+    document.getElementsByClassName("sftermkar-aw").value = "";
   }
 
   document
@@ -137,7 +137,7 @@
   document
     .getElementById("buttonArrivalTab")
     .addEventListener("click", startDataArriwal);
-  document.getElementById("date").valueAsDate = new Date();
+  document.querySelector(".date-aw").valueAsDate = new Date();
 
   function startDataWaste() {
     spinner("dataTableArriwalWaste");
@@ -243,18 +243,18 @@
         const formaModal = allModal[2];
         const firmaModal = allModal[3];
         const wasteModal = allModal[4];
-        modalFromTemplateArw();
+        fromTemplateArw('#modal-body-arw');
 
-        $("#exampleModal").on("shown.bs.modal", () => {
-          $(".date-aw").val(dateModal);
-          $(".summa-aw").val(summaModal);
-          $(".forma-aw").val(formaModal);
-          $(".firmaArrivalWaste-aw").val(firmaModal);
-          $(".waste-aw").val(wasteModal);
-          //$('#awModalLabel').text(dataArray.length+row-15)
-          $("#awModalLabel").text(row + 2);
+        ///////////////////////////////////////////////////////////////////
+        document.querySelector("#exampleModal").addEventListener('shown.bs.modal', () => {
+          document.querySelector("#exampleModal .date-aw").value = dateModal;
+          document.querySelector("#exampleModal .summa-aw").value = summaModal;
+          document.querySelector("#exampleModal .forma-aw").value = formaModal;
+          document.querySelector("#exampleModal .firmaArrivalWaste-aw").value = firmaModal;
+          document.querySelector("#exampleModal .waste-aw").value = wasteModal;
+          document.querySelector("#awModalLabel").innerText = row + 2;
         });
-        //  document.querySelector('#modal-body-arw').innerHTML = '';
+
       });
     } else {
       var div = document.getElementById("dataTableArriwalWaste");
@@ -272,12 +272,12 @@
   /////////////////////////////////////////////////
   //Терминал-карантин
   function rowDataTermKar() {
-    const date = document.getElementById("date");
-    const summa = document.getElementById("summa");
-    const forma = document.getElementById("forma");
-    const waste = document.getElementById("waste");
-    const termkar = document.getElementById("termkar");
-    const sftermkar = document.getElementById("sftermkar");
+    const date = document.querySelector(".date-aw");
+    const summa = document.querySelector(".summa-aw");
+    const forma = document.querySelector(".forma-aw");
+    const waste = document.querySelector(".waste-aw");
+    const termkar = document.querySelector(".termkar-aw");
+    const sftermkar = document.querySelector(".sftermkar-aw");
 
     return (rowData = [
       date.value,
@@ -314,18 +314,19 @@
   //кнопка сохранения в модальном окне
   $("#btnSaveModalAW").on("click", btnSaveModalAW);
   function btnSaveModalAW() {
-    const id = $("#awModalLabel").text();
+    $("#exampleModal").modal("hide");
+        /* const id = $("#awModalLabel").text();
     const data = [
       [
-        $("#dateModal").val(),
-        $("#summaModal").val() * 1,
-        $("#formaModal").val(),
-        $("#firmaArrivalWasteModal").val(),
-        $("#wasteModal").val(),
+        $("#exampleModal .date-aw").val(),
+        $("#exampleModal .summa-aw").val() * 1,
+        $("#exampleModal .forma-aw").val(),
+        $("#exampleModal .firmaArrivalWaste-aw").val(),
+        $("#exampleModal .waste-aw").val(),
       ],
     ];
 
-    $("#exampleModal").modal("hide");
+    $("exampleModal").modal("hide");
     if ($("#vrabotevseArriwalWaste").text() === "Прочие поступления") {
       google.script.run
         .withSuccessHandler(() => {
@@ -338,22 +339,14 @@
           startDataWaste();
         })
         .changesRowWasteModal(id, data);
-    }
+    } */
   }
 
-  //работаем с шаблоном
-  function formFromTemplateArw() {
+  // подключаем шаблон
+  function fromTemplateArw(idInsert) {
     const temp = document.querySelector('#arriwalwaste_forma');
     const clon = temp.content.cloneNode(true);
-    const result = document.querySelector('#for-template-aw');
-    result.appendChild(clon);
-  }
-
-  //работаем с модалкой
-  function modalFromTemplateArw() {
-    const temp = document.querySelector('#arriwalwaste_forma');
-    const clon = temp.content.cloneNode(true);
-    const result = document.querySelector('#modal-body-arw');
+    const result = document.querySelector(idInsert);
     if (!result.firstChild) {
       result.appendChild(clon);
     }

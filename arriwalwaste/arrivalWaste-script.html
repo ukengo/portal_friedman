@@ -17,8 +17,8 @@
   }
 
   function startArrivalWasteClear() {
-    document.getElementById("firmaArrivalWaste-datalist").innerText = '';
-    document.getElementById("waste-datalist").innerText = '';
+    document.querySelector("#firmaArrivalWaste-datalist").value = "";
+    document.querySelector("#waste-datalist").value = "";
   }
 
   function startArrivalWaste() {
@@ -38,12 +38,12 @@
   }
 
   function rowDataRangeArrivalWaste() {
-    const date = document.querySelector(".date-aw").value;
-    let summa = +document.querySelector(".summa-aw").value;
-    const summaPrivat = +document.querySelector(".summaPrivat-aw").value;
-    let forma = document.querySelector(".forma-aw").value;
-    let firmaArrivalWaste = document.querySelector(".firmaArrivalWaste-aw").value;
-    let waste = document.querySelector(".waste-aw").value;
+    const date = document.querySelector(".date").value;
+    let summa = +document.querySelector(".summa").value;
+    const summaPrivat = +document.querySelector(".summaPrivat").value;
+    let forma = document.querySelector(".forma").value;
+    let firmaArrivalWaste = document.querySelector(".firmaArrivalWaste").value;
+    let waste = document.querySelector(".waste").value;
     if (!summaPrivat && !summa) {
       summa = "";
       waste = "Не заполнено ни одно поле суммы";
@@ -67,8 +67,8 @@
   }
 
   function buttonClickWasteAndArival() {
-    let vrabotevseArriwalWaste = document.getElementById(
-      "vrabotevseArriwalWaste"
+    let vrabotevseArriwalWaste = document.querySelector(
+      "#vrabotevseArriwalWaste"
     );
     if (rowDataRangeArrivalWaste()[4] === "Не заполнено ни одно поле суммы") {
       alert("Не заполнено ни одно поле суммы");
@@ -117,34 +117,34 @@
   }
 
   function buttonClickOchistkaAW() {
-    document.("summa-aw").value = "";
-    document.getElementsByClassName("summaPrivat-aw").value = "";
-    document.getElementsByClassName("firmaArrivalWaste-aw").value = "";
-    document.getElementsByClassName("waste-aw").value = "";
-    document.getElementsByClassName("termkar-aw").value = "";
-    document.getElementsByClassName("sftermkar-aw").value = "";
+    document.querySelector(".summa").value = "";
+    document.querySelector(".summaPrivat").value = "";
+    document.querySelector(".firmaArrivalWaste").value = "";
+    document.querySelector(".waste").value = "";
+    document.querySelector(".termkar").value = "";
+    document.querySelector(".sftermkar").value = "";
   }
 
   document
-    .getElementById("buttonWaste")
+    .querySelector("#buttonWaste")
     .addEventListener("click", buttonClickWasteAndArival);
   document
-    .getElementById("buttonArrival")
+    .querySelector("#buttonArrival")
     .addEventListener("click", buttonClickWasteAndArival);
   document
-    .getElementById("buttonWasteTab")
+    .querySelector("#buttonWasteTab")
     .addEventListener("click", startDataWaste);
   document
-    .getElementById("buttonArrivalTab")
+    .querySelector("#buttonArrivalTab")
     .addEventListener("click", startDataArriwal);
-  document.querySelector(".date-aw").valueAsDate = new Date();
+  document.querySelector("#date").valueAsDate = new Date();
 
   function startDataWaste() {
     spinner("dataTableArriwalWaste");
     google.script.run
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsWaste();
-    document.getElementById("vrabotevseArriwalWaste").innerHTML =
+    document.querySelector("#vrabotevseArriwalWaste").innerHTML =
       "Прочие траты";
     //   document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
@@ -155,7 +155,7 @@
     google.script.run
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsArriwal();
-    document.getElementById("vrabotevseArriwalWaste").innerHTML =
+    document.querySelector("#vrabotevseArriwalWaste").innerHTML =
       "Прочие поступления";
     //  document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
@@ -227,11 +227,11 @@
         result += "</tr>";
       }
       result += "</table>";
-      var div = document.getElementById("dataTableArriwalWaste");
+      var div = document.querySelector("#dataTableArriwalWaste");
       div.innerHTML = result;
       document.querySelector(".arw-table").style.height = "87vh";
       tableLineSelection(); // полосы в таблице
-      $(".btnbtn").click(function (i) {
+      document.querySelector(".btnbtn").addEventListener('click', i => {
         //id кнопки
         const idButtonModalFinance = i.currentTarget.attributes.id.value;
 
@@ -243,15 +243,13 @@
         const formaModal = allModal[2];
         const firmaModal = allModal[3];
         const wasteModal = allModal[4];
-        fromTemplateArw('#modal-body-arw');
-
-        ///////////////////////////////////////////////////////////////////
-        document.querySelector("#exampleModal").addEventListener('shown.bs.modal', () => {
-          document.querySelector("#exampleModal .date-aw").value = dateModal;
-          document.querySelector("#exampleModal .summa-aw").value = summaModal;
-          document.querySelector("#exampleModal .forma-aw").value = formaModal;
-          document.querySelector("#exampleModal .firmaArrivalWaste-aw").value = firmaModal;
-          document.querySelector("#exampleModal .waste-aw").value = wasteModal;
+        document.querySelector("#exampleModal").addEventListener("shown.bs.modal", () => {
+          document.querySelector("#dateModal").value = dateModal;
+          document.querySelector("#summaModal").value = summaModal;
+          document.querySelector("#formaModal").value = formaModal;
+          document.querySelector("#firmaArrivalWasteModal").value = firmaModal;
+          document.querySelector("#wasteModal").value = wasteModal;
+          //$('#awModalLabel').text(dataArray.length+row-15)
           document.querySelector("#awModalLabel").innerText = row + 2;
         });
 
@@ -265,19 +263,18 @@
 
   function updateR() {
     document
-      .getElementById("buttonModal")
-      .addEventListener("click", function () { });
+      .querySelector("buttonModal").addEventListener("click", function () { });
   }
 
   /////////////////////////////////////////////////
   //Терминал-карантин
   function rowDataTermKar() {
-    const date = document.querySelector(".date-aw");
-    const summa = document.querySelector(".summa-aw");
-    const forma = document.querySelector(".forma-aw");
-    const waste = document.querySelector(".waste-aw");
-    const termkar = document.querySelector(".termkar-aw");
-    const sftermkar = document.querySelector(".sftermkar-aw");
+    const date = document.querySelector("#date");
+    const summa = document.querySelector("#summa");
+    const forma = document.querySelector("#forma");
+    const waste = document.querySelector("#waste");
+    const termkar = document.querySelector("#termkar");
+    const sftermkar = document.querySelector("#sftermkar");
 
     return (rowData = [
       date.value,
@@ -296,7 +293,7 @@
       return;
     }
     const id = $("#awModalLabel").text();
-    if ($("#vrabotevseArriwalWaste").text() === "Прочие поступления") {
+    if (document.querySelector("#vrabotevseArriwalWaste").innerText === "Прочие поступления") {
       google.script.run
         .withSuccessHandler(() => {
           startDataArriwal();
@@ -312,22 +309,21 @@
   });
 
   //кнопка сохранения в модальном окне
-  $("#btnSaveModalAW").on("click", btnSaveModalAW);
+  document.querySelector("#btnSaveModalAW").addEventListener("click", btnSaveModalAW);
   function btnSaveModalAW() {
-    $("#exampleModal").modal("hide");
-        /* const id = $("#awModalLabel").text();
+    const id = document.querySelector("#awModalLabel").innerText;
     const data = [
       [
-        $("#exampleModal .date-aw").val(),
-        $("#exampleModal .summa-aw").val() * 1,
-        $("#exampleModal .forma-aw").val(),
-        $("#exampleModal .firmaArrivalWaste-aw").val(),
-        $("#exampleModal .waste-aw").val(),
+        document.querySelector("#dateModal").value,
+        document.querySelector("#summaModal").value * 1,
+        document.querySelector("#formaModal").value,
+        document.querySelector("#firmaArrivalWasteModal").value,
+        document.querySelector("#wasteModal").value,
       ],
     ];
 
-    $("exampleModal").modal("hide");
-    if ($("#vrabotevseArriwalWaste").text() === "Прочие поступления") {
+    $("#exampleModal").modal("hide");
+    if (document.querySelector("#vrabotevseArriwalWaste").innerText === "Прочие поступления") {
       google.script.run
         .withSuccessHandler(() => {
           startDataArriwal();
@@ -339,7 +335,7 @@
           startDataWaste();
         })
         .changesRowWasteModal(id, data);
-    } */
+    }
   }
 
   // подключаем шаблон

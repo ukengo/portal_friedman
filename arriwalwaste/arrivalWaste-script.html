@@ -288,11 +288,11 @@
   ////////////////////////////////////////////
 
   //кнопка удаления в модальном окне
-  $("#btnDeleteModalAW").on("click", () => {
+  document.querySelector("#btnDeleteModalAW").addEventListener("click", () => {
     if (!window.confirm("Удалить запись?")) {
       return;
     }
-    const id = $("#awModalLabel").text();
+    const id = document.querySelector("#awModalLabel").innerText;
     if (document.querySelector("#vrabotevseArriwalWaste").innerText === "Прочие поступления") {
       google.script.run
         .withSuccessHandler(() => {

@@ -4,7 +4,7 @@ function loadPartialHTML_(partial) {
 }
 
 function loadArriwalWasteView() {
-  return loadPartialHTML_('arriwalwaste/arriwalWaste1');
+  return loadPartialHTML_('arriwalwaste/arriwalWaste');
 }
 
 

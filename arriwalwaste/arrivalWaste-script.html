@@ -38,12 +38,12 @@
   }
 
   function rowDataRangeArrivalWaste() {
-    const date = document.querySelector(".date").value;
-    let summa = +document.querySelector(".summa").value;
-    const summaPrivat = +document.querySelector(".summaPrivat").value;
-    let forma = document.querySelector(".forma").value;
-    let firmaArrivalWaste = document.querySelector(".firmaArrivalWaste").value;
-    let waste = document.querySelector(".waste").value;
+    const date = document.querySelector(".date-aw").value;
+    let summa = +document.querySelector(".summa-aw").value;
+    const summaPrivat = +document.querySelector(".summaPrivat-aw").value;
+    let forma = document.querySelector(".forma-aw").value;
+    let firmaArrivalWaste = document.querySelector(".firmaArrivalWaste-aw").value;
+    let waste = document.querySelector(".waste-aw").value;
     if (!summaPrivat && !summa) {
       summa = "";
       waste = "Не заполнено ни одно поле суммы";
@@ -117,12 +117,12 @@
   }
 
   function buttonClickOchistkaAW() {
-    document.querySelector(".summa").value = "";
-    document.querySelector(".summaPrivat").value = "";
-    document.querySelector(".firmaArrivalWaste").value = "";
-    document.querySelector(".waste").value = "";
-    document.querySelector(".termkar").value = "";
-    document.querySelector(".sftermkar").value = "";
+    document.querySelector(".summa-aw").value = "";
+    document.querySelector(".summaPrivat-aw").value = "";
+    document.querySelector(".firmaArrivalWaste-aw").value = "";
+    document.querySelector(".waste-aw").value = "";
+    document.querySelector(".termkar-aw").value = "";
+    document.querySelector(".sftermkar-aw").value = "";
   }
 
   document
@@ -137,7 +137,7 @@
   document
     .querySelector("#buttonArrivalTab")
     .addEventListener("click", startDataArriwal);
-  document.querySelector("#date").valueAsDate = new Date();
+  document.querySelector(".date-aw").valueAsDate = new Date();
 
   function startDataWaste() {
     spinner("dataTableArriwalWaste");
@@ -161,52 +161,6 @@
     startArrivalWaste();
   }
 
-  /* function createTableArriwalWaste(dataArray) {
-
-  const nameTable = dataArray.data.slice()
-  if(dataArray.data){
-    var result = "<table class='table table-bordered' style='font-size:0.9em'>"
-      // строим таблицу
-      for(var i=1; i<dataArray.data.length; i++) {
-        result += "<tr>";
-          for(var j=0; j<dataArray.data[i].length; j++){
-            result += "<td>"+dataArray.data[i][j]+"</td>";
-      }
-          result += "<td><button type=\"button\" id=\"buttonModalFinance"+ i +"\"  class=\"btn btn-sm btn-light btnbtn\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\" \" />Edit</button></td>";
-          result += "</tr>";
-      }
-      result += "</table>";
-      var div = document.getElementById('dataTableArriwalWaste');
-      div.innerHTML = result;
-      $('.btnbtn').click(function (i){
-        
-        //id кнопки
-        const idButtonModalFinance = i.currentTarget.attributes.id.value 
-        
-        //номер рядка из id кнопки (номер редактируемого рядка)
-        const row = parseInt(idButtonModalFinance.match(/\d+/))
-         
-        const allModal = dataArray.data[row] 
-        const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0])) //формат даты
-        const summaModal = parseInt(allModal[1].replace(/\s+/g, '')).toFixed(2) // удаляем пробел (.replace(/\s+/g, ''))
-        const formaModal = allModal[2]
-        const firmaModal = allModal[3]
-        const wasteModal = allModal[4]
-        $('#exampleModal').on('shown.bs.modal', () => {
-          $('#dateModal').val(dateModal)
-          $('#summaModal').val(summaModal)
-          $('#formaModal').val(formaModal)
-          $('#firmaArrivalWasteModal').val(firmaModal)
-          $('#wasteModal').val(wasteModal)
-          $('#awModalLabel').text(dataArray.length+row-15)
-        }) 
-      }) 
- 
-  }else{
-    var div = document.getElementById('dataTableArriwalWaste');
-    div.innerHTML = "Data not found!";
-  }
-} */
   function createTableArriwalWaste(dataArray) {
     if (!dataArray.data) return false;
     const nameTable = dataArray.data.slice();
@@ -243,16 +197,16 @@
         const formaModal = allModal[2];
         const firmaModal = allModal[3];
         const wasteModal = allModal[4];
-        document.querySelector("#exampleModal").addEventListener("shown.bs.modal", () => {
-          document.querySelector("#dateModal").value = dateModal;
-          document.querySelector("#summaModal").value = summaModal;
-          document.querySelector("#formaModal").value = formaModal;
-          document.querySelector("#firmaArrivalWasteModal").value = firmaModal;
-          document.querySelector("#wasteModal").value = wasteModal;
-          //$('#awModalLabel').text(dataArray.length+row-15)
-          document.querySelector("#awModalLabel").innerText = row + 2;
-        });
 
+        fromTemplateArw('#modal-body-aw');
+        document.querySelector("#exampleModal").addEventListener("shown.bs.modal", () => {
+          document.getElementsByClassName("date-aw")[1].value = dateModal;
+          document.getElementsByClassName("summa-aw")[1].value = summaModal;
+          document.getElementsByClassName("forma-aw")[1].value = formaModal;
+          document.getElementsByClassName("firmaArrivalWaste-aw")[1].value = firmaModal;
+          document.getElementsByClassName("waste-aw")[1].value = wasteModal;
+          document.getElementById("awModalLabel").innerText = row + 2;
+        });
       });
     } else {
       var div = document.getElementById("dataTableArriwalWaste");
@@ -269,12 +223,12 @@
   /////////////////////////////////////////////////
   //Терминал-карантин
   function rowDataTermKar() {
-    const date = document.querySelector("#date");
-    const summa = document.querySelector("#summa");
-    const forma = document.querySelector("#forma");
-    const waste = document.querySelector("#waste");
-    const termkar = document.querySelector("#termkar");
-    const sftermkar = document.querySelector("#sftermkar");
+    const date = document.querySelector(".date-aw");
+    const summa = document.querySelector(".summa-aw");
+    const forma = document.querySelector(".forma-aw");
+    const waste = document.querySelector(".waste-aw");
+    const termkar = document.querySelector(".termkar-aw");
+    const sftermkar = document.querySelector(".sftermkar-aw");
 
     return (rowData = [
       date.value,
@@ -292,8 +246,8 @@
     if (!window.confirm("Удалить запись?")) {
       return;
     }
-    const id = document.querySelector("#awModalLabel").innerText;
-    if (document.querySelector("#vrabotevseArriwalWaste").innerText === "Прочие поступления") {
+    const id = document.getElementById("awModalLabel").innerText;
+    if (document.getElementById("vrabotevseArriwalWaste").innerText === "Прочие поступления") {
       google.script.run
         .withSuccessHandler(() => {
           startDataArriwal();
@@ -314,14 +268,13 @@
     const id = document.querySelector("#awModalLabel").innerText;
     const data = [
       [
-        document.querySelector("#dateModal").value,
-        document.querySelector("#summaModal").value * 1,
-        document.querySelector("#formaModal").value,
-        document.querySelector("#firmaArrivalWasteModal").value,
-        document.querySelector("#wasteModal").value,
+        document.getElementsByClassName("date-aw")[1].value,
+        document.getElementsByClassName("summa-aw")[1].value * 1,
+        document.getElementsByClassName("forma-aw")[1].value,
+        document.getElementsByClassName("firmaArrivalWaste-aw")[1].value,
+        document.getElementsByClassName("waste-aw")[1].value,
       ],
     ];
-
     $("#exampleModal").modal("hide");
     if (document.querySelector("#vrabotevseArriwalWaste").innerText === "Прочие поступления") {
       google.script.run

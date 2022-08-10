@@ -171,7 +171,7 @@
       div.innerHTML = result;
       document.querySelector(".arw-table").style.height = "87vh";
       tableLineSelection(); // полосы в таблице
-      btnEdit(dataArray);
+      btnEditModalAw(dataArray);
     } else {
       var div = document.getElementById("dataTableArriwalWaste");
       div.innerHTML = "Data not found!";
@@ -251,7 +251,7 @@
   }
 
   // кнопка редактирование (открытие модального окна)
-  function btnEdit(dataArray) {
+  function btnEditModalAw(dataArray) {
     document.querySelector(".btnbtn").addEventListener('click', i => {
       //id кнопки
       const idButtonModalFinance = i.currentTarget.attributes.id.value;

@@ -29,12 +29,13 @@
   }
 
   function afterDropDownReturned(arrayOfArrays, datalist) {
-    let firma = document.getElementById(datalist)
+    let selectorDatalist = document.getElementById(datalist);
+    selectorDatalist.innerHTML = null;
     arrayOfArrays.forEach((r) => {
-      const option = document.createElement('option')
-      option.textContent = r
-      firma.appendChild(option)
-    })
+      const selectorOption = document.createElement('option');
+      selectorOption.textContent = r;
+      selectorDatalist.appendChild(selectorOption)
+    });
   }
 
   //автоскрытие разворачивающегося меню 

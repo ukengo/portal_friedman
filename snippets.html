@@ -80,4 +80,24 @@
     return $(this_).parent()[colIndex].childNodes[colIndex].innerHTML;
   }
 
+  // проверяем форму на наличие чекбоксов или радиокнопок
+  const isCheckboxOrRadio = type => ['checkbox', 'rsdio'].includes(type);
+
+
+  // собираем данные форм в массив
+  function serializeForm(formNode) {
+    let res = [];
+    for (let field of formNode) {
+      const { name } = field;
+      if (name) {
+        const { type, checked, value } = field;
+        res[name] = isCheckboxOrRadio(type) ? checked : value;
+      }
+    }
+    // преобразовываем объект в массив данных
+    res = (Object.values(res));
+    return res;
+  }
+
+
 </script>

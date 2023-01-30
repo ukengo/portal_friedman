@@ -3,96 +3,97 @@
     <h5>Финансы</h5>
   </div>
 
-  <div class="col-xl-10 radius p-4 form-background-color">
-    <div class="row g-1 mt-1">
-      <div class="col-md-2">
-        <div class="form">
-          <label for="proektfin">Проект</label>
-          <input type="number" id="proektfin" list="proektfin-datalist"
-            class="form-control form-control-sm form-font input-paste-finance" />
-          <datalist id="proektfin-datalist"></datalist>
+  <form action="" id="formFinStart">
+    <div class="col-xl-10 radius p-4 form-background-color">
+      <div class="row g-1 mt-1">
+        <div class="col-md-2">
+          <div class="form">
+            <label for="proektfin">Проект</label>
+            <input type="number" id="proektfin" list="proektfin-datalist"
+              class="form-control form-control-sm form-font input-paste-finance" />
+            <datalist id="proektfin-datalist"></datalist>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form">
+            <label for="summafin">Сумма</label>
+            <input type="number" id="summafin" class="form-control form-control-sm" />
+          </div>
+        </div>
+
+        <div class="col-md-1">
+          <div class="form">
+            <label for="priznakfin">Признак</label>
+            <input type="text" id="priznakfin" list="priznakfin-datalist" class="form-control form-control-sm" />
+            <datalist id="priznakfin-datalist"></datalist>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form">
+            <label for="dateoplfin">Дата оплаты</label>
+            <input type="date" id="dateoplfin" class="form-control form-control-sm" />
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form">
+            <label for="sffin">Сф</label>
+            <input type="text" id="sffin" list="sffin-datalist" class="form-control form-control-sm" />
+            <datalist id="sffin-datalist"></datalist>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form">
+            <label for="idfin">id</label>
+            <input type="text" id="idfin" class="form-control form-control-sm" />
+          </div>
         </div>
       </div>
+      <div class="row g-1 mt-1">
+        <div class="col-md-6">
+          <div class="form">
+            <label for="primfin">Примечание</label>
+            <input type="text" id="primfin" list="primfin-datalist" class="form-control form-control-sm" />
+            <datalist id="primfin-datalist"></datalist>
+          </div>
+        </div>
 
-      <div class="col-md-2">
-        <div class="form">
-          <label for="summafin">Сумма</label>
-          <input type="number" id="summafin" class="form-control form-control-sm" />
+        <div class="col-md-6">
+          <div class="form">
+            <label for="firmafin">Фирма</label>
+            <input type="text" id="firmafin" list="firmafin-datalist" class="form-control form-control-sm" />
+            <datalist id="firmafin-datalist"></datalist>
+          </div>
         </div>
       </div>
-
-      <div class="col-md-1">
-        <div class="form">
-          <label for="priznakfin">Признак</label>
-          <input type="text" id="priznakfin" list="priznakfin-datalist" class="form-control form-control-sm" />
-          <datalist id="priznakfin-datalist"></datalist>
+      <div class="row g-1 mt-1 checkbox-finance">
+        <div class="col-md-auto">
+          <div class="form-check">
+            <span class="check-style"></span>
+            <label for="issuepartfinance" class="form-check-label">Выставлено частично</label>
+            <input type="checkbox" id="issuepartfinance" class="form-check-input" value="part" />
+          </div>
         </div>
-      </div>
-
-      <div class="col-md-2">
-        <div class="form">
-          <label for="dateoplfin">Дата оплаты</label>
-          <input type="date" id="dateoplfin" class="form-control form-control-sm" />
+        <div class="col-md-auto">
+          <div class="form-check">
+            <span class="check-style"></span>
+            <label for="issuecompletfinance" class="form-check-label">Выставлено полностью</label>
+            <input type="checkbox" id="issuecompletfinance" class="form-check-input" value="complet" />
+          </div>
         </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="form">
-          <label for="sffin">Сф</label>
-          <input type="text" id="sffin" list="sffin-datalist" class="form-control form-control-sm" />
-          <datalist id="sffin-datalist"></datalist>
-        </div>
-      </div>
-
-      <div class="col-md-2">
-        <div class="form">
-          <label for="idfin">id</label>
-          <input type="text" id="idfin" class="form-control form-control-sm" />
+        <div class="col-md-auto">
+          <div class="form-check">
+            <span class="check-style"></span>
+            <label for="ispolufinance" class="form-check-label">Исполу</label>
+            <input type="checkbox" id="ispolufinance" class="form-check-input" value="ispolu" />
+          </div>
         </div>
       </div>
     </div>
-    <div class="row g-1 mt-1">
-      <div class="col-md-6">
-        <div class="form">
-          <label for="primfin">Примечание</label>
-          <input type="text" id="primfin" list="primfin-datalist" class="form-control form-control-sm" />
-          <datalist id="primfin-datalist"></datalist>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="form">
-          <label for="firmafin">Фирма</label>
-          <input type="text" id="firmafin" list="firmafin-datalist" class="form-control form-control-sm" />
-          <datalist id="firmafin-datalist"></datalist>
-        </div>
-      </div>
-    </div>
-    <div class="row g-1 mt-1 checkbox-finance">
-      <div class="col-md-auto">
-        <div class="form-check">
-          <span class="check-style"></span>
-          <label for="issuepartfinance" class="form-check-label">Выставлено частично</label>
-          <input type="checkbox" id="issuepartfinance" class="form-check-input" value="part" />
-        </div>
-      </div>
-      <div class="col-md-auto">
-        <div class="form-check">
-          <span class="check-style"></span>
-          <label for="issuecompletfinance" class="form-check-label">Выставлено полностью</label>
-          <input type="checkbox" id="issuecompletfinance" class="form-check-input" value="complet" />
-        </div>
-      </div>
-      <div class="col-md-auto">
-        <div class="form-check">
-          <span class="check-style"></span>
-          <label for="ispolufinance" class="form-check-label">Исполу</label>
-          <input type="checkbox" id="ispolufinance" class="form-check-input" value="ispolu" />
-        </div>
-      </div>
-    </div>
-  </div>
-
+  </form>
   <div class="row  mb-2 mt-2 ">
 
     <div class="col-md-9">

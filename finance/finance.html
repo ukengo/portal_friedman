@@ -1,4 +1,4 @@
-<div class="container"  onkeypress="clickPressFinance(event)">
+<div class="container" onkeypress="clickPressFinance(event)">
   <div class="row mt-4">
     <h5>Финансы</h5>
   </div>
@@ -110,6 +110,8 @@
         <button type="button" class="btn btn-primary btn-danger" id="btnTableАFinance">Table</button>
         <button type="button" class="btn btn-primary btn-danger" id="clearBtnTableFinance">Clear</button>
       </div>
+      <button type="button" id="buttonModalFinanceMultiple" class="btn btn-primary btn-danger" data-bs-toggle="modal"
+        data-bs-target="#ModalFinanceMultiple">Multiple</button>
     </div>
   </div>
 </div>
@@ -124,7 +126,9 @@
   <form>
     <div class="row g-1 mt-1">
       <div class="col-md-4">
-        <input type="search" class="form-control input-search input-paste-finance mt-1" id="searchFinance" somethingSearch="#data-table-finance tbody tr" placeholder="Поиск по таблице"  onkeypress="clickPressFinanceShearh(event)">
+        <input type="search" class="form-control input-search input-paste-finance mt-1" id="searchFinance"
+          somethingSearch="#data-table-finance tbody tr" placeholder="Поиск по таблице"
+          onkeypress="clickPressFinanceShearh(event)">
       </div>
       <div class="col-md-4"></div>
       <div class="col-md-4">
@@ -262,4 +266,20 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Modal Multiple-->
+<div class="modal fade" id="ModalFinanceMultiple" tabindex="-1" aria-labelledby="ModalLabelFinanceMultiple"
+  aria-hidden="true">
+  <div class="container">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="modal-body-multiple-1"></div>
+          <div class="modal-body-multiple"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>

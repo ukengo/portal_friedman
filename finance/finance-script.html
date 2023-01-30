@@ -26,6 +26,7 @@
       afterDropDownReturned(arrayOfArrays, 'priznakfin-datalist')
     }).getDropDownArrayPriznak()
   }
+
   function array(ar) {
     var row_number_fin = 0;
     let naydenofin = 0
@@ -172,7 +173,6 @@
       return false;
     }
   }
-
 
   function SearchRecordsFin(valSfFin) {
     var proektFin = document.getElementById("proektfin").value;
@@ -503,7 +503,7 @@
 
   // кнопки Add R+ т Add R- (обработка кнопок)
   $('#add_button_fin button').click(function () {
-   // if (!window.confirm('Добавить запись?')) return;
+    // if (!window.confirm('Добавить запись?')) return;
     const this_ = this
     const vatieButton = this_.innerText;
     this.disabled = true;
@@ -563,5 +563,139 @@
       }
     }
   }
+
+  //будуємо "велику модалку"
+  //document.querySelector().onclick
+
+
+/*   function StrongMultipleNext() {
+    return `
+    
+            
+              <div class="row g-1 mt-1">
+                <div class="col-2">
+                  <div class="form">
+                    <label for="proektfin">Проект</label>
+                    <input type="number" id="proektfin" list="proektfin-datalist"
+                      class="form-control form-control-sm form-font input-paste-finance" />
+                    <datalist id="proektfin-datalist"></datalist>
+                  </div>
+                </div>
+          
+                <div class="col-2">
+                  <div class="form">
+                    <label for="summafin">Сумма</label>
+                    <input type="number" id="summafin" class="form-control form-control-sm" />
+                  </div>
+                </div>
+          
+                <div class="col-1">
+                  <div class="form">
+                    <label for="priznakfin">Признак</label>
+                    <input type="text" id="priznakfin" list="priznakfin-datalist" class="form-control form-control-sm" />
+                    <datalist id="priznakfin-datalist"></datalist>
+                  </div>
+                </div>
+          
+                <div class="col-2">
+                  <div class="form">
+                    <label for="dateoplfin">Дата оплаты</label>
+                    <input type="date" id="dateoplfin" class="form-control form-control-sm" />
+                  </div>
+                </div>
+          
+                <div class="col">
+                  <div class="form">
+                    <label for="primfin">Примечание</label>
+                    <input type="text" id="primfin" list="primfin-datalist" class="form-control form-control-sm" />
+                    <datalist id="primfin-datalist"></datalist>
+                  </div>
+                </div>
+          
+              </div>
+              <div class="row g-1 mt-1 checkbox-finance">
+                <div class="col-md-auto">
+                  <div class="form-check">
+                    <span class="check-style"></span>
+                    <label for="issuepartfinance" class="form-check-label">Выставлено частично</label>
+                    <input type="checkbox" id="issuepartfinance" class="form-check-input" value="part" />
+                  </div>
+                </div>
+                <div class="col-md-auto">
+                  <div class="form-check">
+                    <span class="check-style"></span>
+                    <label for="issuecompletfinance" class="form-check-label">Выставлено полностью</label>
+                    <input type="checkbox" id="issuecompletfinance" class="form-check-input" value="complet" />
+                  </div>
+                </div>
+                <div class="col-md-auto">
+                  <div class="form-check">
+                    <span class="check-style"></span>
+                    <label for="ispolufinance" class="form-check-label">Исполу</label>
+                    <input type="checkbox" id="ispolufinance" class="form-check-input" value="ispolu" />
+                  </div>
+                </div>
+                  
+               <div class="col ">
+                   <button type="button" class="btn btn-light btn-sm float-md-end btn-multiple-next">+</button>
+                </div>
+              <hr>              
+           
+          `;
+
+
+  }
+  const uuu = () => {
+    document.querySelector('.modal-body-multiple-1').innerHTML = StrongMultipleNext();
+    document.querySelector('.modal-body-multiple').innerHTML = StrongMultipleNext();
+  }
+ 
+  document.querySelector('#buttonModalFinanceMultiple').onclick = () => {
+    uuu();
+    document.querySelectorAll('.btn-multiple-next').onclick = function () {
+      console.log(111111111111111111);
+      
+    //  document.querySelector('.strong-multiple-next').innerHTML = StrongMultipleNext();
+     for(i = 0; i < document.querySelectorAll('.btn-multiple-next').length; i++) {
+    console.log(document.querySelector('.btn-multiple-next')[i]);
+    } 
+    const node = this;
+    console.log(node);
+    console.log(document.querySelectorAll('.btn-multiple-next').length);
+
+  };
+    
+  } */
+  
+  
+ /*  document.querySelector('.11111111111111111111').innerHTML = `
+                  <button type="button" class="btn btn-light btn-sm float-md-end btn-multiple-next">+</button>
+                `; */
+  
+
+
+
+  
+  
+ 
+
+
+
+  // строим форму ввода
+  /*  const buttonClickCashe = () => {
+     buildDatalistCashe();
+     spinner('results');
+     hideBtnBuh(); // включение выпадающего окна со стрелкой на мобильном
+     const temp = document.querySelector('#cashe_forma');
+     const clon = temp.content.cloneNode(true);
+     const result = document.querySelector('#results');
+     if (result.firstChild) {
+       while (result.firstChild) {
+         result.removeChild(result.firstChild);
+       }
+     }
+     result.appendChild(clon);
+     document.getElementById('button_cashe_input').addEventListener('click', buttonInput);
+   } */
 
 </script>

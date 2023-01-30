@@ -503,26 +503,32 @@
 
   // кнопки Add R+ т Add R- (обработка кнопок)
   $('#add_button_fin button').click(function () {
-    // if (!window.confirm('Добавить запись?')) return;
+   // if (!window.confirm('Добавить запись?')) return;
     const this_ = this
     const vatieButton = this_.innerText;
     this.disabled = true;
-   // serializeFormV2('formFinStart');
-   let array = serializeFormV2('formFinStart');
-    if (vatieButton === 'Add R-') array[1] = -array[1];
-    console.log(array);
-    
-    this_.disabled = false;
-/*     google.script.run.withSuccessHandler(function (return_string) {
+    const proektFin = document.getElementById("proektfin").value;
+    let summaFin = document.getElementById("summafin").value;
+    const priznakFin = document.getElementById("priznakfin").value;
+    const dateoplFin = document.getElementById("dateoplfin").value;
+    const sfFin = document.getElementById("sffin").value;
+    const primFin = document.getElementById("primfin").value;
+    const idFin = document.getElementById("idfin").value;
+    const firmaFin = document.getElementById("firmafin").value;
+
+    if (vatieButton === 'Add R-') summaFin = -summaFin;
+    const checkBox = inputCheckboxChecked();
+    //spinner('rowdatafin')
+    google.script.run.withSuccessHandler(function (return_string) {
       //  document.getElementById("proektfin").value = proektFin;
       // SearchRecordsFinProekt();
       $('.checkbox-finance input:checkbox').prop('checked', false);
       this_.disabled = false;
-    }).AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, checkBox); */
+    }).AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, checkBox);
   });
 
 
-// кнопка Update (обработка кнопок)
+  // кнопка Update (обработка кнопок)
   function updateRecordFinButton() {
     const elem = document.querySelectorAll('.btn-update-fin');
 
@@ -559,123 +565,136 @@
     }
   }
 
+  // кнопки + и - (обработка кнопок)
+  $('#buttonModalFinanceMultiple button').click(function () {
+    // if (!window.confirm('Добавить запись?')) return;
+    const this_ = this
+    const vatieButton = this_.innerText;
+    this.disabled = true;   
+    let array = serializeFormV2('formFinStart');
+    if (vatieButton === '-') array[1] = -array[1];
+    this_.disabled = false;
+  });
+
+
+
   //будуємо "велику модалку"
   //document.querySelector().onclick
 
 
-/*   function StrongMultipleNext() {
-    return `
-    
-            
-              <div class="row g-1 mt-1">
-                <div class="col-2">
-                  <div class="form">
-                    <label for="proektfin">Проект</label>
-                    <input type="number" id="proektfin" list="proektfin-datalist"
-                      class="form-control form-control-sm form-font input-paste-finance" />
-                    <datalist id="proektfin-datalist"></datalist>
-                  </div>
-                </div>
-          
-                <div class="col-2">
-                  <div class="form">
-                    <label for="summafin">Сумма</label>
-                    <input type="number" id="summafin" class="form-control form-control-sm" />
-                  </div>
-                </div>
-          
-                <div class="col-1">
-                  <div class="form">
-                    <label for="priznakfin">Признак</label>
-                    <input type="text" id="priznakfin" list="priznakfin-datalist" class="form-control form-control-sm" />
-                    <datalist id="priznakfin-datalist"></datalist>
-                  </div>
-                </div>
-          
-                <div class="col-2">
-                  <div class="form">
-                    <label for="dateoplfin">Дата оплаты</label>
-                    <input type="date" id="dateoplfin" class="form-control form-control-sm" />
-                  </div>
-                </div>
-          
-                <div class="col">
-                  <div class="form">
-                    <label for="primfin">Примечание</label>
-                    <input type="text" id="primfin" list="primfin-datalist" class="form-control form-control-sm" />
-                    <datalist id="primfin-datalist"></datalist>
-                  </div>
-                </div>
-          
-              </div>
-              <div class="row g-1 mt-1 checkbox-finance">
-                <div class="col-md-auto">
-                  <div class="form-check">
-                    <span class="check-style"></span>
-                    <label for="issuepartfinance" class="form-check-label">Выставлено частично</label>
-                    <input type="checkbox" id="issuepartfinance" class="form-check-input" value="part" />
-                  </div>
-                </div>
-                <div class="col-md-auto">
-                  <div class="form-check">
-                    <span class="check-style"></span>
-                    <label for="issuecompletfinance" class="form-check-label">Выставлено полностью</label>
-                    <input type="checkbox" id="issuecompletfinance" class="form-check-input" value="complet" />
-                  </div>
-                </div>
-                <div class="col-md-auto">
-                  <div class="form-check">
-                    <span class="check-style"></span>
-                    <label for="ispolufinance" class="form-check-label">Исполу</label>
-                    <input type="checkbox" id="ispolufinance" class="form-check-input" value="ispolu" />
-                  </div>
-                </div>
-                  
-               <div class="col ">
-                   <button type="button" class="btn btn-light btn-sm float-md-end btn-multiple-next">+</button>
-                </div>
-              <hr>              
-           
-          `;
-
-
-  }
-  const uuu = () => {
-    document.querySelector('.modal-body-multiple-1').innerHTML = StrongMultipleNext();
-    document.querySelector('.modal-body-multiple').innerHTML = StrongMultipleNext();
-  }
- 
-  document.querySelector('#buttonModalFinanceMultiple').onclick = () => {
-    uuu();
-    document.querySelectorAll('.btn-multiple-next').onclick = function () {
-      console.log(111111111111111111);
+  /*   function StrongMultipleNext() {
+      return `
       
-    //  document.querySelector('.strong-multiple-next').innerHTML = StrongMultipleNext();
-     for(i = 0; i < document.querySelectorAll('.btn-multiple-next').length; i++) {
-    console.log(document.querySelector('.btn-multiple-next')[i]);
-    } 
-    const node = this;
-    console.log(node);
-    console.log(document.querySelectorAll('.btn-multiple-next').length);
-
-  };
-    
-  } */
+              
+                <div class="row g-1 mt-1">
+                  <div class="col-2">
+                    <div class="form">
+                      <label for="proektfin">Проект</label>
+                      <input type="number" id="proektfin" list="proektfin-datalist"
+                        class="form-control form-control-sm form-font input-paste-finance" />
+                      <datalist id="proektfin-datalist"></datalist>
+                    </div>
+                  </div>
+            
+                  <div class="col-2">
+                    <div class="form">
+                      <label for="summafin">Сумма</label>
+                      <input type="number" id="summafin" class="form-control form-control-sm" />
+                    </div>
+                  </div>
+            
+                  <div class="col-1">
+                    <div class="form">
+                      <label for="priznakfin">Признак</label>
+                      <input type="text" id="priznakfin" list="priznakfin-datalist" class="form-control form-control-sm" />
+                      <datalist id="priznakfin-datalist"></datalist>
+                    </div>
+                  </div>
+            
+                  <div class="col-2">
+                    <div class="form">
+                      <label for="dateoplfin">Дата оплаты</label>
+                      <input type="date" id="dateoplfin" class="form-control form-control-sm" />
+                    </div>
+                  </div>
+            
+                  <div class="col">
+                    <div class="form">
+                      <label for="primfin">Примечание</label>
+                      <input type="text" id="primfin" list="primfin-datalist" class="form-control form-control-sm" />
+                      <datalist id="primfin-datalist"></datalist>
+                    </div>
+                  </div>
+            
+                </div>
+                <div class="row g-1 mt-1 checkbox-finance">
+                  <div class="col-md-auto">
+                    <div class="form-check">
+                      <span class="check-style"></span>
+                      <label for="issuepartfinance" class="form-check-label">Выставлено частично</label>
+                      <input type="checkbox" id="issuepartfinance" class="form-check-input" value="part" />
+                    </div>
+                  </div>
+                  <div class="col-md-auto">
+                    <div class="form-check">
+                      <span class="check-style"></span>
+                      <label for="issuecompletfinance" class="form-check-label">Выставлено полностью</label>
+                      <input type="checkbox" id="issuecompletfinance" class="form-check-input" value="complet" />
+                    </div>
+                  </div>
+                  <div class="col-md-auto">
+                    <div class="form-check">
+                      <span class="check-style"></span>
+                      <label for="ispolufinance" class="form-check-label">Исполу</label>
+                      <input type="checkbox" id="ispolufinance" class="form-check-input" value="ispolu" />
+                    </div>
+                  </div>
+                    
+                 <div class="col ">
+                     <button type="button" class="btn btn-light btn-sm float-md-end btn-multiple-next">+</button>
+                  </div>
+                <hr>              
+             
+            `;
   
   
- /*  document.querySelector('.11111111111111111111').innerHTML = `
-                  <button type="button" class="btn btn-light btn-sm float-md-end btn-multiple-next">+</button>
-                `; */
+    }
+    const uuu = () => {
+      document.querySelector('.modal-body-multiple-1').innerHTML = StrongMultipleNext();
+      document.querySelector('.modal-body-multiple').innerHTML = StrongMultipleNext();
+    }
+   
+    document.querySelector('#buttonModalFinanceMultiple').onclick = () => {
+      uuu();
+      document.querySelectorAll('.btn-multiple-next').onclick = function () {
+        console.log(111111111111111111);
+        
+      //  document.querySelector('.strong-multiple-next').innerHTML = StrongMultipleNext();
+       for(i = 0; i < document.querySelectorAll('.btn-multiple-next').length; i++) {
+      console.log(document.querySelector('.btn-multiple-next')[i]);
+      } 
+      const node = this;
+      console.log(node);
+      console.log(document.querySelectorAll('.btn-multiple-next').length);
   
+    };
+      
+    } */
+
+
+  /*  document.querySelector('.11111111111111111111').innerHTML = `
+                   <button type="button" class="btn btn-light btn-sm float-md-end btn-multiple-next">+</button>
+                 `; */
 
 
 
-  
-  
- 
 
 
 
- 
+
+
+
+
+
 
 </script>

@@ -566,13 +566,14 @@
   }
 
   // кнопки + и - (обработка кнопок)
-  $('#buttonModalFinanceMultiple button').click(function () {
+  $('.buttonModalFinanceMultiple').click(function () {
     // if (!window.confirm('Добавить запись?')) return;
     const this_ = this
     const vatieButton = this_.innerText;
     this.disabled = true;   
     let array = serializeFormV2('formFinStart');
     if (vatieButton === '-') array[1] = -array[1];
+    console.log(array)
     this_.disabled = false;
   });
 

@@ -575,17 +575,19 @@
     this.disabled = true;
     if (arrFinMulti === undefined) arrFinMulti = [];
     let array = serializeFormV2('formFinStart');
-    if (vatieButton === '-') array[1] = -array[1];
-    arrFinMulti.push(array);
-    btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+    if (array[0]) {
+      if (vatieButton === '-') array[1] = -array[1];
+      arrFinMulti.push(array);
+      btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+    }
     this_.disabled = false;
   })
 
   // кнопка Add (10) (обработка кнопок)
   $('#btnFimMultipleAdd').click(function () {
     const this_ = this;
-    this_.disabled = true;
-    if (arrFinMulti.length) {
+    if (arrFinMulti && arrFinMulti.length) {
+      this_.disabled = true;
       btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
       google.script.run.withSuccessHandler(function () {
         //$('.checkbox-finance input:checkbox').prop('checked', false);

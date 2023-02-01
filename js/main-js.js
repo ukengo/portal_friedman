@@ -786,6 +786,32 @@ function AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFi
   }
 }
 
+function AddRecordFinMultiple(arrFinMulti) {
+  const rows = arrFinMulti.length;
+  dataFinance().insertRowsAfter(99, rows);
+  //формируем id
+  const idFinId = new Date().getTime();
+  let data = [];
+
+  for (i = 0; i < rows; i++){
+    data.push([arrFinMulti[i][0], arrFinMulti[i][1]*1, arrFinMulti[i][2], arrFinMulti[i][3], arrFinMulti[i][4], arrFinMulti[i][6], idFinId*getRandom()]);
+  };
+
+console.log(1);
+
+dataFinance().getRange('A100:G' + Number(rows+99)).setValues(data);
+console.log(2);
+  
+
+/* 
+    // обработка вставки "частичная оплата"
+    if (checkBox === 'ispolu') {
+      ispoluSet(summaFin, proektFin);
+    } else {
+      issuePart(checkBox, proektFin);
+    }  */
+}
+
 // функция обработка вставки "частичная оплата"
 function issuePart(checkBox, proektFin) {
   const getLastRowReestr = dataBase().getLastRow();

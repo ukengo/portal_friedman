@@ -583,12 +583,20 @@
 
   // кнопка Add (10) (обработка кнопок)
   $('#btnFimMultipleAdd').click(function () {
-    arrFinMulti = [];
+    const this_ = this;
+    this_.disabled = true;
     if (arrFinMulti.length) {
       btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+      google.script.run.withSuccessHandler(function () {
+        //$('.checkbox-finance input:checkbox').prop('checked', false);
+        arrFinMulti = [];
+        btnFimMultipleAdd.innerText = 'Add';
+        this_.disabled = false;
+      }).AddRecordFinMultiple(arrFinMulti);
     } else {
       btnFimMultipleAdd.innerText = 'Add';
     }
+
   })
 
   // кнопка Mod (обработка кнопок)

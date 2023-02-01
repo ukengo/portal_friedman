@@ -7,3 +7,8 @@ function formatDateDDdotMMdotYYYY(date) {
 function formatDateYYYYdotMMdotDD(date) {
     return Utilities.formatDate(new Date(date), 'Europe/Kiev', 'yyyy.MM.dd')
 }
+
+//генерация случайного числа
+function getRandom() {
+    return Math.round(Math.random() * 132)
+}

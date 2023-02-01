@@ -503,7 +503,7 @@
 
   // кнопки Add R+ т Add R- (обработка кнопок)
   $('#add_button_fin button').click(function () {
-   // if (!window.confirm('Добавить запись?')) return;
+    // if (!window.confirm('Добавить запись?')) return;
     const this_ = this
     const vatieButton = this_.innerText;
     this.disabled = true;
@@ -566,17 +566,59 @@
   }
 
   // кнопки + и - (обработка кнопок)
-  $('.buttonModalFinanceMultiple').click(function () {
+  let arrFinMulti;
+  const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
+  $('.btn-fim-multiple').click(function () {
     // if (!window.confirm('Добавить запись?')) return;
-    const this_ = this
+    const this_ = this;
     const vatieButton = this_.innerText;
-    this.disabled = true;   
+    this.disabled = true;
+    if (arrFinMulti === undefined) arrFinMulti = [];
     let array = serializeFormV2('formFinStart');
     if (vatieButton === '-') array[1] = -array[1];
-    console.log(array)
+    arrFinMulti.push(array);
+    btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
     this_.disabled = false;
-  });
+  })
 
+  // кнопка Add (10) (обработка кнопок)
+  $('#btnFimMultipleAdd').click(function () {
+    arrFinMulti = [];
+    if (arrFinMulti.length) {
+      btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+    } else {
+      btnFimMultipleAdd.innerText = 'Add';
+    }
+  })
+
+  // кнопка Mod (обработка кнопок)
+  $('#btnModalMultiple').click(() => {
+    if (arrFinMulti !== undefined) {
+      let result = "<table id='tableArrFinMulti' class='table mt-3 table-bordered table-hover table-line-selection'>"
+      // будуємо таблицю
+      for (let i = 0; i < arrFinMulti.length; i++) {
+        result += "<tr>";
+        for (let j = 0; j < arrFinMulti[i].length; j++) {
+          result += "<td>" + arrFinMulti[i][j] + "</td>";
+        }
+        result += "</tr>";
+      }
+      result += "</table>";
+      result += `
+                  <div id="divClearArrFinMulti">
+                    <button type="button" class="btn btn-primary btn-danger mt-1" id="btnClearArrFinMulti" data-bs-dismiss="modal">Clear</button>
+                  </div>
+                `;
+      const modalBodyMultiple = document.querySelector('.modal-body-multiple');
+      modalBodyMultiple.innerHTML = result;
+      $('#btnClearArrFinMulti').click(() => {
+        arrFinMulti = [];
+        btnFimMultipleAdd.innerText = 'Add';
+        modalBodyMultiple.innerHTML = '';
+      })
+    }
+    if (arrFinMulti.length === 0) $('.modal-body-multiple').empty();
+  })
 
 
   //будуємо "велику модалку"

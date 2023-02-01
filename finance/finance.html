@@ -96,7 +96,7 @@
   </form>
   <div class="row  mb-2 mt-2 ">
 
-    <div class="col-md-9">
+    <div class="col">
       <div class="btn-group my-1" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-primary btn-danger" id="btnSearchFinance">Search</button>
         <button type="button" class="btn btn-primary btn-danger" id="btnClearSearchFinance">Clear</button>
@@ -114,8 +114,10 @@
       <div class="btn-group my-1" role="group" aria-label="Multiple">
         <button type="button" class="btn btn-danger my-1 btn-fim-multiple">+</button>
         <button type="button" class="btn btn-danger my-1 btn-fim-multiple">-</button>
-        <button type="button" class="btn btn-danger my-1">Add</button>
+        <button type="button" class="btn btn-danger my-1" id="btnFimMultipleAdd">Add</button>
       </div>
+      <button type="button" id="btnModalMultiple" class="btn btn-danger my-1" data-bs-toggle="modal"
+        data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple">Mod</button>
     </div>
   </div>
 
@@ -276,10 +278,9 @@
   <div class="modal fade" id="ModalFinanceMultiple" tabindex="-1" aria-labelledby="ModalLabelFinanceMultiple"
     aria-hidden="true">
     <div class="container">
-      <div class="modal-dialog modal-xl">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-body">
-            <div class="modal-body-multiple-1"></div>
             <div class="modal-body-multiple"></div>
           </div>
         </div>

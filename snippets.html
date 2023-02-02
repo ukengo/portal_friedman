@@ -99,5 +99,15 @@
     return res;
   }
 
+  // собираем данные форм в массив v2
+  function serializeFormV2(formId) {
+    let array = [];
+    Array.from(document.getElementById(formId).elements)
+    .forEach((element) => {
+      const value = element.type === 'checkbox' ? element.checked : element.value;
+      array.push(value);     
+    })
+    return array
+  }
 
 </script>

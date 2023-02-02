@@ -26,6 +26,7 @@
       afterDropDownReturned(arrayOfArrays, 'priznakfin-datalist')
     }).getDropDownArrayPriznak()
   }
+
   function array(ar) {
     var row_number_fin = 0;
     let naydenofin = 0
@@ -173,7 +174,6 @@
     }
   }
 
-
   function SearchRecordsFin(valSfFin) {
     var proektFin = document.getElementById("proektfin").value;
     var summaFin = document.getElementById("summafin").value;
@@ -248,6 +248,10 @@
     document.getElementById("primfin").value = '';
     document.getElementById("idfin").value = '';
     document.getElementById("firmafin").value = '';
+    document.getElementById("issuepartfinance").checked = false;
+    document.getElementById("issuecompletfinance").checked = false
+    document.getElementById("ispolufinance").checked = false
+
     labelred();
 
   }
@@ -503,7 +507,7 @@
 
   // кнопки Add R+ т Add R- (обработка кнопок)
   $('#add_button_fin button').click(function () {
-   // if (!window.confirm('Добавить запись?')) return;
+    // if (!window.confirm('Добавить запись?')) return;
     const this_ = this
     const vatieButton = this_.innerText;
     this.disabled = true;
@@ -526,6 +530,7 @@
       this_.disabled = false;
     }).AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, checkBox);
   });
+
 
   // кнопка Update (обработка кнопок)
   function updateRecordFinButton() {
@@ -563,5 +568,70 @@
       }
     }
   }
+
+  // кнопки + и - (обработка кнопок)
+  let arrFinMulti;
+  const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
+  $('.btn-fim-multiple').click(function () {
+    // if (!window.confirm('Добавить запись?')) return;
+    const this_ = this;
+    const vatieButton = this_.innerText;
+    this.disabled = true;
+    if (arrFinMulti === undefined) arrFinMulti = [];
+    let array = serializeFormV2('formFinStart');
+    if (array[0]) {
+      if (vatieButton === '-') array[1] = -array[1];
+      arrFinMulti.push(array);
+      btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+    }
+    this_.disabled = false;
+  })
+
+  // кнопка Add (10) (обработка кнопок)
+  $('#btnFimMultipleAdd').click(function () {
+    const this_ = this;
+    if (arrFinMulti && arrFinMulti.length) {
+      this_.disabled = true;
+      btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+      google.script.run.withSuccessHandler(function () {
+        //$('.checkbox-finance input:checkbox').prop('checked', false);
+        arrFinMulti = [];
+        btnFimMultipleAdd.innerText = 'Add';
+        this_.disabled = false;
+      }).AddRecordFinMultiple(arrFinMulti);
+    } else {
+      btnFimMultipleAdd.innerText = 'Add';
+    }
+
+  })
+
+  // кнопка Mod (обработка кнопок)
+  $('#btnModalMultiple').click(() => {
+    if (arrFinMulti !== undefined) {
+      let result = "<table id='tableArrFinMulti' class='table mt-3 table-bordered table-hover table-line-selection'>"
+      // будуємо таблицю
+      for (let i = 0; i < arrFinMulti.length; i++) {
+        result += "<tr>";
+        for (let j = 0; j < arrFinMulti[i].length; j++) {
+          result += "<td>" + arrFinMulti[i][j] + "</td>";
+        }
+        result += "</tr>";
+      }
+      result += "</table>";
+      result += `
+                  <div id="divClearArrFinMulti">
+                    <button type="button" class="btn btn-primary btn-danger mt-1" id="btnClearArrFinMulti" data-bs-dismiss="modal">Clear</button>
+                  </div>
+                `;
+      const modalBodyMultiple = document.querySelector('.modal-body-multiple');
+      modalBodyMultiple.innerHTML = result;
+      $('#btnClearArrFinMulti').click(() => {
+        arrFinMulti = [];
+        btnFimMultipleAdd.innerText = 'Add';
+        modalBodyMultiple.innerHTML = '';
+      })
+    }
+    if (arrFinMulti.length === 0) $('.modal-body-multiple').empty();
+  })
 
 </script>

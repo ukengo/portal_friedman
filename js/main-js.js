@@ -807,7 +807,6 @@ function AddRecordFinMultiple(arrFinMulti) {
   for (i = 0; i < rows; i++) {
     check.push([arrFinMulti[i][0], arrFinMulti[i][1], arrFinMulti[i][8], arrFinMulti[i][10]]);
   };
-
   const getLastRowReestr = dataBase.getLastRow();
   const tableValuesReestr = dataBase.getRange(2, 1, getLastRowReestr - 1, 24).getValues();
   for (i = 0; i < check.length; i++) {

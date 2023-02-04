@@ -99,25 +99,26 @@
     <div class="col">
       <div class="btn-group my-1" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-primary btn-danger" id="btnSearchFinance">Search</button>
-        <button type="button" class="btn btn-primary btn-danger" id="btnClearSearchFinance">Clear</button>
+        <button type="button" class="btn btn-primary btn-danger" onclick="ClearRecordFin()">Clear Record</button>
       </div>
       <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
-        <button type="button" class="btn btn-danger my-1">Add R+</button>
-        <button type="button" class="btn btn-danger my-1">Add R-</button>
+        <button type="button" class="btn btn-primary btn-danger">Add R+</button>
+        <button type="button" class="btn btn-primary btn-danger">Add R-</button>
       </div>
-      <button type="button" class="btn btn-danger my-1" onclick="ClearRecordFin()">Clear Record</button>
-      <button type="button" class="btn btn-danger my-1" onclick="startTableFinance()">Up Record</button>
+      <div class="btn-group my-1" role="group" aria-label="Multiple">
+        <button type="button" class="btn btn-primary btn-danger btn-fim-multiple">+</button>
+        <button type="button" class="btn btn-primary btn-danger btn-fim-multiple">-</button>
+        <button type="button" class="btn btn-primary btn-danger" id="btnFimMultipleAdd">Add</button>
+      </div>
+      <button type="button" id="btnModalMultiple" class="btn btn-primary btn-danger" data-bs-toggle="modal"
+        data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple">Mod</button>
+      <button type="button" class="btn btn-primary btn-danger" id="btnClearSearchFinance">Clear</button>
+      <button type="button" class="btn btn-primary btn-danger" onclick="startTableFinance()">Up Record</button>
       <div class="btn-group my-1" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-primary btn-danger" id="btnTableАFinance">Table</button>
         <button type="button" class="btn btn-primary btn-danger" id="clearBtnTableFinance">Clear</button>
       </div>
-      <div class="btn-group my-1" role="group" aria-label="Multiple">
-        <button type="button" class="btn btn-danger my-1 btn-fim-multiple">+</button>
-        <button type="button" class="btn btn-danger my-1 btn-fim-multiple">-</button>
-        <button type="button" class="btn btn-danger my-1" id="btnFimMultipleAdd">Add</button>
-      </div>
-      <button type="button" id="btnModalMultiple" class="btn btn-danger my-1" data-bs-toggle="modal"
-        data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple">Mod</button>
+
     </div>
   </div>
 

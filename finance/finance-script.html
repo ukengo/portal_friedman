@@ -573,13 +573,14 @@
   let arrFinMulti;
   const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
   $('.btn-fim-multiple').click(function () {
-    // if (!window.confirm('Добавить запись?')) return;
     const this_ = this;
     const vatieButton = this_.innerText;
     this.disabled = true;
     if (arrFinMulti === undefined) arrFinMulti = [];
     let array = serializeFormV2('formFinStart');
     if (array[0]) {
+      array.push(finMultiNum);
+      finMultiNum++;
       if (vatieButton === '-') array[1] = -array[1];
       arrFinMulti.push(array);
       btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
@@ -636,7 +637,12 @@
         const a = this_.closest('tr');
         a.parentElement.removeChild(a);
 
-        btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+        if(arrFinMulti.length) {
+          btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+        } else {
+          btnFimMultipleAdd.innerText = 'Add';
+        }
+        
       }, 500);
     })
   })

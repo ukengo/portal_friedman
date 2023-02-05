@@ -519,7 +519,10 @@
     const primFin = document.getElementById("primfin").value;
     const idFin = document.getElementById("idfin").value;
     const firmaFin = document.getElementById("firmafin").value;
-
+    if (!proektFin) {
+      this_.disabled = false;
+      return
+    }
     if (vatieButton === 'Add R-') summaFin = -summaFin;
     const checkBox = inputCheckboxChecked();
     //spinner('rowdatafin')
@@ -571,6 +574,7 @@
 
   // кнопки + и - (обработка кнопок)
   let arrFinMulti;
+  let finMultiNum = 0;
   const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
   $('.btn-fim-multiple').click(function () {
     const this_ = this;
@@ -628,22 +632,24 @@
 
     // кнопка X (обработка кнопок)
     $('.bi-x-lg-fin-multi').click(function () {
-      const this_ = this
-      setTimeout(function () {
-        const rowMulti = this_.getAttribute('rownumberfinmulti');
-        arrFinMulti.splice(rowMulti, 1);
-
-        // видаляємо строчку таблиці
-        const a = this_.closest('tr');
-        a.parentElement.removeChild(a);
-
-        if(arrFinMulti.length) {
-          btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
-        } else {
-          btnFimMultipleAdd.innerText = 'Add';
+      let buttonDeleteNumber = this.getAttribute('rownumberfinmulti');
+      let rowMulti;
+      for (i = 0; i < arrFinMulti.length; i++) {
+        if (arrFinMulti[i][11] == buttonDeleteNumber) {
+          rowMulti = i;
         }
-        
-      }, 500);
+      }
+      arrFinMulti.splice(rowMulti, 1);
+
+      // видаляємо строчку таблиці
+      const a = this.closest('tr');
+      a.parentElement.removeChild(a);
+
+      if (arrFinMulti.length) {
+        btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+      } else {
+        btnFimMultipleAdd.innerText = 'Add';
+      }
     })
   })
 
@@ -654,13 +660,14 @@
       this_.disabled = true;
       btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
       google.script.run.withSuccessHandler(function () {
-        //$('.checkbox-finance input:checkbox').prop('checked', false);
         arrFinMulti = [];
         btnFimMultipleAdd.innerText = 'Add';
         this_.disabled = false;
       }).AddRecordFinMultiple(arrFinMulti);
     } else {
       btnFimMultipleAdd.innerText = 'Add';
+      this_.disabled = true;
+      this_.disabled = false;
     }
   })
 

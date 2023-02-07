@@ -1,5 +1,7 @@
 ///02.06.2022+++
 function buhgalterTable() {
+  // копі із Управление ИА СЧЕТА в РУ+
+  //dataUpravlIA
   const valueBuh = ssBuhSheet().getRange(2, 1, getLastRow() - 1, 6).getValues()
   const valueBuhMap = valueBuh.map(x => [x[0], x[1], x[2], x[3], x[5]])
   
@@ -22,7 +24,7 @@ function buhgalterTable() {
       sheetFinance.getRange(100, 1, arr.length, 7).setValues(arr)
 
 
-      // замена квери
+/*       // замена квери
       const valueA2 = sheetFinance.getRange('A2').getValue(); //получаем значение проекта в А2
       const valueA100G = sheetFinance.getRange('A100:G').getValues(); //получаем значения всего списка проектов из проекта в A100:G
       const filtere = valueA100G.filter((row) => row[0] == valueA2); //отбираем все записи, соответствующие А2
@@ -35,7 +37,7 @@ function buhgalterTable() {
           sheetFinance.getRange(filtere.length + 4, 1).setValue('Итого');
           sheetFinance.getRange(filtere.length + 4, 2).setValue(sum);     //то формируем сумму
         }
-      }
+      } */
 
       //ставим галочки
       const valueBuh5 = valueBuh.map(x => [x[5] = true])

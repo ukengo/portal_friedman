@@ -332,13 +332,23 @@
         })
         .changesRowWasteModal(id, data);
     }
-  } 
+  }
 
   // жрачка підстановка "нал"
-  document.querySelector('#waste').oninput = () => {
-    if (document.querySelector('#waste').value == "жрачка") {
-      document.querySelector('#forma').value = "нал";
+  function grachka() {
+    const arr = [
+      ['Гуров', 'нал'],
+      ['жрачка', 'нал'],
+      ['Рекстон заправка', 'нал']
+    ];
+    document.querySelector('#waste').oninput = () => {
+      arr.forEach(el => {
+        if (document.querySelector('#waste').value == el[0]) {
+          document.querySelector('#forma').value = el[1];
+        }
+      })
     }
   }
-  
+  grachka();
+
 </script>

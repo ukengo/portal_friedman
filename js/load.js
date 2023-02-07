@@ -79,6 +79,11 @@ const ssBuhSheet = () => {
   return ret
 }
 
+const dataUpravlIA = () => {
+  const ret = SpreadsheetApp.openByUrl(URLREESTR()).getSheetByName("Управление ИА СЧЕТА")
+  return ret
+}
+
 function doGet() {
   return HtmlService.createTemplateFromFile('main-HTML').evaluate()
     //Responsive

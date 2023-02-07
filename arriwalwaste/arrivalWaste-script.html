@@ -332,5 +332,13 @@
         })
         .changesRowWasteModal(id, data);
     }
-  } //
+  } 
+
+  // жрачка підстановка "нал"
+  document.querySelector('#waste').oninput = () => {
+    if (document.querySelector('#waste').value == "жрачка") {
+      document.querySelector('#forma').value = "нал";
+    }
+  }
+  
 </script>

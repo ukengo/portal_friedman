@@ -7,86 +7,89 @@
     <div class="col-xl-5">
       <div class="radius p-3">
         <div class="row">
+          <label for="date">Дата</label>
+        </div>
+        <div class="row">
           <div class="form mb-1 col-6">
-            <label for="date">Дата</label>
             <input type="date" class="form-control" id="date" />
           </div>
           <div class="col-6">
             <input type="button" id="yesterday_button_arriwalwaste" value="Yesterday" class="btn btn-danger">
           </div>
         </div>
-        <div class="form mb-1 mt-1">
-          <div class="row">
-            <div class="col">
-              <label for="summa">Сумма</label>
-              <input type="number" class="form-control" id="summa" />
-            </div>
-            <div class="col">
-              <label for="summaPrivat" class="text-nowrap">Количество приват</label>
-              <input type="number" class="form-control" id="summaPrivat" onkeypress="clickPressAwPrivat(event)" />
-            </div>
+      
+      <div class="form mb-1 mt-1">
+        <div class="row">
+          <div class="col">
+            <label for="summa">Сумма</label>
+            <input type="number" class="form-control" id="summa" />
+          </div>
+          <div class="col">
+            <label for="summaPrivat" class="text-nowrap">Количество приват</label>
+            <input type="number" class="form-control" id="summaPrivat" onkeypress="clickPressAwPrivat(event)" />
           </div>
         </div>
-
-        <div class="form mb-1 mt-1">
-          <label for="forma">Форма собственности</label>
-          <select class="form-control" id="forma">
-            <option>нал</option>
-            <option>ооо</option>
-            <option>оооАксон</option>
-            <option>флп</option>
-          </select>
-        </div>
-
-        <div class="form mb-1 mt-1">
-          <label for="firmaArrivalWaste">Фирма</label>
-          <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWaste" />
-          <datalist id="firmaArrivalWaste-datalist"></datalist>
-        </div>
-
-        <div class="form mb-1 mt-1">
-          <label for="waste">Статья расхода</label>
-          <input type="text" class="form-control" list="waste-datalist" id="waste" />
-          <datalist id="waste-datalist"></datalist>
-        </div>
-
-        <div class="form-group mt-1">
-          <label for="termkar">Терминал-Карантин</label>
-          <select class="form-control" id="termkar">
-            <option></option>
-            <option>терминал</option>
-            <option>карантин</option>
-          </select>
-        </div>
-
-        <div class="form mt-1">
-          <label for="sftermkar">Сф Терминал-Карантин</label>
-          <input class="form-control" id="sftermkar">
-        </div>
       </div>
-      <button type="button" class="btn btn-danger mb-2 mt-2 shadow-none" id="buttonWaste">Расход</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2 shadow-none" id="buttonArrival">Приход</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2 м" id="buttonWasteTab">Траты</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2 shadow-none" id="buttonArrivalTab">Поступления</button>
 
+      <div class="form mb-1 mt-1">
+        <label for="forma">Форма собственности</label>
+        <select class="form-control" id="forma">
+          <option>нал</option>
+          <option>ооо</option>
+          <option>оооАксон</option>
+          <option>флп</option>
+        </select>
+      </div>
+
+      <div class="form mb-1 mt-1">
+        <label for="firmaArrivalWaste">Фирма</label>
+        <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWaste" />
+        <datalist id="firmaArrivalWaste-datalist"></datalist>
+      </div>
+
+      <div class="form mb-1 mt-1">
+        <label for="waste">Статья расхода</label>
+        <input type="text" class="form-control" list="waste-datalist" id="waste" />
+        <datalist id="waste-datalist"></datalist>
+      </div>
+
+      <div class="form-group mt-1">
+        <label for="termkar">Терминал-Карантин</label>
+        <select class="form-control" id="termkar">
+          <option></option>
+          <option>терминал</option>
+          <option>карантин</option>
+        </select>
+      </div>
+
+      <div class="form mt-1">
+        <label for="sftermkar">Сф Терминал-Карантин</label>
+        <input class="form-control" id="sftermkar">
+      </div>
     </div>
-    <div class="col-xl radius" style="height: 490px;">
-      <p id="vrabotevseArriwalWaste" class="h4 mb-4 text-center"></p>
-      <div class="row">
-        <div class="form my-2">
-          <input type="search" class="form-control input-search" id="search"
-            somethingSearch="#dataTableArriwalWaste tbody tr" placeholder="Поиск по таблице">
-        </div>
-      </div>
-      <div id="divDataTableArriwalWaste" class="row" style="overflow: auto;">
-        <div id="dataTableArriwalWaste" class="table-responsive-xs radius"></div>
-      </div>
-
-
-    </div>
+    <button type="button" class="btn btn-danger mb-2 mt-2 shadow-none" id="buttonWaste">Расход</button>
+    <button type="button" class="btn btn-danger mb-2 mt-2 shadow-none" id="buttonArrival">Приход</button>
+    <button type="button" class="btn btn-danger mb-2 mt-2 м" id="buttonWasteTab">Траты</button>
+    <button type="button" class="btn btn-danger mb-2 mt-2 shadow-none" id="buttonArrivalTab">Поступления</button>
 
   </div>
-  <div id='arriwalwasteatrong'></div>
+  <div class="col-xl radius" style="height: 490px;">
+    <p id="vrabotevseArriwalWaste" class="h4 mb-4 text-center"></p>
+    <div class="row">
+      <div class="form my-2">
+        <input type="search" class="form-control input-search" id="search"
+          somethingSearch="#dataTableArriwalWaste tbody tr" placeholder="Поиск по таблице">
+      </div>
+    </div>
+    <div id="divDataTableArriwalWaste" class="row" style="overflow: auto;">
+      <div id="dataTableArriwalWaste" class="table-responsive-xs radius"></div>
+    </div>
+
+
+  </div>
+
+</div>
+<div id='arriwalwasteatrong'></div>
 </div>
 
 <!-- Modal -->

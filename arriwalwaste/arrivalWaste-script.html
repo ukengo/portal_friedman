@@ -123,6 +123,11 @@
   }
 
   document
+    .getElementById("yesterday_button_arriwalwaste")
+    .addEventListener("click", () => {
+      document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+    });
+  document
     .getElementById("buttonWaste")
     .addEventListener("click", buttonClickWasteAndArival);
   document

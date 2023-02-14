@@ -124,8 +124,10 @@
 
   document
     .getElementById("yesterday_button_arriwalwaste")
-    .addEventListener("click", () => {
+    .addEventListener("click", function () {
+      this.disabled = true;
       document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+      this.disabled = false;
     });
   document
     .getElementById("buttonWaste")
@@ -365,6 +367,7 @@
       ['Айпекс таможенные платежи', 'ооо'],
       ['Айпекс на покупку валюты', 'ооо'],
       ['Айпекс комиссия за покупку валюты', 'ооо'],
+      ['Айпекс комиссия за международный перевод', 'ооо'],
       ['Айпекс за товар', 'ооо'],
       ['Айпекс таможенные платежи', 'ооо'],
       ['Ключи Медок', 'ооо'],

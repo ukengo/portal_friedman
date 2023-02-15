@@ -590,13 +590,31 @@
 
   accordingButon();
 
-  // кнопка SY
-  document.querySelector('#btnReestrSY').addEventListener("click", function () {
-    // console.log(1);
-    this.disabled = true;
-    ClearRecordReestr();
-    document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+  // кнопки вчора + п'ятниця + сьогодні 
+  document.querySelectorAll('.btn-reestr-yft').forEach(el => {
+    el.addEventListener("click", function () {
+      this.disabled = true;
+      ClearRecordReestr();
+      switch (this.id) {
+      case 'btnReestrSY':
+      document.querySelector(".date-reestr-yft").innerText = formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000));
+      document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+        break;
+        case 'btnReestrSFri':
+        document.querySelector(".date-reestr-yft").innerText = formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000*3)) + ' - ' + formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000));
+        document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+        document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000*3));
+        document.getElementById("check-date-reestr").value = '<';
+        break;
+        case 'btnReestrST':
+        document.querySelector(".date-reestr-yft").innerText = formatDateDDtireMMtireYYYY(new Date(Date.now()));
+        document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
+        break;
+    }
     SearchRecordsReestr();
+    ClearRecordReestr();
     this.disabled = false;
-  });
+  })
+})
+
 </script>

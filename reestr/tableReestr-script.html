@@ -590,5 +590,13 @@
 
   accordingButon();
 
-
+  // кнопка SY
+  document.querySelector('#btnReestrSY').addEventListener("click", function () {
+    // console.log(1);
+    this.disabled = true;
+    ClearRecordReestr();
+    document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+    SearchRecordsReestr();
+    this.disabled = false;
+  });
 </script>

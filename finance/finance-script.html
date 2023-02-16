@@ -619,102 +619,105 @@
     }
   }
 
-  // кнопки + и - (обработка кнопок)
-  let arrFinMulti;
-  let finMultiNum = 0;
-  const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
-  $('.btn-fim-multiple').click(function () {
-    const this_ = this;
-    const vatieButton = this_.innerText;
-    this.disabled = true;
-    if (arrFinMulti === undefined) arrFinMulti = [];
-    let array = serializeFormV2('formFinStart');
-    if (array[0]) {
-      array.push(finMultiNum);
-      finMultiNum++;
-      if (vatieButton === '-') array[1] = -array[1];
-      arrFinMulti.push(array);
-      btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
-    }
-    this_.disabled = false;
-  })
+  (function MultipleFinance() {
+    // кнопки + и - (обработка кнопок)
+    let arrFinMulti;
+    let finMultiNum = 0;
+    const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
+    $('.btn-fim-multiple').click(function () {
+      const this_ = this;
+      const vatieButton = this_.innerText;
+      this.disabled = true;
+      if (arrFinMulti === undefined) arrFinMulti = [];
+      let array = serializeFormV2('formFinStart');
+      if (array[0]) {
+        array.push(finMultiNum);
+        finMultiNum++;
+        if (vatieButton === '-') array[1] = -array[1];
+        arrFinMulti.push(array);
+        btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+      }
+      this_.disabled = false;
+    })
 
-  // кнопка Mod (обработка кнопок)
-  $('#btnModalMultiple').click(() => {
-    if (!arrFinMulti) return
-    if (arrFinMulti !== undefined) {
-      let result = "<table id='tableArrFinMulti' class='table mt-3 table-bordered table-hover table-line-selection'>"
-      // будуємо таблицю
-      let = rowNumberFinMulti = 0;
-      //result += `<tr><td></td></tr>`;
-      for (let i = 0; i < arrFinMulti.length; i++) {
-        result += `<tr>`;
-        for (let j = 0; j < arrFinMulti[i].length; j++) {
-          result += "<td>" + arrFinMulti[i][j] + "</td>";
-        }
-        result += `
+    // кнопка Mod (обработка кнопок)
+    $('#btnModalMultiple').click(() => {
+      if (!arrFinMulti) return
+      if (arrFinMulti !== undefined) {
+        let result = "<table id='tableArrFinMulti' class='table mt-3 table-bordered table-hover table-line-selection'>"
+        // будуємо таблицю
+        let = rowNumberFinMulti = 0;
+        //result += `<tr><td></td></tr>`;
+        for (let i = 0; i < arrFinMulti.length; i++) {
+          result += `<tr>`;
+          for (let j = 0; j < arrFinMulti[i].length; j++) {
+            result += "<td>" + arrFinMulti[i][j] + "</td>";
+          }
+          result += `
           <td class="bi-x-lg-fin-multi" rownumberfinmulti="${rowNumberFinMulti}">
             <svg xmlns="http://www.w3.org/2000/svg" color="red" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
             <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
             </svg>            
           </td>`;
-        rowNumberFinMulti++;
-        result += "</tr>";
-      }
-      result += "</table>";
-      result += `
+          rowNumberFinMulti++;
+          result += "</tr>";
+        }
+        result += "</table>";
+        result += `
                   <div id="divClearArrFinMulti">
                     <button type="button" class="btn btn-primary btn-danger mt-1" id="btnClearArrFinMulti" data-bs-dismiss="modal">Clear</button>
                   </div>
                 `;
-      const modalBodyMultiple = document.querySelector('.modal-body-multiple');
-      modalBodyMultiple.innerHTML = result;
-      $('#btnClearArrFinMulti').click(() => {
-        arrFinMulti = [];
-        btnFimMultipleAdd.innerText = 'Add';
-        modalBodyMultiple.innerHTML = '';
-      })
-    }
-    if (arrFinMulti.length === 0) $('.modal-body-multiple').empty();
-
-    // кнопка X (обработка кнопок)
-    $('.bi-x-lg-fin-multi').click(function () {
-      let buttonDeleteNumber = this.getAttribute('rownumberfinmulti');
-      let rowMulti;
-      for (i = 0; i < arrFinMulti.length; i++) {
-        if (arrFinMulti[i][11] == buttonDeleteNumber) {
-          rowMulti = i;
-        }
+        const modalBodyMultiple = document.querySelector('.modal-body-multiple');
+        modalBodyMultiple.innerHTML = result;
+        $('#btnClearArrFinMulti').click(() => {
+          arrFinMulti = [];
+          btnFimMultipleAdd.innerText = 'Add';
+          modalBodyMultiple.innerHTML = '';
+        })
       }
-      arrFinMulti.splice(rowMulti, 1);
+      if (arrFinMulti.length === 0) $('.modal-body-multiple').empty();
 
-      // видаляємо строчку таблиці
-      const a = this.closest('tr');
-      a.parentElement.removeChild(a);
+      // кнопка X (обработка кнопок)
+      $('.bi-x-lg-fin-multi').click(function () {
+        let buttonDeleteNumber = this.getAttribute('rownumberfinmulti');
+        let rowMulti;
+        for (i = 0; i < arrFinMulti.length; i++) {
+          if (arrFinMulti[i][11] == buttonDeleteNumber) {
+            rowMulti = i;
+          }
+        }
+        arrFinMulti.splice(rowMulti, 1);
 
-      if (arrFinMulti.length) {
+        // видаляємо строчку таблиці
+        const a = this.closest('tr');
+        a.parentElement.removeChild(a);
+
+        if (arrFinMulti.length) {
+          btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+        } else {
+          btnFimMultipleAdd.innerText = 'Add';
+        }
+      })
+    })
+
+    // кнопка Add (10) (обработка кнопок)
+    $('#btnFimMultipleAdd').click(function () {
+      const this_ = this;
+      if (arrFinMulti && arrFinMulti.length) {
+        this_.disabled = true;
         btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
+        google.script.run.withSuccessHandler(function () {
+          arrFinMulti = [];
+          btnFimMultipleAdd.innerText = 'Add';
+          this_.disabled = false;
+        }).AddRecordFinMultiple(arrFinMulti);
       } else {
         btnFimMultipleAdd.innerText = 'Add';
+        this_.disabled = false;
       }
     })
-  })
-
-  // кнопка Add (10) (обработка кнопок)
-  $('#btnFimMultipleAdd').click(function () {
-    const this_ = this;
-    if (arrFinMulti && arrFinMulti.length) {
-      this_.disabled = true;
-      btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
-      google.script.run.withSuccessHandler(function () {
-        arrFinMulti = [];
-        btnFimMultipleAdd.innerText = 'Add';
-        this_.disabled = false;
-      }).AddRecordFinMultiple(arrFinMulti);
-    } else {
-      btnFimMultipleAdd.innerText = 'Add';
-      this_.disabled = false;
-    }
-  })
+  }());
+  
 
 </script>

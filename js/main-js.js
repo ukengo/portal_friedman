@@ -1657,3 +1657,8 @@ function changesRowFinanceModal(id, data, checkBox) {
   // обработка вставки "частичная оплата"
   issuePart(checkBox, data[0][0]);
 }
+
+function changesRowFinanceYFT(id, date) {
+  const row = numColElementa(dataFinance(), +id).numRow;
+  dataFinance().getRange(row, 4).setValue(date);
+}

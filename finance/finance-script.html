@@ -319,22 +319,19 @@
           <button type="button"
             id="btnFinanceY${i}"
             something="${i}"
-            class="btn btn-sm btn-light btn-finance-yft"
-            data-bs-toggle="modal" data-bs-target="#exampleModalFinance">
+            class="btn btn-sm btn-light btn-finance-yft">
               Y  
           </button>
           <button type="button"
             id="btnFinanceFri${i}"
             something="${i}"
-            class="btn btn-sm btn-light btn-finance-yft"
-            data-bs-toggle="modal" data-bs-target="#exampleModalFinance">
+            class="btn btn-sm btn-light mx-2 btn-finance-yft">
             Fri
           </button>
           <button type="button"
             id="btnFinanceT${i}"
             something="${i}"
-            class="btn btn-sm btn-light btn-finance-yft"
-            data-bs-toggle="modal" data-bs-target="#exampleModalFinance">
+            class="btn btn-sm btn-light btn-finance-yft">
               T  
           </button>
         </td>`;
@@ -359,14 +356,31 @@
       autoSearchOnOpen('#searchFinance');
     }).keyup(dataSearchFinance);// эмуляция отпускания кнопки, при щелчке поиск по таблице (автопоиск при открытии)
 
-
-
     tableLineSelection() //полосы в таблице
     clickTableFin();
     $('#btnTableАFinance').prop("disabled", false);
     autoSearchOnOpen('#searchFinance')
     $("#div-data-tablefinance-spinner").remove();
 
+    // кнопки вчора + п'ятниця + сьогодні 
+    document.querySelectorAll('.btn-finance-yft').forEach(el => {
+      el.addEventListener("click", function () {
+        const row = this.getAttribute('something');
+        const id = dataArray[row][6];
+        switch (this.id) {
+          case `btnFinanceY${row}`:
+            google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)));
+            break;
+          case `btnFinanceFri${row}`:
+            google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)));
+            break;
+          case `btnFinanceT${row}`:
+            google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now())));
+            break;
+        }
+        btnTableFinance();
+      })
+    });
 
     // редактирование таблицы showDataFinance через модалку 
     $('.btnbtnfin').click(function () {

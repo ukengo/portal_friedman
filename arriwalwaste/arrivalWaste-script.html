@@ -123,6 +123,13 @@
   }
 
   document
+    .getElementById("yesterday_button_arriwalwaste")
+    .addEventListener("click", function () {
+      this.disabled = true;
+      document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+      this.disabled = false;
+    });
+  document
     .getElementById("buttonWaste")
     .addEventListener("click", buttonClickWasteAndArival);
   document
@@ -332,5 +339,49 @@
         })
         .changesRowWasteModal(id, data);
     }
-  } //
+  }
+
+  // жрачка підстановка "нал"
+  function grachka() {
+    const arr = [
+      ['Гуров', 'нал'],
+      ['Рекстон заправка', 'нал'],
+      ['Задарма Zadarma', 'нал'],
+      ['Григорьев SEO', 'нал'],
+      ['Диланян ЗП', 'нал'],
+      ['Лазоренко ЗП', 'нал'],
+      ['Зиновкина ЗП', 'нал'],
+      ['Радюк ЗП', 'нал'],
+      ['Диланян бонус', 'нал'],
+      ['Лазоренко бонус', 'нал'],
+      ['Зиновкина бонус', 'нал'],
+      ['жрачка', 'нал'],
+      ['Интернет Григоренко', 'нал'],
+      ['Свет Григоренко', 'нал'],
+      ['квартплата Григоренко', 'нал'],
+      ['отопление Григоренко', 'нал'],
+      ['Григоренко консьерж', 'нал'],
+      ['жрачка', 'нал'],
+      ['Айпекс 200$', 'нал'],
+      ['туча', 'ооо'],
+      ['Айпекс таможенные платежи', 'ооо'],
+      ['Айпекс на покупку валюты', 'ооо'],
+      ['Айпекс комиссия за покупку валюты', 'ооо'],
+      ['Айпекс комиссия за международный перевод', 'ооо'],
+      ['Айпекс за товар', 'ооо'],
+      ['Айпекс таможенные платежи', 'ооо'],
+      ['Ключи Медок', 'ооо'],
+      ['Обновление Медок', 'ооо'],
+      ['Гугл адвордс', 'ооо']
+    ];
+    document.querySelector('#waste').oninput = () => {
+      arr.forEach(el => {
+        if (document.querySelector('#waste').value == el[0]) {
+          document.querySelector('#forma').value = el[1];
+        }
+      })
+    }
+  }
+  grachka();
+
 </script>

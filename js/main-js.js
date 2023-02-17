@@ -788,9 +788,7 @@ function AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFi
 
 function AddRecordFinMultiple(arrFinMulti) {
   const rows = arrFinMulti.length;
-  const dataFinance = dataFinance();
-  const dataBase = dataBase();
-  dataFinance.insertRowsAfter(99, rows);
+  dataFinance().insertRowsAfter(99, rows);
 
   //формируем id
   const idFinId = new Date().getTime();
@@ -800,15 +798,16 @@ function AddRecordFinMultiple(arrFinMulti) {
   for (i = 0; i < rows; i++) {
     data.push([arrFinMulti[i][0], arrFinMulti[i][1] * 1, arrFinMulti[i][2], arrFinMulti[i][3], arrFinMulti[i][4], arrFinMulti[i][6], idFinId * getRandom()]);
   };
-  dataFinance.getRange('A100:G' + Number(rows + 99)).setValues(data);
+  dataFinance().getRange('A100:G' + Number(rows + 99)).setValues(data);
 
   // обробляємо чекбокси
   let check = [];
   for (i = 0; i < rows; i++) {
     check.push([arrFinMulti[i][0], arrFinMulti[i][1], arrFinMulti[i][8], arrFinMulti[i][10]]);
   };
-  const getLastRowReestr = dataBase.getLastRow();
-  const tableValuesReestr = dataBase.getRange(2, 1, getLastRowReestr - 1, 24).getValues();
+
+  const getLastRowReestr = dataBase().getLastRow();
+  const tableValuesReestr = dataBase().getRange(2, 1, getLastRowReestr - 1, 24).getValues();
   for (i = 0; i < check.length; i++) {
 
     // виставлено частково
@@ -825,7 +824,7 @@ function AddRecordFinMultiple(arrFinMulti) {
       if (check[i][1] < 0) check[i][1] = -check[i][1];
       for (y = 0; y < tableValuesReestr.length; y++) {
         if (+tableValuesReestr[y][5] == +check[i][0]) {
-          dataBase.getRange(y + 2, 18).setValue(check[i][1]);
+          dataBase().getRange(y + 2, 18).setValue(check[i][1]);
         }
       }
     }

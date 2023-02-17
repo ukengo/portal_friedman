@@ -66,7 +66,7 @@
     }
   }
 
-  function SearchRecordsReestr() {
+  function SearchRecordsReestr(spintext) {
     const dateendReestr = document.getElementById("dateendreestr").value;
     const datestartReestr = document.getElementById("datestartreestr").value;
     const firmaReestr = document.getElementById("firmareestr").value;
@@ -99,7 +99,7 @@
 
     var row_number_reestr = 0;
     let count = 0; // счетчик для подсчета количества остановленных при выборке
-    spinner('rowdatareestr')
+    spinner('rowdatareestr', spintext)
     google.script.run.withSuccessHandler(function (ar) {
       var displayTableReestr = '<form>';
       displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTableReestr\" >';
@@ -590,5 +590,30 @@
 
   accordingButon();
 
+  // кнопки вчора + п'ятниця + сьогодні 
+  document.querySelectorAll('.btn-reestr-yft').forEach(el => {
+    el.addEventListener("click", function () {
+      this.disabled = true;
+      ClearRecordReestr();
+      switch (this.id) {
+        case 'btnReestrSY':
+          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+          SearchRecordsReestr(`Іде пошук на ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000))}`);
+          break;
+        case 'btnReestrSFri':
+          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+          document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+          document.getElementById("check-date-reestr").value = '<';
+          SearchRecordsReestr(`Іде пошук з ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000 * 3))} по ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000))}`);
+          break;
+        case 'btnReestrST':
+          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
+          SearchRecordsReestr(`Іде пошук на ${formatDateDDtireMMtireYYYY(new Date(Date.now()))}`);
+          break;
+      }
+      ClearRecordReestr();
+      this.disabled = false;
+    })
+  })
 
 </script>

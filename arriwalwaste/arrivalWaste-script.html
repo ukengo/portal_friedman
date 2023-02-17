@@ -122,13 +122,25 @@
     document.getElementById("sftermkar").value = "";
   }
 
-  document
-    .getElementById("yesterday_button_arriwalwaste")
-    .addEventListener("click", function () {
+  // кнопки вчора + п'ятниця + сьогодні 
+  document.querySelectorAll('.btn-arriwalwaste-yft').forEach(el => {
+    el.addEventListener("click", function () {
       this.disabled = true;
-      document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+      switch (this.id) {
+        case 'btnArriwalwasteY':
+          document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+          break;
+        case 'btnArriwalwasteFri':
+          document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+          break;
+        case 'btnArriwalwasteT':
+          document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
+          break;
+      }
       this.disabled = false;
-    });
+    })
+  });
+
   document
     .getElementById("buttonWaste")
     .addEventListener("click", buttonClickWasteAndArival);

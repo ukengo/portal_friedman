@@ -370,6 +370,8 @@
         switch (this.id) {
           case `btnFinanceY${row}`:
             google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)));
+            this.innerHTML = ''
+            
             break;
           case `btnFinanceFri${row}`:
             google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)));
@@ -378,8 +380,8 @@
             google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now())));
             break;
         }
-        btnTableFinance();
-      })
+     //   btnTableFinance();     
+      })      
     });
 
     // редактирование таблицы showDataFinance через модалку 

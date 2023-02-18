@@ -370,18 +370,19 @@
         switch (this.id) {
           case `btnFinanceY${row}`:
             google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)));
-            this.innerHTML = ''
-            
+            this.innerHTML = '';
             break;
           case `btnFinanceFri${row}`:
             google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)));
+            this.innerHTML = '';
             break;
           case `btnFinanceT${row}`:
             google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now())));
+            this.innerHTML = '';
             break;
         }
-     //   btnTableFinance();     
-      })      
+        //   btnTableFinance();     
+      })
     });
 
     // редактирование таблицы showDataFinance через модалку 
@@ -720,6 +721,6 @@
       }
     })
   }());
-  
+
 
 </script>

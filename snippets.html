@@ -103,11 +103,18 @@
   function serializeFormV2(formId) {
     let array = [];
     Array.from(document.getElementById(formId).elements)
-    .forEach((element) => {
-      const value = element.type === 'checkbox' ? element.checked : element.value;
-      array.push(value);     
-    })
+      .forEach((element) => {
+        const value = element.type === 'checkbox' ? element.checked : element.value;
+        array.push(value);
+      })
     return array
+  }
+
+  // Визначення номера строчки по значенню элемента стрчки.
+  function findNumRow(arr, value, numEl) {
+    for (var i = 0; i < arr.length; i++)
+      if (arr[i][numEl] == value)
+        return i;
   }
 
 </script>

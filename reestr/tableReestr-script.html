@@ -100,7 +100,14 @@
     var row_number_reestr = 0;
     let count = 0; // счетчик для подсчета количества остановленных при выборке
     spinner('rowdatareestr', spintext)
-    google.script.run.withSuccessHandler(function (ar) {
+    google.script.run.withSuccessHandler(searchRecordsReestrTable).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr);
+  }
+
+
+  
+  function searchRecordsReestrTable(ar) {
+    var row_number_reestr = 0;
+    let count = 0; // счетчик для подсчета количества остановленных при выборке
       var displayTableReestr = '<form>';
       displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTableReestr\" >';
       displayTableReestr += "<tr>";
@@ -109,6 +116,9 @@
       displayTableReestr += "<th></th>";
       displayTableReestr += "<th></th>";
       displayTableReestr += "</tr>";
+
+      console.log(ar);
+      
 
       ar.forEach(function (item, index) {
 
@@ -210,18 +220,6 @@
         displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr_close" + row_number_reestr + "\" value=\"FinClose\" class=\"btn btn-danger\" ";
         displayTableReestr += "onclick=\"FinanceRecordReestrClose(" + row_number_reestr + ")\" /></div> ";
 
-        /* displayTableReestr += "<td><div style=\"padding: 5px\"> ";
-  
-        displayTableReestr += "<input type=\"button\" id=\"update_button_reestr"+ row_number_reestr +"\" value=\"Update\" class=\"btn btn-danger\" ";
-        displayTableReestr += "onclick=\"UpdateRecordReestr("+row_number_reestr+")\" /></div> ";
-  
-        
-        displayTableReestr += "<div style=\"padding: 5px\" > "; */
-
-        /*           displayTableReestr += "<input type=\"button\" id=\"delete_button_Reestr"+ row_number_reestr +"\" value=\"Delete\" class=\"btn btn-danger\" ";
-          displayTableReestr += "onclick=\"DeleteRecordReestr("+row_number_reestr+")\" /></div> "; */
-
-
         displayTableReestr += "</td>";
         displayTableReestr += "</tr>";
         row_number_reestr++;
@@ -239,8 +237,17 @@
       // $("#rowdatareestr").attr("tabindex",-1).focus();
       // startTableReestr()
       $('#btnSearchReestr').prop("disabled", false);
-    }).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr);
-  }
+    
+
+    }
+
+
+
+
+
+
+
+
 
   function ClearRecordReestr() {
     document.getElementById("dateendreestr").value = '';
@@ -357,6 +364,7 @@
           { "title": "Дата начало" },
           { "title": "Фирма" },
           { "title": "Работа" },
+          { "title": "Код раб" },
           { "title": "Проект" },
           { "title": "Сотрудник" },
           { "title": "Исполнитель" },
@@ -395,10 +403,25 @@
     $("#div-data-table-spinner").remove()
     $('#btnTable').prop("disabled", false);
 
+    // обробка кнопки локального редагування проекту
+    document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
+      const projBtnEditLoc = this.innerHTML;
+      console.log(projBtnEditLoc);
+      const filt = findNumRow(dataArray, this.innerHTML, 5);
+     // console.log(new Array(filt));
+      const array = []
+      searchRecordsReestrTable([dataArray[filt]])
+     // console.log(projBtn1);
+     // console.log(filt);
+     // console.log(dataArray[filt]);
+
+    });
+
   }
 
   /* function showDataReestr(dataArray){
-    var result = "<table class='table table-bordered table-hover ' style='font-size:0.8em'>"    
+    var result = "<ta
+    ble class='table table-bordered table-hover ' style='font-size:0.8em'>"    
     // строим таблицу
     for(var i=dataArray.length-1; i>0; i--) {
       result += "<tr>";
@@ -477,6 +500,7 @@
     sessionStorage.setItem('proekt', text[4]);
     // вставка значения из кеша на кнопку и в поле поиска таблицы
     document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;
+    document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
     document.getElementById('btnSearchFinInfo').innerHTML = 'fin ' + text[4];
     document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';
     document.getElementById('btnSearchFinMinus').innerHTML = 'fin-';
@@ -615,5 +639,14 @@
       this.disabled = false;
     })
   })
+
+
+
+
+  //кнопка маленькая левая1 (reestr)
+  /*   $('#btnSearchReestrInfo').click(function () {
+      $("#rowdatareestr").attr("tabindex", -1).focus();
+      SearchRecordsReestr();
+    }); */
 
 </script>

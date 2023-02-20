@@ -234,17 +234,7 @@
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
-
-
   }
-
-
-
-
-
-
-
-
 
   function ClearRecordReestr() {
     document.getElementById("dateendreestr").value = '';
@@ -392,7 +382,7 @@
     // обробка кнопки локального редагування проекту
     document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
       const projBtnEditLoc = this.innerHTML;
-      const arreestrInfoLocal = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
+      const arreestrInfoLocal = dataArray.map(x => [formatDateYYYYtireMMtireDD(strongToDate(x[0])), formatDateYYYYtireMMtireDD(strongToDate(x[1])), x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
       const filt = findNumRow(arreestrInfoLocal, this.innerHTML, 5);
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
     });
@@ -408,7 +398,7 @@
         result += "<td>"+dataArray[i][j]+"</td>";
       }
       result += "<td><button type=\"button\" id=\"buttonModalReestr"+ i +"\"  something= "+ i +" class=\"btn btn-sm btn-light btnbtnfin\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModalReestr\"  />Edit</button></td>";
-      result += "</tr>";
+      result  +=  "</tr>";
     }
     result += "</table>";
     var div = document.getElementById('div-data-table');

@@ -125,4 +125,12 @@
     }
   }
 
+// перетворення числа в додатне в полях "Сума" і "Кількість приват"
+document.querySelectorAll('.num-plus').forEach(el => {
+  el.addEventListener('input', function() {
+    if(this.value < 0) {
+      this.value = -this.value}
+  })
+})
+
 </script>

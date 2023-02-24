@@ -324,7 +324,7 @@
     $(document).ready(function () {
       // sessionStorage.setItem('DataLength', dataArray.length);//записываем в кеш длину
       let oTable = $('#data-table').DataTable({
-        data: dataArray.map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25]]),
+        data: dataArray.map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25], x[18]]),
         //CHANGE THE TABLE HEADINGS BELOW TO MATCH WITH YOUR SELECTED DATA RANGE
         lengthMenu: [[25, 50, 100, 500, -1, 0], [25, 50, 100, 500, "Все", "Пусто"]],
         responsive: true,
@@ -332,8 +332,7 @@
         order: [[11, 'desc']], // колонка 10 это номера строк, по ним сортировка
         columnDefs: [
           {
-            targets: [11],
-            visible: false,
+            targets: [11], visible: false,
           }, // скрываем колонку номеров сттрок
         ],
         columns: [
@@ -349,15 +348,36 @@
           { "title": "Примечание" },
           { "title": "Примечание мое" },
           { "title": "Row" },
+          { "title": "Row2" },
         ]
       });
+
+      //підсвітка червоним зупинені проекти
+      const rowRedReestrDataTable = () => {
+        document.querySelectorAll('#data-table tbody tr').forEach(el => {
+          if (el.innerHTML.includes('TRUE')) {
+            el.style.color = 'red';
+          }
+        })
+        //remove the nth column
+      $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
+      }
+
+      rowRedReestrDataTable();
+
+      document.querySelectorAll('#div-data-table').forEach(el =>
+        el.addEventListener('click', rowRedReestrDataTable));
+      document.querySelectorAll('.dataTables_wrapper .dataTables_filter input').forEach(el =>
+        el.addEventListener('input', rowRedReestrDataTable));
+      //кінець підсвітка червоним зупинені проекти
+
       trimmingSpaces();
       clickTableReestr();
       document.querySelector('.dataTables_wrapper .dataTables_filter input').classList.add("form-control");
       document.querySelector('.dataTables_wrapper .dataTables_filter input').style =
         `border-radius: 20px;
-    width: 400px;
-    padding: 5px 14px`;
+        width: 400px;
+        padding: 5px 14px`;
       document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Поиск по таблице';
       // считывваем из кеша данные для поиска и вставляем в поле поиска
       const valueSearch = sessionStorage.getItem('dataTables_filter_input');

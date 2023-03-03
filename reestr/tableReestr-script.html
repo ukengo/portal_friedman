@@ -336,17 +336,17 @@
           }, // скрываем колонку номеров сттрок
         ],
         columns: [
-          { "title": "Дата конец" },
-          { "title": "Дата начало" },
-          { "title": "Фирма" },
-          { "title": "Работа" },
-          { "title": "Проект" },
-          { "title": "Сотрудник" },
-          { "title": "Исполнитель" },
-          { "title": "Сумма исполу" },
-          { "title": "Оплата исполу" },
-          { "title": "Примечание" },
-          { "title": "Примечание мое" },
+          { "title": "Дата кінець" },
+          { "title": "Дата початок" },
+          { "title": "Фірма" },
+          { "title": "Робота" },
+          { "title": "Проєкт" },
+          { "title": "Співробітник" },
+          { "title": "Виконавець" },
+          { "title": "Сумма викону" },
+          { "title": "Оплата викону" },
+          { "title": "Примітки" },
+          { "title": "Примітки мої" },
           { "title": "Row" },
           { "title": "Row2" },
         ]
@@ -369,7 +369,8 @@
         el.addEventListener('click', rowRedReestrDataTable));
       document.querySelectorAll('.dataTables_wrapper .dataTables_filter input').forEach(el =>
         el.addEventListener('input', rowRedReestrDataTable));
-      //кінець підсвітка червоним зупинені проекти
+        document.querySelector('#div-data-table').addEventListener('mousemove', rowRedReestrDataTable);
+        //кінець підсвітка червоним зупинені проекти
 
       trimmingSpaces();
       clickTableReestr();

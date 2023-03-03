@@ -12,7 +12,7 @@ function buhgalterTable() {
 
   if (valueBuhFalse != '') {
     if (valueBuhFalse.map(x => [x[0], x[1], x[2], x[3]].indexOf('')) > 0) {
-      Browser.msgBox('Не все поля заполнены')
+      Browser.msgBox('Не всі поля заповнені')
 
     } else {
       const arr = valueBuhFalse.map(x => [x[0], x[3], numSearh(x[2]), '', x[2], '', new Date().getTime() * getRandom()])
@@ -48,7 +48,7 @@ function buhgalterTable() {
         .getSheetByName('bot')
       const valueBot = sheetBot.getRange(13, 1).getDisplayValue()
       readLastRow(valueBot)
-      console.log('Выполнено')
+      console.log('Виконано')
       return arrPortal
     }
   } else {
@@ -61,9 +61,9 @@ function numSearh(numSf) {
   const regex = /([А-Я]+)/; //регулярное выражение для получения букв по номеру счета
   let res = numSf.match(regex)[0];//получаем буквы по номеру счета
   if (res == 'РФ' || res == 'РМ') {
-    return 'флп'
+    return 'фоп'
   } else {
-    return 'ооо'
+    return 'тов'
   }
 }
 
@@ -139,20 +139,3 @@ function dataDateSost(){
 function updateDateSostGs(dateDateSost){
   dataInspektor().getRange(3, 4).setValue(dateDateSost)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

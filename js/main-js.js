@@ -263,7 +263,7 @@ function getDropDownArrayStatyaArrivalWaste() {
 
 //форма оплаты (признак)
 function getDropDownArrayPriznak() {
-  return ['нал', 'ооо', 'флп']
+  return ['гот', 'тов', 'фоп']
 }
 
 // Конец выбора для формирования выпадающих списков
@@ -1510,7 +1510,7 @@ function numProekt() {
 // получаем массив сотрудников (функцией отбора уникальных значений)
 function sotrArr() {
   // находим номер колонки по имени
-  const numColSotr = numColElementa(dataSheet(), 'Сотрудник').numCol
+  const numColSotr = numColElementa(dataSheet(), 'Співробітник').numCol
   return getDropDownArray(dataSheet(), 2, numColSotr)
 }
 

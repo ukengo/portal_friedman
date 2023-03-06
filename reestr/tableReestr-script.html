@@ -328,7 +328,7 @@
         //CHANGE THE TABLE HEADINGS BELOW TO MATCH WITH YOUR SELECTED DATA RANGE
         lengthMenu: [[25, 50, 100, 500, -1, 0], [25, 50, 100, 500, "Все", "Пусто"]],
         responsive: true,
-        autoWidth: false,
+        autoWidth: false,        
         order: [[11, 'desc']], // колонка 10 это номера строк, по ним сортировка
         columnDefs: [
           {
@@ -370,6 +370,7 @@
       document.querySelectorAll('.dataTables_wrapper .dataTables_filter input').forEach(el =>
         el.addEventListener('input', rowRedReestrDataTable));
         document.querySelector('#div-data-table').addEventListener('mousemove', rowRedReestrDataTable);
+        
         //кінець підсвітка червоним зупинені проекти
 
       trimmingSpaces();
@@ -628,8 +629,10 @@
     })
   })
 
-
-
+  $('#data-table').on('search.dt', function() {
+    $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
+  }); 
+  
 
   //кнопка маленькая левая1 (reestr)
   /*   $('#btnSearchReestrInfo').click(function () {

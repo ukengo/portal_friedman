@@ -654,7 +654,11 @@
         for (let i = 0; i < arrFinMulti.length; i++) {
           result += `<tr>`;
           for (let j = 0; j < arrFinMulti[i].length; j++) {
-            result += "<td>" + arrFinMulti[i][j] + "</td>";
+            if (arrFinMulti[i][j] === true) {
+              result += `<td style="color: red;">${arrFinMulti[i][j]}</td>`;
+            } else {
+              result += `<td>${arrFinMulti[i][j]}</td>`;
+            }
           }
           result += `
           <td class="bi-x-lg-fin-multi" rownumberfinmulti="${arrFinMulti[i][11]}">

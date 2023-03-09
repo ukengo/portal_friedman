@@ -1171,12 +1171,12 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
 
 
 function getRecordsReestr() {
-  const dateRee = dataBase().getDataRange().getValues().slice(1)
+  const dateRee = dataBase().getDataRange().getValues().slice(1);
   const dataMapRee = dateRee.filter(x => x[5] != '')
-    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18]])
-  const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '').sort((a, b) => b[5] - a[5])
-  const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '').sort().reverse()
-  const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1)
+    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18]]);
+  const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '').sort((a, b) => b[5] - a[5]);
+  const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '').sort((a, b) => b[5] - a[5]);
+  const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1);
   return dataFilterMapReeDate
 }
 

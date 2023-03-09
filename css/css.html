@@ -1,4 +1,11 @@
 <style>
+
+/*прибираємо стрибок сторінки у браузері*/
+html {
+    width: 100vw;
+    overflow-x: hidden;
+  }
+
   body {
     background-color: #f5f5f5;
   }
@@ -188,9 +195,10 @@
     border-color: #dc3545 !important;
   }
 
-  input:focus, input:active {
+  input:focus,
+  input:active {
     border-color: #ffa8b1 !important;
-    box-shadow: 0 0 0 0 !important;    
+    box-shadow: 0 0 0 0 !important;
   }
 
   /* удаляет фон подложки в полях поиска по таблицам */
@@ -205,9 +213,8 @@
   }
 
   @media (max-width: 768px) {
-  html {
-    font-size: 14px;
+    html {
+      font-size: 14px;
+    }
   }
-}
-
 </style>

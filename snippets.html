@@ -125,12 +125,31 @@
     }
   }
 
-// перетворення числа в додатне в полях "Сума" і "Кількість приват"
-document.querySelectorAll('.num-plus').forEach(el => {
-  el.addEventListener('input', function() {
-    if(this.value < 0) {
-      this.value = -this.value}
+  // перетворення числа в додатне в полях "Сума" і "Кількість приват"
+  document.querySelectorAll('.num-plus').forEach(el => {
+    el.addEventListener('input', function () {
+      if (this.value < 0) {
+        this.value = -this.value
+      }
+    })
   })
-})
+
+  // пошук по таблиці? де col - номер колонки, який ппропускається при пошуку
+  function findInTable(arr, value, col) {
+  const result = [];
+  let yi = '';
+  for (var i = 0; i < arr.length; i++) {
+    for (var j = 0; j < arr[i].length; j++) {
+      if (j === col) continue
+      if (yi !== i) {   // пропускаємо дублі     
+        if (arr[i][j].includes(value)) {
+          result.push(arr[i]);
+          yi = i;
+        }
+      }
+    }
+  }
+  return (result);
+}
 
 </script>

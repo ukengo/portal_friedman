@@ -143,8 +143,6 @@
     doubleCheck();
     updateRecordFinButton();
     $('#btnSearchFinance').prop("disabled", false);
-    //  $("#rowdatafin").attr("tabindex",-1).focus();
-
   }
 
   // cрабатывание по кнопке Enter
@@ -203,7 +201,6 @@
   }
 
   function SearchRecordsFinProekt1(proektFin) {
-
     var summaFin = ""
     var priznakFin = ""
     var dateoplFin = ""
@@ -211,11 +208,7 @@
     var primFin = ""
     var idFin = ""
     var firmaFin = ""
-    //  spinner('rowdatafin')
-
-
     google.script.run.withSuccessHandler(array).searchRecordsFinProekt(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin);
-
   }
 
   function SearchRecordsFinProekt() {
@@ -223,21 +216,6 @@
     spinner('rowdatafin')
     SearchRecordsFinProekt1(proektFin)
   }
-
-
-  /*     function SearchRecordsFinProekt(){
-        var proektFin = document.getElementById("proektfin").value;
-        var summaFin = document.getElementById("summafin").value;
-        var priznakFin = document.getElementById("priznakfin").value;
-        var dateoplFin = document.getElementById("dateoplfin").value;
-        var sfFin = document.getElementById("sffin").value;
-        var primFin = document.getElementById("primfin").value;
-        var idFin = document.getElementById("idfin").value;
-        var firmaFin = document.getElementById("firmafin").value;
-        spinner('rowdatafin')
-  
-        google.script.run.withSuccessHandler(array).searchRecordsFinProekt(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin);
-      } */
 
   function ClearRecordFin() {
     document.getElementById("proektfin").value = '';
@@ -249,11 +227,8 @@
     document.getElementById("idfin").value = '';
     document.getElementById("firmafin").value = '';
     document.getElementById("issuepartfinance").checked = false;
-    document.getElementById("issuecompletfinance").checked = false
-    document.getElementById("ispolufinance").checked = false
-
-    labelred();
-
+    document.getElementById("issuecompletfinance").checked = false;
+    document.getElementById("ispolufinance").checked = false;
   }
 
   function UpdateRecordFin(row_number_fin) {
@@ -279,19 +254,18 @@
   }
 
   // открытие полной таблицы финансов при загрузке окна (автооткрытие)
-  searchMobile(btnTableFinance);
+  // searchMobile(btnTableFinance);
+
+  btnTableFinance();
 
   $('#btnTableАFinance').click(btnTableFinance);
 
   function btnTableFinance() {
     $('#btnTableАFinance').prop("disabled", true);
-    clearBtnTableFinance();
-    $('<div id="div-data-tablefinance-spinner"></div><div id="div-data-table-finance"><div id="data-table-finance" </div>').appendTo('#div-data-tablefinance-row')
-    $("#div-data-tablefinance-spinner").attr("tabindex", -1).focus();
-    spinner('div-data-tablefinance-spinner')
+    $('<div id="div-data-tablefinance-spinner"></div><div id="div-data-table-finance"><div id="data-table-finance" </div>').appendTo('#div-data-tablefinance-row');
+    spinner('div-data-tablefinance-spinner');
     google.script.run.withSuccessHandler(showDataFinance).getDataTableFinance();
-    //startTableFinance();
-  };
+  }
 
   $('#clearBtnTableFinance').click(clearBtnTableFinance);
 
@@ -306,106 +280,178 @@
   };
 
   function showDataFinance(dataArray) {
-    const dataArrayProcessed = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[7]]);
-    var result = "<table class='table mt-3 table-bordered table-hover table-line-selection' style='font-size:0.9em'>"
-    // строим таблицу
-    for (var i = 0; i < dataArrayProcessed.length; i++) {
-      result += "<tr>";
-      for (var j = 0; j < dataArrayProcessed[i].length; j++) {
-        result += "<td>" + dataArrayProcessed[i][j] + "</td>";
+    function dataSearchFinanceNew() {
+      const value = document.querySelector('#searchFinance').value;
+      var div = document.getElementById('div-data-tablefinance-row');
+      div.innerHTML = '';
+      document.querySelector('#summaFinsnce').innerText = '';
+      if (value.length < 4) return;
+      const dataArrayProcessed = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]]);
+      const dataArrayProcessedFiltered = findInTable(dataArrayProcessed, value, 6);
+      // const dataArrayAttr = dataArray.map(x => [x[6]]);
+      var result = "<table id='table-finance-search' class='table mt-3 table-bordered table-hover table-line-selection' style='font-size:0.9em'>"
+      for (var i = 0; i < findInTable(dataArrayProcessedFiltered, value).length; i++) {
+
+        result += "<tr>";
+        for (var j = 0; j < findInTable(dataArrayProcessedFiltered, value)[i].length; j++) {
+          if (j === 6) continue // пропускаємо ID
+          result += "<td>" + findInTable(dataArrayProcessedFiltered, value)[i][j] + "</td>";
+        }
+        result += `
+          <td align="center">
+              <button type="button"
+                id="btnFinanceY"
+                data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
+                class="btn btn-sm btn-light btn-finance-yft">
+                  Y  
+              </button>
+              <button type="button"
+                id="btnFinanceFri"
+                data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
+                class="btn btn-sm btn-light mx-2 btn-finance-yft">
+                Fri
+              </button>
+              <button type="button"
+                id="btnFinanceT"
+                data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
+                class="btn btn-sm btn-light btn-finance-yft">
+                  T  
+              </button>
+            </td>`;
+        result += `
+            <td align="center">
+                <button type="button"
+                data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
+                  class="btn btn-sm btn-light btnbtn-fin-edit"
+                  data-bs-toggle="modal" data-bs-target="#exampleModalFinance">
+                  Edit
+                </button>
+              </td>`
+        result += "</tr>";
       }
-      result += `
-      <td align="center">
-          <button type="button"
-            id="btnFinanceY${i}"
-            something="${i}"
-            class="btn btn-sm btn-light btn-finance-yft">
-              Y  
-          </button>
-          <button type="button"
-            id="btnFinanceFri${i}"
-            something="${i}"
-            class="btn btn-sm btn-light mx-2 btn-finance-yft">
-            Fri
-          </button>
-          <button type="button"
-            id="btnFinanceT${i}"
-            something="${i}"
-            class="btn btn-sm btn-light btn-finance-yft">
-              T  
-          </button>
-        </td>`;
-      result += `
-        <td align="center">
-            <button type="button"
-              id="buttonModalFinance${i}"
-              something="${i}"
-              class="btn btn-sm btn-light btnbtnfin"
-              data-bs-toggle="modal" data-bs-target="#exampleModalFinance">
-              Edit
-            </button>
-          </td>`
-      result += "</tr>";
+      result += "</table>";
+      div.innerHTML = result;
+      summaTr();
+      clickTableFin();
+
+      document.querySelectorAll('.btnbtn-fin-edit').forEach(el => {
+        el.addEventListener('click', function () {
+          const idRow = this.getAttribute('data-id');
+        })
+      })
+
+      // редактирование таблицы showDataFinance через модальное окно
+      $('.btnbtn-fin-edit').click(function () {
+        const row = this.getAttribute('data-id');
+        const allModal = dataArray.filter(el => el[6] === row).flat();
+        $('#exampleModalFinance').on('shown.bs.modal', () => {
+          $('#proektfinModal').val(allModal[0]);
+          $('#summafinModal').val(strongToNumber(allModal[1]));// преобразование в число и удаление пробелов
+          $('#priznakfinModal').val(allModal[2]);
+          $('#sffinModal').val(allModal[4]);
+          $('#idfinModal').val(allModal[6]);
+          $('#primfinModal').val(allModal[5]);
+          $('#firmafinModal').val(allModal[7]);
+          $('#financeModalLabel').html(+row + 100);
+          if (allModal[3]) {
+            $('#dateoplfinModal').val(formatDateYYYYtireMMtireDD(strongToDate(allModal[3]))); //формат даты
+          } else {
+            $('#dateoplfinModal').val('');
+          }
+        })
+      })
+
+
+      // кнопки вчора + п'ятниця + сьогодні 
+      document.querySelectorAll('.btn-finance-yft').forEach(el => {
+        el.addEventListener("click", function () {
+          const dataId = this.getAttribute('data-id');
+          //const id = dataArray[row][6];
+          switch (this.id) {
+            case `btnFinanceY`:
+              google.script.run.changesRowFinanceYFT(dataId, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)));
+              this.innerHTML = '';
+              break;
+            case `btnFinanceFri`:
+              google.script.run.changesRowFinanceYFT(dataId, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)));
+              this.innerHTML = '';
+              break;
+            case `btnFinanceT`:
+              google.script.run.changesRowFinanceYFT(dataId, formatDateYYYYtireMMtireDD(new Date(Date.now())));
+              this.innerHTML = '';
+              break;
+          }
+          //   btnTableFinance();     
+        })
+      });
     }
-    result += "</table>";
-    var div = document.getElementById('data-table-finance');
-    div.innerHTML = result;
-    $('#data-table-finance').hide(); // скрытие таблицы при загрузке страницы
-    $('#searchFinance').mouseup(() => {
-      $('#data-table-finance').show();
-      autoSearchOnOpen('#searchFinance');
-    }).keyup(dataSearchFinance);// эмуляция отпускания кнопки, при щелчке поиск по таблице (автопоиск при открытии)
 
-    tableLineSelection() //полосы в таблице
-    clickTableFin();
+
+    // строим таблицу
+    /*     for (var i = 0; i < dataArrayProcessed.length; i++) {
+          result += "<tr>";
+          for (var j = 0; j < dataArrayProcessed[i].length; j++) {
+            result += "<td>" + dataArrayProcessed[i][j] + "</td>";
+          }
+          result += `
+          <td align="center">
+              <button type="button"
+                id="btnFinanceY${i}"
+                something="${i}"
+                class="btn btn-sm btn-light btn-finance-yft">
+                  Y  
+              </button>
+              <button type="button"
+                id="btnFinanceFri${i}"
+                something="${i}"
+                class="btn btn-sm btn-light mx-2 btn-finance-yft">
+                Fri
+              </button>
+              <button type="button"
+                id="btnFinanceT${i}"
+                something="${i}"
+                class="btn btn-sm btn-light btn-finance-yft">
+                  T  
+              </button>
+            </td>`;
+          result += `
+            <td align="center">
+                <button type="button"
+                  id="buttonModalFinance${i}"
+                  something="${i}"
+                  class="btn btn-sm btn-light btnbtnfin"
+                  data-bs-toggle="modal" data-bs-target="#exampleModalFinance">
+                  Edit
+                </button>
+              </td>`
+          result += "</tr>";
+        }
+        result += "</table>";
+        var div = document.getElementById('data-table-finance');
+        div.innerHTML = result;
+     */
+
+
+
+    // $('#data-table-finance').hide(); // скрытие таблицы при загрузке страницы
+
+
+    /* 
+        $('#searchFinance').mouseup(() => {
+          $('#data-table-finance').show();
+          autoSearchOnOpen('#searchFinance');
+        }).keyup(dataSearchFinanceNew);// эмуляция отпускания кнопки, при щелчке поиск по таблице (автопоиск при открытии) */
+
+
+    // скрытие результатов поиска по нажатию на крестик инпута Fiance
+    document.getElementById('searchFinance').addEventListener('input', dataSearchFinanceNew);
+    document.getElementById('searchFinance').addEventListener('click', dataSearchFinanceNew);
+
+
+    //tableLineSelection() //полосы в таблице
     $('#btnTableАFinance').prop("disabled", false);
-    autoSearchOnOpen('#searchFinance')
-    $("#div-data-tablefinance-spinner").remove();
-
-    // кнопки вчора + п'ятниця + сьогодні 
-    document.querySelectorAll('.btn-finance-yft').forEach(el => {
-      el.addEventListener("click", function () {
-        const row = this.getAttribute('something');
-        const id = dataArray[row][6];
-        switch (this.id) {
-          case `btnFinanceY${row}`:
-            google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)));
-            this.innerHTML = '';
-            break;
-          case `btnFinanceFri${row}`:
-            google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)));
-            this.innerHTML = '';
-            break;
-          case `btnFinanceT${row}`:
-            google.script.run.changesRowFinanceYFT(id, formatDateYYYYtireMMtireDD(new Date(Date.now())));
-            this.innerHTML = '';
-            break;
-        }
-        //   btnTableFinance();     
-      })
-    });
-
-    // редактирование таблицы showDataFinance через модалку 
-    $('.btnbtnfin').click(function () {
-      const row = this.getAttribute('something')
-      const allModal = dataArray[row]
-
-      $('#exampleModalFinance').on('shown.bs.modal', () => {
-        $('#proektfinModal').val(allModal[0])
-        $('#summafinModal').val(strongToNumber(allModal[1]))// преобразование в число и удаление пробелов
-        $('#priznakfinModal').val(allModal[2])
-        $('#sffinModal').val(allModal[4])
-        $('#idfinModal').val(allModal[6])
-        $('#primfinModal').val(allModal[5])
-        $('#firmafinModal').val(allModal[7])
-        $('#financeModalLabel').html(+row + 100)
-        if (allModal[3]) {
-          $('#dateoplfinModal').val(formatDateYYYYtireMMtireDD(strongToDate(allModal[3]))) //формат даты
-        } else {
-          $('#dateoplfinModal').val('')
-        }
-      })
-    })
+    document.querySelector('#div-data-tablefinance-spinner').innerHTML = '';
+    document.getElementById("searchFinance").click();
   }
 
   // вставка дата вчера в модалке
@@ -420,26 +466,26 @@
   });
 
   // дата в модалке если заполненная, то жирным
-  /*   if(document.querySelector('#dateoplfinModal').value) {
+  /*   if (document.querySelector('#dateoplfinModal').value) {
       document.querySelector('#dateoplfinModal').style.cssText = 'font-weight: bold';
     } else {
       document.querySelector('#dateoplfinModal').style.cssText = 'font-weight: normal';
     } */
 
   // отображение скрытие таблицы с учетом результатов поиска, если поле Ппоиска заполнено, показывает результаты ,если пусто, скрывает
-  function dataSearchFinance() {
-    if (this.value && this.value.length >= 3) {
-      $('#data-table-finance').show();   // если в поле поиска нажимается клавиша, таблица отображается (с учетом поиска) 
-    } else {
-      $('#data-table-finance').hide();
-    }
-    summaTr()
-  }
+  /*   function dataSearchFinance() {
+      if (this.value && this.value.length >= 3) {
+        $('#data-table-finance').show();   // если в поле поиска нажимается клавиша, таблица отображается (с учетом поиска) 
+      } else {
+        $('#data-table-finance').hide();
+      }
+      summaTr()
+    } */
 
   function summaTr() {
-    const trNone = document.querySelector('#data-table-finance');
+    const trNone = document.querySelector('#table-finance-search');
     const trNone1 = getComputedStyle(trNone).display;
-    const tr = document.querySelectorAll('#data-table-finance tr');
+    const tr = document.querySelectorAll('#table-finance-search tr');
     const divSummaFinance = document.querySelector('#summaFinsnce')
     let sum = 0;
     if (trNone1 === 'none') {
@@ -451,11 +497,10 @@
         sum += tr[i].getElementsByTagName("td")[1].innerText * 1;
       }
     }
-    divSummaFinance.innerText = `Сумма: ${Math.round(sum).toFixed(2)} грн`;
+    divSummaFinance.innerText = `Разом: ${Math.round(sum).toFixed(2)} грн`;
   }
 
-  // скрытие результатов поиска по нажатию на крестик инпута
-  document.getElementById('searchFinance').addEventListener('input', dataSearchFinance);
+
 
 
   //кнопка сохранения в модальном окне
@@ -498,7 +543,7 @@
 
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
   function clickTableFin() {
-    clickTables('#div-data-table-finance', clickTapHandlingFinance);
+    clickTables('#div-data-tablefinance-row', clickTapHandlingFinance);
   }
 
   //обработка клика или тапа по таблице 

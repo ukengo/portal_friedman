@@ -263,7 +263,7 @@ function getDropDownArrayStatyaArrivalWaste() {
 
 //форма оплаты (признак)
 function getDropDownArrayPriznak() {
-  return ['нал', 'ооо', 'флп']
+  return ['гот', 'тов', 'фоп']
 }
 
 // Конец выбора для формирования выпадающих списков
@@ -1171,12 +1171,12 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
 
 
 function getRecordsReestr() {
-  const dateRee = dataBase().getDataRange().getValues().slice(1)
+  const dateRee = dataBase().getDataRange().getValues().slice(1);
   const dataMapRee = dateRee.filter(x => x[5] != '')
-    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18]])
-  const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '').sort((a, b) => b[5] - a[5])
-  const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '').sort().reverse()
-  const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1)
+    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18]]);
+  const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '').sort((a, b) => b[5] - a[5]);
+  const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '').sort((a, b) => b[5] - a[5]);
+  const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1);
   return dataFilterMapReeDate
 }
 
@@ -1510,7 +1510,7 @@ function numProekt() {
 // получаем массив сотрудников (функцией отбора уникальных значений)
 function sotrArr() {
   // находим номер колонки по имени
-  const numColSotr = numColElementa(dataSheet(), 'Сотрудник').numCol
+  const numColSotr = numColElementa(dataSheet(), 'Співробітник').numCol
   return getDropDownArray(dataSheet(), 2, numColSotr)
 }
 
@@ -1572,7 +1572,7 @@ function getData() {
   var spreadSheetId = "1ewk6ahWyREzSUe985l3zm_LblKpdjXs6rAHd71hXzwQ"; //CHANGE
   var dataRange = "База!A2:Z"; //CHANGE
   var range = Sheets.Spreadsheets.Values.get(spreadSheetId, dataRange);
-  var values = range.values.filter(x => x[5] != '').map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25]]);
+  var values = range.values.filter(x => x[5] != '');
   return values;
 }
 

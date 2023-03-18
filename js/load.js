@@ -75,7 +75,7 @@ const dataJob = () => {
 }
 
 const ssBuhSheet = () => {
-  const ret = SpreadsheetApp.openByUrl(URLBUH()).getSheetByName('Счета')
+  const ret = SpreadsheetApp.openByUrl(URLBUH()).getSheetByName('РАХУНКИ')
   return ret
 }
 

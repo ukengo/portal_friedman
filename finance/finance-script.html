@@ -331,7 +331,7 @@
       }
       result += "</table>";
       div.innerHTML = result;
-      summaTr();
+      summaTrFiltered('#table-finance-search', '#summaFinsnce');
       clickTableFin();
 
       document.querySelectorAll('.btnbtn-fin-edit').forEach(el => {
@@ -481,27 +481,6 @@
       }
       summaTr()
     } */
-
-  function summaTr() {
-    const trNone = document.querySelector('#table-finance-search');
-    const trNone1 = getComputedStyle(trNone).display;
-    const tr = document.querySelectorAll('#table-finance-search tr');
-    const divSummaFinance = document.querySelector('#summaFinsnce')
-    let sum = 0;
-    if (trNone1 === 'none') {
-      divSummaFinance.innerText = ``;
-      return false
-    }
-    for (let i = 0; i < tr.length; i++) {
-      if (tr[i].style.display != 'none') {
-        sum += tr[i].getElementsByTagName("td")[1].innerText * 1;
-      }
-    }
-    divSummaFinance.innerText = `Разом: ${Math.round(sum).toFixed(2)} грн`;
-  }
-
-
-
 
   //кнопка сохранения в модальном окне
   $('#btnSaveModalFinance').on("click", btnSaveModalFinance)
@@ -770,6 +749,6 @@
         this_.disabled = false;
       }
     })
-  }());  
+  }());
 
 </script>

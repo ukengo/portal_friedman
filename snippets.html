@@ -136,20 +136,39 @@
 
   // пошук по таблиці? де col - номер колонки, який ппропускається при пошуку
   function findInTable(arr, value, col) {
-  const result = [];
-  let yi = '';
-  for (var i = 0; i < arr.length; i++) {
-    for (var j = 0; j < arr[i].length; j++) {
-      if (j === col) continue
-      if (yi !== i) {   // пропускаємо дублі     
-        if (arr[i][j].includes(value)) {
-          result.push(arr[i]);
-          yi = i;
+    const result = [];
+    let yi = '';
+    for (var i = 0; i < arr.length; i++) {
+      for (var j = 0; j < arr[i].length; j++) {
+        if (j === col) continue
+        if (yi !== i) {   // пропускаємо дублі     
+          if (arr[i][j].includes(value)) {
+            result.push(arr[i]);
+            yi = i;
+          }
         }
       }
     }
+    return (result);
   }
-  return (result);
-}
+
+  // сума по відфільтрованій таблиці
+  function summaTrFiltered(IdTable, IdElSumma) {
+    const trNone = document.querySelector(IdTable);
+    const trNone1 = getComputedStyle(trNone).display;
+    const tr = document.querySelectorAll(`${IdTable} tr`);
+    const divSummaFinance = document.querySelector(IdElSumma)
+    let sum = 0;
+    if (trNone1 === 'none') {
+      divSummaFinance.innerText = ``;
+      return false
+    }
+    for (let i = 0; i < tr.length; i++) {
+      if (tr[i].style.display != 'none') {
+        sum += tr[i].getElementsByTagName("td")[1].innerText * 1;
+      }
+    }
+    divSummaFinance.innerText = `Разом: ${Math.round(sum).toFixed(2)} грн`;
+  }
 
 </script>

@@ -229,6 +229,7 @@
     document.getElementById("issuepartfinance").checked = false;
     document.getElementById("issuecompletfinance").checked = false;
     document.getElementById("ispolufinance").checked = false;
+    labelred();
   }
 
   function UpdateRecordFin(row_number_fin) {
@@ -280,7 +281,7 @@
   };
 
   function showDataFinance(dataArray) {
-    function dataSearchFinanceNew() {
+    function dataSearchFinanceNew() { //пошук
       const value = document.querySelector('#searchFinance').value;
       var div = document.getElementById('div-data-tablefinance-row');
       div.innerHTML = '';

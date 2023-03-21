@@ -272,7 +272,7 @@
       var div = document.getElementById("dataTableArriwalWaste");
       div.innerHTML = "Data not found!";
     }
-    autoSearchOnOpen(".input-search"); // автопоиск при открытии
+    autoSearchOnOpen(".input-search"); // автопоиск при открытии    
   }
 
   function updateR() {
@@ -353,6 +353,15 @@
     }
   }
 
+  // вставка суми доходу/витрат при фільтрації
+  ['change', 'keyup', 'search'].forEach(event => {
+    document.querySelector('#search').addEventListener(event, function () {
+      if (!this.value || !document.getElementById('dataTableArriwalWaste').hasChildNodes()) document.querySelector('#vrabotevse-arriwalwaste-summa').innerHTML = '';
+      else summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');
+      
+    })
+  })
+
   // жрачка підстановка "нал"
   function grachka() {
     const arr = [
@@ -375,7 +384,7 @@
       ['Григоренко консьерж', 'гот'],
       ['жрачка', 'гот'],
       ['Айпекс 200$', 'гот'],
-      ['туча', 'гот'],
+      ['туча', 'тов'],
       ['Айпекс митні платежі', 'тов'],
       ['Айпекс на купівлю валюти', 'тов'],
       ['Айпекс комісія на купівлю валюти', 'тов'],

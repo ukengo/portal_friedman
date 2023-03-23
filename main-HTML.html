@@ -49,6 +49,7 @@
                 role="tab" aria-controls="nav-job" aria-selected="true">job</a>
             </li>
           </ul>
+          <p id='nav_finance_data' class="text-light position-absolute end-0 p-5 translate-middle-y top-50"></p>
         </div>
       </div>
     </nav>
@@ -123,6 +124,8 @@
         document.getElementById("nav-brand-tab").addEventListener("click", () =>
           document.getElementById("nav-buhgalter-tab").click());
 
+        // вставка дати на головну
+        document.querySelector('#nav_finance_data').innerText = formatDateDDpointMMpointYYYY(new Date());
 
       </script>
 

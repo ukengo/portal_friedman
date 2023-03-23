@@ -354,7 +354,7 @@
   }
 
   // вставка суми доходу/витрат при фільтрації
-  ['change', 'keyup', 'search'].forEach(event => {
+  ['change', 'keyup', 'search', 'click'].forEach(event => {
     document.querySelector('#search').addEventListener(event, function () {
       if (!this.value || !document.getElementById('dataTableArriwalWaste').hasChildNodes()) document.querySelector('#vrabotevse-arriwalwaste-summa').innerHTML = '';
       else summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');

@@ -23,7 +23,7 @@
 
 <script>
 
-  function spinner(elemId, text= 'Іде пошук...') {
+  function spinner(elemId, text = 'Іде пошук...') {
     document.getElementById(elemId).innerHTML = `<div class=\"d-flex justify-content-center\"><div class=\"spinner-border text-danger mb-4 mt-2\" role=\"status\"><span class=\"visually-hidden\"></span></div>${text}</div>`;
   }
 
@@ -95,6 +95,35 @@
     return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '.'
       + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '.'
       + date.getFullYear();
+  }
+
+  // універсальне форматування дати і часу
+  const formatDateTime = (date, repay) => {
+    let dateTime = new Date(date);
+
+    const year = dateTime.getFullYear();
+    const month = dateTime.getMonth() + 1;
+    const day = dateTime.getDate();
+    const hour = dateTime.getHours();
+    const min = dateTime.getMinutes();
+    const sec = dateTime.getSeconds();
+
+    const yearGood = year.toString().padStart(4, "0");
+    const monthGood = month.toString().padStart(2, "0");
+    const dayGood = day.toString().padStart(2, "0");
+    const hourGood = hour.toString().padStart(2, "0");
+    const minGood = min.toString().padStart(2, "0");
+    const secGood = sec.toString().padStart(2, "0");
+
+    switch (repay) {
+      case 'dd.mm.yyyy':
+        return `${dayGood}.${monthGood}.${yearGood}`;
+        break;
+      case 'hh:mm:ss':
+        return `${hourGood}:${minGood}:${secGood}`;
+        break;
+    }
+    //return `${yearGood}/${monthGood}/${dayGood} ${hourGood}:${minGood}:${secGood}`;
   }
 
   /* // функция поиска по таблице

@@ -50,8 +50,8 @@
             </li>
           </ul>
           <div id='nav_finance_data' class="text-light position-absolute end-0 p-5 translate-middle-y top-50">
-            <div class="nav-finance-data-date d-flex justify-content-center"></div>
-            <div class="nav-finance-data-time d-flex justify-content-center"></div>
+            <div class="nav-maim-data-date d-flex justify-content-center"></div>
+            <div class="nav-maim-data-time d-flex justify-content-center"></div>
           </div>
         </div>
       </div>
@@ -128,10 +128,11 @@
           document.getElementById("nav-buhgalter-tab").click());
 
         // вставка дати на головну
-        setInterval(() => {
-          document.querySelector('.nav-finance-data-date').innerText = formatDateTime(new Date(), `dd.mm.yyyy`);
-          document.querySelector('.nav-finance-data-time').innerText = formatDateTime(new Date(), `hh:mm:ss`);
-        }, 1000);
+        (function addDate() {
+          document.querySelector('.nav-maim-data-date').innerText = formatDateTime(new Date(), `dd.mm.yyyy`);
+          document.querySelector('.nav-maim-data-time').innerText = formatDateTime(new Date(), `hh:mm`);
+          setTimeout(addDate, 30000);
+        })();
 
       </script>
 

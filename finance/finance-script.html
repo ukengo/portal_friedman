@@ -146,17 +146,27 @@
   }
 
   // cрабатывание по кнопке Enter
+
+  document.getElementById('exampleModalFinance').addEventListener('keydown', event => {
+    /* if (event.keyCode == 13) {
+      btnSaveModalFinance(); 
+    }*/
+    console.log(11111111111111111111111111111);
+    
+  })
+
+
   function clickPressFinance(event) {
     if (event.keyCode == 13) {
       SearchRecordsFin();
     }
   }
 
-  function clickPressFinanceModal(event) {
+/*   function clickPressFinanceModal(event) {
     if (event.keyCode == 13) {
       btnSaveModalFinance();
     }
-  }
+  } */
 
   function clickPressFinanceUpdate(event) {
     if (event.keyCode == 13) {
@@ -534,13 +544,13 @@
     const text = getDataFromTd(data);
     const col = event.srcElement.cellIndex;
     if (col === 7) return false;
-    ClearRecordFin();
+    // ClearRecordFin();
     switch (col) {
       case 0:
         $('#proektfin').val(text[0]);
         break;
       case 1:
-        $('#summafin').val(text[1]);
+        $('#summafin').val(Math.abs(text[1]));
         break;
       case 2:
         $('#priznakfin').val(text[2]);

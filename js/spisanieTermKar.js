@@ -24,15 +24,15 @@ function vReestrTerminalKarantin(data) {
   //  берем столбец с назначениями платежей из таблицы Списание терминал
   let valueVhodSchet = data[5]
 
-  if (data[4] === 'терминал') {
+  if (data[4] === 'термінал') {
     if (valueReestrTrataNaznechenie.toString().includes(valueVhodSchet) == false) {
-      let res = [Utilities.formatDate(new Date(data[0]), 'Europe/Kiev', 'dd.MM.yyyy'), data[1], 'ооо', '', 'АВТОМОБІЛЬНІ ІНТЕЛЕКТУАЛЬНІ ТЕХНОЛОГІЇ ' + 'пп' + data[5]]
+      let res = [Utilities.formatDate(new Date(data[0]), 'Europe/Kiev', 'dd.MM.yyyy'), data[1], 'тов', '', 'АВТОМОБІЛЬНІ ІНТЕЛЕКТУАЛЬНІ ТЕХНОЛОГІЇ ' + 'пп' + data[5]]
       sheetReestrTrata.appendRow(res)
     }
   }
   if (data[4] === 'карантин') {
     if (valueReestrTrataNaznechenie.toString().includes(valueVhodSchet) == false) {
-      let res = [Utilities.formatDate(new Date(data[0]), 'Europe/Kiev', 'dd.MM.yyyy'), data[1], 'ооо', '', 'КАРАНТИН ' + '' + data[5]]
+      let res = [Utilities.formatDate(new Date(data[0]), 'Europe/Kiev', 'dd.MM.yyyy'), data[1], 'тов', '', 'КАРАНТИН ' + '' + data[5]]
       sheetReestrTrata.appendRow(res)
 
     }

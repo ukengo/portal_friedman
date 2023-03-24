@@ -98,7 +98,7 @@
   }
 
   // універсальне форматування дати і часу
-  const formatDateTime = (date, repay) => {
+  const formatDateTime = (date, repay, dayW = 1) => {
     let dateTime = new Date(date);
 
     const year = dateTime.getFullYear();
@@ -117,13 +117,46 @@
 
     switch (repay) {
       case 'dd.mm.yyyy':
-        return `${dayGood}.${monthGood}.${yearGood}`;
+        return dayW ? `${dayGood}.${monthGood}.${yearGood}, ${DayDate(date)}` : `${dayGood}.${monthGood}.${yearGood}`;
         break;
       case 'hh:mm:ss':
         return `${hourGood}:${minGood}:${secGood}`;
         break;
+      case 'hh:mm':
+        return `${hourGood}:${minGood}`;
+        break;
     }
     //return `${yearGood}/${monthGood}/${dayGood} ${hourGood}:${minGood}:${secGood}`;
+  }
+
+  // формування дня тижня
+  function DayDate(d) {
+    if (d == undefined) d = new Date();
+    let res;
+    switch (d.getDay()) {
+      case 0:
+        res = 'нд';
+        break;
+      case 1:
+        res = 'пн';
+        break;
+      case 2:
+        res = 'вт';
+        break;
+      case 3:
+        res = 'ср';
+        break;
+      case 4:
+        res = 'чт';
+        break;
+      case 5:
+        res = 'пт';
+        break;
+      case 6:
+        res = 'сб';
+        break;
+    }
+    return res;
   }
 
   /* // функция поиска по таблице

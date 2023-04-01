@@ -146,6 +146,17 @@
   }
 
   // cрабатывание по кнопке Enter
+  document.getElementById('exampleModalFinance').addEventListener('keydown', event => {
+    if (event.keyCode == 13) {
+      btnSaveModalFinance();
+    }
+  })
+
+  document.getElementById('formFinStart').addEventListener('keydown', event => {
+    if (event.keyCode == 13) {
+      SearchRecordsFin();
+    }
+  })
 
   function clickPressFinanceUpdate(event) {
     if (event.keyCode == 13) {

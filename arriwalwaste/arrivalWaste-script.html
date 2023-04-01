@@ -353,15 +353,6 @@
     }
   }
 
-  // вставка суми доходу/витрат при фільтрації
-  ['change', 'keyup', 'search'].forEach(event => {
-    document.querySelector('#search').addEventListener(event, function () {
-      if (!this.value || !document.getElementById('dataTableArriwalWaste').hasChildNodes()) document.querySelector('#vrabotevse-arriwalwaste-summa').innerHTML = '';
-      else summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');
-      
-    })
-  })
-
   // жрачка підстановка "нал"
   function grachka() {
     const arr = [
@@ -404,5 +395,28 @@
     }
   }
   grachka();
+
+
+  // вставка суми доходу/витрат при фільтрації
+  const mutationObserverAw = () => {
+    let observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        const searsh = document.querySelector('#search');
+        const summa = document.querySelector('#vrabotevse-arriwalwaste-summa');
+        summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');
+        if (!searsh.value || !document.getElementById('dataTableArriwalWaste').hasChildNodes() || summa.innerHTML === 'Разом: 0.00 грн') {
+          summa.innerHTML = '';
+        }/*  else {
+          summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');
+        } */
+      });
+    });
+    observer.observe(document.getElementById('dataTableArriwalWaste'), {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+  }
+  mutationObserverAw();
 
 </script>

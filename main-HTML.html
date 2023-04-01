@@ -49,6 +49,10 @@
                 role="tab" aria-controls="nav-job" aria-selected="true">job</a>
             </li>
           </ul>
+          <div id='nav_finance_data' class="text-light position-absolute end-0 p-5 translate-middle-y top-50">
+            <div class="nav-maim-data-date d-flex justify-content-center"></div>
+            <div class="nav-maim-data-time d-flex justify-content-center"></div>
+          </div>
         </div>
       </div>
     </nav>
@@ -123,6 +127,12 @@
         document.getElementById("nav-brand-tab").addEventListener("click", () =>
           document.getElementById("nav-buhgalter-tab").click());
 
+        // вставка дати на головну
+        (function addDate() {
+          document.querySelector('.nav-maim-data-date').innerText = formatDateTime(new Date(), `dd.mm.yyyy`);
+          document.querySelector('.nav-maim-data-time').innerText = formatDateTime(new Date(), `hh:mm`);
+          setTimeout(addDate, 30000);
+        })();
 
       </script>
 

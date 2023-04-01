@@ -101,13 +101,13 @@ function addNewRowMinusThreee(rowData) {
 } */
 
 function getLastTenRows(sheet) {
-  const lr = sheet.getDataRange().getValues().length
-
-  const data = sheet.getRange(2, 1, lr, 5).getDisplayValues()
+  const lr = sheet.getDataRange().getValues().length;
+  const arr = sheet.getRange(2, 1, lr, 5).getDisplayValues();
+  const data = arr.filter(e => !e.every(el => el === ''));  // відбір не пустих підмасивів
   const dataObject = {
     'data': data,
     'length': lr
-  }
+  };
   return dataObject
 }
 

@@ -23,7 +23,7 @@
 
 <script>
 
-  function spinner(elemId, text= 'Іде пошук...') {
+  function spinner(elemId, text = 'Іде пошук...') {
     document.getElementById(elemId).innerHTML = `<div class=\"d-flex justify-content-center\"><div class=\"spinner-border text-danger mb-4 mt-2\" role=\"status\"><span class=\"visually-hidden\"></span></div>${text}</div>`;
   }
 
@@ -88,6 +88,75 @@
     return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '-'
       + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
       + date.getFullYear();
+  }
+
+  //форматирование даты в вид dd.mm.гггг 
+  function formatDateDDpointMMpointYYYY(date) {
+    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '.'
+      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '.'
+      + date.getFullYear();
+  }
+
+  // універсальне форматування дати і часу
+  const formatDateTime = (date, repay, dayW = 1) => {
+    let dateTime = new Date(date);
+
+    const year = dateTime.getFullYear();
+    const month = dateTime.getMonth() + 1;
+    const day = dateTime.getDate();
+    const hour = dateTime.getHours();
+    const min = dateTime.getMinutes();
+    const sec = dateTime.getSeconds();
+
+    const yearGood = year.toString().padStart(4, "0");
+    const monthGood = month.toString().padStart(2, "0");
+    const dayGood = day.toString().padStart(2, "0");
+    const hourGood = hour.toString().padStart(2, "0");
+    const minGood = min.toString().padStart(2, "0");
+    const secGood = sec.toString().padStart(2, "0");
+
+    switch (repay) {
+      case 'dd.mm.yyyy':
+        return dayW ? `${dayGood}.${monthGood}.${yearGood}, ${DayDate(date)}` : `${dayGood}.${monthGood}.${yearGood}`;
+        break;
+      case 'hh:mm:ss':
+        return `${hourGood}:${minGood}:${secGood}`;
+        break;
+      case 'hh:mm':
+        return `${hourGood}:${minGood}`;
+        break;
+    }
+    //return `${yearGood}/${monthGood}/${dayGood} ${hourGood}:${minGood}:${secGood}`;
+  }
+
+  // формування дня тижня
+  function DayDate(d) {
+    if (d == undefined) d = new Date();
+    let res;
+    switch (d.getDay()) {
+      case 0:
+        res = 'нд';
+        break;
+      case 1:
+        res = 'пн';
+        break;
+      case 2:
+        res = 'вт';
+        break;
+      case 3:
+        res = 'ср';
+        break;
+      case 4:
+        res = 'чт';
+        break;
+      case 5:
+        res = 'пт';
+        break;
+      case 6:
+        res = 'сб';
+        break;
+    }
+    return res;
   }
 
   /* // функция поиска по таблице

@@ -228,7 +228,7 @@
     const nameTable = dataArray.data.slice();
     if (dataArray) {
       var result =
-        "<table class='table table-bordered table-hover table-line-selection' style='table-layout: auto;'>";
+        "<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>";
 
       // строим таблицу
       for (var i = dataArray.data.length - 2; i > 0; i--) {
@@ -273,6 +273,14 @@
       div.innerHTML = "Data not found!";
     }
     autoSearchOnOpen(".input-search"); // автопоиск при открытии    
+
+
+    clickTables('#table-aw', () => {
+      if (event.target.tagName !== 'TD') return false;
+      const dataTarget = event.target.textContent;
+      document.querySelector('#search').value = dataTarget;
+    })
+
   }
 
   function updateR() {

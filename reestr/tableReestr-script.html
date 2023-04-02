@@ -328,7 +328,7 @@
         //CHANGE THE TABLE HEADINGS BELOW TO MATCH WITH YOUR SELECTED DATA RANGE
         lengthMenu: [[25, 50, 100, 500, -1, 0], [25, 50, 100, 500, "Все", "Пусто"]],
         responsive: true,
-        autoWidth: false,        
+        autoWidth: false,
         order: [[11, 'desc']], // колонка 10 это номера строк, по ним сортировка
         columnDefs: [
           {
@@ -360,7 +360,7 @@
           }
         })
         //remove the nth column
-      $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
+        $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
       }
 
       rowRedReestrDataTable();
@@ -625,10 +625,10 @@
     })
   })
 
-  $('#data-table').on('search.dt', function() {
+  $('#data-table').on('search.dt', function () {
     $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
-  }); 
-  
+  });
+
 
   //кнопка маленькая левая1 (reestr)
   /*   $('#btnSearchReestrInfo').click(function () {

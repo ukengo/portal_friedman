@@ -131,32 +131,17 @@
 
   // формування дня тижня
   function DayDate(d) {
+    const days = {
+      0: "нд",
+      1: "пн",
+      2: "вт",
+      3: "ср",
+      4: "чт",
+      5: "пт",
+      6: "сб",
+    };
     if (d == undefined) d = new Date();
-    let res;
-    switch (d.getDay()) {
-      case 0:
-        res = 'нд';
-        break;
-      case 1:
-        res = 'пн';
-        break;
-      case 2:
-        res = 'вт';
-        break;
-      case 3:
-        res = 'ср';
-        break;
-      case 4:
-        res = 'чт';
-        break;
-      case 5:
-        res = 'пт';
-        break;
-      case 6:
-        res = 'сб';
-        break;
-    }
-    return res;
+    return days[d.getDay()]
   }
 
   /* // функция поиска по таблице

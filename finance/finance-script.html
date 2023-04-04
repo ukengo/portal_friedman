@@ -286,7 +286,7 @@
       var div = document.getElementById('div-data-tablefinance-row');
       div.innerHTML = '';
       document.querySelector('#summaFinsnce').innerText = '';
-      if (value.length < 4) return;
+      if (value.length < 5) return;
       const dataArrayProcessed = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]]);
       const dataArrayProcessedFiltered = findInTable(dataArrayProcessed, value, 6);
       // const dataArrayAttr = dataArray.map(x => [x[6]]);

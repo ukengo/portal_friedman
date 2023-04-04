@@ -141,7 +141,7 @@
     for (var i = 0; i < arr.length; i++) {
       for (var j = 0; j < arr[i].length; j++) {
         if (j === col) continue
-        if (yi !== i) {   // пропускаємо дублі     
+        if (yi !== i) {   // пропускаємо дублі
           if (arr[i][j].toLowerCase().includes(value.toLowerCase())) {
             result.push(arr[i]);
             yi = i;
@@ -170,7 +170,5 @@
     }
     divSummaFinance.innerText = `Разом: ${sum.toFixed(2)} грн`;
   }
-
-  
 
 </script>

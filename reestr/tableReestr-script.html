@@ -352,22 +352,28 @@
         ]
       });
 
-      //підсвітка червоним зупинені проекти
-      const rowRedReestrDataTable = () => {
+      //підсвітка проектів
+
+      const rowColorReestrDataTable = () => {
         document.querySelectorAll('#data-table tbody tr').forEach(el => {
+
+          //підсвітка червоним зупинені проекти
           if (el.innerHTML.includes('TRUE')) {
             el.style.color = 'red';
+          }
+
+          //підсвітка зеленим не закриті проекти
+          if (el.querySelector('td').innerHTML === '') {
+            el.style.color = 'green';
           }
         })
         //remove the nth column
         $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
       }
 
-      rowRedReestrDataTable();
-
-      $('#data-table').on('draw.dt', rowRedReestrDataTable);
-
-      //кінець підсвітка червоним зупинені проекти
+      $('#data-table').on('draw.dt', rowColorReestrDataTable);
+      rowColorReestrDataTable();
+      //кінець підсвітки проектів
 
       trimmingSpaces();
       clickTableReestr();

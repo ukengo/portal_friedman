@@ -49,15 +49,16 @@
                 role="tab" aria-controls="nav-job" aria-selected="true">job</a>
             </li>
           </ul>
+          <div class="text-light position-absolute end-0 translate-middle-y top-50">
+            <div><input type="date" class="bg-danger form-control" id="calendar"></div>
+          </div>
           <div id='nav_finance_data' class="text-light position-absolute end-0 p-5 translate-middle-y top-50">
             <div class="nav-maim-data-date d-flex justify-content-center"></div>
             <div class="nav-maim-data-time d-flex justify-content-center"></div>
           </div>
         </div>
-      </div>
     </nav>
     <header>
-
       <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade" id="nav-newproekt" role="tabpanel" aria-labelledby="nav-newproekt-tab">
           <?!= loadNewProektView() ?>
@@ -133,6 +134,11 @@
           document.querySelector('.nav-maim-data-time').innerText = formatDateTime(new Date(), `hh:mm`);
           setTimeout(addDate, 30000);
         })();
+
+        // Імітація кліка на календар
+/*        document.getElementById("nav_finance_data").addEventListener("click", () =>
+          document.getElementById("calendar").click());
+ */
 
       </script>
 

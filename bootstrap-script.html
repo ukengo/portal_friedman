@@ -20,9 +20,8 @@
 <link rel="stylesheet" type="text/css"
   href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 
-
 <script>
- const k = console.log.bind(document);
+  const k = console.log.bind(document);
 
   function spinner(elemId, text = 'Іде пошук...') {
     document.getElementById(elemId).innerHTML = `<div class=\"d-flex justify-content-center\"><div class=\"spinner-border text-danger mb-4 mt-2\" role=\"status\"><span class=\"visually-hidden\"></span></div>${text}</div>`;
@@ -257,6 +256,6 @@
   // эмуляция отпускания кнопки, при щелчке поиск по таблице (автопоиск при открытии)
   function autoSearchOnOpen(selektor) {
     $(selektor).triggerHandler('keyup');
-  } 
-  
+  }
+
 </script>

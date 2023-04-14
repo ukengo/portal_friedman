@@ -225,16 +225,18 @@
 } */
   function createTableArriwalWaste(dataArray) {
     if (!dataArray.data) return false;
-    const nameTable = dataArray.data.slice();
-    if (dataArray) {
+    if (dataArray.data) {
       var result =
         "<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>";
-
+      
+      // відбір не пустих підмасивів
+      const dataArrayData = dataArray.data.filter(e => !e.every(el => el === ''));
+      
       // строим таблицу
-      for (var i = dataArray.data.length - 2; i > 0; i--) {
+      for (var i = dataArrayData.length - 1; i >= 0; i--) {
         result += "<tr>";
-        for (var j = 0; j < dataArray.data[i].length; j++) {
-          result += "<td>" + dataArray.data[i][j] + "</td>";
+        for (var j = 0; j < dataArrayData[i].length; j++) {
+          result += "<td>" + dataArrayData[i][j] + "</td>";
         }
         result +=
           '<td><button type="button" id="buttonModalFinance' +
@@ -252,7 +254,7 @@
 
         //номер рядка из id кнопки (номер редактируемого рядка)
         const row = parseInt(idButtonModalFinance.match(/\d+/));
-        const allModal = dataArray.data[row];
+        const allModal = dataArrayData[row];
         const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0])); //формат даты
         const summaModal = strongToNumber(allModal[1]); //строку в число
         const formaModal = allModal[2];

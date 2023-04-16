@@ -117,7 +117,7 @@
       <button type="button" class="btn btn-primary btn-danger shadow-none" onclick="startTableFinance()">Up
         Record</button>
       <div class="btn-group my-1" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnTableАFinance">Table</button>
+        <button type="button" class="btn btn-primary btn-danger shadow-none search-t-finance" id="btnTableАFinance">Table</button>
         <button type="button" class="btn btn-primary btn-danger shadow-none" id="clearBtnTableFinance">Clear</button>
       </div>
     </div>
@@ -128,14 +128,25 @@
       <div id="rowdatafin"></div>
     </div>
   </div>
-
+  
   <div class="container">
-    <form>
+    
+    <!-- <form> -->
+      
       <div class="row g-1 mt-1">
         <div class="col-md-4">
-          <input type="search" class="form-control input-search input-paste-finance mt-1" id="searchFinance"
-            placeholder="Поиск по таблице" onkeypress="clickPressFinanceShearh(event)">
-        </div>
+          
+          <div class="row row-centered">
+           
+            <button class="btn shadow-none col-sm-2 search-t-finance">Search:</button>
+          
+            <div class="col-sm-10">
+              <input type="search" class="form-control input-search input-paste-finance" id="searchFinance"
+                placeholder="Поиск по таблице" onkeypress="clickPressFinanceShearh(event)">
+            </div>
+          </div>
+        
+          </div>
         <div class="col-md-4"></div>
         <div class="col-md-4">
           <button type="button" class="btn btn-primary btn-danger shadow-none mt-1" id="btnSearchFinanceInfo"></button>
@@ -145,7 +156,7 @@
             id="btnSearchFinanceJobInfo"></button>
         </div>
       </div>
-    </form>
+    <!-- </form> -->
   </div>
 
   <div class="container">

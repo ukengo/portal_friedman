@@ -351,7 +351,7 @@
           { "title": "Row2" },
         ]
       });
-
+      
       //підсвітка проектів
 
       const rowColorReestrDataTable = () => {
@@ -383,12 +383,15 @@
         width: 400px;
         padding: 5px 14px`;
       document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Поиск по таблице';
+     
+      // пошук при кліку на Search:
+      document.querySelector('.dataTables_wrapper .dataTables_filter input').addEventListener('click', btnTable); 
       // считывваем из кеша данные для поиска и вставляем в поле поиска
       const valueSearch = sessionStorage.getItem('dataTables_filter_input');
       $('.dataTables_filter input').val(valueSearch);
       autoSearchOnOpen('.dataTables_filter input');
       // end
-
+     
       /* // при поиске если введены критерии поиска, то ищется по всей таблице, если строка поиска пустая, то отображается количество строк по умолчанию
       $('#searchReestr').keyup(function() {
         if(this.value === '') {
@@ -398,11 +401,11 @@
         }
         oTable.draw();
       }); */
-
+      
     });
     $("#div-data-table-spinner").remove()
     $('#btnTable').prop("disabled", false);
-
+    
     // обробка кнопки локального редагування проекту
     document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
       const projBtnEditLoc = this.innerHTML;
@@ -411,7 +414,7 @@
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
     });
   }
-
+ 
   /* function showDataReestr(dataArray){
     var result = "<ta
     ble class='table table-bordered table-hover ' style='font-size:0.8em'>"    

@@ -351,7 +351,7 @@
           { "title": "Row2" },
         ]
       });
-      
+
       //підсвітка проектів
 
       const rowColorReestrDataTable = () => {
@@ -383,15 +383,30 @@
         width: 400px;
         padding: 5px 14px`;
       document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Поиск по таблице';
-     
+
       // пошук при кліку на Search:
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').addEventListener('click', btnTable); 
+
+
+      var a = document.querySelector('.dataTables_wrapper .dataTables_filter');
+      var b = document.querySelector('.dataTables_wrapper .dataTables_filter input');
+      var c = document.querySelector('.dataTables_wrapper .dataTables_filter label');
+      // var cName = document.querySelector('.dataTables_wrapper .dataTables_filter label[for="name"]');
+
+      var elem = document.createElement("button");
+      var elemText = document.createTextNode("Up");
+
+      elem.appendChild(elemText);
+      elem.classList.add('btn', 'btn-light', 'me-2', 'align-baseline')
+      elem.onclick = btnTable;
+      a.insertBefore(elem, c);
+
+
       // считывваем из кеша данные для поиска и вставляем в поле поиска
       const valueSearch = sessionStorage.getItem('dataTables_filter_input');
       $('.dataTables_filter input').val(valueSearch);
       autoSearchOnOpen('.dataTables_filter input');
       // end
-     
+
       /* // при поиске если введены критерии поиска, то ищется по всей таблице, если строка поиска пустая, то отображается количество строк по умолчанию
       $('#searchReestr').keyup(function() {
         if(this.value === '') {
@@ -401,11 +416,11 @@
         }
         oTable.draw();
       }); */
-      
+
     });
     $("#div-data-table-spinner").remove()
     $('#btnTable').prop("disabled", false);
-    
+
     // обробка кнопки локального редагування проекту
     document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
       const projBtnEditLoc = this.innerHTML;
@@ -414,7 +429,7 @@
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
     });
   }
- 
+
   /* function showDataReestr(dataArray){
     var result = "<ta
     ble class='table table-bordered table-hover ' style='font-size:0.8em'>"    
@@ -644,5 +659,5 @@
       $("#rowdatareestr").attr("tabindex", -1).focus();
       SearchRecordsReestr();
     }); */
-    
+
 </script>

@@ -311,12 +311,12 @@ function createNewFolderOtOrgana(proekt, firma, prim) {
     const id = listFileUrlArr[0].match(/[-\w]{25,}/)
     var newFolderProekt = DriveApp.getFolderById(id[0]).createFolder(`#${proekt} ${prim}`)
   }
-  newFolderProekt.createFolder(`От клиента`)
-  const newFolderOtOrgana = newFolderProekt.createFolder(`От органа`)
-  newFolderOtOrgana.createFolder(`Финансы`)
-  const newFolderOtBelochki = newFolderOtOrgana.createFolder(`Белочки`)
-  newFolderOtBelochki.createFolder('Клиенту')
-  newFolderOtBelochki.createFolder('От клиента')
+  newFolderProekt.createFolder(`Від клієнта`)
+  const newFolderOtOrgana = newFolderProekt.createFolder(`Від органа`)
+  newFolderOtOrgana.createFolder(`Фінанси`)
+  const newFolderOtBelochki = newFolderOtOrgana.createFolder(`Білочки`)
+  newFolderOtBelochki.createFolder('Клієнту')
+  newFolderOtBelochki.createFolder('Від клієнта')
 }
 
 // получение списка папок в определенной директории

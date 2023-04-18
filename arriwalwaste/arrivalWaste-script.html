@@ -231,7 +231,8 @@
       
       // відбір не пустих підмасивів
       const dataArrayData = dataArray.data.filter(e => !e.every(el => el === ''));
-      
+     
+     k(dataArrayData)
       // строим таблицу
       for (var i = dataArrayData.length - 1; i >= 0; i--) {
         result += "<tr>";

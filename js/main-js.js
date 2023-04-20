@@ -42,12 +42,13 @@ function addNewRowArrival(rowData) {
 }
 
 function addNewTableArriwalWaste(rowData, sheet) {
-  const arrivalDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate))
+  const arrivalDate = String(rowData.splice(0, 1));
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate));
   const arrivalSumma = rowData.splice(1, 1)
   rowData.splice(1, 0, (new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(arrivalSumma)))
   const lastTenRows = getLastTenRows(sheet)
-  const lastTenRowsData = lastTenRows.data
+  //const lastTenRowsData = lastTenRows.data
+  const lastTenRowsData = []
   lastTenRowsData.push(rowData)
   return lastTenRows
 }
@@ -57,6 +58,7 @@ function addNewTableArriwal(rowData) {
 }
 function addNewTableWaste(rowData) {
   const lastTenRows = addNewTableArriwalWaste(rowData, dataWaste())
+  console.log(lastTenRows)
   return lastTenRows
 }
 /* function addNewTableArriwal(rowData) {
@@ -124,7 +126,7 @@ function getLastTenRowsArriwal() {
 }
 
 ////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////
 
 function addpRoekt() {
   const arr = getDropDownArray(dataSheet(), 2, 6)

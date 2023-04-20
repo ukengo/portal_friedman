@@ -64,9 +64,7 @@
   }
 
   function buttonClickWasteAndArival() {
-    let vrabotevseArriwalWaste = document.getElementById(
-      "vrabotevseArriwalWaste"
-    );
+    let vrabotevseArriwalWaste = document.getElementById("vrabotevseArriwalWaste");
     if (rowDataRangeArrivalWaste()[4] === "Не заполнено ни одно поле суммы") {
       alert("Не заполнено ни одно поле суммы");
       return false;
@@ -223,16 +221,14 @@
     div.innerHTML = "Data not found!";
   }
 } */
+
   function createTableArriwalWaste(dataArray) {
     if (!dataArray.data) return false;
-    if (dataArray.data) {
+    if (dataArray.data) {     
       var result =
         "<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>";
-      
       // відбір не пустих підмасивів
-      const dataArrayData = dataArray.data.filter(e => !e.every(el => el === ''));
-     
-     k(dataArrayData)
+      const dataArrayData = dataArray.data.filter(e => !e.every(el => el === ''));      
       // строим таблицу
       for (var i = dataArrayData.length - 1; i >= 0; i--) {
         result += "<tr>";

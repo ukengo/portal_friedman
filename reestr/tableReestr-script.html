@@ -225,7 +225,6 @@
       if (item[14]) {
         count++
       }
-
     });
 
     displayTableReestr += '</table></form>'
@@ -427,6 +426,7 @@
       const arreestrInfoLocal = dataArray.map(x => [formatDateYYYYtireMMtireDD(strongToDate(x[0])), formatDateYYYYtireMMtireDD(strongToDate(x[1])), x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
       const filt = findNumRow(arreestrInfoLocal, this.innerHTML, 5);
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
+      document.querySelector("#mainTableReestr th").innerHTML = '';
     });
   }
 

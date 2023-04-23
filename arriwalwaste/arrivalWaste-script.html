@@ -221,34 +221,42 @@
     div.innerHTML = "Data not found!";
   }
 } */
+  //функція побудови таблиці
+  const buildTableAw = dataArray => {
+    let result =
+      `<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>`;
+    // відбір не пустих підмасивів
+    const dataArrayData = dataArray.filter(e => !e.every(el => el === ''));
+    for (var i = dataArrayData.length - 1; i >= 0; i--) {
+      result += "<tr>";
+      for (var j = 0; j < dataArrayData[i].length; j++) {
+        result += "<td>" + dataArrayData[i][j] + "</td>";
+      }
+      result +=
+        `<td>
+          <button type="button" id="buttonModalFinance${i}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal"/>Edit
+          </button>
+        </td>`;
+      result += `</tr>`;
+    }
+    result += `</table>`;
+    clickTables('#table-aw', () => {
+      if (event.target.tagName !== 'TD') return false;
+      const dataTarget = event.target.textContent;
+      document.querySelector('#search').value = dataTarget;
+    })
+    return result
+  }
 
   function createTableArriwalWaste(dataArray) {
     if (!dataArray.data) return false;
-    if (dataArray.data) {     
-      var result =
-        "<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>";
-      // відбір не пустих підмасивів
-      const dataArrayData = dataArray.data.filter(e => !e.every(el => el === ''));      
-      // строим таблицу
-      for (var i = dataArrayData.length - 1; i >= 0; i--) {
-        result += "<tr>";
-        for (var j = 0; j < dataArrayData[i].length; j++) {
-          result += "<td>" + dataArrayData[i][j] + "</td>";
-        }
-        result +=
-          '<td><button type="button" id="buttonModalFinance' +
-          i +
-          '" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal" " />Edit</button></td>';
-        result += "</tr>";
-      }
-      result += "</table>";
+    if (dataArray.data) {
       var div = document.getElementById("dataTableArriwalWaste");
-      div.innerHTML = result;
+      div.innerHTML = buildTableAw(dataArray.data);
       tableLineSelection(); // полосы в таблице
       $(".btnbtn").click(function (i) {
         //id кнопки
         const idButtonModalFinance = i.currentTarget.attributes.id.value;
-
         //номер рядка из id кнопки (номер редактируемого рядка)
         const row = parseInt(idButtonModalFinance.match(/\d+/));
         const allModal = dataArrayData[row];
@@ -267,19 +275,37 @@
           $("#awModalLabel").text(row + 2);
         });
       });
+
+      //пошук//////////
+      const searhValueNode = document.querySelector('#search');
+      searhValueNode.addEventListener('click', searchValueAw);
+      searhValueNode.addEventListener('keyup', searchValueAw);
+      searhValueNode.addEventListener('input', searchValueAw);
+
+      function searchValueAw() {
+        const dataSearchValue = searhValueNode.value;
+        if (dataSearchValue) {
+          const dataSearchResult = findInTable(dataArray.data, dataSearchValue);
+          div.innerHTML = buildTableAw(dataSearchResult);
+        } else {
+          div.innerHTML = buildTableAw(dataArray.data);
+        }
+        clickTables('#table-aw', searchToClick);
+      }
+      //пошук кінець//////////
+
     } else {
       var div = document.getElementById("dataTableArriwalWaste");
       div.innerHTML = "Data not found!";
     }
     autoSearchOnOpen(".input-search"); // автопоиск при открытии    
 
-
-    clickTables('#table-aw', () => {
+    function searchToClick() {
       if (event.target.tagName !== 'TD') return false;
       const dataTarget = event.target.textContent;
       document.querySelector('#search').value = dataTarget;
-    })
-
+    }
+    clickTables('#table-aw', searchToClick)
   }
 
   function updateR() {

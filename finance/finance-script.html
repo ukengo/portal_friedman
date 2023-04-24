@@ -259,7 +259,7 @@
 
   btnTableFinance();
 
-  document.querySelector('.search-t-finance').addEventListener('click', btnTableFinance)
+  document.querySelectorAll('.search-t-finance').forEach(el => el.addEventListener('click', btnTableFinance));
 
   function btnTableFinance() {
     $('#btnTableАFinance').prop("disabled", true);
@@ -697,6 +697,5 @@
       }
     })
   }());
-
 
 </script>

@@ -121,60 +121,60 @@
 
       displayTableReestr += "<tr id=\"ROWNUMBER:" + row_number_reestr + "\" >";
 
-      displayTableReestr += "<td colspan=\"9\">"
-      displayTableReestr += "<div class=\"row g-1 mt-1\">"
+      displayTableReestr += "<td colspan=\"9\">";
+      displayTableReestr += "<div class=\"row g-1 mt-1\">";
 
-      displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_dateendreestr\">Дата конец</label>  ";
+      displayTableReestr += "<div class=\"col-auto\">";
+      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата конец</label>`;
       displayTableReestr += "<input type=\"date\" id=\"up_dateendreestr" + row_number_reestr + "\" value=\"" + item[0] + "\" class=\"form-control form-control-sm\" /></div> ";
 
-      displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_datestartreestr\">Дата начало</label> ";
-      displayTableReestr += "<input type=\"date\" id=\"up_datestartreestr" + row_number_reestr + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" />"
+      displayTableReestr += "<div class=\"col-auto\">";
+      displayTableReestr += `<label for=\"up_datestartreestr${row_number_reestr}">Дата начало</label> `;
+      displayTableReestr += "<input type=\"date\" id=\"up_datestartreestr" + row_number_reestr + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" />";
       displayTableReestr += "</div>";
 
-      displayTableReestr += "<div class=\"col-md-5\">"
-      displayTableReestr += "<label for=\"up_firmareestr\">Фирма</label> ";
+      displayTableReestr += "<div class=\"col-md-5\">";
+      displayTableReestr += `<label for=\"up_firmareestr${row_number_reestr}">Фирма</label>`;
       displayTableReestr += "<input type=\"text\" list=\"firmareestr-datalist\" id=\"up_firmareestr" + row_number_reestr + "\" value=\"" + item[2] + "\" class=\"form-control form-control-sm\" /> <datalist id=\"firmareestr-datalist\"></datalist></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += "<label for=\"up_rabotareestr\">Работа</label> ";
+      displayTableReestr += `<label for=\"up_rabotareestr${row_number_reestr}">Работа</label>`;
       displayTableReestr += "<input type=\"text\" list=\"rabotareestr-datalist\" id=\"up_rabotareestr" + row_number_reestr + "\" value=\"" + item[3] + "\" class=\"form-control form-control-sm\" /><datalist id=\"rabotareestr-datalist\"></datalist></div>";
 
-      displayTableReestr += "<div class=\"col-md-1\">"
-      displayTableReestr += "<label for=\"up_coderabotareestr\">Код раб</label> ";
+      displayTableReestr += "<div class=\"col-md-1\">";
+      displayTableReestr += `<label for=\"up_coderabotareestr${row_number_reestr}">Код раб</label>`;
       displayTableReestr += "<input type=\"text\" id=\"up_coderabotareestr" + row_number_reestr + "\" value=\"" + item[4] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += "<label for=\"up_proektreestr\">Проект</label> ";
+      displayTableReestr += `<label for=\"up_proektreestr${row_number_reestr}">Проект</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_proektreestr" + row_number_reestr + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm fw-bold\" /></div>";
 
 
       displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_sotrreestr\">Сотрудник</label> ";
+      displayTableReestr += `<label for=\"up_sotrreestr${row_number_reestr}">Сотрудник</label>`;
       displayTableReestr += "<input type=\"text\" list=\"sotrreestr-datalist\" id=\"up_sotrreestr" + row_number_reestr + "\" value=\"" + item[6] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_ispolreestr\">Исполнитель</label> ";
+      displayTableReestr += `<label for=\"up_ispolreestr${row_number_reestr}">Исполнитель</label>`;
       displayTableReestr += "<input type=\"text\" list=\"ispolreestr-datalist\"  id=\"up_ispolreestr" + row_number_reestr + "\" value=\"" + item[7] + "\" class=\"form-control form-control-sm fw-bold text-success\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
 
-      displayTableReestr += "<label for=\"up_sumispolreestr\">Сумма исполнителю</label> ";
+      displayTableReestr += `<label for=\"up_sumispolreestr${row_number_reestr}">Сумма исполнителю</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_sumispolreestr" + row_number_reestr + "\" value=\"" + item[8] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
 
-      displayTableReestr += "<label for=\"up_sumoplatareestr\">Оплата исполнителю</label> ";
+      displayTableReestr += `<label for=\"up_sumoplatareestr${row_number_reestr}">Оплата исполнителю</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_sumoplatareestr" + row_number_reestr + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-4\">"
 
-      displayTableReestr += "<label for=\"up_primreestr\">Примечание к проекту</label> ";
+      displayTableReestr += `<label for=\"up_primreestr${row_number_reestr}">Примечание к проекту</label>`;
       displayTableReestr += "<input type=\"text\" list=\"primreestr-datalist\" id=\"up_primreestr" + row_number_reestr + "\" value=\"" + item[10] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primreestr-datalist\"></datalist></div>";
 
       displayTableReestr += "<div class=\"col-md-4\">"
-      displayTableReestr += "<label for=\"up_primmoyoreestr\">Примечание мое</label> ";
+      displayTableReestr += `<label for=\"up_primmoyoreestr${row_number_reestr}">Примечание мое</label>`;
       displayTableReestr += "<input type=\"text\" list=\"primmoyoreestr-datalist\"  id=\"up_primmoyoreestr" + row_number_reestr + "\" value=\"" + item[11] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primmoyoreestr-datalist\"></datalist></div></div>";
 
       displayTableReestr += `
@@ -233,6 +233,10 @@
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
+    document.querySelectorAll('label').forEach(el => el.addEventListener('click', function () {
+      const id = this.getAttribute('for');
+      document.getElementById(id).value = '';
+    }))
   }
 
   function ClearRecordReestr() {

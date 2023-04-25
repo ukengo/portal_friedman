@@ -233,10 +233,7 @@
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
-    document.querySelectorAll('label').forEach(el => el.addEventListener('click', function () {
-      const id = this.getAttribute('for');
-      document.getElementById(id).value = '';
-    }))
+    clearInputClickLabel();
   }
 
   function ClearRecordReestr() {

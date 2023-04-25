@@ -60,10 +60,19 @@
   }
 
   //очистка inputa щелчком по label и удаление красной расскраски
-  $("label").click(function () {
+  /* $("label").click(function () {
     $(this).next().val('');
     $(this).removeAttr('style');
-  })
+  }) */
+
+  clearInputClickLabel();
+  function clearInputClickLabel() {
+    document.querySelectorAll('label').forEach(el => el.addEventListener('click', function () {
+      this.removeAttribute('style');
+      const id = this.getAttribute('for');
+      document.getElementById(id).value = '';
+    }))
+  }
 
   // очистка поля поиска прищелчке на крестике
   document.querySelector('body').addEventListener('input', () => {

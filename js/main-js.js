@@ -1553,10 +1553,11 @@ function inspektorGs() {
 }
 
 // отбор данных для модального окна
-function debtsToInspectorsGs(insp) {
+function debtsToInspectorsGs() {
   return dataBase().getRange(2, 1, dataBase().getLastRow(), 20).getValues()
     .map(x => [x[5], x[2], x[15], x[16], x[17]])
-    .filter(x => (x[2] === insp && x[3] != x[4]));
+    //.filter(x => (x[2] === insp && x[3] != x[4]));
+    .filter(x => (x[3] != x[4]));
 }
 
 ////////////////////////////////////

@@ -221,6 +221,7 @@
     div.innerHTML = "Data not found!";
   }
 } */
+
   //функція побудови таблиці
   const buildTableAw = dataArray => {
     let result =
@@ -248,52 +249,57 @@
     return result
   }
 
+  // відкриття модалки по кліку на кнопку запису
+  function btnOpenModal(arr, id) {
+    //id - кнопки
+    //номер рядка из id кнопки (номер редактируемого рядка)
+    const row = parseInt(id.match(/\d+/)); //id кнопки
+    const allModal = arr[row];
+    const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0])); //формат даты
+    const summaModal = strongToNumber(allModal[1]); //строку в число
+    const formaModal = allModal[2];
+    const firmaModal = allModal[3];
+    const wasteModal = allModal[4];
+    $("#exampleModal").on("shown.bs.modal", () => {
+      $("#dateModal").val(dateModal);
+      $("#summaModal").val(summaModal);
+      $("#formaModal").val(formaModal);
+      $("#firmaArrivalWasteModal").val(firmaModal);
+      $("#wasteModal").val(wasteModal);
+      //$('#awModalLabel').text(dataArray.length+row-15)
+      $("#awModalLabel").text(row + 2);
+    })
+  }
+
   function createTableArriwalWaste(dataArray) {
     if (!dataArray.data) return false;
     if (dataArray.data) {
       var div = document.getElementById("dataTableArriwalWaste");
-      div.innerHTML = buildTableAw(dataArray.data);
-      tableLineSelection(); // полосы в таблице
-      $(".btnbtn").click(function (i) {
-        //id кнопки
-        const idButtonModalFinance = i.currentTarget.attributes.id.value;
-        //номер рядка из id кнопки (номер редактируемого рядка)
-        const row = parseInt(idButtonModalFinance.match(/\d+/));
-        const allModal = dataArrayData[row];
-        const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0])); //формат даты
-        const summaModal = strongToNumber(allModal[1]); //строку в число
-        const formaModal = allModal[2];
-        const firmaModal = allModal[3];
-        const wasteModal = allModal[4];
-        $("#exampleModal").on("shown.bs.modal", () => {
-          $("#dateModal").val(dateModal);
-          $("#summaModal").val(summaModal);
-          $("#formaModal").val(formaModal);
-          $("#firmaArrivalWasteModal").val(firmaModal);
-          $("#wasteModal").val(wasteModal);
-          //$('#awModalLabel').text(dataArray.length+row-15)
-          $("#awModalLabel").text(row + 2);
-        });
-      });
-
-      //пошук//////////
-      const searhValueNode = document.querySelector('#search');
-      searhValueNode.addEventListener('click', searchValueAw);
-      searhValueNode.addEventListener('keyup', searchValueAw);
-      searhValueNode.addEventListener('input', searchValueAw);
-
+      searchValueAw();
       function searchValueAw() {
+        const searhValueNode = document.querySelector('#search');
+        searhValueNode.addEventListener('click', searchValueAw);
+        searhValueNode.addEventListener('keyup', searchValueAw);
+        searhValueNode.addEventListener('input', searchValueAw);
         const dataSearchValue = searhValueNode.value;
         if (dataSearchValue) {
+
+          // пошук
           const dataSearchResult = findInTable(dataArray.data, dataSearchValue);
           div.innerHTML = buildTableAw(dataSearchResult);
+          $(".btnbtn").click(function () {
+            id = this.id
+            btnOpenModal(dataSearchResult, id)
+          })
         } else {
           div.innerHTML = buildTableAw(dataArray.data);
+          $(".btnbtn").click(function () {
+            id = this.id
+            btnOpenModal(dataArray.data, id)
+          })
         }
         clickTables('#table-aw', searchToClick);
       }
-      //пошук кінець//////////
-
     } else {
       var div = document.getElementById("dataTableArriwalWaste");
       div.innerHTML = "Data not found!";

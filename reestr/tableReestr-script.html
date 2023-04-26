@@ -121,60 +121,60 @@
 
       displayTableReestr += "<tr id=\"ROWNUMBER:" + row_number_reestr + "\" >";
 
-      displayTableReestr += "<td colspan=\"9\">"
-      displayTableReestr += "<div class=\"row g-1 mt-1\">"
+      displayTableReestr += "<td colspan=\"9\">";
+      displayTableReestr += "<div class=\"row g-1 mt-1\">";
 
-      displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_dateendreestr\">Дата конец</label>  ";
+      displayTableReestr += "<div class=\"col-auto\">";
+      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата конец</label>`;
       displayTableReestr += "<input type=\"date\" id=\"up_dateendreestr" + row_number_reestr + "\" value=\"" + item[0] + "\" class=\"form-control form-control-sm\" /></div> ";
 
-      displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_datestartreestr\">Дата начало</label> ";
-      displayTableReestr += "<input type=\"date\" id=\"up_datestartreestr" + row_number_reestr + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" />"
+      displayTableReestr += "<div class=\"col-auto\">";
+      displayTableReestr += `<label for=\"up_datestartreestr${row_number_reestr}">Дата начало</label> `;
+      displayTableReestr += "<input type=\"date\" id=\"up_datestartreestr" + row_number_reestr + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" />";
       displayTableReestr += "</div>";
 
-      displayTableReestr += "<div class=\"col-md-5\">"
-      displayTableReestr += "<label for=\"up_firmareestr\">Фирма</label> ";
+      displayTableReestr += "<div class=\"col-md-5\">";
+      displayTableReestr += `<label for=\"up_firmareestr${row_number_reestr}">Фирма</label>`;
       displayTableReestr += "<input type=\"text\" list=\"firmareestr-datalist\" id=\"up_firmareestr" + row_number_reestr + "\" value=\"" + item[2] + "\" class=\"form-control form-control-sm\" /> <datalist id=\"firmareestr-datalist\"></datalist></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += "<label for=\"up_rabotareestr\">Работа</label> ";
+      displayTableReestr += `<label for=\"up_rabotareestr${row_number_reestr}">Работа</label>`;
       displayTableReestr += "<input type=\"text\" list=\"rabotareestr-datalist\" id=\"up_rabotareestr" + row_number_reestr + "\" value=\"" + item[3] + "\" class=\"form-control form-control-sm\" /><datalist id=\"rabotareestr-datalist\"></datalist></div>";
 
-      displayTableReestr += "<div class=\"col-md-1\">"
-      displayTableReestr += "<label for=\"up_coderabotareestr\">Код раб</label> ";
+      displayTableReestr += "<div class=\"col-md-1\">";
+      displayTableReestr += `<label for=\"up_coderabotareestr${row_number_reestr}">Код раб</label>`;
       displayTableReestr += "<input type=\"text\" id=\"up_coderabotareestr" + row_number_reestr + "\" value=\"" + item[4] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += "<label for=\"up_proektreestr\">Проект</label> ";
-      displayTableReestr += "<input type=\"number\" id=\"up_proektreestr" + row_number_reestr + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm form-font\" /></div>";
+      displayTableReestr += `<label for=\"up_proektreestr${row_number_reestr}">Проект</label>`;
+      displayTableReestr += "<input type=\"number\" id=\"up_proektreestr" + row_number_reestr + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm fw-bold\" /></div>";
 
 
       displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_sotrreestr\">Сотрудник</label> ";
+      displayTableReestr += `<label for=\"up_sotrreestr${row_number_reestr}">Сотрудник</label>`;
       displayTableReestr += "<input type=\"text\" list=\"sotrreestr-datalist\" id=\"up_sotrreestr" + row_number_reestr + "\" value=\"" + item[6] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += "<label for=\"up_ispolreestr\">Исполнитель</label> ";
-      displayTableReestr += "<input type=\"text\" list=\"ispolreestr-datalist\"  id=\"up_ispolreestr" + row_number_reestr + "\" value=\"" + item[7] + "\" class=\"form-control form-control-sm\" /></div>";
+      displayTableReestr += `<label for=\"up_ispolreestr${row_number_reestr}">Исполнитель</label>`;
+      displayTableReestr += "<input type=\"text\" list=\"ispolreestr-datalist\"  id=\"up_ispolreestr" + row_number_reestr + "\" value=\"" + item[7] + "\" class=\"form-control form-control-sm fw-bold text-success\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
 
-      displayTableReestr += "<label for=\"up_sumispolreestr\">Сумма исполнителю</label> ";
+      displayTableReestr += `<label for=\"up_sumispolreestr${row_number_reestr}">Сумма исполнителю</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_sumispolreestr" + row_number_reestr + "\" value=\"" + item[8] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
 
-      displayTableReestr += "<label for=\"up_sumoplatareestr\">Оплата исполнителю</label> ";
+      displayTableReestr += `<label for=\"up_sumoplatareestr${row_number_reestr}">Оплата исполнителю</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_sumoplatareestr" + row_number_reestr + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-4\">"
 
-      displayTableReestr += "<label for=\"up_primreestr\">Примечание к проекту</label> ";
+      displayTableReestr += `<label for=\"up_primreestr${row_number_reestr}">Примечание к проекту</label>`;
       displayTableReestr += "<input type=\"text\" list=\"primreestr-datalist\" id=\"up_primreestr" + row_number_reestr + "\" value=\"" + item[10] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primreestr-datalist\"></datalist></div>";
 
       displayTableReestr += "<div class=\"col-md-4\">"
-      displayTableReestr += "<label for=\"up_primmoyoreestr\">Примечание мое</label> ";
+      displayTableReestr += `<label for=\"up_primmoyoreestr${row_number_reestr}">Примечание мое</label>`;
       displayTableReestr += "<input type=\"text\" list=\"primmoyoreestr-datalist\"  id=\"up_primmoyoreestr" + row_number_reestr + "\" value=\"" + item[11] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primmoyoreestr-datalist\"></datalist></div></div>";
 
       displayTableReestr += `
@@ -225,7 +225,6 @@
       if (item[14]) {
         count++
       }
-
     });
 
     displayTableReestr += '</table></form>'
@@ -234,6 +233,7 @@
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
+    clearInputClickLabel();
   }
 
   function ClearRecordReestr() {
@@ -351,7 +351,7 @@
           { "title": "Row2" },
         ]
       });
-      
+
       //підсвітка проектів
 
       const rowColorReestrDataTable = () => {
@@ -383,15 +383,30 @@
         width: 400px;
         padding: 5px 14px`;
       document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Поиск по таблице';
-     
+
       // пошук при кліку на Search:
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').addEventListener('click', btnTable); 
+
+
+      var a = document.querySelector('.dataTables_wrapper .dataTables_filter');
+      var b = document.querySelector('.dataTables_wrapper .dataTables_filter input');
+      var c = document.querySelector('.dataTables_wrapper .dataTables_filter label');
+      // var cName = document.querySelector('.dataTables_wrapper .dataTables_filter label[for="name"]');
+
+      var elem = document.createElement("button");
+      var elemText = document.createTextNode("Up");
+
+      elem.appendChild(elemText);
+      elem.classList.add('btn', 'btn-light', 'me-2', 'align-baseline')
+      elem.onclick = btnTable;
+      a.insertBefore(elem, c);
+
+
       // считывваем из кеша данные для поиска и вставляем в поле поиска
       const valueSearch = sessionStorage.getItem('dataTables_filter_input');
       $('.dataTables_filter input').val(valueSearch);
       autoSearchOnOpen('.dataTables_filter input');
       // end
-     
+
       /* // при поиске если введены критерии поиска, то ищется по всей таблице, если строка поиска пустая, то отображается количество строк по умолчанию
       $('#searchReestr').keyup(function() {
         if(this.value === '') {
@@ -401,20 +416,21 @@
         }
         oTable.draw();
       }); */
-      
+
     });
     $("#div-data-table-spinner").remove()
     $('#btnTable').prop("disabled", false);
-    
+
     // обробка кнопки локального редагування проекту
     document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
       const projBtnEditLoc = this.innerHTML;
       const arreestrInfoLocal = dataArray.map(x => [formatDateYYYYtireMMtireDD(strongToDate(x[0])), formatDateYYYYtireMMtireDD(strongToDate(x[1])), x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
       const filt = findNumRow(arreestrInfoLocal, this.innerHTML, 5);
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
+      document.querySelector("#mainTableReestr th").innerHTML = '';
     });
   }
- 
+
   /* function showDataReestr(dataArray){
     var result = "<ta
     ble class='table table-bordered table-hover ' style='font-size:0.8em'>"    
@@ -644,5 +660,5 @@
       $("#rowdatareestr").attr("tabindex", -1).focus();
       SearchRecordsReestr();
     }); */
-    
+
 </script>

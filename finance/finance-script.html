@@ -259,7 +259,7 @@
 
   btnTableFinance();
 
-  $('.search-t-finance').click(btnTableFinance);
+  document.querySelectorAll('.search-t-finance').forEach(el => el.addEventListener('click', btnTableFinance));
 
   function btnTableFinance() {
     $('#btnTableАFinance').prop("disabled", true);
@@ -268,11 +268,13 @@
     google.script.run.withSuccessHandler(showDataFinance).getDataTableFinance();
   }
 
-  $('#clearBtnTableFinance').click(clearBtnTableFinance);
+  document.querySelector('#clearBtnTableFinance').addEventListener('click', clearBtnTableFinance);
 
   function clearBtnTableFinance() {
     $('#clearBtnTableFinance').prop("disabled", true);
     $('#div-data-table-finance').remove();
+    $('#table-finance-search').remove();
+    // $('#div-data-tablefinance-row').remove();
     document.getElementById('btnSearchFinanceInfo').innerHTML = '';
     document.getElementById('btnSearchFinanceReestrInfo').innerHTML = '';
     document.getElementById('btnSearchFinanceJobInfo').innerHTML = '';
@@ -286,7 +288,8 @@
       var div = document.getElementById('div-data-tablefinance-row');
       div.innerHTML = '';
       document.querySelector('#summaFinsnce').innerText = '';
-      if (value.length < 5) return;
+      const numberOfCharactersPerLine = 4;
+      if (value.length < numberOfCharactersPerLine) return;
       const dataArrayProcessed = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]]);
       const dataArrayProcessedFiltered = findInTable(dataArrayProcessed, value, 6);
       // const dataArrayAttr = dataArray.map(x => [x[6]]);
@@ -394,7 +397,6 @@
 
 
     //tableLineSelection() //полосы в таблице
-    
     $('#btnTableАFinance').prop("disabled", false);
     document.querySelector('#div-data-tablefinance-spinner').innerHTML = '';
     document.getElementById("searchFinance").click();    

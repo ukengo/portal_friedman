@@ -22,7 +22,6 @@
         var div = document.getElementById('results');
         div.innerHTML = "Data not found!";
       }
-      btnInsp();
       // все кнопки с бухгалтера enabled
       document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }).inspektorGs();
@@ -43,13 +42,13 @@
   }
 
   // клик по таблице инспектора и открытие модалки
-  function btnInsp() {
+  google.script.run.withSuccessHandler((data) => {
     $('#tableInspektor tr td').bind('click', function () {
       spinner('results-modal');
       const insp = valueCellCol(this, 0);
-      google.script.run.withSuccessHandler(debtsToInspectors).debtsToInspectorsGs(insp);
+      debtsToInspectors(data.filter(x => (x[2] === insp)));
     })
-  }
+  }).debtsToInspectorsGs();
 
   // клик по таблице модалки, запоминание номера проекта и переход на финансы
   function btnInspModal() {
@@ -58,7 +57,6 @@
       localStorage.removeItem('proekt')
       sessionStorage.setItem('proekt', proekt);
       const dataTarget = event.target.textContent;
-      console.log(dataTarget);
       $('.btn-close').click();
       $('#btnSearchFinMinus').click();
       $('#btnClearSearchFinance').click();
@@ -75,11 +73,10 @@
       /* $('.btn-close').click();
       $('#btnClearSearchFinance').click();
       $('#nav-fin-tab')[0].click();
-      $('#proektfin').val(proekt);  
+      $('#proektfin').val(proekt);
       $('#searchFinance').val(proekt);
       autoSearchOnOpen('#searchFinance'); */
     })
   }
-
     ////END INSPEKTOR
 </script>

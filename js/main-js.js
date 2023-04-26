@@ -42,12 +42,13 @@ function addNewRowArrival(rowData) {
 }
 
 function addNewTableArriwalWaste(rowData, sheet) {
-  const arrivalDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate))
+  const arrivalDate = String(rowData.splice(0, 1));
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate));
   const arrivalSumma = rowData.splice(1, 1)
   rowData.splice(1, 0, (new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(arrivalSumma)))
   const lastTenRows = getLastTenRows(sheet)
-  const lastTenRowsData = lastTenRows.data
+  //const lastTenRowsData = lastTenRows.data
+  const lastTenRowsData = []
   lastTenRowsData.push(rowData)
   return lastTenRows
 }
@@ -57,6 +58,7 @@ function addNewTableArriwal(rowData) {
 }
 function addNewTableWaste(rowData) {
   const lastTenRows = addNewTableArriwalWaste(rowData, dataWaste())
+  console.log(lastTenRows)
   return lastTenRows
 }
 /* function addNewTableArriwal(rowData) {
@@ -124,7 +126,7 @@ function getLastTenRowsArriwal() {
 }
 
 ////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////
 
 function addpRoekt() {
   const arr = getDropDownArray(dataSheet(), 2, 6)
@@ -311,12 +313,12 @@ function createNewFolderOtOrgana(proekt, firma, prim) {
     const id = listFileUrlArr[0].match(/[-\w]{25,}/)
     var newFolderProekt = DriveApp.getFolderById(id[0]).createFolder(`#${proekt} ${prim}`)
   }
-  newFolderProekt.createFolder(`От клиента`)
-  const newFolderOtOrgana = newFolderProekt.createFolder(`От органа`)
-  newFolderOtOrgana.createFolder(`Финансы`)
-  const newFolderOtBelochki = newFolderOtOrgana.createFolder(`Белочки`)
-  newFolderOtBelochki.createFolder('Клиенту')
-  newFolderOtBelochki.createFolder('От клиента')
+  newFolderProekt.createFolder(`Від клієнта`)
+  const newFolderOtOrgana = newFolderProekt.createFolder(`Від органа`)
+  newFolderOtOrgana.createFolder(`Фінанси`)
+  const newFolderOtBelochki = newFolderOtOrgana.createFolder(`Білочки`)
+  newFolderOtBelochki.createFolder('Клієнту')
+  newFolderOtBelochki.createFolder('Від клієнта')
 }
 
 // получение списка папок в определенной директории
@@ -1551,10 +1553,11 @@ function inspektorGs() {
 }
 
 // отбор данных для модального окна
-function debtsToInspectorsGs(insp) {
+function debtsToInspectorsGs() {
   return dataBase().getRange(2, 1, dataBase().getLastRow(), 20).getValues()
     .map(x => [x[5], x[2], x[15], x[16], x[17]])
-    .filter(x => (x[2] === insp && x[3] != x[4]));
+    //.filter(x => (x[2] === insp && x[3] != x[4]));
+    .filter(x => (x[3] != x[4]));
 }
 
 ////////////////////////////////////

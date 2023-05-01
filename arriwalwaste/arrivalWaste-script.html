@@ -278,11 +278,11 @@
       searchValueAw();
       function searchValueAw() {
         const searhValueNode = document.querySelector('#search');
-        searhValueNode.addEventListener('click', searchValueAw);
-        searhValueNode.addEventListener('keyup', searchValueAw);
-        searhValueNode.addEventListener('input', searchValueAw);
-        const dataSearchValue = searhValueNode.value;
-        if (dataSearchValue) {
+       // searhValueNode.addEventListener('click', searchValueAw);
+       // searhValueNode.addEventListener('keyup', searchValueAw);
+       // searhValueNode.addEventListener('input', searchValueAw);
+       // const dataSearchValue = searhValueNode.value;
+/*         if (dataSearchValue) {
 
           // пошук
           const dataSearchResult = findInTable(dataArray.data, dataSearchValue);
@@ -291,13 +291,13 @@
             id = this.id
             btnOpenModal(dataSearchResult, id)
           })
-        } else {
+        } else { */
           div.innerHTML = buildTableAw(dataArray.data);
           $(".btnbtn").click(function () {
             id = this.id
             btnOpenModal(dataArray.data, id)
           })
-        }
+       // }
         clickTables('#table-aw', searchToClick);
       }
     } else {

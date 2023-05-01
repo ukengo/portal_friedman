@@ -263,7 +263,7 @@
 
   function btnTableFinance() {
     $('#btnTableАFinance').prop("disabled", true);
-    $('<div id="div-data-tablefinance-spinner"></div><div id="div-data-table-finance"><div id="data-table-finance" </div>').appendTo('#div-data-tablefinance-row');
+    $('<div id="div-data-tablefinance-spinner"></div><div id="div-data-table-finance"><div id="data-table-finance" </div>').prependTo('#div-data-tablefinance-row');
     spinner('div-data-tablefinance-spinner');
     google.script.run.withSuccessHandler(showDataFinance).getDataTableFinance();
   }

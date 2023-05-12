@@ -1579,7 +1579,11 @@ function getData() {
   var spreadSheetId = "1ewk6ahWyREzSUe985l3zm_LblKpdjXs6rAHd71hXzwQ"; //CHANGE
   var dataRange = "База!A2:Z"; //CHANGE
   var range = Sheets.Spreadsheets.Values.get(spreadSheetId, dataRange);
+<<<<<<< HEAD:js/main-js.js
   var values = range.values.filter(x => x[5] != '');
+=======
+  var values = range.values.filter(x => x[5] != '').map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25]]);
+>>>>>>> abfc8727f95f080bc57906b1b092fc3ef4e756a8:main-js.js
   return values;
 }
 

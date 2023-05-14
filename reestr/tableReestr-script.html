@@ -473,7 +473,7 @@
     const text = getDataFromTd(data);
     const col = event.srcElement._DT_CellIndex.column;
     ClearRecordReestr();
-    switch (col) {
+ /*    switch (col) {
       case 0:
         $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
         break;
@@ -507,7 +507,23 @@
       case 10:
         $('#primmoyoreestr').val(text[10]);
         break;
+    } */
+
+    const elems = {
+      0: $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0]))),
+      1: $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1]))),
+      2: $('#firmareestr').val(text[2]),
+      3: $('#rabotareestr').val(text[3]),
+      4: $('#proektreestr').val(text[4]),
+      5: $('#sotrreestr').val(text[5]),
+      6: $('#ispolreestr').val(text[6]),
+      7: $('#sumispolreestr').val(strongToNumber(text[7])),
+      8: $('#sumoplatareestr').val(strongToNumber(text[8])),
+      9: $('#primreestr').val(text[9]),
+      10: $('#primmoyoreestr').val(text[10]),
     }
+    changeSwitch(elems, col);
+
     labelred();
     sessionStorage.setItem('proekt', text[4]);
     // вставка значения из кеша на кнопку и в поле поиска таблицы

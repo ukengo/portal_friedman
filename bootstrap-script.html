@@ -29,12 +29,14 @@
 
   function afterDropDownReturned(arrayOfArrays, datalist) {
     let selectorDatalist = document.getElementById(datalist);
-    selectorDatalist.innerHTML = null;
-    arrayOfArrays.forEach((r) => {
-      const selectorOption = document.createElement('option');
-      selectorOption.textContent = r;
-      selectorDatalist.appendChild(selectorOption)
-    });
+    if (selectorDatalist) {
+      selectorDatalist.innerHTML = null;
+      arrayOfArrays.forEach((r) => {
+        const selectorOption = document.createElement('option');
+        selectorOption.textContent = r;
+        selectorDatalist.appendChild(selectorOption)
+      });
+    }
   }
 
   //автоскрытие разворачивающегося меню 

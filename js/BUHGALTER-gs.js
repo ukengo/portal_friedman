@@ -131,6 +131,7 @@ function sendMessage(sText, chatID) {
 ////////////////////////////////
 //TermSum
 function dataTermSum() {
+  //https://docs.google.com/spreadsheets/d/1dY62dP8R3iTwyoNLvEeEJn5thoC-56Pb4ZNtZJsHGu4/edit#gid=0
   const sheet = SpreadsheetApp.openById('1dY62dP8R3iTwyoNLvEeEJn5thoC-56Pb4ZNtZJsHGu4').getSheetByName('bot')
   const termdate = sheet.getRange(3, 1).getValue()
   const termsumma = sheet.getRange(7, 1).getValue()

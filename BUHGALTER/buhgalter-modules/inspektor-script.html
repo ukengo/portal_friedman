@@ -25,6 +25,19 @@
       // все кнопки с бухгалтера enabled
       document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
     }).inspektorGs();
+
+    // клик по таблице инспектора и открытие модалки
+    openModalInsp();
+  }
+
+  function openModalInsp() {
+    google.script.run.withSuccessHandler((data) => {
+      $('#tableInspektor tr td').bind('click', function () {
+        spinner('results-modal');
+        const insp = valueCellCol(this, 0);
+        debtsToInspectors(data.filter(x => (x[2] === insp)));
+      })
+    }).debtsToInspectorsGs();
   }
 
   function debtsToInspectors(dataArray) {
@@ -37,18 +50,13 @@
       } result += "</tr>";
     }
     result += "</table>";
+
     document.getElementById('results-modal').innerHTML = result;
     btnInspModal();
   }
 
-  // клик по таблице инспектора и открытие модалки
-  google.script.run.withSuccessHandler((data) => {
-    $('#tableInspektor tr td').bind('click', function () {
-      spinner('results-modal');
-      const insp = valueCellCol(this, 0);
-      debtsToInspectors(data.filter(x => (x[2] === insp)));
-    })
-  }).debtsToInspectorsGs();
+
+
 
   // клик по таблице модалки, запоминание номера проекта и переход на финансы
   function btnInspModal() {

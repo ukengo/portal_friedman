@@ -104,16 +104,20 @@ function addNewRowMinusThreee(rowData) {
 
 function getLastTenRows(sheet) {
   const lr = sheet.getDataRange().getValues().length;
-  const data = sheet.getRange(2, 1, lr, 5).getDisplayValues();
+  const dataArr = sheet.getRange(2, 1, lr, 5).getDisplayValues();
+  //const data = {...sheet.getRange(2, 1, lr, 5).getDisplayValues()};
 
   // відбір не пустих підмасивів
-  // const data = arr.filter(e => !e.every(el => el[0] === ''));
+  let data = dataArr.filter(e => !e.every(el => el === ''));
   // const data = arr.filter(n => n.some(m => m !== ''));
+
+  //добавляємо в кінець масиву номер запису
+  data.forEach((el, i) => el.push(String(i)));
+
   const dataObject = {
     'data': data,
     'len': lr
   };
-
   return dataObject
 }
 

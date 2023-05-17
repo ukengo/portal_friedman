@@ -109,19 +109,21 @@
     var row_number_reestr = 0;
     let count = 0; // счетчик для подсчета количества остановленных при выборке
     var displayTableReestr = '<form>';
-    displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTableReestr\" >';
+    displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger\" id=\"mainTableReestr\" >';
     displayTableReestr += "<tr>";
     displayTableReestr += "<th></th>";
-    displayTableReestr += "<th></th>";
-    displayTableReestr += "<th></th>";
-    displayTableReestr += "<th></th>";
+    displayTableReestr += `
+                            <th class="text-center" width="1">
+                              <button type="button" class="btn btn-danger btn-sm" id="btnClearSearchReestr">Clear</button>
+                            </th>
+                          `;
     displayTableReestr += "</tr>";
 
     ar.forEach(function (item, index) {
 
       displayTableReestr += "<tr id=\"ROWNUMBER:" + row_number_reestr + "\" >";
 
-      displayTableReestr += "<td colspan=\"9\">";
+      displayTableReestr += "<td>";
       displayTableReestr += "<div class=\"row g-1 mt-1\">";
 
       displayTableReestr += "<div class=\"col-auto\">";
@@ -234,6 +236,10 @@
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
     clearInputClickLabel();
+
+    document.querySelector('#btnClearSearchReestr').addEventListener('click', () => {
+      document.querySelector('#rowdatareestr').innerHTML = '';
+    })
   }
 
   function ClearRecordReestr() {
@@ -473,41 +479,41 @@
     const text = getDataFromTd(data);
     const col = event.srcElement._DT_CellIndex.column;
     ClearRecordReestr();
- /*    switch (col) {
-      case 0:
-        $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
-        break;
-      case 1:
-        $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
-        break;
-      case 2:
-        $('#firmareestr').val(text[2]);
-        break;
-      case 3:
-        $('#rabotareestr').val(text[3]);
-        break;
-      case 4:
-        $('#proektreestr').val(text[4]);
-        break;
-      case 5:
-        $('#sotrreestr').val(text[5]);
-        break;
-      case 6:
-        $('#ispolreestr').val(text[6]);
-        break;
-      case 7:
-        $('#sumispolreestr').val(strongToNumber(text[7]));
-        break;
-      case 8:
-        $('#sumoplatareestr').val(strongToNumber(text[8]));
-        break;
-      case 9:
-        $('#primreestr').val(text[9]);
-        break;
-      case 10:
-        $('#primmoyoreestr').val(text[10]);
-        break;
-    } */
+    /*    switch (col) {
+         case 0:
+           $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
+           break;
+         case 1:
+           $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
+           break;
+         case 2:
+           $('#firmareestr').val(text[2]);
+           break;
+         case 3:
+           $('#rabotareestr').val(text[3]);
+           break;
+         case 4:
+           $('#proektreestr').val(text[4]);
+           break;
+         case 5:
+           $('#sotrreestr').val(text[5]);
+           break;
+         case 6:
+           $('#ispolreestr').val(text[6]);
+           break;
+         case 7:
+           $('#sumispolreestr').val(strongToNumber(text[7]));
+           break;
+         case 8:
+           $('#sumoplatareestr').val(strongToNumber(text[8]));
+           break;
+         case 9:
+           $('#primreestr').val(text[9]);
+           break;
+         case 10:
+           $('#primmoyoreestr').val(text[10]);
+           break;
+       } */
 
     const elems = {
       0: $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0]))),
@@ -586,7 +592,7 @@
     $('#data-table_filter input').val(textContent);
     $('#btnSearchReestrInfo').html(textContent);
     $('#nav-reestr-tab')[0].click();
-    $('#btnClearSearchReestr').click();
+    // $('#btnClearSearchReestr').click();
     labelred();
     autoSearchOnOpen('.dataTables_filter input');
   })
@@ -604,11 +610,11 @@
     SearchRecordsReestr();
   });
 
-  $('#btnClearSearchReestr').click(function () {
-    $('#btnClearSearchReestr').prop("disabled", true);
-    $('#rowdatareestr').html('');
-    $('#btnClearSearchReestr').prop("disabled", false);
-  });
+  /*  $('#btnClearSearchReestr').click(function () {
+     $('#btnClearSearchReestr').prop("disabled", true);
+     $('#rowdatareestr').html('');
+     $('#btnClearSearchReestr').prop("disabled", false);
+   }); */
 
   $('#btnTable2').click(function () {
     $('#div-data-table').remove();

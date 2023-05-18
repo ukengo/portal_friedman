@@ -46,14 +46,16 @@
     displayTable += '<table onkeypress=\"clickPressFinanceUpdate(event)\" class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTableFin\" >';
     displayTable += "<tr>";
     displayTable += "<th>" + naydenofin + "</th>";
-
+    displayTable += `<th width="10">
+                      <button type="button" class="btn btn-primary btn-danger btn-sm shadow-none" id="btnClearSearchFinance">Clear</button> 
+                    </th>`
     displayTable += "</tr>";
 
     ar.forEach(function (item, index) {
 
       displayTable += "<tr class=\"radius\" id=\"ROWNUMBER:" + row_number_fin + "\" >";
 
-      displayTable += "<td>"
+      displayTable += "<td colspan=\"2\">"
       displayTable += "<div class=\"row\">"
 
       displayTable += "<div class=\"col-md-2\">"
@@ -142,6 +144,11 @@
     localStorage.setItem('test', displayTable);
     doubleCheck();
     updateRecordFinButton();
+
+    document.querySelector('#btnClearSearchFinance').addEventListener('click', () => {
+      document.querySelector('#rowdatafin').innerHTML = '';
+    })
+
     $('#btnSearchFinance').prop("disabled", false);
   }
 
@@ -399,7 +406,7 @@
     //tableLineSelection() //полосы в таблице
     $('#btnTableАFinance').prop("disabled", false);
     document.querySelector('#div-data-tablefinance-spinner').innerHTML = '';
-    document.getElementById("searchFinance").click();    
+    document.getElementById("searchFinance").click();
   }
 
   // вставка дата вчера в модалке
@@ -459,13 +466,6 @@
   $('#btnSearchFinance').click(function () {
     $('#btnSearchFinance').prop("disabled", true);
     SearchRecordsFin()
-  })
-
-  $('#btnClearSearchFinance').click(function () {
-    $('#btnClearSearchFinance').prop("disabled", true);
-    $('#rowdatafin').html('');
-    $('#btnClearSearchFinance').prop("disabled", false);
-    $('#btnSearchFinance').prop("disabled", false);
   })
 
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша

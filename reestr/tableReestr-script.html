@@ -536,8 +536,7 @@
     document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;
     document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
     document.getElementById('btnSearchFinInfo').innerHTML = 'fin ' + text[4];
-    document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';
-    document.getElementById('btnSearchFinMinus').innerHTML = 'fin-';
+    document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';   
     document.getElementById('btnSearchJobInfo').innerHTML = 'job ' + text[4];
     document.querySelector('#data-table_filter input').value = event.target.innerHTML;
   };
@@ -574,14 +573,15 @@
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
       }
+      btnClearSearchFinance();
     }, 1);
   })
 
   //кнопка маленькая средняя (finance minus без перехода)
-  $('#btnSearchFinMinus').click(function () {
+  /* $('#btnSearchFinMinus').click(function () {
     document.getElementById("SearchFinInReestr").innerHTML = '';
     document.getElementById("rowdatafin").innerHTML = '';
-  })
+  }) */
 
 
   // перехват кнопки (reestr с переходом)

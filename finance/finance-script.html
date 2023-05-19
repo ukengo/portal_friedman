@@ -152,12 +152,12 @@
   }
 
   // подія кліку на кнопку закриття форми пошуку
-/*   const btnClearSearchFinance = () => {
-    document.querySelectorAll('.btn-clear-search-finance').forEach(elem => elem.addEventListener('click', (e) => {
-      document.querySelector('#rowdatafin').innerHTML = '';
-      document.querySelector('#SearchFinInReestr').innerHTML = '';
-    }))
-  } */
+  /*   const btnClearSearchFinance = () => {
+      document.querySelectorAll('.btn-clear-search-finance').forEach(elem => elem.addEventListener('click', (e) => {
+        document.querySelector('#rowdatafin').innerHTML = '';
+        document.querySelector('#SearchFinInReestr').innerHTML = '';
+      }))
+    } */
 
   // cрабатывание по кнопке Enter
   document.getElementById('exampleModalFinance').addEventListener('keydown', event => {
@@ -341,7 +341,7 @@
                 <button type="button"
                 data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
                   class="btn btn-sm btn-light btnbtn-fin-edit"
-                  data-bs-toggle="modal" data-bs-target="#exampleModalFinance">
+                  >
                   Edit
                 </button>
               </td>`
@@ -361,8 +361,14 @@
 
       // редактирование таблицы showDataFinance через модальное окно
       $('.btnbtn-fin-edit').click(function () {
+        var myModal = new bootstrap.Modal(document.getElementById('exampleModalFinance'));
         const row = this.getAttribute('data-id');
         const allModal = dataArray.filter(el => el[6] === row).flat();
+        if (!row) {
+          alert('Немає ID');
+          return
+        }
+        myModal.show();
         $('#exampleModalFinance').on('shown.bs.modal', () => {
           $('#proektfinModal').val(allModal[0]);
           $('#summafinModal').val(strongToNumber(allModal[1]));// преобразование в число и удаление пробелов
@@ -380,11 +386,14 @@
         })
       })
 
-
       // кнопки вчора + п'ятниця + сьогодні 
       document.querySelectorAll('.btn-finance-yft').forEach(el => {
         el.addEventListener("click", function () {
           const dataId = this.getAttribute('data-id');
+          if (!dataId) {
+            alert('Немає ID');
+            return
+          }
           //const id = dataArray[row][6];
           switch (this.id) {
             case `btnFinanceY`:

@@ -103,8 +103,6 @@
     google.script.run.withSuccessHandler(searchRecordsReestrTable).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr);
   }
 
-
-
   function searchRecordsReestrTable(ar) {
     var row_number_reestr = 0;
     let count = 0; // счетчик для подсчета количества остановленных при выборке
@@ -114,7 +112,7 @@
     displayTableReestr += "<th></th>";
     displayTableReestr += `
                             <th class="text-center" width="1">
-                              <button type="button" class="btn btn-danger btn-sm" id="btnClearSearchReestr">Clear</button>
+                              <button type="button" class="btn btn-danger btn-sm btn-clear-search" id="btnClearSearchReestr">Clear</button>
                             </th>
                           `;
     displayTableReestr += "</tr>";
@@ -206,7 +204,7 @@
         </div>
       `;
 
-      displayTableReestr += "<div id=\"rowdatafin1" + row_number_reestr + "\"></div>"
+      displayTableReestr += "<div class='btn-delete' id=\"rowdatafin1" + row_number_reestr + "\"></div>"
 
       displayTableReestr += "<td><div class=\"d-grid gap-2\"> ";
 
@@ -215,9 +213,6 @@
 
       displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr" + row_number_reestr + "\" value=\"Finance\" class=\"btn btn-danger\" ";
       displayTableReestr += "onclick=\"FinanceRecordReestr(" + row_number_reestr + ")\" />";
-
-      displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr_close" + row_number_reestr + "\" value=\"FinClose\" class=\"btn btn-danger\" ";
-      displayTableReestr += "onclick=\"FinanceRecordReestrClose(" + row_number_reestr + ")\" /></div> ";
 
       displayTableReestr += "</td>";
       displayTableReestr += "</tr>";
@@ -237,9 +232,8 @@
     $('#btnSearchReestr').prop("disabled", false);
     clearInputClickLabel();
 
-    document.querySelector('#btnClearSearchReestr').addEventListener('click', () => {
-      document.querySelector('#rowdatareestr').innerHTML = '';
-    })
+    // закриття блоку по кнопці Clear
+    btnClearSearchFinance();
   }
 
   function ClearRecordReestr() {
@@ -298,6 +292,8 @@
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
       }
+      // закриття блоку по кнопці Clear
+      btnClearSearchFinance();
     }, 1);
   }
 
@@ -536,7 +532,7 @@
     document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;
     document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
     document.getElementById('btnSearchFinInfo').innerHTML = 'fin ' + text[4];
-    document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';   
+    document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';
     document.getElementById('btnSearchJobInfo').innerHTML = 'job ' + text[4];
     document.querySelector('#data-table_filter input').value = event.target.innerHTML;
   };
@@ -573,6 +569,7 @@
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
       }
+      // закриття блоку по кнопці Clear
       btnClearSearchFinance();
     }, 1);
   })

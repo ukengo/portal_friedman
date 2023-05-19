@@ -47,7 +47,7 @@
     displayTable += "<tr>";
     displayTable += "<th>" + naydenofin + "</th>";
     displayTable += `<th width="10">
-                      <button type="button" class="btn btn-primary btn-danger btn-sm shadow-none btn-clear-search-finance">Clear</button> 
+                      <button type="button" class="btn btn-primary btn-danger btn-sm shadow-none  btn-clear-search btn-clear-search-finance">Clear</button> 
                     </th>`
     displayTable += "</tr>";
 
@@ -145,19 +145,19 @@
     doubleCheck();
     updateRecordFinButton();
 
-    // подія кліку на кнопку закриття форми пошуку
+    // закриття блоку по кнопці Clear
     btnClearSearchFinance();
 
     $('#btnSearchFinance').prop("disabled", false);
   }
 
   // подія кліку на кнопку закриття форми пошуку
-  const btnClearSearchFinance = () => {
-    document.querySelectorAll('.btn-clear-search-finance').forEach(elem => elem.addEventListener('click', () => {
+/*   const btnClearSearchFinance = () => {
+    document.querySelectorAll('.btn-clear-search-finance').forEach(elem => elem.addEventListener('click', (e) => {
       document.querySelector('#rowdatafin').innerHTML = '';
       document.querySelector('#SearchFinInReestr').innerHTML = '';
     }))
-  }
+  } */
 
   // cрабатывание по кнопке Enter
   document.getElementById('exampleModalFinance').addEventListener('keydown', event => {

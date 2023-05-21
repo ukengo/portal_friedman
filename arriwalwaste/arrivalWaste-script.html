@@ -159,7 +159,7 @@
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsWaste();
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
-      "Прочие траты";
+      "Інші витрати";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
   }
@@ -170,7 +170,7 @@
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsArriwal();
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
-      "Прочие поступления";
+      "Інші надходження";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
   }
@@ -327,7 +327,7 @@
   }
 
   /////////////////////////////////////////////////
-  //Терминал-карантин
+  //Термінал-карантин
   function rowDataTermKar() {
     const date = document.getElementById("date");
     const summa = document.getElementById("summa");

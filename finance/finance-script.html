@@ -60,32 +60,32 @@
 
       displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_proektfin\">Проект</label>  ";
+      displayTable += "<label for=\"up_proektfin\">Проєкт</label>  ";
       displayTable += "<input type=\"text\" id=\"up_proektfin" + row_number_fin + "\" value=\"" + item[0] + "\" class=\"form-control form-control-sm form-font\" /></div></div> ";
 
       displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_summafin\">Сумма</label> ";
+      displayTable += "<label for=\"up_summafin\">Сума</label> ";
       displayTable += "<input type=\"number\" id=\"up_summafin" + row_number_fin + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
       displayTable += "<div class=\"col-md-1\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_priznakfin\">Признак</label> ";
+      displayTable += "<label for=\"up_priznakfin\">Ознака</label> ";
       displayTable += "<input  type=\"text\" list=\"priznakfin-datalist\" id=\"up_priznakfin" + row_number_fin + "\" value=\"" + item[2] + "\" class=\"form-control form-control-sm\" /><datalist id=\"priznakfin-datalist\"></datalist></div></div> ";
 
       displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_dateoplfin\">Дата оплаты</label> ";
+      displayTable += "<label for=\"up_dateoplfin\">Дата оплати</label> ";
       displayTable += "<input type=\"date\" id=\"up_dateoplfin" + row_number_fin + "\" value=\"" + formatDateYYYYtireMMtireDD(strongToDate(item[3])) + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
       displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_sffin\">Сф</label> ";
+      displayTable += "<label for=\"up_sffin\">Рф</label> ";
       displayTable += "<input type=\"text\" id=\"up_sffin" + row_number_fin + "\" value=\"" + item[4] + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
       displayTable += "<div class=\"col-md-3\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_primfin\">Примечание</label> ";
+      displayTable += "<label for=\"up_primfin\">Примітка</label> ";
       displayTable += "<input type=\"text\"  list=\"primfin-datalist\" id=\"up_primfin" + row_number_fin + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primfin-datalist\"></datalist> </div></div> ";
 
       displayTable += "<div class=\"col-md-1 delete-fin\">"
@@ -95,17 +95,17 @@
 
       displayTable += "<div class=\"col-md-4 delete-fin\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_firmafin\">Фирма</label> ";
+      displayTable += "<label for=\"up_firmafin\">Фірма</label> ";
       displayTable += "<input type=\"text\" disabled id=\"up_firmafin" + row_number_fin + "\" value=\"" + item[7] + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
       displayTable += "<div class=\"col-md-2 delete-fin\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_sumispolfin\">Сумма исполу</label> ";
+      displayTable += "<label for=\"up_sumispolfin\">Сума викону</label> ";
       displayTable += "<input type=\"text\" id=\"up_sumispolfin" + row_number_fin + "\" value=\"" + item[8] + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
       displayTable += "<div class=\"col-md-2 delete-fin\">"
       displayTable += "<div class=\"form-label\">"
-      displayTable += "<label for=\"up_v\">Оплата исполу</label> ";
+      displayTable += "<label for=\"up_v\">Оплата викону</label> ";
       displayTable += "<input type=\"text\" id=\"up_oplataispolfin" + row_number_fin + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
 
@@ -120,14 +120,14 @@
               <div class="col-md-auto">
                 <div class="form-check">
                   <span class="check-style"></span>
-                  <label for="issuepartfinance1" class="form-check-label" >Выставлено частично</label>
+                  <label for="issuepartfinance1" class="form-check-label" >Виставлено</label>
                   <input type="checkbox" id="issuepartfinance1" class="form-check-input" value="part"/>
                 </div>  
               </div>
               <div class="col-md-auto">
                 <div class="form-check">
                   <span class="check-style"></span>
-                  <label for="issuecompletfinance1" class="form-check-label" >Выставлено полностью</label>
+                  <label for="issuecompletfinance1" class="form-check-label" >Виставлено повністю</label>
                   <input type="checkbox" id="issuecompletfinance1" class="form-check-input" value="complet"/>
                 </div>  
               </div>

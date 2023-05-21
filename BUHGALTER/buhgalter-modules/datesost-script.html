@@ -19,7 +19,7 @@
     //функция формирования формы заполения и кнопок
     function bildHtmlDateSost() {
         google.script.run.withSuccessHandler(dataDateSost => {
-            let result = `<div"><b>Дата состояния: ${dataDateSost}</b></div>`;
+            let result = `<div"><b>Дата стану: ${dataDateSost}</b></div>`;
             result += displayResultsDateSost();
             document.getElementById("results").innerHTML = result;
         }).dataDateSost();

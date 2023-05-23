@@ -398,8 +398,27 @@
     }
   }
 
+  function startova() {
+    google.script.run
+      .withSuccessHandler((dataArray) => {
+
+        // з'єднуємо 2 масиви і мапуємо витрати + форма власності 
+        const arr = [...dataArray[0].data, ...dataArray[1].data].map(x => [x[4], x[2]]);
+
+        const elemWaste = document.querySelector('#waste');
+        elemWaste.oninput = () => {
+          arr.forEach(el => {
+            if (elemWaste.value == el[0]) {
+              document.querySelector('#forma').value = el[1];
+            }
+          })
+        }
+      }).getLastTenRowsWasteAndArriwal();
+  }
+  startova();
+
   // жрачка підстановка "нал"
-  function grachka() {
+  /* function grachka() {
     const arr = [
       ['Гуров', 'гот'],
       ['Рекстон заправка', 'гот'],
@@ -440,7 +459,7 @@
       })
     }
   }
-  grachka();
+  grachka(); */
 
 
   // вставка суми доходу/витрат при фільтрації

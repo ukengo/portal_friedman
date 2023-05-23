@@ -129,6 +129,11 @@ function getLastTenRowsArriwal() {
   return getLastTenRows(dataArriwal())
 }
 
+function getLastTenRowsWasteAndArriwal() {
+  
+  return [getLastTenRowsWaste(), getLastTenRowsArriwal()] 
+}
+
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 

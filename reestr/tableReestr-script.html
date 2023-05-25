@@ -103,78 +103,78 @@
     google.script.run.withSuccessHandler(searchRecordsReestrTable).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr);
   }
 
-
-
   function searchRecordsReestrTable(ar) {
     var row_number_reestr = 0;
     let count = 0; // счетчик для подсчета количества остановленных при выборке
     var displayTableReestr = '<form>';
-    displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTableReestr\" >';
+    displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger\" id=\"mainTableReestr\" >';
     displayTableReestr += "<tr>";
     displayTableReestr += "<th></th>";
-    displayTableReestr += "<th></th>";
-    displayTableReestr += "<th></th>";
-    displayTableReestr += "<th></th>";
+    displayTableReestr += `
+                            <th class="text-center" width="1">
+                              <button type="button" class="w-50 btn btn-outline-danger btn-sm btn-clear-search" id="btnClearSearchReestr">X</button>
+                            </th>
+                          `;
     displayTableReestr += "</tr>";
 
     ar.forEach(function (item, index) {
 
       displayTableReestr += "<tr id=\"ROWNUMBER:" + row_number_reestr + "\" >";
 
-      displayTableReestr += "<td colspan=\"9\">";
+      displayTableReestr += "<td>";
       displayTableReestr += "<div class=\"row g-1 mt-1\">";
 
       displayTableReestr += "<div class=\"col-auto\">";
-      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата конец</label>`;
+      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата кінецт</label>`;
       displayTableReestr += "<input type=\"date\" id=\"up_dateendreestr" + row_number_reestr + "\" value=\"" + item[0] + "\" class=\"form-control form-control-sm\" /></div> ";
 
       displayTableReestr += "<div class=\"col-auto\">";
-      displayTableReestr += `<label for=\"up_datestartreestr${row_number_reestr}">Дата начало</label> `;
+      displayTableReestr += `<label for=\"up_datestartreestr${row_number_reestr}">Дата початок</label> `;
       displayTableReestr += "<input type=\"date\" id=\"up_datestartreestr" + row_number_reestr + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" />";
       displayTableReestr += "</div>";
 
       displayTableReestr += "<div class=\"col-md-5\">";
-      displayTableReestr += `<label for=\"up_firmareestr${row_number_reestr}">Фирма</label>`;
+      displayTableReestr += `<label for=\"up_firmareestr${row_number_reestr}">Фірма</label>`;
       displayTableReestr += "<input type=\"text\" list=\"firmareestr-datalist\" id=\"up_firmareestr" + row_number_reestr + "\" value=\"" + item[2] + "\" class=\"form-control form-control-sm\" /> <datalist id=\"firmareestr-datalist\"></datalist></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += `<label for=\"up_rabotareestr${row_number_reestr}">Работа</label>`;
+      displayTableReestr += `<label for=\"up_rabotareestr${row_number_reestr}">Робота</label>`;
       displayTableReestr += "<input type=\"text\" list=\"rabotareestr-datalist\" id=\"up_rabotareestr" + row_number_reestr + "\" value=\"" + item[3] + "\" class=\"form-control form-control-sm\" /><datalist id=\"rabotareestr-datalist\"></datalist></div>";
 
       displayTableReestr += "<div class=\"col-md-1\">";
-      displayTableReestr += `<label for=\"up_coderabotareestr${row_number_reestr}">Код раб</label>`;
+      displayTableReestr += `<label for=\"up_coderabotareestr${row_number_reestr}">Код роб</label>`;
       displayTableReestr += "<input type=\"text\" id=\"up_coderabotareestr" + row_number_reestr + "\" value=\"" + item[4] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += `<label for=\"up_proektreestr${row_number_reestr}">Проект</label>`;
+      displayTableReestr += `<label for=\"up_proektreestr${row_number_reestr}">Проєкт</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_proektreestr" + row_number_reestr + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm fw-bold\" /></div>";
 
 
       displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += `<label for=\"up_sotrreestr${row_number_reestr}">Сотрудник</label>`;
+      displayTableReestr += `<label for=\"up_sotrreestr${row_number_reestr}">Співробітник</label>`;
       displayTableReestr += "<input type=\"text\" list=\"sotrreestr-datalist\" id=\"up_sotrreestr" + row_number_reestr + "\" value=\"" + item[6] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += `<label for=\"up_ispolreestr${row_number_reestr}">Исполнитель</label>`;
+      displayTableReestr += `<label for=\"up_ispolreestr${row_number_reestr}">Викон</label>`;
       displayTableReestr += "<input type=\"text\" list=\"ispolreestr-datalist\"  id=\"up_ispolreestr" + row_number_reestr + "\" value=\"" + item[7] + "\" class=\"form-control form-control-sm fw-bold text-success\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
 
-      displayTableReestr += `<label for=\"up_sumispolreestr${row_number_reestr}">Сумма исполнителю</label>`;
+      displayTableReestr += `<label for=\"up_sumispolreestr${row_number_reestr}">Сума викону</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_sumispolreestr" + row_number_reestr + "\" value=\"" + item[8] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-2\">"
 
-      displayTableReestr += `<label for=\"up_sumoplatareestr${row_number_reestr}">Оплата исполнителю</label>`;
+      displayTableReestr += `<label for=\"up_sumoplatareestr${row_number_reestr}">Оплата викону</label>`;
       displayTableReestr += "<input type=\"number\" id=\"up_sumoplatareestr" + row_number_reestr + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div>";
 
       displayTableReestr += "<div class=\"col-md-4\">"
 
-      displayTableReestr += `<label for=\"up_primreestr${row_number_reestr}">Примечание к проекту</label>`;
+      displayTableReestr += `<label for=\"up_primreestr${row_number_reestr}">Примітки до проєкту</label>`;
       displayTableReestr += "<input type=\"text\" list=\"primreestr-datalist\" id=\"up_primreestr" + row_number_reestr + "\" value=\"" + item[10] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primreestr-datalist\"></datalist></div>";
 
       displayTableReestr += "<div class=\"col-md-4\">"
-      displayTableReestr += `<label for=\"up_primmoyoreestr${row_number_reestr}">Примечание мое</label>`;
+      displayTableReestr += `<label for=\"up_primmoyoreestr${row_number_reestr}">Примітки мої</label>`;
       displayTableReestr += "<input type=\"text\" list=\"primmoyoreestr-datalist\"  id=\"up_primmoyoreestr" + row_number_reestr + "\" value=\"" + item[11] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primmoyoreestr-datalist\"></datalist></div></div>";
 
       displayTableReestr += `
@@ -182,7 +182,7 @@
           <div class="col-auto">
             <div class="form-check">
               <span class="check-style"></span>
-              <label class="form-check-label" for="up_issuepartreestr${row_number_reestr}">Выставлено частично</label> 
+              <label class="form-check-label" for="up_issuepartreestr${row_number_reestr}">Виставлено частково</label> 
               <input type="checkbox" id="up_issuepartreestr${row_number_reestr}" class="form-check-input"${check1(item[12])}/>
               
             </div>
@@ -190,32 +190,29 @@
           <div class="col-auto">
             <div class="form-check">
               <span class="check-style"></span>
-              <label class="form-check-label" for="up_withoutaccountreestr${row_number_reestr}">Без счета</label> 
+              <label class="form-check-label" for="up_withoutaccountreestr${row_number_reestr}">Без рф</label> 
               <input type="checkbox" id="up_withoutaccountreestr${row_number_reestr}" class="form-check-input"${check1(item[13])}/>
             </div>
           </div>
           <div class="col-auto">
             <div class="form-check">
               <span class="check-style"></span>
-              <label class="form-check-label" for="up_stoppedreestr${row_number_reestr}">Остановлено</label> 
+              <label class="form-check-label" for="up_stoppedreestr${row_number_reestr}">Зупинено</label> 
               <input type="checkbox" id="up_stoppedreestr${row_number_reestr}" class="form-check-input"${check1(item[14])}/>
             </div>
           </div>
         </div>
       `;
 
-      displayTableReestr += "<div id=\"rowdatafin1" + row_number_reestr + "\"></div>"
+      displayTableReestr += "<div class='btn-delete' id=\"rowdatafin1" + row_number_reestr + "\"></div>"
 
       displayTableReestr += "<td><div class=\"d-grid gap-2\"> ";
 
-      displayTableReestr += "<input type=\"button\" id=\"update_button_reestr" + row_number_reestr + "\" value=\"Update\" class=\"btn btn-danger\" ";
+      displayTableReestr += "<input type=\"button\" id=\"update_button_reestr" + row_number_reestr + "\" value=\"Update\" class=\"btn btn-outline-danger\" ";
       displayTableReestr += "onclick=\"UpdateRecordReestr(" + row_number_reestr + ")\" /> ";
 
-      displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr" + row_number_reestr + "\" value=\"Finance\" class=\"btn btn-danger\" ";
+      displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr" + row_number_reestr + "\" value=\"Finance\" class=\"btn btn-outline-danger\" ";
       displayTableReestr += "onclick=\"FinanceRecordReestr(" + row_number_reestr + ")\" />";
-
-      displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr_close" + row_number_reestr + "\" value=\"FinClose\" class=\"btn btn-danger\" ";
-      displayTableReestr += "onclick=\"FinanceRecordReestrClose(" + row_number_reestr + ")\" /></div> ";
 
       displayTableReestr += "</td>";
       displayTableReestr += "</tr>";
@@ -234,6 +231,9 @@
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
     clearInputClickLabel();
+
+    // закриття блоку по кнопці Clear
+    btnClearSearchFinance();
   }
 
   function ClearRecordReestr() {
@@ -292,6 +292,8 @@
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
       }
+      // закриття блоку по кнопці Clear
+      btnClearSearchFinance();
     }, 1);
   }
 
@@ -382,7 +384,7 @@
         `border-radius: 20px;
         width: 400px;
         padding: 5px 14px`;
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Поиск по таблице';
+      document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Пошук по таблиці';
 
       // пошук при кліку на Search:
 
@@ -473,41 +475,41 @@
     const text = getDataFromTd(data);
     const col = event.srcElement._DT_CellIndex.column;
     ClearRecordReestr();
- /*    switch (col) {
-      case 0:
-        $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
-        break;
-      case 1:
-        $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
-        break;
-      case 2:
-        $('#firmareestr').val(text[2]);
-        break;
-      case 3:
-        $('#rabotareestr').val(text[3]);
-        break;
-      case 4:
-        $('#proektreestr').val(text[4]);
-        break;
-      case 5:
-        $('#sotrreestr').val(text[5]);
-        break;
-      case 6:
-        $('#ispolreestr').val(text[6]);
-        break;
-      case 7:
-        $('#sumispolreestr').val(strongToNumber(text[7]));
-        break;
-      case 8:
-        $('#sumoplatareestr').val(strongToNumber(text[8]));
-        break;
-      case 9:
-        $('#primreestr').val(text[9]);
-        break;
-      case 10:
-        $('#primmoyoreestr').val(text[10]);
-        break;
-    } */
+    /*    switch (col) {
+         case 0:
+           $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
+           break;
+         case 1:
+           $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
+           break;
+         case 2:
+           $('#firmareestr').val(text[2]);
+           break;
+         case 3:
+           $('#rabotareestr').val(text[3]);
+           break;
+         case 4:
+           $('#proektreestr').val(text[4]);
+           break;
+         case 5:
+           $('#sotrreestr').val(text[5]);
+           break;
+         case 6:
+           $('#ispolreestr').val(text[6]);
+           break;
+         case 7:
+           $('#sumispolreestr').val(strongToNumber(text[7]));
+           break;
+         case 8:
+           $('#sumoplatareestr').val(strongToNumber(text[8]));
+           break;
+         case 9:
+           $('#primreestr').val(text[9]);
+           break;
+         case 10:
+           $('#primmoyoreestr').val(text[10]);
+           break;
+       } */
 
     const elems = {
       0: $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0]))),
@@ -531,7 +533,6 @@
     document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
     document.getElementById('btnSearchFinInfo').innerHTML = 'fin ' + text[4];
     document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';
-    document.getElementById('btnSearchFinMinus').innerHTML = 'fin-';
     document.getElementById('btnSearchJobInfo').innerHTML = 'job ' + text[4];
     document.querySelector('#data-table_filter input').value = event.target.innerHTML;
   };
@@ -568,14 +569,16 @@
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
       }
+      // закриття блоку по кнопці Clear
+      btnClearSearchFinance();
     }, 1);
   })
 
   //кнопка маленькая средняя (finance minus без перехода)
-  $('#btnSearchFinMinus').click(function () {
+  /* $('#btnSearchFinMinus').click(function () {
     document.getElementById("SearchFinInReestr").innerHTML = '';
     document.getElementById("rowdatafin").innerHTML = '';
-  })
+  }) */
 
 
   // перехват кнопки (reestr с переходом)
@@ -586,7 +589,7 @@
     $('#data-table_filter input').val(textContent);
     $('#btnSearchReestrInfo').html(textContent);
     $('#nav-reestr-tab')[0].click();
-    $('#btnClearSearchReestr').click();
+    // $('#btnClearSearchReestr').click();
     labelred();
     autoSearchOnOpen('.dataTables_filter input');
   })
@@ -604,11 +607,11 @@
     SearchRecordsReestr();
   });
 
-  $('#btnClearSearchReestr').click(function () {
-    $('#btnClearSearchReestr').prop("disabled", true);
-    $('#rowdatareestr').html('');
-    $('#btnClearSearchReestr').prop("disabled", false);
-  });
+  /*  $('#btnClearSearchReestr').click(function () {
+     $('#btnClearSearchReestr').prop("disabled", true);
+     $('#rowdatareestr').html('');
+     $('#btnClearSearchReestr').prop("disabled", false);
+   }); */
 
   $('#btnTable2').click(function () {
     $('#div-data-table').remove();
@@ -632,9 +635,9 @@
   $('#accordingButonReestr').click(accordingButon);
   function accordingButon() {
     if ($('#accordingButonReestr').attr('class') == 'accordion-button collapsed') {
-      $('#accordingButonReestr').text('Развернуть форму');
+      $('#accordingButonReestr').text('Розвернути форму');
     } else {
-      $('#accordingButonReestr').text('Cвренуть форму');
+      $('#accordingButonReestr').text('Звернути форму');
     };
   };
 

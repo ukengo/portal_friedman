@@ -159,7 +159,7 @@
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsWaste();
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
-      "Прочие траты";
+      "Інші витрати";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
   }
@@ -170,7 +170,7 @@
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsArriwal();
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
-      "Прочие поступления";
+      "Інші надходження";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
   }
@@ -327,7 +327,7 @@
   }
 
   /////////////////////////////////////////////////
-  //Терминал-карантин
+  //Термінал-карантин
   function rowDataTermKar() {
     const date = document.getElementById("date");
     const summa = document.getElementById("summa");
@@ -398,8 +398,27 @@
     }
   }
 
+  function startova() {
+    google.script.run
+      .withSuccessHandler((dataArray) => {
+
+        // з'єднуємо 2 масиви і мапуємо витрати + форма власності 
+        const arr = [...dataArray[0].data, ...dataArray[1].data].map(x => [x[4], x[2]]);
+
+        const elemWaste = document.querySelector('#waste');
+        elemWaste.oninput = () => {
+          arr.forEach(el => {
+            if (elemWaste.value == el[0]) {
+              document.querySelector('#forma').value = el[1];
+            }
+          })
+        }
+      }).getLastTenRowsWasteAndArriwal();
+  }
+  startova();
+
   // жрачка підстановка "нал"
-  function grachka() {
+  /* function grachka() {
     const arr = [
       ['Гуров', 'гот'],
       ['Рекстон заправка', 'гот'],
@@ -440,7 +459,7 @@
       })
     }
   }
-  grachka();
+  grachka(); */
 
 
   // вставка суми доходу/витрат при фільтрації

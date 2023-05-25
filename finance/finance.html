@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row mt-4">
-    <h5>Финансы</h5>
+    <h5>Фінанси</h5>
   </div>
 
   <form action="" id="formFinStart">
@@ -8,7 +8,7 @@
       <div class="row g-1 mt-1">
         <div class="col-md-2">
           <div class="form">
-            <label for="proektfin">Проект</label>
+            <label for="proektfin">Проєкт</label>
             <input type="number" id="proektfin" list="proektfin-datalist"
               class="form-control form-control-sm form-font input-paste-finance" />
             <datalist id="proektfin-datalist"></datalist>
@@ -24,7 +24,7 @@
 
         <div class="col-md-1">
           <div class="form">
-            <label for="priznakfin">Признак</label>
+            <label for="priznakfin">Ознака</label>
             <input type="text" id="priznakfin" list="priznakfin-datalist" class="form-control form-control-sm" />
             <datalist id="priznakfin-datalist"></datalist>
           </div>
@@ -32,14 +32,14 @@
 
         <div class="col-md-2">
           <div class="form">
-            <label for="dateoplfin">Дата оплаты</label>
+            <label for="dateoplfin">Дата оплати</label>
             <input type="date" id="dateoplfin" class="form-control form-control-sm" />
           </div>
         </div>
 
         <div class="col-md-3">
           <div class="form">
-            <label for="sffin">Сф</label>
+            <label for="sffin">Рф</label>
             <input type="text" id="sffin" list="sffin-datalist" class="form-control form-control-sm" />
             <datalist id="sffin-datalist"></datalist>
           </div>
@@ -55,7 +55,7 @@
       <div class="row g-1 mt-1">
         <div class="col-md-6">
           <div class="form">
-            <label for="primfin">Примечание</label>
+            <label for="primfin">Примітка</label>
             <input type="text" id="primfin" list="primfin-datalist" class="form-control form-control-sm" />
             <datalist id="primfin-datalist"></datalist>
           </div>
@@ -63,7 +63,7 @@
 
         <div class="col-md-6">
           <div class="form">
-            <label for="firmafin">Фирма</label>
+            <label for="firmafin">Фірма</label>
             <input type="text" id="firmafin" list="firmafin-datalist" class="form-control form-control-sm" />
             <datalist id="firmafin-datalist"></datalist>
           </div>
@@ -73,21 +73,21 @@
         <div class="col-md-auto">
           <div class="form-check">
             <span class="check-style"></span>
-            <label for="issuepartfinance" class="form-check-label">Выставлено частично</label>
+            <label for="issuepartfinance" class="form-check-label">Виставлено частково</label>
             <input type="checkbox" id="issuepartfinance" class="form-check-input" value="part" />
           </div>
         </div>
         <div class="col-md-auto">
           <div class="form-check">
             <span class="check-style"></span>
-            <label for="issuecompletfinance" class="form-check-label">Выставлено полностью</label>
+            <label for="issuecompletfinance" class="form-check-label">Виставлено повністю</label>
             <input type="checkbox" id="issuecompletfinance" class="form-check-input" value="complet" />
           </div>
         </div>
         <div class="col-md-auto">
           <div class="form-check">
             <span class="check-style"></span>
-            <label for="ispolufinance" class="form-check-label">Исполу</label>
+            <label for="ispolufinance" class="form-check-label">Викону</label>
             <input type="checkbox" id="ispolufinance" class="form-check-input" value="ispolu" />
           </div>
         </div>
@@ -113,7 +113,7 @@
       </div>
       <button type="button" id="btnModalMultiple" class="btn btn-primary btn-danger shadow-none" data-bs-toggle="modal"
         data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple">Mod</button>
-      <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnClearSearchFinance">Clear</button>
+      <!-- <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnClearSearchFinance">Clear</button> -->
       <button type="button" class="btn btn-primary btn-danger shadow-none" onclick="startTableFinance()">Up
         Record</button>
       <div class="btn-group my-1" role="group" aria-label="Basic example">
@@ -126,7 +126,7 @@
 
   <div class="container">
     <div class="row radius mb-4 mt-4">
-      <div id="rowdatafin"></div>
+      <div id="rowdatafin" class="btn-delete"></div>
     </div>
   </div>
 
@@ -139,7 +139,7 @@
           <button class="btn btn-light shadow-none col-sm-1 text-center px-1 search-t-finance">Up</button>
           <div class="col-sm-10">
             <input type="search" class="form-control input-search input-paste-finance" id="searchFinance"
-              placeholder="Поиск по таблице" onkeypress="clickPressFinanceShearh(event)">
+              placeholder="Пошук по таблиці" onkeypress="clickPressFinanceShearh(event)">
           </div>
         </div>
       </div>
@@ -165,8 +165,6 @@
     </div>
   </div>
 
-
-
   <!-- Modal -->
   <div class="modal fade" id="exampleModalFinance" tabindex="-1" aria-labelledby="exampleModalLabelFinance"
     aria-hidden="true">
@@ -182,48 +180,38 @@
             <div hidden id="financeModalLabel"> </div>
             <div class="container">
 
-
-
               <div class="form">
-                <label for="proektfinModal">Проект</label>
+                <label for="proektfinModal">Проєкт</label>
                 <input type="number" id="proektfinModal" list="proektfin-datalist"
                   class="form-control form-control-sm form-font" />
                 <datalist id="proektfin-datalist"></datalist>
               </div>
 
-
-
               <div class="form">
-                <label for="summafinModal">Сумма</label>
+                <label for="summafinModal">Сума</label>
                 <input type="number" id="summafinModal" class="form-control form-control-sm" />
               </div>
 
               <div class="form">
-                <label for="priznakfinModal">Признак</label>
+                <label for="priznakfinModal">Ознака</label>
                 <input type="text" id="priznakfinModal" list="priznakfin-datalist"
                   class="form-control form-control-sm" />
                 <datalist id="priznakfin-datalist"></datalist>
               </div>
 
-
-
               <div class="form">
-                <label for="dateoplfinModal">Дата оплаты</label>
+                <label for="dateoplfinModal">Дата оплати</label>
                 <input type="date" id="dateoplfinModal" class="form-control form-control-sm" />
               </div>
 
-
-
               <div class="form">
-                <label for="sffinModal">Сф</label>
+                <label for="sffinModal">Рф</label>
                 <input type="text" id="sffinModal" list="sffin-datalist" class="form-control form-control-sm" />
                 <datalist id="sffin-datalist"></datalist>
               </div>
 
-
-
               <div class="form">
-                <label for="primfinModal">Примечание</label>
+                <label for="primfinModal">Примітка</label>
                 <input type="text" id="primfinModal" list="primfin-datalist" class="form-control form-control-sm" />
                 <datalist id="primfin-datalist"></datalist>
               </div>
@@ -232,12 +220,10 @@
                 <label for="idfinModal">id</label>
                 <input type="text" id="idfinModal" class="form-control form-control-sm" />
 
-
               </div>
 
-
               <div class="form">
-                <label for="firmafinModal">Фирма</label>
+                <label for="firmafinModal">Фірма</label>
                 <input type="text" id="firmafinModal" list="firmafin-datalist" class="form-control form-control-sm" />
                 <datalist id="firmafin-datalist"></datalist>
               </div>
@@ -245,13 +231,13 @@
               <div class="row g-1 mt-1 checkbox-finance">
                 <div class="col-md-auto">
                   <div class="form-check">
-                    <label for="issuepartfinance" class="form-check-label">Выставлено частично</label>
+                    <label for="issuepartfinance" class="form-check-label">Виставлено частково</label>
                     <input type="checkbox" id="issuepartfinanceMod" class="form-check-input" value="part" />
                   </div>
                 </div>
                 <div class="col-md-auto">
                   <div class="form-check">
-                    <label for="issuecompletfinance" class="form-check-label">Выставлено полностью</label>
+                    <label for="issuecompletfinance" class="form-check-label">Виставлено повністю</label>
                     <input type="checkbox" id="issuecompletfinanceMod" class="form-check-input" value="complet" />
                   </div>
                 </div>

@@ -1,7 +1,7 @@
 function insertTermKar(data) {
 
   dataIns = [[data[0], data[5], '', data[1], true]]
-  if (data[4] === 'терминал') {
+  if (data[4] === 'термінал') {
     dataTerminal().insertRowAfter(2);
     dataTerminal().getRange(3, 1, 1, 5).setValues(dataIns)
   }
@@ -21,7 +21,7 @@ function vReestrTerminalKarantin(data) {
   let valueReestrTrata = sheetReestrTrata.getDataRange().getValues().slice(1);
   //  берем столбец с назначениями платежей
   let valueReestrTrataNaznechenie = valueReestrTrata.map(x => x[3]);
-  //  берем столбец с назначениями платежей из таблицы Списание терминал
+  //  берем столбец с назначениями платежей из таблицы Списання термінал
   let valueVhodSchet = data[5]
 
   if (data[4] === 'термінал') {

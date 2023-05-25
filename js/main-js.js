@@ -129,6 +129,11 @@ function getLastTenRowsArriwal() {
   return getLastTenRows(dataArriwal())
 }
 
+function getLastTenRowsWasteAndArriwal() {
+  
+  return [getLastTenRowsWaste(), getLastTenRowsArriwal()] 
+}
+
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
@@ -254,7 +259,7 @@ function getDropDownArrayOpisanieJob() {
   return getDropDownArray(dataJob(), 100, 5)
 }
 
-//таблица Реестр оформлений - Фирма из Job
+//таблица Реестр оформлений - Фірма из Job
 function getDropDownArrayFirmaJob() {
   return getDropDownArray(dataJob(), 100, 10)
 }
@@ -1443,7 +1448,7 @@ function NaOtdachuJobGs(proektJob, dateendJob, opisanieJob, firmaJob) {
   })
   let dataNomer = opisanieJob;//номера работ из job
   let dataProekt = proektJob; //проекты работ из job
-  let dataFirma = firmaJob; //фирма работ из job
+  let dataFirma = firmaJob; //фірма работ из job
   let dataDate
   if (dataDate) {
     dataDate = formatDateDDdotMMdotYYYY(dateendJob);//даты работ из job 
@@ -1459,7 +1464,7 @@ function NaOtdachuJobGs(proektJob, dateendJob, opisanieJob, firmaJob) {
   //     + dataDate.getFullYear();
   // конец работы с датой
 
-  // проверяем, была ли фирма на отдаче
+  // проверяем, была ли фірма на отдаче
   let firmaPredid = sheetNaOtdachuValue.filter(row => row[1] == dataFirma);
   //берем последнюю ячейку из Даты отдачи
   let firmaPredid7Pop = firmaPredid.map(row => row[7]).pop();

@@ -19,7 +19,7 @@
     //функция формирования формы заполения и кнопок
     function bildHtmlDateSost() {
         google.script.run.withSuccessHandler(dataDateSost => {
-            let result = `<div"><b>Дата состояния: ${dataDateSost}</b></div>`;
+            let result = `<div>Дата стану: <b>${dataDateSost}</b></div>`;
             result += displayResultsDateSost();
             document.getElementById("results").innerHTML = result;
         }).dataDateSost();
@@ -55,7 +55,7 @@
         if (dateSost) {
             google.script.run.withSuccessHandler(function (return_string) {
             }).updateDateSostGs(dateSost);
-            document.getElementById("results").innerHTML = "Дата состояния:" + " <b>" + new Date(dateSost).toLocaleDateString() + "</b>" + displayResultsDateSost();
+            document.getElementById("results").innerHTML = "Дата стану: " + "<b>" + new Date(dateSost).toLocaleDateString() + "</b>" + displayResultsDateSost();
         };
         document.getElementById("update_button_datesost").disabled = false;
         clearDateSost();
@@ -64,12 +64,12 @@
     function todayDateSost() {
         google.script.run.withSuccessHandler(function (return_string) {
         }).updateDateSostGs(new Date().toLocaleDateString());
-        document.getElementById("results").innerHTML = "Дата состояния:" + " <b>" + new Date().toLocaleDateString() + "</b>" + displayResultsDateSost();
+        document.getElementById("results").innerHTML = "Дата стану: " + "<b>" + new Date().toLocaleDateString() + "</b>" + displayResultsDateSost();
     }
 
     function yesterdayDateSost() {
         google.script.run.withSuccessHandler(function (return_string) {
         }).updateDateSostGs(new Date(Date.now() - 86400000).toLocaleDateString());
-        document.getElementById("results").innerHTML = "Дата состояния:" + " <b>" + new Date(Date.now() - 86400000).toLocaleDateString() + "</b>" + displayResultsDateSost();
+        document.getElementById("results").innerHTML = "Дата стану: " + "<b>" + new Date(Date.now() - 86400000).toLocaleDateString() + "</b>" + displayResultsDateSost();
     }    
 </script>

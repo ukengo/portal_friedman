@@ -198,4 +198,15 @@
       }
     }))
   }
+
+  const btnDisable = (btn) => {
+    btn.classList.remove('btn-outline-danger')
+    btn.classList.add('btn-danger');
+  }
+  
+  const btnEnable = (btn) => {
+    btn.classList.remove('btn-danger');
+    btn.classList.add('btn-outline-danger');    
+  }
+
 </script>

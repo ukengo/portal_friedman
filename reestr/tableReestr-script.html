@@ -94,6 +94,7 @@
     if (searchStop(dataArr)) {
       alert('Не введені дані')
       $('#btnSearchReestr').prop("disabled", false);
+      //document.querySelector()
       return;
     }
 
@@ -105,7 +106,10 @@
 
   function searchRecordsReestrTable(ar) {
     var row_number_reestr = 0;
-    let count = 0; // счетчик для подсчета количества остановленных при выборке
+    
+    let countStopped = 0; // счетчик для подсчета количества остановленных при выборке
+    let countClose = 0; // счетчик для подсчета количества закрытых при выборке
+    
     var displayTableReestr = '<form>';
     displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger\" id=\"mainTableReestr\" >';
     displayTableReestr += "<tr>";
@@ -220,13 +224,19 @@
 
       // считаем количество остановленных
       if (item[14]) {
-        count++
+        countStopped++
+      }
+
+      // считаем количество остановленных
+      k(item[0])
+      if (item[0]) {
+        countClose++        
       }
     });
 
     displayTableReestr += '</table></form>'
     document.getElementById("rowdatareestr").innerHTML = displayTableReestr;
-    document.querySelector("#mainTableReestr th").innerHTML = `${row_number_reestr - count} - закрытых, ${count} - остановленных. Всего: ${row_number_reestr}`;
+    document.querySelector("#mainTableReestr th").innerHTML = `${countClose} - закрытых, ${countStopped} - остановленных. Всего: ${row_number_reestr}`;
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
@@ -257,7 +267,8 @@
   }
 
   function UpdateRecordReestr(row_number_reestr) {
-    document.getElementById("update_button_reestr" + row_number_reestr).disabled = true;
+    const btnDE = document.getElementById("update_button_reestr" + row_number_reestr);
+    btnDisable(btnDE);
     var dateendReestr = document.getElementById("up_dateendreestr" + row_number_reestr).value;
     var datestartReestr = document.getElementById("up_datestartreestr" + row_number_reestr).value;
     var firmaReestr = document.getElementById("up_firmareestr" + row_number_reestr).value;
@@ -275,18 +286,20 @@
     var stoppedReestr = document.getElementById("up_stoppedreestr" + row_number_reestr).checked;
 
     google.script.run.withSuccessHandler(function (return_string) {
-      document.getElementById("update_button_reestr" + row_number_reestr).disabled = false;
+      btnEnable(btnDE);
+
     }).UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr);
   }
 
   function FinanceRecordReestr(row_number_reestr) {
-    document.getElementById("finance_button_reestr" + row_number_reestr).disabled = true;
+    const btnDE = document.getElementById("finance_button_reestr" + row_number_reestr);
+    btnDisable(btnDE);
     localStorage.removeItem('test');
     let proektFin = document.getElementById("up_proektreestr" + row_number_reestr).value;
     SearchRecordsFinProekt1(proektFin);
     let checkTest = setInterval(function () {
       if (localStorage.getItem('test')) {
-        document.getElementById("finance_button_reestr" + row_number_reestr).disabled = false;
+        btnEnable(btnDE);
         document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = localStorage.getItem('test');
         const elements = document.querySelectorAll(`#rowdatafin1${row_number_reestr} .delete-fin`);
         elements.forEach(elem => elem.remove());

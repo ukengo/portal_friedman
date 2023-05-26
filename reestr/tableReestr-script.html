@@ -82,7 +82,7 @@
     const issuepartReestr = document.getElementById("issuepartreestr").checked;
     const withoutaccountReestr = document.getElementById("withoutaccountreestr").checked;
     const stoppedReestr = document.getElementById("stoppedreestr").checked;
-    const checkDateReestr = document.getElementById("check-date-reestr").value;
+    const checkDateReestr = document.getElementById("checkDateReestr").value;
 
 
     // остановка скриипта, если не выбраны критерии поиска в инпутах
@@ -253,7 +253,7 @@
     document.getElementById("issuepartreestr").checked = false;
     document.getElementById("withoutaccountreestr").checked = false;
     document.getElementById("stoppedreestr").checked = false;
-    document.getElementById("check-date-reestr").value = '';
+    document.getElementById("checkDateReestr").value = '';
     labelred();
   }
 
@@ -437,34 +437,6 @@
     });
   }
 
-  /* function showDataReestr(dataArray){
-    var result = "<ta
-    ble class='table table-bordered table-hover ' style='font-size:0.8em'>"    
-    // строим таблицу
-    for(var i=dataArray.length-1; i>0; i--) {
-      result += "<tr>";
-      for(var j=0; j<dataArray[i].length; j++){
-        result += "<td>"+dataArray[i][j]+"</td>";
-      }
-      result += "<td><button type=\"button\" id=\"buttonModalReestr"+ i +"\"  something= "+ i +" class=\"btn btn-sm btn-light btnbtnfin\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModalReestr\"  />Edit</button></td>";
-      result  +=  "</tr>";
-    }
-    result += "</table>";
-    var div = document.getElementById('div-data-table');
-    div.innerHTML = result;
-    $('#btnTable2').prop( "disabled", false ); 
-    $("#div-data-table-spinner").remove()
-    //полосы в таблице
-    $("table tr").click(function() {
-    // $("table tr").css("background", "#FFFFFF"); //reset to original color
-      if(!this.style.background){
-        $(this).css("background", "#FFE4E1"); //apply the new color  
-      }else{
-        $(this).css("background", "#FFFFFF");
-      }    
-    });
-  } */
-
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
   function clickTableReestr() {
 
@@ -479,41 +451,6 @@
     const text = getDataFromTd(data);
     const col = event.srcElement._DT_CellIndex.column;
     ClearRecordReestr();
-    /*    switch (col) {
-         case 0:
-           $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
-           break;
-         case 1:
-           $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
-           break;
-         case 2:
-           $('#firmareestr').val(text[2]);
-           break;
-         case 3:
-           $('#rabotareestr').val(text[3]);
-           break;
-         case 4:
-           $('#proektreestr').val(text[4]);
-           break;
-         case 5:
-           $('#sotrreestr').val(text[5]);
-           break;
-         case 6:
-           $('#ispolreestr').val(text[6]);
-           break;
-         case 7:
-           $('#sumispolreestr').val(strongToNumber(text[7]));
-           break;
-         case 8:
-           $('#sumoplatareestr').val(strongToNumber(text[8]));
-           break;
-         case 9:
-           $('#primreestr').val(text[9]);
-           break;
-         case 10:
-           $('#primmoyoreestr').val(text[10]);
-           break;
-       } */
 
     const elems = {
       0: $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0]))),
@@ -660,7 +597,7 @@
         case 'btnReestrSFri':
           document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
           document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
-          document.getElementById("check-date-reestr").value = '<';
+          document.getElementById("checkDateReestr").value = '<';
           SearchRecordsReestr(`Іде пошук з ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000 * 3))} по ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000))}`);
           break;
         case 'btnReestrST':
@@ -683,5 +620,7 @@
       $("#rowdatareestr").attr("tabindex", -1).focus();
       SearchRecordsReestr();
     }); */
+
+
 
 </script>

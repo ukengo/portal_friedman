@@ -1,0 +1,224 @@
+<script>
+    document.querySelector('#btnSearchReestrOf').disabled = true;
+
+    google.script.run.withSuccessHandler((data) => {
+        document.querySelector('#btnSearchReestrOf').disabled = false;
+        document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
+            const serializeForm = serializeFormV3('financeAccoddion');
+            searchRecordsReestrTest(serializeForm);
+        })
+
+        function searchRecordsReestrTest(dataForm) {
+            let returnRows = [];
+            const allRecords = data;
+
+            allRecords.forEach(function (value, index) {
+
+                var evalRows = [];
+
+                if (!dataForm.checkdatereestr) {
+                    if (dataForm.dateendreestr != '') {
+                        if (formatDateTime(value[0], 'dd.mm.yyyy', dayW = 0) == formatDateTime(dataForm.dateendreestr, 'dd.mm.yyyy', dayW = 0)) {
+                            evalRows.push('yes');
+                        } else {
+                            evalRows.push('no');
+                        }
+                    } else {
+                        evalRows.push('yes');
+                    }
+
+
+                    if (dataForm.datestartreestr != '') {
+                        if (formatDateTime(value[1], 'dd.mm.yyyy', dayW = 0) == formatDateTime(dataForm.datestartreestr, 'dd.mm.yyyy', dayW = 0)) {
+                            evalRows.push('yes');
+                        } else {
+                            evalRows.push('no');
+                        }
+                    }
+                    else {
+                        evalRows.push('yes');
+                    }
+                }
+
+
+
+
+                if (dataForm.checkDateReestr === '<') {
+                    if (dataForm.dateendreestr != '' && dataForm.datestartreestr != '') {
+                        if (Date.parse(value[0]) >= Date.parse(dataForm.datestartreestr) && Date.parse(value[0]) <= Date.parse(dataForm.dateendreestr)) {
+                            evalRows.push('yes');
+                            k(value[0])
+                        } else {
+                            evalRows.push('no');
+                        }
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+
+
+                if (dataForm.checkDateReestr === '>') {
+                    if (dataForm.dateendreestr != '' && dataForm.datestartreestr != '') {
+                        if (Date.parse(value[1]) <= Date.parse(dataForm.dateendreestr) && Date.parse(value[1]) >= Date.parse(dataForm.datestartreestr)) {
+                            evalRows.push('yes');
+                        } else {
+                            evalRows.push('no');
+                        }
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                //////////////////////////////////////////////////////////////////////////////////////////////////
+                if (dataForm.firmareestr != '') {
+                    if (String(value[2]).toUpperCase() == dataForm.firmareestr.toUpperCase()) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.rabotareestr != '') {
+                    if (String(value[3]).toUpperCase() == dataForm.rabotareestr.toUpperCase()) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.coderabotareestr != '') {
+                    if (String(value[4]).toUpperCase() == dataForm.coderabotareestr.toUpperCase()) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.proektreestr != '') {
+                    if (value[5] == dataForm.proektreestr * 1) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.sotrreestr != '') {
+                    if (String(value[6]).toUpperCase() == dataForm.sotrreestr.toUpperCase()) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.ispolreestr != '') {
+                    if (String(value[7]).toUpperCase() == dataForm.ispolreestr.toUpperCase()) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.sumispolreestr != '') {
+                    if (value[8] == dataForm.sumispolreestr) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.sumoplatareestr != '') {
+                    if (value[9] == dataForm.sumoplatareestr) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.primreestr != '') {
+                    if (String(value[10]).toUpperCase() == dataForm.primreestr.toUpperCase()) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.primMoyoreestr != '') {
+                    if (String(value[11]).toUpperCase() == dataForm.primmoyoreestr.toUpperCase()) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.issuepartreestr) {
+                    if (value[12] && dataForm.issuepartreestr) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.withoutaccountreestr) {
+                    if (value[13] && dataForm.withoutaccountreestr) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (dataForm.stoppedreestr) {
+                    if (value[14] && dataForm.stoppedreestr) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+
+                if (evalRows.indexOf("no") == -1) {
+                    returnRows.push(value);
+                }
+            })
+            k(returnRows)
+            return returnRows
+        }
+    }).getRecordsReestr();
+
+</script>

@@ -119,6 +119,14 @@
     return array
   }
 
+  // собираем данные форм в массив v3
+  const serializeFormV3 = (formId) => {
+    const formElement = document.getElementById(formId);
+    const formData = new FormData(formElement);
+    const values = Object.fromEntries(formData.entries());
+    return values;
+  }
+
   // Визначення номера строчки по значенню элемента стрчки.
   function findNumRow(arr, value, numEl) {
     for (var i = 0; i < arr.length; i++)
@@ -203,10 +211,10 @@
     btn.classList.remove('btn-outline-danger')
     btn.classList.add('btn-danger');
   }
-  
+
   const btnEnable = (btn) => {
     btn.classList.remove('btn-danger');
-    btn.classList.add('btn-outline-danger');    
+    btn.classList.add('btn-outline-danger');
   }
 
 </script>

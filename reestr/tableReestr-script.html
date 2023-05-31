@@ -57,7 +57,7 @@
   // cрабатывание по кнопке Enter
   function clickPressReestrSearch(event) {
     if (event.keyCode == 13) {
-      SearchRecordsReestr()
+      //SearchRecordsReestr()
     }
   }
   function clickPressReestrUpdate(event) {
@@ -93,7 +93,7 @@
 
     if (searchStop(dataArr)) {
       alert('Не введені дані')
-      $('#btnSearchReestr').prop("disabled", false);
+      // $('#btnSearchReestr').prop("disabled", false);
       //document.querySelector()
       return;
     }
@@ -107,7 +107,9 @@
 
   function searchRecordsReestrTable(ar) {
     var row_number_reestr = 0;
-    let count = 0; // счетчик для подсчета количества остановленных при выборке
+    let countStopped = 0; // счетчик для подсчета количества остановленных при выборке
+    let countClose = 0; // счетчик для подсчета количества закрытых при выборке
+
     var displayTableReestr = '<form>';
     displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger\" id=\"mainTableReestr\" >';
     displayTableReestr += "<tr>";
@@ -222,13 +224,18 @@
 
       // считаем количество остановленных
       if (item[14]) {
-        count++
+        countStopped++
+      }
+
+      // считаем количество закрытых    
+      if (item[0]) {
+        countClose++
       }
     });
 
     displayTableReestr += '</table></form>'
     document.getElementById("rowdatareestr").innerHTML = displayTableReestr;
-    document.querySelector("#mainTableReestr th").innerHTML = `${row_number_reestr - count} - закрытых, ${count} - остановленных. Всего: ${row_number_reestr}`;
+    document.querySelector("#mainTableReestr th").innerHTML = `${countClose} - закритых, ${countStopped} - зупинених. Всього: ${row_number_reestr}`;
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
@@ -429,14 +436,14 @@
     $('#btnTable').prop("disabled", false);
 
     // обробка кнопки локального редагування проекту
-     document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
+    document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
       const projBtnEditLoc = this.innerHTML;
       const arreestrInfoLocal = dataArray.map(x => [formatDateYYYYtireMMtireDD(strongToDate(x[0])), formatDateYYYYtireMMtireDD(strongToDate(x[1])), x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
       const filt = findNumRow(arreestrInfoLocal, this.innerHTML, 5);
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
       document.querySelector("#mainTableReestr th").innerHTML = '';
     });
-  } 
+  }
 
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
   function clickTableReestr() {
@@ -490,10 +497,10 @@
   $('#btnTable').click(btnTable)
 
   //кнопка маленькая левая (reestr)
-  $('#btnSearchReestrInfo').click(function () {
-    $("#rowdatareestr").attr("tabindex", -1).focus();
-    SearchRecordsReestr();
-  });
+  /*   $('#btnSearchReestrInfo').click(function () {
+      $("#rowdatareestr").attr("tabindex", -1).focus();
+      SearchRecordsReestr();
+    }); */
 
   //кнопка маленькая средняя (finance plus без перехода)
   $('#btnSearchFinPlus').click(function () {
@@ -544,10 +551,10 @@
     autoSearchOnOpen('#searchFinance');
   }) */
 
-  $('#btnSearchReestr').click(function () {
-    $('#btnSearchReestr').prop("disabled", true);
-    SearchRecordsReestr();
-  });
+  /*   $('#btnSearchReestr').click(function () {
+      $('#btnSearchReestr').prop("disabled", true);
+      SearchRecordsReestr();
+    }); */
 
   /*  $('#btnClearSearchReestr').click(function () {
      $('#btnClearSearchReestr').prop("disabled", true);
@@ -615,13 +622,29 @@
     $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
   });
 
+  //перестановка дат
+  document.querySelectorAll('.form-reestr-date').forEach(elem => {
+    elem.addEventListener('change', permutationOfDates);
+  });
+
+  function permutationOfDates() {
+    const dateendReestrElem = document.getElementById("dateendreestr");
+    const datestartReestrElem = document.getElementById("datestartreestr");
+    const dateendReestr = formatDateYYYYtireMMtireDD(new Date(dateendReestrElem.value));
+    const datestartReestr = formatDateYYYYtireMMtireDD(new Date(datestartReestrElem.value));
+
+    if (dateendReestr != 'NaN-NaN-NaN' && datestartReestr != 'NaN-NaN-NaN') {
+      if (dateendReestr < datestartReestr) {
+        dateendReestrElem.value = datestartReestr;
+        datestartReestrElem.value = dateendReestr;
+      }
+    }
+  }
 
   //кнопка маленькая левая1 (reestr)
   /*   $('#btnSearchReestrInfo').click(function () {
       $("#rowdatareestr").attr("tabindex", -1).focus();
       SearchRecordsReestr();
     }); */
-
-
 
 </script>

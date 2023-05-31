@@ -1,55 +1,67 @@
 <script>
-    document.querySelector('#btnSearchReestrOf').disabled = true;
-    document.querySelector('#btnReestrSTOf').disabled = true;
-    document.querySelector('#btnReestrSFriOf').disabled = true;
-    document.querySelector('#btnReestrSYOf').disabled = true;
 
-    google.script.run.withSuccessHandler((data) => {
-        document.querySelector('#btnSearchReestrOf').disabled = false;
-        document.querySelector('#btnReestrSTOf').disabled = false;
-        document.querySelector('#btnReestrSFriOf').disabled = false;
-        document.querySelector('#btnReestrSYOf').disabled = false;
+    function disableTrueReestrOnlone() {
+        document.querySelector('#btnSearchReestrOf').disabled = true;
+        document.querySelector('#btnReestrSTOf').disabled = true;
+        document.querySelector('#btnReestrSFriOf').disabled = true;
+        document.querySelector('#btnReestrSYOf').disabled = true;
+        document.querySelector('#btnSearchReestr').disabled = true;
+    }
+    disableTrueReestrOnlone();
 
-        document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
-            SearchRecordsReestrLocal(data);
-        })
+    document.querySelector('#btnSearchReestr').addEventListener('click', function () {
+        disableTrueReestrOnlone();
+        online();
+        document.querySelector('#btnSearchReestrOf').click();
+    });
 
-        //кнопка маленькая левая (reestr локал)
-        /*        $('#btnSearchReestrInfoLocal').click(function () {
-                   $("#rowdatareestr").attr("tabindex", -1).focus();
-                   SearchRecordsReestrLocal(data);
-               }); */
+    online();
+    function online() {
+        google.script.run.withSuccessHandler((data) => {
+            document.querySelector('#btnSearchReestr').disabled = false;
+            document.querySelector('#btnSearchReestrOf').disabled = false;
+            document.querySelector('#btnReestrSTOf').disabled = false;
+            document.querySelector('#btnReestrSFriOf').disabled = false;
+            document.querySelector('#btnReestrSYOf').disabled = false;
 
-        // кнопки вчора + п'ятниця + сьогодні онлайн
-        document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
-            el.addEventListener("click", function () {
-                this.disabled = true;
-                ClearRecordReestr();
-                switch (this.id) {
-                    case 'btnReestrSYOf':
-                        document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-                        SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
-                        break;
-                    case 'btnReestrSFriOf':
-                        document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-                        document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
-                        document.getElementById("checkDateReestr").value = '<';
-                        SearchRecordsReestrLocal(data, `Іде пошук з ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3))} по ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
-                        break;
-                    case 'btnReestrSTOf':
-                        document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
-                        SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now()))}`);
-                        break;
+            document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
+                SearchRecordsReestrLocal(data);
+            });
+
+            document.querySelector('#financeAccoddion').addEventListener('keypress', (e) => {
+                if (e.keyCode == 13) {
+                    SearchRecordsReestrLocal(data);
                 }
-                ClearRecordReestr();
-                this.disabled = false;
+            });
+
+            // кнопки вчора + п'ятниця + сьогодні онлайн
+            document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
+                el.addEventListener("click", function () {
+                    this.disabled = true;
+                    ClearRecordReestr();
+                    switch (this.id) {
+                        case 'btnReestrSYOf':
+                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+                            SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+                            break;
+                        case 'btnReestrSFriOf':
+                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+                            document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+                            document.getElementById("checkDateReestr").value = '<';
+                            SearchRecordsReestrLocal(data, `Іде пошук з ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3))} по ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+                            break;
+                        case 'btnReestrSTOf':
+                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
+                            SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now()))}`);
+                            break;
+                    }
+                    ClearRecordReestr();
+                    this.disabled = false;
+                })
             })
-        })
 
-
-
-    }).getRecordsReestr();
-
+        }).getRecordsReestr();
+    }
 
 
     function SearchRecordsReestrLocal(allRecords, spintext) {

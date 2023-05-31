@@ -100,7 +100,8 @@
 
     var row_number_reestr = 0;
     let count = 0; // счетчик для подсчета количества остановленных при выборке
-    spinner('rowdatareestr', spintext)
+    spinner('rowdatareestr', spintext);
+
     google.script.run.withSuccessHandler(searchRecordsReestrTable).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr);
   }
 
@@ -126,7 +127,7 @@
       displayTableReestr += "<div class=\"row g-1 mt-1\">";
 
       displayTableReestr += "<div class=\"col-auto\">";
-      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата кінецт</label>`;
+      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата кінець</label>`;
       displayTableReestr += "<input type=\"date\" id=\"up_dateendreestr" + row_number_reestr + "\" value=\"" + item[0] + "\" class=\"form-control form-control-sm\" /></div> ";
 
       displayTableReestr += "<div class=\"col-auto\">";
@@ -428,14 +429,14 @@
     $('#btnTable').prop("disabled", false);
 
     // обробка кнопки локального редагування проекту
-    document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
+     document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
       const projBtnEditLoc = this.innerHTML;
       const arreestrInfoLocal = dataArray.map(x => [formatDateYYYYtireMMtireDD(strongToDate(x[0])), formatDateYYYYtireMMtireDD(strongToDate(x[1])), x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
       const filt = findNumRow(arreestrInfoLocal, this.innerHTML, 5);
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
       document.querySelector("#mainTableReestr th").innerHTML = '';
     });
-  }
+  } 
 
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
   function clickTableReestr() {

@@ -5,24 +5,27 @@
         document.querySelector('#btnReestrSTOf').disabled = true;
         document.querySelector('#btnReestrSFriOf').disabled = true;
         document.querySelector('#btnReestrSYOf').disabled = true;
-        document.querySelector('#btnSearchReestr').disabled = true;
+        document.querySelector('#btnSearchReestrInfo').disabled = true;        
+        document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
     }
     disableTrueReestrOnlone();
 
-    document.querySelector('#btnSearchReestr').addEventListener('click', function () {
+    document.querySelector('#updateAll').addEventListener('click', function () {
         disableTrueReestrOnlone();
         online();
         document.querySelector('#btnSearchReestrOf').click();
+        btnTable();
     });
-
+    
     online();
     function online() {
         google.script.run.withSuccessHandler((data) => {
-            document.querySelector('#btnSearchReestr').disabled = false;
+            document.querySelector('.bi-arrow-repeat').style.color = 'white';
             document.querySelector('#btnSearchReestrOf').disabled = false;
             document.querySelector('#btnReestrSTOf').disabled = false;
             document.querySelector('#btnReestrSFriOf').disabled = false;
             document.querySelector('#btnReestrSYOf').disabled = false;
+            document.querySelector('#btnSearchReestrInfo').disabled = false;
 
             document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
                 SearchRecordsReestrLocal(data);
@@ -32,6 +35,12 @@
                 if (e.keyCode == 13) {
                     SearchRecordsReestrLocal(data);
                 }
+            });
+
+            //кнопка маленькая левая (reestr)
+            $('#btnSearchReestrInfo').click(function () {
+                $("#rowdatareestr").attr("tabindex", -1).focus();
+                SearchRecordsReestrLocal(data);
             });
 
             // кнопки вчора + п'ятниця + сьогодні онлайн
@@ -314,10 +323,6 @@
         });
 
         return returnRows;
-
     }
-
-
-
 
 </script>

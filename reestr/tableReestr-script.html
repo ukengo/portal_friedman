@@ -109,14 +109,15 @@
     var row_number_reestr = 0;
     let countStopped = 0; // счетчик для подсчета количества остановленных при выборке
     let countClose = 0; // счетчик для подсчета количества закрытых при выборке
+    let countOpen = 0; // счетчик для подсчета количества не закрытых при выборке
 
     var displayTableReestr = '<form>';
     displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger\" id=\"mainTableReestr\" >';
     displayTableReestr += "<tr>";
     displayTableReestr += "<th></th>";
     displayTableReestr += `
-                            <th class="text-center" width="1">
-                              <button type="button" class="w-50 btn btn-outline-danger btn-sm btn-clear-search" id="btnClearSearchReestr">X</button>
+                              <th class="text-center">
+                              <button type="button" class="w-75 btn btn-outline-danger btn-sm btn-clear-search" id="btnClearSearchReestr">X</button>
                             </th>
                           `;
     displayTableReestr += "</tr>";
@@ -231,11 +232,16 @@
       if (item[0]) {
         countClose++
       }
+
+      // считаем количество не закрытых    
+      if (!item[0] && !item[14]) {
+        countOpen++
+      }
     });
 
     displayTableReestr += '</table></form>'
     document.getElementById("rowdatareestr").innerHTML = displayTableReestr;
-    document.querySelector("#mainTableReestr th").innerHTML = `${countClose} - закритых, ${countStopped} - зупинених. Всього: ${row_number_reestr}`;
+    document.querySelector("#mainTableReestr th").innerHTML = `Закритих: ${countClose}. Не закритих: ${countOpen}. Зупинених: ${countStopped}. Всього: ${countClose + countStopped + countOpen}`;
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
@@ -406,14 +412,14 @@
       var c = document.querySelector('.dataTables_wrapper .dataTables_filter label');
       // var cName = document.querySelector('.dataTables_wrapper .dataTables_filter label[for="name"]');
 
+
+      // перезавантаження таблиці
       var elem = document.createElement("button");
       var elemText = document.createTextNode("Up");
-
       elem.appendChild(elemText);
-      elem.classList.add('btn', 'btn-light', 'me-2', 'align-baseline')
-      elem.onclick = btnTable;
+      elem.classList.add('btn', 'btn-light', 'me-2', 'align-baseline', 'search-t-reestr')
+      elem.addEventListener('click', btnTable);
       a.insertBefore(elem, c);
-
 
       // считывваем из кеша данные для поиска и вставляем в поле поиска
       const valueSearch = sessionStorage.getItem('dataTables_filter_input');
@@ -436,13 +442,13 @@
     $('#btnTable').prop("disabled", false);
 
     // обробка кнопки локального редагування проекту
-    document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
+    /* document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
       const projBtnEditLoc = this.innerHTML;
       const arreestrInfoLocal = dataArray.map(x => [formatDateYYYYtireMMtireDD(strongToDate(x[0])), formatDateYYYYtireMMtireDD(strongToDate(x[1])), x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
       const filt = findNumRow(arreestrInfoLocal, this.innerHTML, 5);
       searchRecordsReestrTable([arreestrInfoLocal[filt]]);
       document.querySelector("#mainTableReestr th").innerHTML = '';
-    });
+    }); */
   }
 
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
@@ -457,29 +463,49 @@
     const dataTarget = event.target.textContent;
     const data = [...event.target.parentNode.children];
     const text = getDataFromTd(data);
-    const col = event.srcElement._DT_CellIndex.column;
+    const col = event.target._DT_CellIndex.column;
     ClearRecordReestr();
-
-    const elems = {
-      0: $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0]))),
-      1: $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1]))),
-      2: $('#firmareestr').val(text[2]),
-      3: $('#rabotareestr').val(text[3]),
-      4: $('#proektreestr').val(text[4]),
-      5: $('#sotrreestr').val(text[5]),
-      6: $('#ispolreestr').val(text[6]),
-      7: $('#sumispolreestr').val(strongToNumber(text[7])),
-      8: $('#sumoplatareestr').val(strongToNumber(text[8])),
-      9: $('#primreestr').val(text[9]),
-      10: $('#primmoyoreestr').val(text[10]),
+    switch (col) {
+      case 0:
+        $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
+        break;
+      case 1:
+        $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
+        break;
+      case 2:
+        $('#firmareestr').val(text[2]);
+        break;
+      case 3:
+        $('#rabotareestr').val(text[3]);
+        break;
+      case 4:
+        $('#proektreestr').val(text[4]);
+        break;
+      case 5:
+        $('#sotrreestr').val(text[5]);
+        break;
+      case 6:
+        $('#ispolreestr').val(text[6]);
+        break;
+      case 7:
+        $('#sumispolreestr').val(strongToNumber(text[7]));
+        break;
+      case 8:
+        $('#sumoplatareestr').val(strongToNumber(text[8]));
+        break;
+      case 9:
+        $('#primreestr').val(text[9]);
+        break;
+      case 10:
+        $('#proektreestr').val(text[4]);
+        break;
     }
-    changeSwitch(elems, col);
 
     labelred();
     sessionStorage.setItem('proekt', text[4]);
     // вставка значения из кеша на кнопку и в поле поиска таблицы
     document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;
-    document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
+    // document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
     document.getElementById('btnSearchFinInfo').innerHTML = 'fin ' + text[4];
     document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';
     document.getElementById('btnSearchJobInfo').innerHTML = 'job ' + text[4];
@@ -562,14 +588,14 @@
      $('#btnClearSearchReestr').prop("disabled", false);
    }); */
 
-  $('#btnTable2').click(function () {
-    $('#div-data-table').remove();
-    $('#btnTable2').prop("disabled", true);
-    $('<div id="div-data-table-spinner"></div><div id="div-data-table"></div>').appendTo('#div-data-table-row')
-    $("#div-data-table-spinner").attr("tabindex", -1).focus();
-    spinner('div-data-table-spinner');
-    google.script.run.withSuccessHandler(showDataReestr).getData2();
-  });
+  /*   $('#btnTable2').click(function () {
+      $('#div-data-table').remove();
+      $('#btnTable2').prop("disabled", true);
+      $('<div id="div-data-table-spinner"></div><div id="div-data-table"></div>').appendTo('#div-data-table-row')
+      $("#div-data-table-spinner").attr("tabindex", -1).focus();
+      spinner('div-data-table-spinner');
+      google.script.run.withSuccessHandler(showDataReestr).getData2();
+    }); */
 
   $('#clearBtnTable').click(function () {
     $('#clearBtnTable').prop("disabled", true);

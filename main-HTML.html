@@ -42,13 +42,22 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" id="nav-reestr-tab" data-bs-toggle="tab" data-bs-target="#nav-reestr" type="button"
-                role="tab" aria-controls="nav-reestr" aria-selected="true">тРеєстр</a>
+                role="tab" aria-controls="nav-reestr" aria-selected="true">Реєстр</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" id="nav-job-tab" data-bs-toggle="tab" data-bs-target="#nav-job" type="button"
                 role="tab" aria-controls="nav-job" aria-selected="true">job</a>
             </li>
           </ul>
+          <div class="nav-link" id="updateAll">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" color='white' fill="currentColor"
+              class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+              <path
+                d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+              <path fill-rule="evenodd"
+                d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
+            </svg>
+          </div>
           <div class="text-light position-absolute end-0 translate-middle-y top-50">
             <div><input type="date" class="bg-danger form-control" id="calendar"></div>
           </div>
@@ -86,8 +95,8 @@
       <?!= include("arriwalwaste/arrivalWaste-script") ?>
       <?!= include("newproekt/newProekt-script") ?>
       <?!= include("finance/finance-script") ?>
-      <?!= include("reestr/tableReestr-script") ?>
       <?!= include("reestr/tableReestr-local-script") ?>
+      <?!= include("reestr/tableReestr-script") ?>
       <?!= include("job/job-script") ?>
       <?!= include("snippets") ?>
 
@@ -137,9 +146,9 @@
         })();
 
         // Імітація кліка на календар
-/*        document.getElementById("nav_finance_data").addEventListener("click", () =>
-          document.getElementById("calendar").click());
- */
+        /*        document.getElementById("nav_finance_data").addEventListener("click", () =>
+                  document.getElementById("calendar").click());
+         */
 
       </script>
 

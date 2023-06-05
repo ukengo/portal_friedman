@@ -36,17 +36,14 @@
     })
     const ro = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(naydenofin)
 
-    if (naydenofin) {
-      naydenofin = "Сумма: " + ro + " грн."
-    } else {
-      "Нет данных"
-    }
+    if (naydenofin) naydenofin = "Сума: " + ro + " грн.";
+    else naydenofin = "Немає фінансових рухів";
 
     var displayTable = '<form>';
     displayTable += '<table onkeypress=\"clickPressFinanceUpdate(event)\" class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTableFin\" >';
     displayTable += "<tr>";
-    displayTable += `<th width="805">${naydenofin}</th>`;
-    displayTable += `<th width="10">
+    displayTable += `<th width="550">${naydenofin}</th>`;
+    displayTable += `<th width="1">
                       <button type="button" class="w-100 btn btn-outline-danger btn-sm shadow-none  btn-clear-search btn-clear-search-finance">X</button> 
                     </th>`
     displayTable += "</tr>";
@@ -521,6 +518,7 @@
         $('#firmafin').val(text[6]);
         break;
     }
+    labelred();
     // вставка значения из кеша на кнопку и в поле поиска таблицы
     document.getElementById('btnSearchFinanceInfo').innerHTML = event.target.innerHTML;
     document.getElementById('btnSearchFinanceReestrInfo').innerHTML = 'reestr ' + text[0];

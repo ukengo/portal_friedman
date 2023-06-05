@@ -35,6 +35,7 @@
   }
 
   function rowDataRangeArrivalWaste() {
+    const commissionIsPrivate = 10;
     const date = document.getElementById("date").value;
     let summa = +document.getElementById("summa").value;
     const summaPrivat = +document.getElementById("summaPrivat").value;
@@ -53,7 +54,7 @@
       summaPrivat = "";
     }
     if (summaPrivat && !summa) {
-      summa = summaPrivat * 3;
+      summa = +summaPrivat * +commissionIsPrivate;
       waste = "Приват комісія";
       forma = "тов";
       firmaArrivalWaste = "";

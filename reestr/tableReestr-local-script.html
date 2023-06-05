@@ -1,0 +1,328 @@
+<script>
+
+    function disableTrueReestrOnlone() {
+        document.querySelector('#btnSearchReestrOf').disabled = true;
+        document.querySelector('#btnReestrSTOf').disabled = true;
+        document.querySelector('#btnReestrSFriOf').disabled = true;
+        document.querySelector('#btnReestrSYOf').disabled = true;
+        document.querySelector('#btnSearchReestrInfo').disabled = true;        
+        document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
+    }
+    disableTrueReestrOnlone();
+
+    document.querySelector('#updateAll').addEventListener('click', function () {
+        disableTrueReestrOnlone();
+        online();
+        document.querySelector('#btnSearchReestrOf').click();
+        btnTable();
+    });
+    
+    online();
+    function online() {
+        google.script.run.withSuccessHandler((data) => {
+            document.querySelector('.bi-arrow-repeat').style.color = 'white';
+            document.querySelector('#btnSearchReestrOf').disabled = false;
+            document.querySelector('#btnReestrSTOf').disabled = false;
+            document.querySelector('#btnReestrSFriOf').disabled = false;
+            document.querySelector('#btnReestrSYOf').disabled = false;
+            document.querySelector('#btnSearchReestrInfo').disabled = false;
+
+            document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
+                SearchRecordsReestrLocal(data);
+            });
+
+            document.querySelector('#financeAccoddion').addEventListener('keypress', (e) => {
+                if (e.keyCode == 13) {
+                    SearchRecordsReestrLocal(data);
+                }
+            });
+
+            //кнопка маленькая левая (reestr)
+            $('#btnSearchReestrInfo').click(function () {
+                $("#rowdatareestr").attr("tabindex", -1).focus();
+                SearchRecordsReestrLocal(data);
+            });
+
+            // кнопки вчора + п'ятниця + сьогодні онлайн
+            document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
+                el.addEventListener("click", function () {
+                    this.disabled = true;
+                    ClearRecordReestr();
+                    switch (this.id) {
+                        case 'btnReestrSYOf':
+                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+                            SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+                            break;
+                        case 'btnReestrSFriOf':
+                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+                            document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+                            document.getElementById("checkDateReestr").value = '<';
+                            SearchRecordsReestrLocal(data, `Іде пошук з ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3))} по ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+                            break;
+                        case 'btnReestrSTOf':
+                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
+                            SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now()))}`);
+                            break;
+                    }
+                    ClearRecordReestr();
+                    this.disabled = false;
+                })
+            })
+
+        }).getRecordsReestr();
+    }
+
+
+    function SearchRecordsReestrLocal(allRecords, spintext) {
+        const dateendReestr = document.getElementById("dateendreestr").value;
+        const datestartReestr = document.getElementById("datestartreestr").value;
+        const firmaReestr = document.getElementById("firmareestr").value;
+        const rabotaReestr = document.getElementById("rabotareestr").value;
+        const coderabotaReestr = document.getElementById("coderabotareestr").value;
+        const proektReestr = document.getElementById("proektreestr").value;
+        const sotrReestr = document.getElementById("sotrreestr").value;
+        const ispolReestr = document.getElementById("ispolreestr").value;
+        const sumispolReestr = document.getElementById("sumispolreestr").value;
+        const sumoplataReestr = document.getElementById("sumoplatareestr").value;
+        const primReestr = document.getElementById("primreestr").value;
+        const primMoyoReestr = document.getElementById("primmoyoreestr").value;
+        const issuepartReestr = document.getElementById("issuepartreestr").checked;
+        const withoutaccountReestr = document.getElementById("withoutaccountreestr").checked;
+        const stoppedReestr = document.getElementById("stoppedreestr").checked;
+        const checkDateReestr = document.getElementById("checkDateReestr").value;
+
+
+        // остановка скриипта, если не выбраны критерии поиска в инпутах
+        const dataArr =
+            [
+                dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr
+            ]
+
+        if (searchStop(dataArr)) {
+            alert('Не введені дані')
+            $('#btnSearchReestr').prop("disabled", false);
+            //document.querySelector()
+            return;
+        }
+
+        var row_number_reestr = 0;
+        let count = 0; // счетчик для подсчета количества остановленных при выборке
+        spinner('rowdatareestr', spintext);
+
+        const res = searchRecordsReestrOnline(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr, allRecords);
+
+        searchRecordsReestrTable(res);
+    }
+
+
+
+
+    function searchRecordsReestrOnline(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr, allRecords) {
+
+        var returnRows = [];
+        //  var allRecords = getRecordsReestr();
+
+        allRecords.forEach(function (value, index) {
+
+            var evalRows = [];
+
+            if (!checkDateReestr) {
+                if (dateendReestr != '') {
+                    if (formatDateYYYYtireMMtireDD(new Date(value[0])) == formatDateYYYYtireMMtireDD(new Date(dateendReestr))) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                } else {
+                    evalRows.push('yes');
+                }
+
+                if (datestartReestr != '') {
+                    if (formatDateYYYYtireMMtireDD(new Date(value[1])) == formatDateYYYYtireMMtireDD(new Date(datestartReestr))) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                }
+                else {
+                    evalRows.push('yes');
+                }
+            }
+
+            if (checkDateReestr === '<') {
+                if (dateendReestr != '' && datestartReestr != '') {
+                    if (new Date(value[0]) <= new Date(dateendReestr) && new Date(value[0]) >= new Date(datestartReestr)) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                } else {
+                    evalRows.push('no');
+                }
+            }
+
+            if (checkDateReestr === '>') {
+                if (dateendReestr != '' && datestartReestr != '') {
+                    if (new Date(value[1]) <= new Date(dateendReestr) && new Date(value[1]) >= new Date(datestartReestr)) {
+                        evalRows.push('yes');
+                    } else {
+                        evalRows.push('no');
+                    }
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+            if (firmaReestr != '') {
+                if (String(value[2]).toUpperCase() == firmaReestr.toUpperCase()) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (rabotaReestr != '') {
+                if (String(value[3]).toUpperCase() == rabotaReestr.toUpperCase()) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (coderabotaReestr != '') {
+                if (String(value[4]).toUpperCase() == coderabotaReestr.toUpperCase()) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (proektReestr != '') {
+                if (value[5] == proektReestr * 1) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (sotrReestr != '') {
+                if (String(value[6]).toUpperCase() == sotrReestr.toUpperCase()) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (ispolReestr != '') {
+                if (String(value[7]).toUpperCase() == ispolReestr.toUpperCase()) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (sumispolReestr != '') {
+                if (value[8] == sumispolReestr) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (sumoplataReestr != '') {
+                if (value[9] == sumoplataReestr) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (primReestr != '') {
+                if (String(value[10]).toUpperCase() == primReestr.toUpperCase()) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (primMoyoReestr != '') {
+                if (String(value[11]).toUpperCase() == primMoyoReestr.toUpperCase()) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (issuepartReestr != '') {
+                if (value[12] == issuepartReestr) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (withoutaccountReestr != '') {
+                if (value[13] == withoutaccountReestr) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (stoppedReestr != '') {
+                if (value[14] == stoppedReestr) {
+                    evalRows.push('yes');
+                } else {
+                    evalRows.push('no');
+                }
+            }
+            else {
+                evalRows.push('yes');
+            }
+
+            if (evalRows.indexOf("no") == -1) {
+                returnRows.push(value);
+            }
+
+        });
+
+        return returnRows;
+    }
+
+</script>

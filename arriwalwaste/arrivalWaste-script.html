@@ -34,27 +34,39 @@
       .getDropDownArrayStatyaArrivalWaste();
   }
 
+  document.querySelector('#costPrivat').value = localStorage.getItem('costPrivat');
+
   function rowDataRangeArrivalWaste() {
-    const commissionIsPrivate = 10;
     const date = document.getElementById("date").value;
     let summa = +document.getElementById("summa").value;
     const summaPrivat = +document.getElementById("summaPrivat").value;
+    const costPrivat = +document.getElementById("costPrivat").value;
     let forma = document.getElementById("forma").value;
     let firmaArrivalWaste = document.getElementById("firmaArrivalWaste").value;
     let waste = document.getElementById("waste").value;
+
     if (!summaPrivat && !summa) {
+      if (!costPrivat) {
+        alert ("Не заповнено вартості комісії приват")
+        return false
+      } else {
+        localStorage.setItem('costPrivat', costPrivat);
+        alert("Вартість комісії оновлено");
+        return false
+      }
       summa = "";
-      waste = "Не заполнено ни одно поле суммы";
+      waste = "Не заповнено ні одного поля суми";
       firmaArrivalWaste = "";
     }
     if (summaPrivat && summa) {
-      waste = "Заполнены оба поля суммы";
+      waste = "Заповнені обидва поля суми";
       firmaArrivalWaste = "";
       summa = "";
       summaPrivat = "";
     }
     if (summaPrivat && !summa) {
-      summa = +summaPrivat * +commissionIsPrivate;
+      localStorage.setItem('costPrivat', costPrivat);
+      summa = +summaPrivat * +costPrivat;
       waste = "Приват комісія";
       forma = "тов";
       firmaArrivalWaste = "";
@@ -65,15 +77,17 @@
   }
 
   function buttonClickWasteAndArival() {
+    if(!rowDataRangeArrivalWaste()[4]) return
     let vrabotevseArriwalWaste = document.getElementById("vrabotevseArriwalWaste");
-    if (rowDataRangeArrivalWaste()[4] === "Не заполнено ни одно поле суммы") {
-      alert("Не заполнено ни одно поле суммы");
+    if (rowDataRangeArrivalWaste()[4] === "Не заповнено ні одного поля суми") {
+      alert("Не заповнено ні одного поля суми");
       return false;
     }
-    if (rowDataRangeArrivalWaste()[4] === "Заполнены оба поля суммы") {
-      alert("Заполнены оба поля суммы");
+    if (rowDataRangeArrivalWaste()[4] === "Заповнені обидва поля суми") {
+      alert("Заповнені обидва поля суми");
       return false;
     }
+
     startArrivalWaste();
     if (this.id === "buttonWaste") {
       spinner("dataTableArriwalWaste");
@@ -87,16 +101,16 @@
           .withSuccessHandler(createTableArriwalWaste)
           .vReestrTerminalKarantin(rowDataTermKar());
       }
-      vrabotevseArriwalWaste.innerHTML = "Прочие траты";
+      vrabotevseArriwalWaste.innerHTML = "Інші витрати";
       google.script.run
         .withSuccessHandler(createTableArriwalWaste)
         .addNewTableWaste(rowDataRangeArrivalWaste());
       buttonClickOchistkaAW();
     }
     if (this.id === "buttonArrival") {
-      if (rowDataRangeArrivalWaste()[4] === "Приват комиссия") {
+      if (rowDataRangeArrivalWaste()[4] === "Приват комісія") {
         alert(
-          'Запонено поле "Приват комиссия", не корректная операция прихода'
+          'Запонене поле "Приват комісіяя", не корректна операція приходу'
         );
         return false;
       }
@@ -104,7 +118,7 @@
       google.script.run
         .withSuccessHandler(createTableArriwalWaste)
         .addNewRowArrival(rowDataRangeArrivalWaste());
-      vrabotevseArriwalWaste.innerHTML = "Прочие поступления";
+      vrabotevseArriwalWaste.innerHTML = "Інші надходження";
       google.script.run
         .withSuccessHandler(createTableArriwalWaste)
         .addNewTableArriwal(rowDataRangeArrivalWaste());

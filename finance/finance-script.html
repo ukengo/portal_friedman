@@ -299,8 +299,8 @@
       var div = document.getElementById('div-data-tablefinance-row');
       div.innerHTML = '';
       document.querySelector('#summaFinsnce').innerText = '';
-      const numberOfCharactersPerLine = 4;
-      if (value.length < numberOfCharactersPerLine) return;
+      const numberOfCharactersPerLine = 3;
+      if (value.length <= numberOfCharactersPerLine) return;
       const dataArrayProcessed = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]]);
       const dataArrayProcessedFiltered = findInTable(dataArrayProcessed, value, 6);
       // const dataArrayAttr = dataArray.map(x => [x[6]]);
@@ -411,9 +411,18 @@
       });
     }
 
-    // скрытие результатов поиска по нажатию на крестик инпута Fiance
-    document.getElementById('searchFinance').addEventListener('input', dataSearchFinanceNew);
-    document.getElementById('searchFinance').addEventListener('click', dataSearchFinanceNew);
+    // подія пошук
+    document.getElementById('searchFinance').addEventListener('input', () => {
+      setTimeout(() => {
+        dataSearchFinanceNew();
+      }, 1000);
+    });
+    document.getElementById('searchFinance').addEventListener('click',
+      () => {
+        setTimeout(() => {
+          dataSearchFinanceNew();
+        }, 1000);
+      });
 
 
     //tableLineSelection() //полосы в таблице

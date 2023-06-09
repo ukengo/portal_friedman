@@ -198,11 +198,14 @@
   const btnClearSearchFinance = () => {
     document.querySelectorAll('.btn-clear-search').forEach(elem => elem.addEventListener('click', (e) => {
       if (e.target.closest('.btn-delete')) {
+        
         e.target.closest('.btn-delete').innerHTML = '';
       }
       // якщо на кнопці є клас btn-clear-search-finance, то закрити блок і на сторінці фінансів
       if (e.target.classList.contains('btn-clear-search-finance')) {
         document.querySelector('#rowdatafin').innerHTML = '';
+      } else {
+        document.querySelector('html').scrollIntoView({behavior: "smooth"});
       }
     }))
   }

@@ -218,7 +218,6 @@
 
       displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr" + row_number_reestr + "\" value=\"Finance\" class=\"btn btn-outline-danger\" ";
       displayTableReestr += "onclick=\"FinanceRecordReestr(" + row_number_reestr + ")\" />";
-      displayTableReestr += `<button type="button" class="btn btn-outline-danger btn-clear-search">X</button>`
 
       displayTableReestr += "</td>";
       displayTableReestr += "</tr>";
@@ -324,9 +323,7 @@
   function btnTable() {
     if ($('.dataTables_filter input').length) { // проверка на наличие селектора
       const valueSearch = $('.dataTables_filter input').val(); // данные в поле поиска
-      if (valueSearch) {
-        sessionStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш
-      }
+      sessionStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш
     };
 
     $('#div-data-table').remove();

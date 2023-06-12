@@ -117,7 +117,7 @@
     displayTableReestr += "<th></th>";
     displayTableReestr += `
                               <th class="text-center">
-                              <button type="button" class="w-75 btn btn-outline-danger btn-sm btn-clear-search" id="btnClearSearchReestr">X</button>
+                              <button type="button" class="w-75 btn btn-outline-danger btn-sm btn-clear-search">X</button>
                             </th>
                           `;
     displayTableReestr += "</tr>";
@@ -218,6 +218,10 @@
 
       displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr" + row_number_reestr + "\" value=\"Finance\" class=\"btn btn-outline-danger\" ";
       displayTableReestr += "onclick=\"FinanceRecordReestr(" + row_number_reestr + ")\" />";
+
+      displayTableReestr += `
+                              <button type="button" class="btn btn-outline-danger btn-sm btn-clear-search">X</button>       
+      `;
 
       displayTableReestr += "</td>";
       displayTableReestr += "</tr>";

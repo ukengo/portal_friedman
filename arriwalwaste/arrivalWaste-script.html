@@ -172,7 +172,7 @@
     spinner("dataTableArriwalWaste");
     google.script.run
       .withSuccessHandler(createTableArriwalWaste)
-      .getLastTenRowsWaste();
+      .getLastTenRowsWaste();      
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Інші витрати";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";

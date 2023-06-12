@@ -102,7 +102,8 @@ function addNewRowMinusThreee(rowData) {
   return data;
 } */
 
-function getLastTenRows(sheet) {
+// list - це позначка дії їз стовпцями. Яущо пусто, то передається вся таблиця, якщо "1", то викидаємо четвертий стовпець 
+function getLastTenRows(sheet, list) {
   const lr = sheet.getDataRange().getValues().length;
   const dataArr = sheet.getRange(2, 1, lr, 5).getDisplayValues();
   //const data = {...sheet.getRange(2, 1, lr, 5).getDisplayValues()};
@@ -114,15 +115,24 @@ function getLastTenRows(sheet) {
   //добавляємо в кінець масиву номер запису
   data.forEach((el, i) => el.push(String(i)));
 
+  let dataMap;
+
+  //видаляємо 4 стовпець
+  if (list) {
+    dataMap = data.map(x => [x[0], x[1], x[2], x[4]]);
+  } else {
+    dataMap = data;
+  }
+
   const dataObject = {
-    'data': data,
+    'data': dataMap,
     'len': lr
   };
   return dataObject
 }
 
 function getLastTenRowsWaste() {
-  return getLastTenRows(dataWaste())
+  return getLastTenRows(dataWaste(), 1)
 }
 
 function getLastTenRowsArriwal() {
@@ -130,8 +140,8 @@ function getLastTenRowsArriwal() {
 }
 
 function getLastTenRowsWasteAndArriwal() {
-  
-  return [getLastTenRowsWaste(), getLastTenRowsArriwal()] 
+
+  return [getLastTenRowsWaste(), getLastTenRowsArriwal()]
 }
 
 ////////////////////////////////////////////////

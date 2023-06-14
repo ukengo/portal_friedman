@@ -47,7 +47,7 @@
 
     if (!summaPrivat && !summa) {
       if (!costPrivat) {
-        alert ("Не заповнено вартості комісії приват")
+        alert("Не заповнено вартості комісії приват")
         return false
       } else {
         localStorage.setItem('costPrivat', costPrivat);
@@ -77,7 +77,7 @@
   }
 
   function buttonClickWasteAndArival() {
-    if(!rowDataRangeArrivalWaste()[4]) return
+    if (!rowDataRangeArrivalWaste()[4]) return
     let vrabotevseArriwalWaste = document.getElementById("vrabotevseArriwalWaste");
     if (rowDataRangeArrivalWaste()[4] === "Не заповнено ні одного поля суми") {
       alert("Не заповнено ні одного поля суми");
@@ -172,7 +172,7 @@
     spinner("dataTableArriwalWaste");
     google.script.run
       .withSuccessHandler(createTableArriwalWaste)
-      .getLastTenRowsWaste();      
+      .getLastTenRowsWaste();
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Інші витрати";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
@@ -244,20 +244,24 @@
     // відбір не пустих підмасивів
     // const dataArrayData = dataArray.filter(e => !e.every(el => el === ''));
     const dataArrayData = dataArray;
-
+    const dataArrayDataLength = dataArrayData.length;
+    
+    // новер колонки з ідентифікатором (номером запису)
+    const numId = +dataArrayData[0].length - 1
+    
     for (var i = dataArrayData.length - 1; i >= 0; i--) {
       result += "<tr>";
       for (var j = 0; j < dataArrayData[i].length; j++) {
-        if (j === 5) continue
+        if (j === numId) continue
         result += "<td>" + dataArrayData[i][j] + "</td>";
       }
       result +=
         `<td>
-          <button type="button" id="buttonModalFinance${dataArrayData[i][5]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal"/>Edit
+          <button type="button" id="buttonModalFinance${dataArrayData[i][numId]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal"/>Edit
           </button>
         </td>`;
-      result += `</tr>`;
     }
+    result += `</tr>`;
     result += `</table>`;
     clickTables('#table-aw', () => {
       if (event.target.tagName !== 'TD') return false;
@@ -271,20 +275,18 @@
   function btnOpenModal(arr, id) {
     //id - кнопки (номер рядка для правки)
     const row = Number(id.match(/\d+/)); //id кнопки
-
-    //рядок для правки
-    const allModal = arr.filter(el => Number(el[5]) === Number(row)).flat();
+    const allModal = arr.filter(el => Number(el[+arr[0].length - 1]) === Number(row)).flat();
 
     const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0])); //формат даты
     const summaModal = strongToNumber(allModal[1]); //строку в число
-    const formaModal = allModal[2];
+    if (arr[0].length == 6) { const formaModal = allModal[2]; }
     const firmaModal = allModal[3];
     const wasteModal = allModal[4];
     $("#exampleModal").on("shown.bs.modal", () => {
       $("#dateModal").val(dateModal);
       $("#summaModal").val(summaModal);
       $("#formaModal").val(formaModal);
-      $("#firmaArrivalWasteModal").val(firmaModal);
+      if (arr[0].length == 6) $("#firmaArrivalWasteModal").val(firmaModal);
       $("#wasteModal").val(wasteModal);
       //$('#awModalLabel').text(dataArray.length+row-15)
       $("#awModalLabel").text(row + 2);

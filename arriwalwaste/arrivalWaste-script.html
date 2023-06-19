@@ -46,25 +46,22 @@
     let waste = document.getElementById("waste").value;
 
     if (!summaPrivat && !summa) {
-      if (!costPrivat) {
-        alert("Не заповнено вартості комісії приват")
-        return false
-      } else {
-        localStorage.setItem('costPrivat', costPrivat);
-        alert("Вартість комісії оновлено");
-        return false
-      }
       summa = "";
       waste = "Не заповнено ні одного поля суми";
       firmaArrivalWaste = "";
     }
+
     if (summaPrivat && summa) {
       waste = "Заповнені обидва поля суми";
       firmaArrivalWaste = "";
       summa = "";
       summaPrivat = "";
     }
+
     if (summaPrivat && !summa) {
+      if (!costPrivat) {
+        waste = "Не заповнено вартості комісії приват";
+      }
       localStorage.setItem('costPrivat', costPrivat);
       summa = +summaPrivat * +costPrivat;
       waste = "Приват комісія";
@@ -77,7 +74,11 @@
   }
 
   function buttonClickWasteAndArival() {
-    if (!rowDataRangeArrivalWaste()[4]) return
+    const termkarVal = document.getElementById("termkar").value;
+    if (!rowDataRangeArrivalWaste()[4] && !termkarVal) {
+      alert('Не заповнена стаття витрат');
+      return
+    }
     let vrabotevseArriwalWaste = document.getElementById("vrabotevseArriwalWaste");
     if (rowDataRangeArrivalWaste()[4] === "Не заповнено ні одного поля суми") {
       alert("Не заповнено ні одного поля суми");
@@ -85,6 +86,10 @@
     }
     if (rowDataRangeArrivalWaste()[4] === "Заповнені обидва поля суми") {
       alert("Заповнені обидва поля суми");
+      return false;
+    }
+    if (rowDataRangeArrivalWaste()[4] === "Не заповнено вартості комісії приват") {
+      alert("Не заповнено вартості комісії приват");
       return false;
     }
 
@@ -245,10 +250,10 @@
     // const dataArrayData = dataArray.filter(e => !e.every(el => el === ''));
     const dataArrayData = dataArray;
     const dataArrayDataLength = dataArrayData.length;
-    
+
     // новер колонки з ідентифікатором (номером запису)
     const numId = +dataArrayData[0].length - 1
-    
+
     for (var i = dataArrayData.length - 1; i >= 0; i--) {
       result += "<tr>";
       for (var j = 0; j < dataArrayData[i].length; j++) {
@@ -276,17 +281,26 @@
     //id - кнопки (номер рядка для правки)
     const row = Number(id.match(/\d+/)); //id кнопки
     const allModal = arr.filter(el => Number(el[+arr[0].length - 1]) === Number(row)).flat();
-
     const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0])); //формат даты
     const summaModal = strongToNumber(allModal[1]); //строку в число
-    if (arr[0].length == 6) { const formaModal = allModal[2]; }
-    const firmaModal = allModal[3];
-    const wasteModal = allModal[4];
+    let fIrmaModal = '';
+    let wasteModal = '';
+    if (arr[0].length == 6) {
+      fIrmaModal = allModal[3];
+      wasteModal = allModal[4];
+    } else {
+      wasteModal = allModal[3];
+    }
+    const formaModal = allModal[2];
     $("#exampleModal").on("shown.bs.modal", () => {
       $("#dateModal").val(dateModal);
       $("#summaModal").val(summaModal);
       $("#formaModal").val(formaModal);
-      if (arr[0].length == 6) $("#firmaArrivalWasteModal").val(firmaModal);
+      if (fIrmaModal)
+        $("#firmaArrivalWasteModal").val(fIrmaModal);
+      else
+        $("#firmaArrivalWasteModal").val('');
+
       $("#wasteModal").val(wasteModal);
       //$('#awModalLabel').text(dataArray.length+row-15)
       $("#awModalLabel").text(row + 2);
@@ -294,8 +308,8 @@
   }
 
   function createTableArriwalWaste(dataArray) {
-    if (!dataArray.data) return false;
-    if (dataArray.data) {
+     if (!dataArray.data) return
+     else {
       var div = document.getElementById("dataTableArriwalWaste");
       searchValueAw();
       function searchValueAw() {
@@ -323,9 +337,6 @@
         }
         clickTables('#table-aw', searchToClick);
       }
-    } else {
-      var div = document.getElementById("dataTableArriwalWaste");
-      div.innerHTML = "Data not found!";
     }
     autoSearchOnOpen(".input-search"); // автопоиск при открытии    
 
@@ -370,18 +381,21 @@
       return;
     }
     const id = $("#awModalLabel").text();
-    if ($("#vrabotevseArriwalWaste").text() === "Прочие поступления") {
+    if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
       google.script.run
         .withSuccessHandler(() => {
           startDataArriwal();
         })
         .deleteRowArriwalModal(id);
-    } else {
+    } else if ($("#vrabotevseArriwalWaste").text() === "Інші витрати") {
       google.script.run
         .withSuccessHandler(() => {
           startDataWaste();
         })
         .deleteRowWasteModal(id);
+    } else {
+      alert('Перевірь function btnSaveModalAW()');
+      return
     }
   });
 
@@ -400,28 +414,33 @@
     ];
 
     $("#exampleModal").modal("hide");
-    if ($("#vrabotevseArriwalWaste").text() === "Прочие поступления") {
+    if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
       google.script.run
         .withSuccessHandler(() => {
           startDataArriwal();
         })
         .changesRowArriwalModal(id, data);
-    } else {
+    } else if ($("#vrabotevseArriwalWaste").text() === "Інші витрати") {
       google.script.run
         .withSuccessHandler(() => {
           startDataWaste();
         })
         .changesRowWasteModal(id, data);
+    } else {
+      alert('Перевірь function btnSaveModalAW()');
+      return
     }
   }
 
+  // жрачка підстановка "нал"
   function startova() {
     google.script.run
       .withSuccessHandler((dataArray) => {
 
         // з'єднуємо 2 масиви і мапуємо витрати + форма власності 
-        const arr = [...dataArray[0].data, ...dataArray[1].data].map(x => [x[4], x[2]]);
-
+        const arrWaste = dataArray[0].data.map(x => [x[3], x[2]]);
+        const arrArrival = dataArray[1].data.map(x => [x[4], x[2]]);
+        const arr = [...arrWaste, ...arrArrival];
         const elemWaste = document.querySelector('#waste');
         elemWaste.oninput = () => {
           arr.forEach(el => {

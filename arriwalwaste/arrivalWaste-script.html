@@ -106,10 +106,7 @@
           .withSuccessHandler(createTableArriwalWaste)
           .vReestrTerminalKarantin(rowDataTermKar());
       }
-      vrabotevseArriwalWaste.innerHTML = "Інші витрати";
-      google.script.run
-        .withSuccessHandler(createTableArriwalWaste)
-        .addNewTableWaste(rowDataRangeArrivalWaste());
+      vrabotevseArriwalWaste.innerHTML = "Інші витрати";    
       buttonClickOchistkaAW();
     }
     if (this.id === "buttonArrival") {

@@ -70,6 +70,7 @@
     document.querySelectorAll('label').forEach(el => el.addEventListener('click', function () {
       this.removeAttribute('style');
       const id = this.getAttribute('for');
+      if(!id) return;
       document.getElementById(id).value = '';
     }))
   }

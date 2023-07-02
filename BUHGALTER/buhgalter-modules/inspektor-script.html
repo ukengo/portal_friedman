@@ -8,7 +8,7 @@
 
     if (dataInspektor) {
       var result = "<div class='col-xl-6 radius p-2'><table id='tableInspektor' data-bs-toggle=\"modal\" data-bs-target=\"#inspektorModal\" class='table table-sm'>";
-      result += "<tr><th>Исполнитель</th><th>Сумма, грн</th><td>"
+      result += "<tr><th>Виконавець</th><th>Сума, грн</th><td>"
       for (let i = 0; i < dataInspektor.length; i++) {
         result += "<tr>";
         for (let j = 0; j < dataInspektor[i].length; j++) {
@@ -43,7 +43,7 @@
 
   function debtsToInspectors(dataArray) {
     let result = "<table id='tableInspektorModal'  class='table table-sm'>";
-    result += "<tr><th>Проект</th><th>Фірма</th><th>Исполнитель</th><th>Сумма</th><td>"
+    result += "<tr><th>Проєкт</th><th>Фірма</th><th>Виконавець</th><th>Сума</th><td>"
     for (let i = 0; i < dataArray.length; i++) {
       result += "<tr>";
       for (let j = 0; j < dataArray[i].length; j++) {

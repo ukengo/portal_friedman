@@ -18,20 +18,17 @@
     $("#waste-datalist").empty();
   }
 
+  //таблица Реестр оформлений - Статьи из Прочие поступления и Прочие траты
+  function getDropDownArrayStatyaArrivalWaste() {    
+    const dohod = (JSON.parse(sessionStorage.getItem('dataArrival')).data).map(x => [x[4]]);
+    const rashod = (JSON.parse(sessionStorage.getItem('dataWaste')).data).map(x => [x[3]]);
+    return [...new Set(rashod.concat(dohod).filter(String).flat())]
+  }
+
   function startArrivalWaste() {
     startArrivalWasteClear();
-
-    google.script.run
-      .withSuccessHandler((arrayOfArrays) => {
-        afterDropDownReturned(arrayOfArrays, "firmaArrivalWaste-datalist");
-      })
-      .getDropDownArrayFirmaArrivalWaste();
-
-    google.script.run
-      .withSuccessHandler((arrayOfArrays) => {
-        afterDropDownReturned(arrayOfArrays, "waste-datalist");
-      })
-      .getDropDownArrayStatyaArrivalWaste();
+    afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
+    afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
   }
 
   document.querySelector('#costPrivat').value = localStorage.getItem('costPrivat');
@@ -110,12 +107,12 @@
       buttonClickOchistkaAW();
     }
     if (this.id === "buttonArrival") {
-      if (rowDataRangeArrivalWaste()[4] === "Приват комісія") {
-        alert(
-          'Запонене поле "Приват комісіяя", не корректна операція приходу'
-        );
-        return false;
-      }
+      /*       if (rowDataRangeArrivalWaste()[4] === "Приват комісія") {
+              alert(
+                'Запонене поле "Приват комісія", не корректна операція приходу'
+              );
+              return false;
+            }  */
       spinner("dataTableArriwalWaste");
       google.script.run
         .withSuccessHandler(createTableArriwalWaste)
@@ -304,7 +301,7 @@
     })
   }
 
-  function createTableArriwalWaste(dataArray) {   
+  function createTableArriwalWaste(dataArray) {
     if (!dataArray.data) return
     else {
       var div = document.getElementById("dataTableArriwalWaste");

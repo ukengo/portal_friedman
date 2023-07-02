@@ -38,7 +38,7 @@ function addNewRowArrival(rowData) {
   const arrivalDate = String(rowData.splice(0, 1))
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate))
   dataArriwal().appendRow(rowData)
-  return getLastTenRowsArrival();
+  return getLastTenRowsArriwal();
 }
 
 function addNewTableArriwalWaste(rowData, sheet) {

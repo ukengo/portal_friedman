@@ -1,13 +1,12 @@
 <script>
 
     document.querySelector('#updateAll').addEventListener('click', function () {
-        // disableTrueReestrOnlone();
-        // online();
-        // 
         btnTable();
         btnTableFinance();
         onlineDownloads();
     });
+
+    setInterval(onlineDownloads, 300000);
 
     // завантаженя в локал
     function onlineDownloads() {
@@ -23,26 +22,34 @@
             //            document.querySelector('#btnSearchReestrOf').click();
         }).getRecordsReestr();
         google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataFin', JSON.stringify(data))
+            sessionStorage.setItem('dataFin', JSON.stringify(data));
         }).getRecordsFin();
         google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataNevistavleno', JSON.stringify(data))
+            sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));
         }).startDataNevistvleno();
         google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataNeoplacheno', JSON.stringify(data))
+            sessionStorage.setItem('dataNeoplacheno', JSON.stringify(data));
         }).startDataNeoplacheno();
         google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataSotr2', JSON.stringify(data))
+            sessionStorage.setItem('dataSotr2', JSON.stringify(data));
         }).testSotrCount();
         google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataInspektor', JSON.stringify(data))
+            sessionStorage.setItem('dataInspektor', JSON.stringify(data));
         }).inspektorGs();
         google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataVraboteR', JSON.stringify(data))
+            sessionStorage.setItem('dataVraboteR', JSON.stringify(data));
         }).startDataVraboteR();
         google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataVraboteT', JSON.stringify(data))
+            sessionStorage.setItem('dataVraboteT', JSON.stringify(data));
         }).startDataVraboteT();
+        google.script.run.withSuccessHandler((data) => {
+            sessionStorage.setItem('dataArrival', JSON.stringify(data));
+            startArrivalWaste();
+        }).getLastTenRowsArriwal();
+        google.script.run.withSuccessHandler((data) => {
+            sessionStorage.setItem('dataWaste', JSON.stringify(data));
+            startArrivalWaste();
+        }).getLastTenRowsWaste();
 
         document.querySelector('#btnSearchReestrOf').disabled = true;
         document.querySelector('#btnReestrSTOf').disabled = true;

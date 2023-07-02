@@ -70,7 +70,7 @@
     document.querySelectorAll('label').forEach(el => el.addEventListener('click', function () {
       this.removeAttribute('style');
       const id = this.getAttribute('for');
-      if(!id) return;
+      if (!id) return;
       document.getElementById(id).value = '';
     }))
   }
@@ -203,7 +203,7 @@
         e.target.closest('.btn-delete').innerHTML = '';
       }
       // якщо на кнопці є клас btn-clear-search-finance, то закрити блок і на сторінці фінансів
-      if (e.target.classList.contains('btn-clear-search-finance')) {        
+      if (e.target.classList.contains('btn-clear-search-finance')) {
         document.querySelector('#rowdatafin').innerHTML = '';
       }
     }))
@@ -217,6 +217,19 @@
   const btnEnable = (btn) => {
     btn.classList.remove('btn-danger');
     btn.classList.add('btn-outline-danger');
+  }
+
+  //////////////////////////////
+  // Вібір для формування выпадаючих списків
+
+  // Общая функция
+  /**
+  flagNonUnique - это флаг, отвечающий за не уникальность. Если он true, то берется массив всех данных. Если он пропущен, то берется массив только уникальных данных.
+  */
+  function getDropDownArrayOnline(dataStorage, col, flagNonUnique) {
+    let arr = (JSON.parse(sessionStorage.getItem(dataStorage)).data).map(x => [x[col]]).flat();
+   const result = flagNonUnique ? arr : [...new Set(arr)];
+    return result;
   }
 
 </script>

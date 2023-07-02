@@ -4,13 +4,9 @@
         clearDiv();
         spinner('results');
         hideBtnBuh();
-        startDataSotrCount2();
+        createTableSotrCount2(JSON.parse(sessionStorage.getItem('dataSotr2')));
         // все кнопки с бухгалтера enabled
         document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
-    }
-
-    function startDataSotrCount2() {
-        google.script.run.withSuccessHandler(createTableSotrCount2).testSotrCount();
     }
 
     function createTableSotrCount2(dataArray) {

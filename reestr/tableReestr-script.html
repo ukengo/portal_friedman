@@ -303,13 +303,13 @@
   function FinanceRecordReestr(row_number_reestr) {
     const btnDE = document.getElementById("finance_button_reestr" + row_number_reestr);
     btnDisable(btnDE);
-    localStorage.removeItem('test');
+    sessionStorage.removeItem('test');
     let proektFin = document.getElementById("up_proektreestr" + row_number_reestr).value;
     SearchRecordsFinProekt1(proektFin);
     let checkTest = setInterval(function () {
-      if (localStorage.getItem('test')) {
+      if (sessionStorage.getItem('test')) {
         btnEnable(btnDE);
-        document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = localStorage.getItem('test');
+        document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = sessionStorage.getItem('test');
         const elements = document.querySelectorAll(`#rowdatafin1${row_number_reestr} .delete-fin`);
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
@@ -534,16 +534,16 @@
 
   //кнопка маленькая средняя (finance plus без перехода)
   $('#btnSearchFinPlus').click(function () {
-    localStorage.removeItem('test');
+    sessionStorage.removeItem('test');
     document.getElementById("btnSearchFinPlus").disabled = true;
     const proektFin = sessionStorage.getItem('proekt');
     $('#proektfin').val(numEndStrong(proektFin));
     $('#searchFinance').val(numEndStrong(proektFin));
     SearchRecordsFinProekt1(proektFin);
     let checkTest = setInterval(function () {
-      if (localStorage.getItem('test')) {
+      if (sessionStorage.getItem('test')) {
         document.getElementById("btnSearchFinPlus").disabled = false;
-        document.getElementById("SearchFinInReestr").innerHTML = localStorage.getItem('test');
+        document.getElementById("SearchFinInReestr").innerHTML = sessionStorage.getItem('test');
         const elements = document.querySelectorAll(`#SearchFinInReestr .delete-fin`);
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);

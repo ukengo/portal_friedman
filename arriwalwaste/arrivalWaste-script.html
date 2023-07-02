@@ -106,7 +106,7 @@
           .withSuccessHandler(createTableArriwalWaste)
           .vReestrTerminalKarantin(rowDataTermKar());
       }
-      vrabotevseArriwalWaste.innerHTML = "Інші витрати";    
+      vrabotevseArriwalWaste.innerHTML = "Інші витрати";
       buttonClickOchistkaAW();
     }
     if (this.id === "buttonArrival") {
@@ -304,9 +304,9 @@
     })
   }
 
-  function createTableArriwalWaste(dataArray) {
-     if (!dataArray.data) return
-     else {
+  function createTableArriwalWaste(dataArray) {   
+    if (!dataArray.data) return
+    else {
       var div = document.getElementById("dataTableArriwalWaste");
       searchValueAw();
       function searchValueAw() {
@@ -350,7 +350,6 @@
       .getElementById("buttonModal")
       .addEventListener("click", function () { });
   }
-
   /////////////////////////////////////////////////
   //Термінал-карантин
   function rowDataTermKar() {

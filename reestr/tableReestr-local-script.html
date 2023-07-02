@@ -1,76 +1,49 @@
 <script>
 
-    function disableTrueReestrOnlone() {
-        document.querySelector('#btnSearchReestrOf').disabled = true;
-        document.querySelector('#btnReestrSTOf').disabled = true;
-        document.querySelector('#btnReestrSFriOf').disabled = true;
-        document.querySelector('#btnReestrSYOf').disabled = true;
-        document.querySelector('#btnSearchReestrInfo').disabled = true;        
-        document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
-    }
-    disableTrueReestrOnlone();
 
-    document.querySelector('#updateAll').addEventListener('click', function () {
-        disableTrueReestrOnlone();
-        online();
-        document.querySelector('#btnSearchReestrOf').click();
-        btnTable();
+
+
+      document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
+        SearchRecordsReestrLocal(JSON.parse(sessionStorage.getItem('dataReestr')));
     });
-    
-    online();
-    function online() {
-        google.script.run.withSuccessHandler((data) => {
-            document.querySelector('.bi-arrow-repeat').style.color = 'white';
-            document.querySelector('#btnSearchReestrOf').disabled = false;
-            document.querySelector('#btnReestrSTOf').disabled = false;
-            document.querySelector('#btnReestrSFriOf').disabled = false;
-            document.querySelector('#btnReestrSYOf').disabled = false;
-            document.querySelector('#btnSearchReestrInfo').disabled = false;
+    document.querySelector('#financeAccoddion').addEventListener('keypress', (e) => {
+        if (e.keyCode == 13) {
+            SearchRecordsReestrLocal(JSON.parse(sessionStorage.getItem('dataReestr')));
+        }
+    });
 
-            document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
-                SearchRecordsReestrLocal(data);
-            });
+    //кнопка маленькая левая (reestr)
+    $('#btnSearchReestrInfo').click(function () {
+        $("#rowdatareestr").attr("tabindex", -1).focus();
+        SearchRecordsReestrLocal(JSON.parse(sessionStorage.getItem('dataReestr')));
+    });
 
-            document.querySelector('#financeAccoddion').addEventListener('keypress', (e) => {
-                if (e.keyCode == 13) {
-                    SearchRecordsReestrLocal(data);
-                }
-            });
-
-            //кнопка маленькая левая (reestr)
-            $('#btnSearchReestrInfo').click(function () {
-                $("#rowdatareestr").attr("tabindex", -1).focus();
-                SearchRecordsReestrLocal(data);
-            });
-
-            // кнопки вчора + п'ятниця + сьогодні онлайн
-            document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
-                el.addEventListener("click", function () {
-                    this.disabled = true;
-                    ClearRecordReestr();
-                    switch (this.id) {
-                        case 'btnReestrSYOf':
-                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-                            SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
-                            break;
-                        case 'btnReestrSFriOf':
-                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-                            document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
-                            document.getElementById("checkDateReestr").value = '<';
-                            SearchRecordsReestrLocal(data, `Іде пошук з ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3))} по ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
-                            break;
-                        case 'btnReestrSTOf':
-                            document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
-                            SearchRecordsReestrLocal(data, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now()))}`);
-                            break;
-                    }
-                    ClearRecordReestr();
-                    this.disabled = false;
-                })
-            })
-
-        }).getRecordsReestr();
-    }
+    // кнопки вчора + п'ятниця + сьогодні онлайн
+    document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
+        el.addEventListener("click", function () {
+            this.disabled = true;
+            ClearRecordReestr();
+            const dataReestr = JSON.parse(sessionStorage.getItem('dataReestr'));
+            switch (this.id) {
+                case 'btnReestrSYOf':
+                    document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+                    SearchRecordsReestrLocal(dataReestr, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+                    break;
+                case 'btnReestrSFriOf':
+                    document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+                    document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+                    document.getElementById("checkDateReestr").value = '<';
+                    SearchRecordsReestrLocal(dataReestr, `Іде пошук з ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3))} по ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+                    break;
+                case 'btnReestrSTOf':
+                    document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
+                    SearchRecordsReestrLocal(dataReestr, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now()))}`);
+                    break;
+            }
+            ClearRecordReestr();
+            this.disabled = false;
+        })
+    })
 
 
     function SearchRecordsReestrLocal(allRecords, spintext) {
@@ -99,7 +72,7 @@
             ]
 
         if (searchStop(dataArr)) {
-            alert('Не введені дані')
+            alert('Не введені дані+')
             $('#btnSearchReestr').prop("disabled", false);
             //document.querySelector()
             return;

@@ -3,14 +3,14 @@
     clearDiv();
     spinner('results');
     hideBtnBuh();
-    google.script.run.withSuccessHandler(createTableVrbote).startDataVraboteT();
+    createTableVrbote(JSON.parse(sessionStorage.getItem('dataVraboteT')));
   }
 
   function startDataVraboteR() {
     clearDiv();
     spinner('results');
     hideBtnBuh();
-    google.script.run.withSuccessHandler(createTableVrbote).startDataVraboteR();
+    createTableVrbote(JSON.parse(sessionStorage.getItem('dataVraboteR')));
   }
 
   function createTableVrbote(dataArray) {

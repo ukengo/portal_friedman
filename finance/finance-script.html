@@ -40,7 +40,7 @@
     else naydenofin = "Немає фінансових рухів";
 
     var displayTable = '<form>';
-    displayTable += '<table onkeypress=\"clickPressFinanceUpdate(event)\" class=\"table table-bordered border-danger mb-2 mt-2\" id=\"mainTableFin\" >';
+    displayTable += '<table onkeypress=\"clickPressFinanceUpdate(event)\" class=\"table table-bordered border-success mb-2 mt-2\" id=\"mainTableFin\" >';
     displayTable += "<tr>";
     displayTable += `<th width="550">${naydenofin}</th>`;
     displayTable += `<th width="1">
@@ -138,7 +138,7 @@
     displayTable += '</table></form>';
 
     document.getElementById("rowdatafin").innerHTML = displayTable;
-    localStorage.setItem('test', displayTable);
+    sessionStorage.setItem('test', displayTable);
     doubleCheck();
     updateRecordFinButton();
 
@@ -211,16 +211,16 @@
     google.script.run.withSuccessHandler(array).searchRecordsFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin);
   }
 
-  function SearchRecordsFinProekt1(proektFin) {
-    var summaFin = ""
-    var priznakFin = ""
-    var dateoplFin = ""
-    var sfFin = ""
-    var primFin = ""
-    var idFin = ""
-    var firmaFin = ""
-    google.script.run.withSuccessHandler(array).searchRecordsFinProekt(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin);
-  }
+  /*    function SearchRecordsFinProekt1(proektFin) {
+      var summaFin = ""
+      var priznakFin = ""
+      var dateoplFin = ""
+      var sfFin = ""
+      var primFin = ""
+      var idFin = ""
+      var firmaFin = ""
+      google.script.run.withSuccessHandler(array).searchRecordsFinProekt(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin);
+    }*/
 
   function SearchRecordsFinProekt() {
     var proektFin = document.getElementById("proektfin").value;

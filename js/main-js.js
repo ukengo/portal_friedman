@@ -28,17 +28,17 @@ function addNewRowMinusThreee(rowData) {
 } */
 
 function addNewRowWaste(rowData) {
-  const vasteDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate))
-  dataWaste().appendRow(rowData)
-  return true
+  const vasteDate = String(rowData.splice(0, 1));
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate));
+  dataWaste().appendRow(rowData);  
+  return getLastTenRowsWaste();
 }
 
 function addNewRowArrival(rowData) {
   const arrivalDate = String(rowData.splice(0, 1))
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate))
   dataArriwal().appendRow(rowData)
-  return true
+  return getLastTenRowsArrival();
 }
 
 function addNewTableArriwalWaste(rowData, sheet) {

@@ -4,8 +4,14 @@
         clearDiv();
         spinner('results');
         hideBtnBuh();
-        google.script.run.withSuccessHandler(createTableNevistavleno).startDataNevistvleno();
+        createTableNevistavleno(JSON.parse(sessionStorage.getItem('dataNevistavleno')));
     }
+    /*     function startDataNevistvleno() {
+            clearDiv();
+            spinner('results');
+            hideBtnBuh();
+            google.script.run.withSuccessHandler(createTableNevistavleno).startDataNevistvleno();
+        } */
 
     function createTableNevistavleno(dataArray) {
         const nameTable = dataArray.slice();

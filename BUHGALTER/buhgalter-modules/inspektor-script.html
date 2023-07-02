@@ -4,40 +4,41 @@
     clearDiv();
     spinner('results');
     hideBtnBuh();
-    google.script.run.withSuccessHandler(function displayResultsInspektor(dataArray) {
-      if (dataArray) {
-        var result = "<div class='col-xl-6 radius p-2'><table id='tableInspektor' data-bs-toggle=\"modal\" data-bs-target=\"#inspektorModal\" class='table table-sm'>";
-        result += "<tr><th>Исполнитель</th><th>Сумма, грн</th><td>"
-        for (let i = 0; i < dataArray.length; i++) {
-          result += "<tr>";
-          for (let j = 0; j < dataArray[i].length; j++) {
-            result += "<td>" + dataArray[i][j] + "</td>";
-          }
-          result += "</tr>";
+    const dataInspektor = JSON.parse(sessionStorage.getItem('dataInspektor'));
+
+    if (dataInspektor) {
+      var result = "<div class='col-xl-6 radius p-2'><table id='tableInspektor' data-bs-toggle=\"modal\" data-bs-target=\"#inspektorModal\" class='table table-sm'>";
+      result += "<tr><th>Исполнитель</th><th>Сумма, грн</th><td>"
+      for (let i = 0; i < dataInspektor.length; i++) {
+        result += "<tr>";
+        for (let j = 0; j < dataInspektor[i].length; j++) {
+          result += "<td>" + dataInspektor[i][j] + "</td>";
         }
-        result += "</table></div>";
-        var div2 = document.getElementById('results');
-        div2.innerHTML = result;
-      } else {
-        var div = document.getElementById('results');
-        div.innerHTML = "Data not found!";
+        result += "</tr>";
       }
-      // все кнопки с бухгалтера enabled
-      document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
-    }).inspektorGs();
+      result += "</table></div>";
+      var div2 = document.getElementById('results');
+      div2.innerHTML = result;
+    } else {
+      var div = document.getElementById('results');
+      div.innerHTML = "Data not found!";
+    }
+    // все кнопки с бухгалтера enabled
+    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
 
     // клик по таблице инспектора и открытие модалки
     openModalInsp();
   }
 
   function openModalInsp() {
-    google.script.run.withSuccessHandler((data) => {
-      $('#tableInspektor tr td').bind('click', function () {
-        spinner('results-modal');
-        const insp = valueCellCol(this, 0);
-        debtsToInspectors(data.filter(x => (x[2] === insp)));
-      })
-    }).debtsToInspectorsGs();
+
+    $('#tableInspektor tr td').bind('click', function () {
+      spinner('results-modal');
+      const insp = valueCellCol(this, 0);
+      const dataReestr = JSON.parse(sessionStorage.getItem('dataReestr'));
+      const data = dataReestr.map(x => [x[5], x[2], x[7], x[8], x[9]]).filter(x => (x[3] != x[4]));
+      debtsToInspectors(data.filter(x => (x[2] === insp)));
+    })
   }
 
   function debtsToInspectors(dataArray) {
@@ -62,7 +63,7 @@
   function btnInspModal() {
     $('#tableInspektorModal tr td').bind('click', function () {
       const proekt = valueCellCol(this, 0);
-      localStorage.removeItem('proekt')
+      sessionStorage.removeItem('proekt')
       sessionStorage.setItem('proekt', proekt);
       const dataTarget = event.target.textContent;
       $('.btn-close').click();

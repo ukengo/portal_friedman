@@ -3,7 +3,8 @@
         clearDiv();
         spinner('results');
         hideBtnBuh();
-        google.script.run.withSuccessHandler(createTableNeoplacheno).startDataNeoplacheno();
+        // google.script.run.withSuccessHandler(createTableNeoplacheno).startDataNeoplacheno();
+        createTableNeoplacheno(JSON.parse(sessionStorage.getItem('dataNeoplacheno')));
     }
 
     function createTableNeoplacheno(dataArray) {

@@ -12,6 +12,13 @@ function getDropDownArrayremarkCashe() {
     return res;
 }
 
+function getDropDownArrayCashe() {
+    return {
+        'description': getDropDownArrayDescriptionCashe(),
+        'remark': getDropDownArrayremarkCashe()
+    };
+}
+
 function rebrendArrs(arr) {
     const iOff = arr.indexOf("PRHisAGc");
     arr = arr.splice(0, iOff).filter(e => typeof e === 'string');

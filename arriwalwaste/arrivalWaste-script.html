@@ -19,7 +19,7 @@
   }
 
   //таблица Реестр оформлений - Статьи из Прочие поступления и Прочие траты
-  function getDropDownArrayStatyaArrivalWaste() {    
+  function getDropDownArrayStatyaArrivalWaste() {
     const dohod = (JSON.parse(sessionStorage.getItem('dataArrival')).data).map(x => [x[4]]);
     const rashod = (JSON.parse(sessionStorage.getItem('dataWaste')).data).map(x => [x[3]]);
     return [...new Set(rashod.concat(dohod).filter(String).flat())]
@@ -100,7 +100,8 @@
       } else {
         google.script.run.insertTermKar(rowDataTermKar());
         google.script.run
-          .withSuccessHandler(createTableArriwalWaste)
+          //.withSuccessHandler(createTableArriwalWaste)
+          .withSuccessHandler(startDataWaste)
           .vReestrTerminalKarantin(rowDataTermKar());
       }
       vrabotevseArriwalWaste.innerHTML = "Інші витрати";
@@ -169,9 +170,10 @@
 
   function startDataWaste() {
     spinner("dataTableArriwalWaste");
-    google.script.run
+    createTableArriwalWaste(JSON.parse(sessionStorage.getItem('dataWaste')));
+    /* google.script.run
       .withSuccessHandler(createTableArriwalWaste)
-      .getLastTenRowsWaste();
+      .getLastTenRowsWaste(); */
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Інші витрати";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
@@ -180,9 +182,10 @@
 
   function startDataArriwal() {
     spinner("dataTableArriwalWaste");
-    google.script.run
+    createTableArriwalWaste(JSON.parse(sessionStorage.getItem('dataArrival')));
+    /* google.script.run
       .withSuccessHandler(createTableArriwalWaste)
-      .getLastTenRowsArriwal();
+      .getLastTenRowsArriwal(); */
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Інші надходження";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
@@ -190,7 +193,7 @@
   }
 
   /* function createTableArriwalWaste(dataArray) {
-
+ 
   const nameTable = dataArray.data.slice()
   if(dataArray.data){
     var result = "<table class='table table-bordered' style='font-size:0.9em'>"
@@ -304,6 +307,7 @@
   function createTableArriwalWaste(dataArray) {
     if (!dataArray.data) return
     else {
+      //sessionStorage.setItem('dataWaste', JSON.stringify(dataArray.data));
       var div = document.getElementById("dataTableArriwalWaste");
       searchValueAw();
       function searchValueAw() {
@@ -333,6 +337,15 @@
       }
     }
     autoSearchOnOpen(".input-search"); // автопоиск при открытии    
+    
+    google.script.run.withSuccessHandler((data) => {
+      sessionStorage.setItem('dataWaste', JSON.stringify(data));
+      document.querySelector('#buttonWasteTab').disabled = false;
+    }).getLastTenRowsWaste();
+    google.script.run.withSuccessHandler((data) => {
+      sessionStorage.setItem('dataCashe', JSON.stringify(data));
+      //buildDatalistCashe();
+    }).getDropDownArrayCashe();
 
     function searchToClick() {
       if (event.target.tagName !== 'TD') return false;

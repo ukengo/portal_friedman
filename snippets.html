@@ -152,7 +152,7 @@
     })
   })
 
-  // пошук по таблиці? де col - номер колонки, який ппропускається при пошуку
+  // пошук по таблиці де col - номер колонки, який ппропускається при пошуку
   function findInTable(arr, value, col) {
     const result = [];
     let yi = '';
@@ -161,6 +161,7 @@
         if (j === col) continue
         if (yi !== i) {   // пропускаємо дублі  
           //replace(/\s/g,'') видаляє всі пробільні символи (пробіли)
+          
           if (arr[i][j].toLowerCase().replace(/\s/g, '').includes(value.toLowerCase().replace(/\s/g, ''))) {
             result.push(arr[i]);
             yi = i;

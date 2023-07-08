@@ -30,7 +30,7 @@ function addNewRowMinusThreee(rowData) {
 function addNewRowWaste(rowData) {
   const vasteDate = String(rowData.splice(0, 1));
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate));
-  dataWaste().appendRow(rowData);  
+  dataWaste().appendRow(rowData);    
   return getLastTenRowsWaste();
 }
 

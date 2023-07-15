@@ -74,7 +74,7 @@
     google.script.run.withSuccessHandler(() => {
       document.getElementById("buttonAf").disabled = false;
     })
-    .createNewFolder(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
+      .createNewFolder(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
   }
@@ -83,10 +83,19 @@
     startTableNewProekt() // формирование раскрывающихся списков
     document.getElementById("mainButton").disabled = true;
     google.script.run.withSuccessHandler(() => {
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataSotr2', JSON.stringify(data));
+      }).testSotrCount();
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataVraboteR', JSON.stringify(data));
+      }).startDataVraboteR();
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataVraboteT', JSON.stringify(data));
+      }).startDataVraboteT();      
+      btnTable();
       document.getElementById("mainButton").disabled = false;
-    })
-    .addNewRow(rowDataRangeProekt())
-    buttonClickAf()
+    }).addNewRow(rowDataRangeProekt());
+    buttonClickAf();
   }
 
   function buttonClickBezAf() {
@@ -104,6 +113,16 @@
     startTableNewProekt() // формирование раскрывающихся списков
     google.script.run.createNewFolderOtOrgana(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
     google.script.run.withSuccessHandler(() => {
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataSotr2', JSON.stringify(data));
+      }).testSotrCount();
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataVraboteR', JSON.stringify(data));
+      }).startDataVraboteR();
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataVraboteT', JSON.stringify(data));
+      }).startDataVraboteT();      
+      btnTable();
       document.getElementById("buttonOtOrgana").disabled = false;
     }).addNewRow(rowDataRangeProekt())
     buttonClickOchistka()

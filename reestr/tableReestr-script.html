@@ -293,11 +293,18 @@
     var issuepartReestr = document.getElementById("up_issuepartreestr" + row_number_reestr).checked;
     var withoutaccountReestr = document.getElementById("up_withoutaccountreestr" + row_number_reestr).checked;
     var stoppedReestr = document.getElementById("up_stoppedreestr" + row_number_reestr).checked;
-
     google.script.run.withSuccessHandler(function (return_string) {
       btnEnable(btnDE);
-
+      document.querySelector('#btnSearchReestrInfo').disabled = true;
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataReestr', JSON.stringify(data));
+        document.querySelector('#btnSearchReestrInfo').disabled = false;
+      }).getRecordsReestr();
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));
+      }).startDataNevistvleno();
     }).UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr);
+
   }
 
   function FinanceRecordReestr(row_number_reestr) {

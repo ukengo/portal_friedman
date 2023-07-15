@@ -6,7 +6,7 @@
     onlineDownloads();
   });
 
-  setInterval(onlineDownloads, 900000);
+  setInterval(onlineDownloads, 3600000);
 
   // завантаженя в локал
   function onlineDownloads() {
@@ -15,7 +15,7 @@
     document.querySelector('#btnReestrSTOf').disabled = true;
     document.querySelector('#btnReestrSFriOf').disabled = true;
     document.querySelector('#btnReestrSYOf').disabled = true;
-    document.querySelector('#btnSearchReestrInfo').disabled = true;    
+    document.querySelector('#btnSearchReestrInfo').disabled = true;
     document.querySelector('#buttonWasteTab').disabled = true;
     document.querySelector('#buttonArrivalTab').disabled = true;
     document.querySelector('#btnTableАFinance').disabled = true;
@@ -23,13 +23,13 @@
 
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataReestr', JSON.stringify(data));
-      
+
       document.querySelector('.bi-arrow-repeat').style.color = 'white';
       document.querySelector('#btnSearchReestrOf').disabled = false;
       document.querySelector('#btnReestrSTOf').disabled = false;
       document.querySelector('#btnReestrSFriOf').disabled = false;
       document.querySelector('#btnReestrSYOf').disabled = false;
-      document.querySelector('#btnSearchReestrInfo').disabled = false;      
+      document.querySelector('#btnSearchReestrInfo').disabled = false;
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataFin', JSON.stringify(data));

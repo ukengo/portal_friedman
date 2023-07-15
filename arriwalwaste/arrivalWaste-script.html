@@ -337,7 +337,7 @@
       }
     }
     autoSearchOnOpen(".input-search"); // автопоиск при открытии    
-    
+
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataWaste', JSON.stringify(data));
       document.querySelector('#buttonWasteTab').disabled = false;
@@ -423,13 +423,20 @@
     if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
       google.script.run
         .withSuccessHandler(() => {
-          startDataArriwal();
+          google.script.run.withSuccessHandler((data) => {
+            sessionStorage.setItem('dataArrival', JSON.stringify(data));
+            startDataArriwal();
+          }).getLastTenRowsArriwal();
         })
         .changesRowArriwalModal(id, data);
     } else if ($("#vrabotevseArriwalWaste").text() === "Інші витрати") {
       google.script.run
         .withSuccessHandler(() => {
-          startDataWaste();
+          google.script.run.withSuccessHandler((data) => {
+            sessionStorage.setItem('dataWaste', JSON.stringify(data));
+            startDataWaste();
+          }).getLastTenRowsWaste();
+
         })
         .changesRowWasteModal(id, data);
     } else {

@@ -1,4 +1,5 @@
 <script>
+  const formaFin = new FormDataFromTables('#formFinStart');
 
   function startTableFinance() {
     $("#proektfin-datalist").empty();
@@ -106,30 +107,32 @@
       displayTable += "<input type=\"text\" id=\"up_oplataispolfin" + row_number_fin + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
 
-      displayTable += "<div class=\"col-md-1\">"
+      displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
 
-      displayTable += "<input type=\"button\" id=\"update_button_fin" + row_number_fin + "\" value=\"Update\" class=\"btn btn-danger delete-fin btn-update-fin\" /></div></div> ";
-      displayTable += "<div></div> ";
+      displayTable += "<input type=\"button\" id=\"update_button_fin" + row_number_fin + "\" value=\"Update\" class=\"btn btn-danger delete-fin btn-update-fin\" /></div>";
+
+      displayTable += `</div> `;
 
       displayTable += `
-            <div class="row checkbox-finance">     
-              <div class="col-md-auto">
-                <div class="form-check">
-                  <span class="check-style"></span>
-                  <label for="issuepartfinance1" class="form-check-label" >Виставлено</label>
-                  <input type="checkbox" id="issuepartfinance1" class="form-check-input" value="part"/>
-                </div>  
-              </div>
-              <div class="col-md-auto">
-                <div class="form-check">
-                  <span class="check-style"></span>
-                  <label for="issuecompletfinance1" class="form-check-label" >Виставлено повністю</label>
-                  <input type="checkbox" id="issuecompletfinance1" class="form-check-input" value="complet"/>
-                </div>  
-              </div>
-            </div>
-          `;
+        <div class="col-md-11 checkbox-finance">
+          <div class="form-check d-inline w-auto">
+            <span class="check-style"></span>
+            <label class="align-middle">
+              <input type="checkbox" id="issuepartfinance1" class="form-check-input" value="part">Виставлено
+            </label>
+          </div>
+          <div class="form-check d-inline w-auto align-middle">
+            <span class="check-style"></span>
+            <label>
+              <input type="checkbox" id="issuecompletfinance1" class="form-check-input" value="complet">Виставлено повністю
+            </label>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <button class="btn btn-outline-danger btn-sm d-inline w-100 shadow-none btn-clear-search btn-clear-search-finance" type="button">X</button>
+        </div>
+      `;
 
       displayTable += "</tr>";
       row_number_fin++;
@@ -184,71 +187,32 @@
   }
 
   function SearchRecordsFin(valSfFin) {
-    var proektFin = document.getElementById("proektfin").value;
-    var summaFin = document.getElementById("summafin").value;
-    var sfFin = document.getElementById("sffin").value;;
-    var priznakFin = document.getElementById("priznakfin").value;
-    var dateoplFin = document.getElementById("dateoplfin").value;
-    var primFin = document.getElementById("primfin").value;
-    var idFin = document.getElementById("idfin").value;
-    var firmaFin = document.getElementById("firmafin").value;
+    const dataArr = [proektFin, summaFin, priznakFin, dateoplFin, sfFin, idFin, primFin, firmaFin] = Object.values(formaFin.formaDataObj())
+
     if (valSfFin) {
       var sfFin = valSfFin;
     }
 
     // остановка скриипта, если не выбраны критерии поиска в инпутах (используется сторонняя функция)
-    const dataArr =
-      [
-        proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin
-      ]
-
     if (searchStop(dataArr)) {
       alert('Не внесені дані для пошуку')
       $('#btnSearchFinance').prop("disabled", false);
       return;
     }
+
     spinner('rowdatafin')
-    google.script.run.withSuccessHandler(array).searchRecordsFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin);
+    google.script.run.withSuccessHandler(array).searchRecordsFin(dataArr);
   }
 
-  /*    function SearchRecordsFinProekt1(proektFin) {
-      var summaFin = ""
-      var priznakFin = ""
-      var dateoplFin = ""
-      var sfFin = ""
-      var primFin = ""
-      var idFin = ""
-      var firmaFin = ""
-      google.script.run.withSuccessHandler(array).searchRecordsFinProekt(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin);
-    }*/
-
   function SearchRecordsFinProekt() {
-    var proektFin = document.getElementById("proektfin").value;
+    const proektFin = formaFin.formaDataObj().proektfin;
     spinner('rowdatafin')
     SearchRecordsFinProekt1(proektFin)
   }
 
-  function ClearRecordFin() {
-    document.querySelector('#formFinStart').reset();
-    
-/*     document.getElementById("proektfin").value = '';
-    document.getElementById("summafin").value = '';
-    document.getElementById("priznakfin").value = '';
-    document.getElementById("dateoplfin").value = '';
-    document.getElementById("sffin").value = '';
-    document.getElementById("primfin").value = '';
-    document.getElementById("idfin").value = '';
-    document.getElementById("firmafin").value = ''; */
-   // document.getElementById("issuepartfinance").checked = false;
-   // document.getElementById("issuecompletfinance").checked = false;
-   // document.getElementById("ispolufinance").checked = false;
-    
-    labelred();
-  }
-
   function UpdateRecordFin(row_number_fin) {
     document.getElementById("update_button_fin" + row_number_fin).disabled = true;
-    // var record_id = document.getElementById("up_record_id"+row_number_fin).value;
+
     var proektFin = document.getElementById("up_proektfin" + row_number_fin).value;
     var summaFin = document.getElementById("up_summafin" + row_number_fin).value;
     var priznakFin = document.getElementById("up_priznakfin" + row_number_fin).value;
@@ -485,18 +449,18 @@
         sessionStorage.setItem('dataFin', JSON.stringify(data));
       }).getRecordsFin();
       spinner('rowdatafin');
-      ClearRecordFin();
       if ($('#sffinModal').val()) {
         SearchRecordsFin($('#sffinModal').val());
       } else {
         SearchRecordsFinProekt1($('#proektfinModal').val());
       }
+      //formaFin.clearRecords(); 
     }).changesRowFinanceModal(id, data, checkBox);
   }
 
   $('#btnSearchFinance').click(function () {
     $('#btnSearchFinance').prop("disabled", true);
-    SearchRecordsFin()
+    SearchRecordsFin();
   })
 
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
@@ -512,7 +476,7 @@
     const text = getDataFromTd(data);
     const col = event.srcElement.cellIndex;
     if (col === 7) return false;
-    // ClearRecordFin();
+
     switch (col) {
       case 0:
         $('#proektfin').val(text[0]);

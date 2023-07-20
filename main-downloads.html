@@ -30,6 +30,7 @@
       document.querySelector('#btnReestrSFriOf').disabled = false;
       document.querySelector('#btnReestrSYOf').disabled = false;
       document.querySelector('#btnSearchReestrInfo').disabled = false;
+      btnTable();
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataFin', JSON.stringify(data));

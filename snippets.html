@@ -41,7 +41,7 @@
     noRed.forEach((item) => {
       item.style.color = '';
     });
-  };
+  }
 
   // перехват события вставки и обрезка пробелов в поле input[type="search"]
   $(document).ready(trimmingSpaces);
@@ -161,7 +161,7 @@
         if (j === col) continue
         if (yi !== i) {   // пропускаємо дублі  
           //replace(/\s/g,'') видаляє всі пробільні символи (пробіли)
-          
+
           if (arr[i][j].toLowerCase().replace(/\s/g, '').includes(value.toLowerCase().replace(/\s/g, ''))) {
             result.push(arr[i]);
             yi = i;
@@ -229,7 +229,7 @@
   */
   function getDropDownArrayOnline(dataStorage, col, flagNonUnique) {
     let arr = (JSON.parse(sessionStorage.getItem(dataStorage)).data).map(x => [x[col]]).flat();
-   const result = flagNonUnique ? arr : [...new Set(arr)];
+    const result = flagNonUnique ? arr : [...new Set(arr)];
     return result;
   }
 

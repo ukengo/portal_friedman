@@ -30,7 +30,7 @@ function addNewRowMinusThreee(rowData) {
 function addNewRowWaste(rowData) {
   const vasteDate = String(rowData.splice(0, 1));
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate));
-  dataWaste().appendRow(rowData);    
+  dataWaste().appendRow(rowData);
   return getLastTenRowsWaste();
 }
 
@@ -112,7 +112,7 @@ function getLastTenRows(sheet, list) {
 
   //добавляємо в кінець масиву номер запису
   data.forEach((el, i) => el.push(String(i)));
-  
+
   let dataMap;
 
   //видаляємо 4 стовпець
@@ -575,9 +575,8 @@ function getDateUprav(date) {
 
 ////////////////////////////////////////////////
 // financetable
-
-function searchRecordsFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin) {
-
+function searchRecordsFin(dataArr) {
+  [proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin] = dataArr;
   var returnRows = [];
   var allRecords = getRecordsFin();
 

@@ -222,13 +222,13 @@
   function editReestrFinance(data, col) {
     switch (+col) {
       case 1:
-        ClearRecordReestr();
+        formaReestr.clearRecords();
         $('.input-paste-reestr').val(data);
         $('#data-table_filter input').val(data);
         $('#nav-reestr-tab')[0].click();
         break;
       case 2:
-        ClearRecordFin()
+        formaFin.clearRecords();
         $('.input-paste-finance').val(data);
         $('#nav-fin-tab')[0].click();
         break;

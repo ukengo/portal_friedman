@@ -1,5 +1,8 @@
 <script>
 
+  const formaReestr = new FormDataFromTables('#financeAccoddion');
+
+
   function startTableReestrClear() {
     $("#firmareestr-datalist").empty();
     $("#rabotareestr-datalist").empty();
@@ -213,14 +216,18 @@
 
       displayTableReestr += "<td><div class=\"d-grid gap-2\"> ";
 
-      displayTableReestr += "<input type=\"button\" id=\"update_button_reestr" + row_number_reestr + "\" value=\"Update\" class=\"btn btn-outline-danger\" ";
+      displayTableReestr += "<input type=\"button\" id=\"update_button_reestr" + row_number_reestr + "\" value=\"Update\" class=\"btn btn-outline-danger update_button_reestr\" ";
       displayTableReestr += "onclick=\"UpdateRecordReestr(" + row_number_reestr + ")\" /> ";
+
+      displayTableReestr += `
+                              <button type="button" class="btn btn-outline-danger btn-update-plus">Update+</button>
+      `;
 
       displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr" + row_number_reestr + "\" value=\"Finance\" class=\"btn btn-outline-danger\" ";
       displayTableReestr += "onclick=\"FinanceRecordReestr(" + row_number_reestr + ")\" />";
 
       displayTableReestr += `
-                              <button type="button" class="btn btn-outline-danger btn-sm btn-clear-search">X</button>       
+                              <button type="button" class="btn btn-outline-danger  btn-clear-search">X</button>
       `;
 
       displayTableReestr += "</td>";
@@ -253,26 +260,26 @@
 
     // закриття блоку по кнопці Clear
     btnClearSearchFinance();
-  }
 
-  function ClearRecordReestr() {
-    document.getElementById("dateendreestr").value = '';
-    document.getElementById("datestartreestr").value = '';
-    document.getElementById("firmareestr").value = '';
-    document.getElementById("rabotareestr").value = '';
-    document.getElementById("coderabotareestr").value = '';
-    document.getElementById("proektreestr").value = '';
-    document.getElementById("sotrreestr").value = '';
-    document.getElementById("ispolreestr").value = '';
-    document.getElementById("sumispolreestr").value = '';
-    document.getElementById("sumoplatareestr").value = '';
-    document.getElementById("primreestr").value = '';
-    document.getElementById("primmoyoreestr").value = '';
-    document.getElementById("issuepartreestr").checked = false;
-    document.getElementById("withoutaccountreestr").checked = false;
-    document.getElementById("stoppedreestr").checked = false;
-    document.getElementById("checkDateReestr").value = '';
-    labelred();
+    // кнопка Update+
+    const updateButtonReestr = document.querySelectorAll('.update_button_reestr');
+    document.querySelectorAll('.btn-update-plus').forEach(elem => {
+
+      // приймаємо рамку на кнопці
+      elem.classList.add('shadow-none');
+
+      elem.addEventListener('click', () => {
+        updateButtonReestr.forEach(elem => elem.click());
+        Array.from(updateButtonReestr).every(elem => {
+          const interval = setInterval(() => {
+            if (elem.classList.contains('btn-outline-danger')) {
+              alert('готово');
+              clearInterval(interval);
+            }
+          }, 500);
+        });
+      });
+    });
   }
 
   function UpdateRecordReestr(row_number_reestr) {
@@ -475,7 +482,7 @@
     const data = [...event.target.parentNode.children];
     const text = getDataFromTd(data);
     const col = event.target._DT_CellIndex.column;
-    ClearRecordReestr();
+    formaReestr.clearRecords();
     switch (col) {
       case 0:
         $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
@@ -570,7 +577,7 @@
   // перехват кнопки (reestr с переходом)
   $('.btn-reestr-transition').click(function () {
     const textContent = numEndStrong(this.textContent);
-    ClearRecordReestr();
+    formaReestr.clearRecords();
     $('#proektreestr').val(textContent);
     $('#data-table_filter input').val(textContent);
     $('#btnSearchReestrInfo').html(textContent);
@@ -633,7 +640,7 @@
   document.querySelectorAll('.btn-reestr-yft').forEach(el => {
     el.addEventListener("click", function () {
       this.disabled = true;
-      ClearRecordReestr();
+      formaReestr.clearRecords();
       switch (this.id) {
         case 'btnReestrSY':
           document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
@@ -650,10 +657,11 @@
           SearchRecordsReestr(`Іде пошук на ${formatDateDDtireMMtireYYYY(new Date(Date.now()))}`);
           break;
       }
-      ClearRecordReestr();
+      formaReestr.clearRecords();
       this.disabled = false;
     })
   })
+
 
   $('#data-table').on('search.dt', function () {
     $('#data-table tr').find('td:eq(11),th:eq(11)').remove();

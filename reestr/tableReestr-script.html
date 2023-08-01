@@ -1,0 +1,695 @@
+<script>
+
+  const formaReestr = new FormDataFromTables('#financeAccoddion');
+
+
+  function startTableReestrClear() {
+    $("#firmareestr-datalist").empty();
+    $("#rabotareestr-datalist").empty();
+    $("#coderabotareestr-datalist").empty();
+    $("#proektreestr-datalist").empty();
+    $("#sotrreestr-datalist").empty();
+    $("#ispolreestr-datalist").empty();
+    $("#primreestr-datalist").empty();
+    $("#primmoyoreestr-datalist").empty();
+  }
+
+  function startTableReestr() {
+    startTableReestrClear()
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'firmareestr-datalist')
+    }).getDropDownArrayFirma()
+
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'rabotareestr-datalist')
+    }).getDropDownArrayRabota()
+
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'coderabotareestr-datalist')
+    }).getDropDownArrayCodeRabota()
+
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'proektreestr-datalist')
+    }).getDropDownArrayProekt()
+
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'sotrreestr-datalist')
+    }).getDropDownArraySotr()
+
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'ispolreestr-datalist')
+    }).getDropDownArrayIspol()
+
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'primreestr-datalist')
+    }).getDropDownArrayPrim()
+
+
+    google.script.run.withSuccessHandler((arrayOfArrays) => {
+      afterDropDownReturned(arrayOfArrays, 'primmoyoreestr-datalist')
+    }).getDropDownArrayPrimMoyoReestr()
+  }
+
+  // cрабатывание по кнопке Enter
+  function clickPressReestrSearch(event) {
+    if (event.keyCode == 13) {
+      //SearchRecordsReestr()
+    }
+  }
+  function clickPressReestrUpdate(event) {
+    if (event.keyCode == 13) {
+      UpdateRecordReestr(parseInt(document.activeElement.id.replace(/[^\d]/g, '')))
+    }
+  }
+
+  function SearchRecordsReestr(spintext) {
+    const dateendReestr = document.getElementById("dateendreestr").value;
+    const datestartReestr = document.getElementById("datestartreestr").value;
+    const firmaReestr = document.getElementById("firmareestr").value;
+    const rabotaReestr = document.getElementById("rabotareestr").value;
+    const coderabotaReestr = document.getElementById("coderabotareestr").value;
+    const proektReestr = document.getElementById("proektreestr").value;
+    const sotrReestr = document.getElementById("sotrreestr").value;
+    const ispolReestr = document.getElementById("ispolreestr").value;
+    const sumispolReestr = document.getElementById("sumispolreestr").value;
+    const sumoplataReestr = document.getElementById("sumoplatareestr").value;
+    const primReestr = document.getElementById("primreestr").value;
+    const primMoyoReestr = document.getElementById("primmoyoreestr").value;
+    const issuepartReestr = document.getElementById("issuepartreestr").checked;
+    const withoutaccountReestr = document.getElementById("withoutaccountreestr").checked;
+    const stoppedReestr = document.getElementById("stoppedreestr").checked;
+    const checkDateReestr = document.getElementById("checkDateReestr").value;
+
+
+    // остановка скриипта, если не выбраны критерии поиска в инпутах
+    const dataArr =
+      [
+        dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr
+      ]
+
+    if (searchStop(dataArr)) {
+      alert('Не введені дані')
+      // $('#btnSearchReestr').prop("disabled", false);
+      //document.querySelector()
+      return;
+    }
+
+    var row_number_reestr = 0;
+    let count = 0; // счетчик для подсчета количества остановленных при выборке
+    spinner('rowdatareestr', spintext);
+
+    google.script.run.withSuccessHandler(searchRecordsReestrTable).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr);
+  }
+
+  function searchRecordsReestrTable(ar) {
+    var row_number_reestr = 0;
+    let countStopped = 0; // счетчик для подсчета количества остановленных при выборке
+    let countClose = 0; // счетчик для подсчета количества закрытых при выборке
+    let countOpen = 0; // счетчик для подсчета количества не закрытых при выборке
+
+    var displayTableReestr = '<form>';
+    displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger\" id=\"mainTableReestr\" >';
+    displayTableReestr += "<tr>";
+    displayTableReestr += "<th></th>";
+    displayTableReestr += `
+                              <th class="text-center">
+                              <button type="button" class="w-75 btn btn-outline-danger btn-sm btn-clear-search">X</button>
+                            </th>
+                          `;
+    displayTableReestr += "</tr>";
+
+    ar.forEach(function (item, index) {
+
+      displayTableReestr += "<tr id=\"ROWNUMBER:" + row_number_reestr + "\" >";
+
+      displayTableReestr += "<td>";
+      displayTableReestr += "<div class=\"row g-1 mt-1\">";
+
+      displayTableReestr += "<div class=\"col-auto\">";
+      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата кінець</label>`;
+      displayTableReestr += "<input type=\"date\" id=\"up_dateendreestr" + row_number_reestr + "\" value=\"" + item[0] + "\" class=\"form-control form-control-sm\" /></div> ";
+
+      displayTableReestr += "<div class=\"col-auto\">";
+      displayTableReestr += `<label for=\"up_datestartreestr${row_number_reestr}">Дата початок</label> `;
+      displayTableReestr += "<input type=\"date\" id=\"up_datestartreestr" + row_number_reestr + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" />";
+      displayTableReestr += "</div>";
+
+      displayTableReestr += "<div class=\"col-md-5\">";
+      displayTableReestr += `<label for=\"up_firmareestr${row_number_reestr}">Фірма</label>`;
+      displayTableReestr += "<input type=\"text\" list=\"firmareestr-datalist\" id=\"up_firmareestr" + row_number_reestr + "\" value=\"" + item[2] + "\" class=\"form-control form-control-sm\" /> <datalist id=\"firmareestr-datalist\"></datalist></div>";
+
+      displayTableReestr += "<div class=\"col-md-2\">"
+      displayTableReestr += `<label for=\"up_rabotareestr${row_number_reestr}">Робота</label>`;
+      displayTableReestr += "<input type=\"text\" list=\"rabotareestr-datalist\" id=\"up_rabotareestr" + row_number_reestr + "\" value=\"" + item[3] + "\" class=\"form-control form-control-sm\" /><datalist id=\"rabotareestr-datalist\"></datalist></div>";
+
+      displayTableReestr += "<div class=\"col-md-1\">";
+      displayTableReestr += `<label for=\"up_coderabotareestr${row_number_reestr}">Код роб</label>`;
+      displayTableReestr += "<input type=\"text\" id=\"up_coderabotareestr" + row_number_reestr + "\" value=\"" + item[4] + "\" class=\"form-control form-control-sm\" /></div>";
+
+      displayTableReestr += "<div class=\"col-md-2\">"
+      displayTableReestr += `<label for=\"up_proektreestr${row_number_reestr}">Проєкт</label>`;
+      displayTableReestr += "<input type=\"number\" id=\"up_proektreestr" + row_number_reestr + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm fw-bold\" /></div>";
+
+
+      displayTableReestr += "<div class=\"col-auto\">"
+      displayTableReestr += `<label for=\"up_sotrreestr${row_number_reestr}">Співробітник</label>`;
+      displayTableReestr += "<input type=\"text\" list=\"sotrreestr-datalist\" id=\"up_sotrreestr" + row_number_reestr + "\" value=\"" + item[6] + "\" class=\"form-control form-control-sm\" /></div>";
+
+      displayTableReestr += "<div class=\"col-auto\">"
+      displayTableReestr += `<label for=\"up_ispolreestr${row_number_reestr}">Викон</label>`;
+      displayTableReestr += "<input type=\"text\" list=\"ispolreestr-datalist\"  id=\"up_ispolreestr" + row_number_reestr + "\" value=\"" + item[7] + "\" class=\"form-control form-control-sm fw-bold text-success\" /></div>";
+
+      displayTableReestr += "<div class=\"col-md-2\">"
+
+      displayTableReestr += `<label for=\"up_sumispolreestr${row_number_reestr}">Сума викону</label>`;
+      displayTableReestr += "<input type=\"number\" id=\"up_sumispolreestr" + row_number_reestr + "\" value=\"" + item[8] + "\" class=\"form-control form-control-sm\" /></div>";
+
+      displayTableReestr += "<div class=\"col-md-2\">"
+
+      displayTableReestr += `<label for=\"up_sumoplatareestr${row_number_reestr}">Оплата викону</label>`;
+      displayTableReestr += "<input type=\"number\" id=\"up_sumoplatareestr" + row_number_reestr + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div>";
+
+      displayTableReestr += "<div class=\"col-md-4\">"
+
+      displayTableReestr += `<label for=\"up_primreestr${row_number_reestr}">Примітки до проєкту</label>`;
+      displayTableReestr += "<input type=\"text\" list=\"primreestr-datalist\" id=\"up_primreestr" + row_number_reestr + "\" value=\"" + item[10] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primreestr-datalist\"></datalist></div>";
+
+      displayTableReestr += "<div class=\"col-md-4\">"
+      displayTableReestr += `<label for=\"up_primmoyoreestr${row_number_reestr}">Примітки мої</label>`;
+      displayTableReestr += "<input type=\"text\" list=\"primmoyoreestr-datalist\"  id=\"up_primmoyoreestr" + row_number_reestr + "\" value=\"" + item[11] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primmoyoreestr-datalist\"></datalist></div></div>";
+
+      displayTableReestr += `
+        <div class="row g-1 mt-1">
+          <div class="col-auto">
+            <div class="form-check">
+              <span class="check-style"></span>
+              <label class="form-check-label" for="up_issuepartreestr${row_number_reestr}">Виставлено частково</label> 
+              <input type="checkbox" id="up_issuepartreestr${row_number_reestr}" class="form-check-input"${check1(item[12])}/>
+              
+            </div>
+          </div>
+          <div class="col-auto">
+            <div class="form-check">
+              <span class="check-style"></span>
+              <label class="form-check-label" for="up_withoutaccountreestr${row_number_reestr}">Без рф</label> 
+              <input type="checkbox" id="up_withoutaccountreestr${row_number_reestr}" class="form-check-input"${check1(item[13])}/>
+            </div>
+          </div>
+          <div class="col-auto">
+            <div class="form-check">
+              <span class="check-style"></span>
+              <label class="form-check-label" for="up_stoppedreestr${row_number_reestr}">Зупинено</label> 
+              <input type="checkbox" id="up_stoppedreestr${row_number_reestr}" class="form-check-input"${check1(item[14])}/>
+            </div>
+          </div>
+        </div>
+      `;
+
+      displayTableReestr += "<div class='btn-delete' id=\"rowdatafin1" + row_number_reestr + "\"></div>"
+
+      displayTableReestr += "<td><div class=\"d-grid gap-2\"> ";
+
+      displayTableReestr += "<input type=\"button\" id=\"update_button_reestr" + row_number_reestr + "\" value=\"Update\" class=\"btn btn-outline-danger update_button_reestr\" ";
+      displayTableReestr += "onclick=\"UpdateRecordReestr(" + row_number_reestr + ")\" /> ";
+
+      displayTableReestr += `
+                              <button type="button" class="btn btn-outline-danger btn-update-plus">Update+</button>
+      `;
+
+      displayTableReestr += "<input type=\"button\" id=\"finance_button_reestr" + row_number_reestr + "\" value=\"Finance\" class=\"btn btn-outline-danger\" ";
+      displayTableReestr += "onclick=\"FinanceRecordReestr(" + row_number_reestr + ")\" />";
+
+      displayTableReestr += `
+                              <button type="button" class="btn btn-outline-danger  btn-clear-search">X</button>
+      `;
+
+      displayTableReestr += "</td>";
+      displayTableReestr += "</tr>";
+      row_number_reestr++;
+
+      // считаем количество остановленных
+      if (item[14]) {
+        countStopped++
+      }
+
+      // считаем количество закрытых    
+      if (item[0]) {
+        countClose++
+      }
+
+      // считаем количество не закрытых    
+      if (!item[0] && !item[14]) {
+        countOpen++
+      }
+    });
+
+    displayTableReestr += '</table></form>'
+    document.getElementById("rowdatareestr").innerHTML = displayTableReestr;
+    document.querySelector("#mainTableReestr th").innerHTML = `Закритих: ${countClose}. Не закритих: ${countOpen}. Зупинених: ${countStopped}. Всього: ${countClose + countStopped + countOpen}`;
+    // $("#rowdatareestr").attr("tabindex",-1).focus();
+    // startTableReestr()
+    $('#btnSearchReestr').prop("disabled", false);
+    clearInputClickLabel();
+
+    // закриття блоку по кнопці Clear
+    btnClearSearchFinance();
+
+    // кнопка Update+
+    const updateButtonReestr = document.querySelectorAll('.update_button_reestr');
+    document.querySelectorAll('.btn-update-plus').forEach(elem => {
+
+      // приймаємо рамку на кнопці
+      elem.classList.add('shadow-none');
+
+      elem.addEventListener('click', () => {
+        updateButtonReestr.forEach(elem => elem.click());
+        Array.from(updateButtonReestr).every(elem => {
+          const interval = setInterval(() => {
+            if (elem.classList.contains('btn-outline-danger')) {
+              alert('готово');
+              clearInterval(interval);
+            }
+          }, 500);
+        });
+      });
+    });
+  }
+
+  function UpdateRecordReestr(row_number_reestr) {
+    const btnDE = document.getElementById("update_button_reestr" + row_number_reestr);
+    btnDisable(btnDE);
+    var dateendReestr = document.getElementById("up_dateendreestr" + row_number_reestr).value;
+    var datestartReestr = document.getElementById("up_datestartreestr" + row_number_reestr).value;
+    var firmaReestr = document.getElementById("up_firmareestr" + row_number_reestr).value;
+    var rabotaReestr = document.getElementById("up_rabotareestr" + row_number_reestr).value;
+    var coderabotaReestr = document.getElementById("up_coderabotareestr" + row_number_reestr).value;
+    var proektReestr = document.getElementById("up_proektreestr" + row_number_reestr).value;
+    var sotrReestr = document.getElementById("up_sotrreestr" + row_number_reestr).value;
+    var ispolReestr = document.getElementById("up_ispolreestr" + row_number_reestr).value;
+    var sumispolReestr = document.getElementById("up_sumispolreestr" + row_number_reestr).value;
+    var sumoplataReestr = document.getElementById("up_sumoplatareestr" + row_number_reestr).value;
+    var primReestr = document.getElementById("up_primreestr" + row_number_reestr).value;
+    var primMoyoReestr = document.getElementById("up_primmoyoreestr" + row_number_reestr).value;
+    var issuepartReestr = document.getElementById("up_issuepartreestr" + row_number_reestr).checked;
+    var withoutaccountReestr = document.getElementById("up_withoutaccountreestr" + row_number_reestr).checked;
+    var stoppedReestr = document.getElementById("up_stoppedreestr" + row_number_reestr).checked;
+    google.script.run.withSuccessHandler(function (return_string) {
+      btnEnable(btnDE);
+      document.querySelector('#btnSearchReestrInfo').disabled = true;
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataReestr', JSON.stringify(data));
+        document.querySelector('#btnSearchReestrInfo').disabled = false;
+      }).getRecordsReestr();
+      google.script.run.withSuccessHandler((data) => {
+        sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));
+      }).startDataNevistvleno();
+    }).UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr);
+
+  }
+
+  function FinanceRecordReestr(row_number_reestr) {
+    const btnDE = document.getElementById("finance_button_reestr" + row_number_reestr);
+    btnDisable(btnDE);
+    sessionStorage.removeItem('test');
+    let proektFin = document.getElementById("up_proektreestr" + row_number_reestr).value;
+    SearchRecordsFinProekt1(proektFin);
+    let checkTest = setInterval(function () {
+      if (sessionStorage.getItem('test')) {
+        btnEnable(btnDE);
+        document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = sessionStorage.getItem('test');
+        const elements = document.querySelectorAll(`#rowdatafin1${row_number_reestr} .delete-fin`);
+        elements.forEach(elem => elem.remove());
+        clearInterval(checkTest);
+      }
+      // закриття блоку по кнопці Clear
+      btnClearSearchFinance();
+    }, 1);
+  }
+
+  function FinanceRecordReestrClose(row_number_reestr) {
+    document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = '';
+  }
+
+  // открытие полной таблицы проекта
+  function btnTable() {
+    if ($('.dataTables_filter input').length) { // проверка на наличие селектора
+      const valueSearch = $('.dataTables_filter input').val(); // данные в поле поиска
+      sessionStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш
+    };
+
+    $('#div-data-table').remove();
+    $('#btnTable').prop("disabled", true);
+    $('<div id="div-data-table-spinner"></div><div id="div-data-table"><div style="overflow-x:auto;"><table id="data-table" class="table table-striped table-sm table-hover table-bordered table-datatable table-line-selection "></table></div></div>').appendTo('#div-data-table-row')
+    $("#div-data-table-spinner").attr("tabindex", -1).focus();
+    spinner('div-data-table-spinner')
+    google.script.run.withSuccessHandler(showData).getData();
+
+    //tableLineSelection() //полосы в таблице
+  }
+
+  // открытие полной таблицы проектов при загрузке окна (автооткрытие)
+  searchMobile(btnTable);
+
+
+  function showData(dataArray) {
+    $(document).ready(function () {
+      // sessionStorage.setItem('DataLength', dataArray.length);//записываем в кеш длину
+      let oTable = $('#data-table').DataTable({
+        data: dataArray.map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25], x[18]]),
+        //CHANGE THE TABLE HEADINGS BELOW TO MATCH WITH YOUR SELECTED DATA RANGE
+        lengthMenu: [[25, 50, 100, 500, -1, 0], [25, 50, 100, 500, "Все", "Пусто"]],
+        responsive: true,
+        autoWidth: false,
+        order: [[11, 'desc']], // колонка 10 это номера строк, по ним сортировка
+        columnDefs: [
+          {
+            targets: [11], visible: false,
+          }, // скрываем колонку номеров сттрок
+        ],
+        columns: [
+          { "title": "Дата кінець" },
+          { "title": "Дата початок" },
+          { "title": "Фірма" },
+          { "title": "Робота" },
+          { "title": "Проєкт" },
+          { "title": "Співробітник" },
+          { "title": "Виконавець" },
+          { "title": "Сумма викону" },
+          { "title": "Оплата викону" },
+          { "title": "Примітки" },
+          { "title": "Примітки мої" },
+          { "title": "Row" },
+          { "title": "Row2" },
+        ]
+      });
+
+      //підсвітка проектів
+
+      const rowColorReestrDataTable = () => {
+        document.querySelectorAll('#data-table tbody tr').forEach(el => {
+
+          //підсвітка червоним зупинені проекти
+          if (el.innerHTML.includes('TRUE')) {
+            el.style.color = 'red';
+          }
+
+          //підсвітка зеленим не закриті проекти
+          if (el.querySelector('td').innerHTML === '') {
+            el.style.color = 'green';
+          }
+        })
+        //remove the nth column
+        $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
+      }
+
+      $('#data-table').on('draw.dt', rowColorReestrDataTable);
+      rowColorReestrDataTable();
+      //кінець підсвітки проектів
+
+      trimmingSpaces();
+      clickTableReestr();
+      document.querySelector('.dataTables_wrapper .dataTables_filter input').classList.add("form-control");
+      document.querySelector('.dataTables_wrapper .dataTables_filter input').style =
+        `border-radius: 20px;
+        width: 400px;
+        padding: 5px 14px`;
+      document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Пошук по таблиці';
+
+      // пошук при кліку на Search:
+
+
+      var a = document.querySelector('.dataTables_wrapper .dataTables_filter');
+      var b = document.querySelector('.dataTables_wrapper .dataTables_filter input');
+      var c = document.querySelector('.dataTables_wrapper .dataTables_filter label');
+      // var cName = document.querySelector('.dataTables_wrapper .dataTables_filter label[for="name"]');
+
+
+      // перезавантаження таблиці
+      var elem = document.createElement("button");
+      var elemText = document.createTextNode("Up");
+      elem.appendChild(elemText);
+      elem.classList.add('btn', 'btn-light', 'me-2', 'align-baseline', 'search-t-reestr')
+      elem.addEventListener('click', btnTable);
+      a.insertBefore(elem, c);
+
+      // считывваем из кеша данные для поиска и вставляем в поле поиска
+      const valueSearch = sessionStorage.getItem('dataTables_filter_input');
+      $('.dataTables_filter input').val(valueSearch);
+      autoSearchOnOpen('.dataTables_filter input');
+      // end
+
+      /* // при поиске если введены критерии поиска, то ищется по всей таблице, если строка поиска пустая, то отображается количество строк по умолчанию
+      $('#searchReestr').keyup(function() {
+        if(this.value === '') {
+          oTable.context["0"]._iDisplayLength = 50;  
+        }else{
+          oTable.context["0"]._iDisplayLength = -1;  
+        }
+        oTable.draw();
+      }); */
+
+    });
+    $("#div-data-table-spinner").remove()
+    $('#btnTable').prop("disabled", false);
+
+    // обробка кнопки локального редагування проекту
+    /* document.querySelector('#btnSearchReestrInfoLocal').addEventListener('click', function () {
+      const projBtnEditLoc = this.innerHTML;
+      const arreestrInfoLocal = dataArray.map(x => [formatDateYYYYtireMMtireDD(strongToDate(x[0])), formatDateYYYYtireMMtireDD(strongToDate(x[1])), x[2], x[3], x[4], x[5], x[6], x[15], strongToNumber(x[16]), strongToNumber(x[17]), x[21], x[20], (x[23]), (x[22]), (x[18])]);
+      const filt = findNumRow(arreestrInfoLocal, this.innerHTML, 5);
+      searchRecordsReestrTable([arreestrInfoLocal[filt]]);
+      document.querySelector("#mainTableReestr th").innerHTML = '';
+    }); */
+  }
+
+  //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
+  function clickTableReestr() {
+
+    clickTables('#data-table', clickTapHandling);
+  }
+
+  //обработка клика или тапа по таблице 
+  function clickTapHandling(event) {
+    if (event.target.tagName !== 'TD') return false;
+    const dataTarget = event.target.textContent;
+    const data = [...event.target.parentNode.children];
+    const text = getDataFromTd(data);
+    const col = event.target._DT_CellIndex.column;
+    formaReestr.clearRecords();
+    switch (col) {
+      case 0:
+        $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
+        break;
+      case 1:
+        $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
+        break;
+      case 2:
+        $('#firmareestr').val(text[2]);
+        break;
+      case 3:
+        $('#rabotareestr').val(text[3]);
+        break;
+      case 4:
+        $('#proektreestr').val(text[4]);
+        break;
+      case 5:
+        $('#sotrreestr').val(text[5]);
+        break;
+      case 6:
+        $('#ispolreestr').val(text[6]);
+        break;
+      case 7:
+        $('#sumispolreestr').val(strongToNumber(text[7]));
+        break;
+      case 8:
+        $('#sumoplatareestr').val(strongToNumber(text[8]));
+        break;
+      case 9:
+        $('#primreestr').val(text[9]);
+        break;
+      case 10:
+        $('#proektreestr').val(text[4]);
+        break;
+    }
+
+    labelred();
+    sessionStorage.setItem('proekt', text[4]);
+    // вставка значения из кеша на кнопку и в поле поиска таблицы
+    document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;
+    // document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
+    document.getElementById('btnSearchFinInfo').innerHTML = 'fin ' + text[4];
+    document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';
+    document.getElementById('btnSearchJobInfo').innerHTML = 'job ' + text[4];
+    document.querySelector('#data-table_filter input').value = event.target.innerHTML;
+  };
+
+  // разворачиваем коллапс при старте с настольного
+  /* function collap() {
+  $('#accordingButonReestr')[0].click();
+  }
+  searchMobile(collap); */
+
+  //обработка кнопок
+  // открытие полной таблицы проекта по клику на кнопку
+  $('#btnTable').click(btnTable)
+
+  //кнопка маленькая левая (reestr)
+  /*   $('#btnSearchReestrInfo').click(function () {
+      $("#rowdatareestr").attr("tabindex", -1).focus();
+      SearchRecordsReestr();
+    }); */
+
+  //кнопка маленькая средняя (finance plus без перехода)
+  $('#btnSearchFinPlus').click(function () {
+    sessionStorage.removeItem('test');
+    document.getElementById("btnSearchFinPlus").disabled = true;
+    const proektFin = sessionStorage.getItem('proekt');
+    $('#proektfin').val(numEndStrong(proektFin));
+    $('#searchFinance').val(numEndStrong(proektFin));
+    SearchRecordsFinProekt1(proektFin);
+    let checkTest = setInterval(function () {
+      if (sessionStorage.getItem('test')) {
+        document.getElementById("btnSearchFinPlus").disabled = false;
+        document.getElementById("SearchFinInReestr").innerHTML = sessionStorage.getItem('test');
+        const elements = document.querySelectorAll(`#SearchFinInReestr .delete-fin`);
+        elements.forEach(elem => elem.remove());
+        clearInterval(checkTest);
+      }
+      // закриття блоку по кнопці Clear
+      btnClearSearchFinance();
+    }, 1);
+  })
+
+  //кнопка маленькая средняя (finance minus без перехода)
+  /* $('#btnSearchFinMinus').click(function () {
+    document.getElementById("SearchFinInReestr").innerHTML = '';
+    document.getElementById("rowdatafin").innerHTML = '';
+  }) */
+
+
+  // перехват кнопки (reestr с переходом)
+  $('.btn-reestr-transition').click(function () {
+    const textContent = numEndStrong(this.textContent);
+    formaReestr.clearRecords();
+    $('#proektreestr').val(textContent);
+    $('#data-table_filter input').val(textContent);
+    $('#btnSearchReestrInfo').html(textContent);
+    $('#nav-reestr-tab')[0].click();
+    // $('#btnClearSearchReestr').click();
+    labelred();
+    autoSearchOnOpen('.dataTables_filter input');
+  })
+
+  /* //кнопка маленькая средняя (finance с переходом)
+  $('#btnSearchFinInfo').click(function() {
+    $('#proektfin').val(numEndStrong(this.textContent));  
+    $('#searchFinance').val(numEndStrong(this.textContent)); 
+    $('#nav-fin-tab')[0].click();
+    autoSearchOnOpen('#searchFinance');
+  }) */
+
+  /*   $('#btnSearchReestr').click(function () {
+      $('#btnSearchReestr').prop("disabled", true);
+      SearchRecordsReestr();
+    }); */
+
+  /*  $('#btnClearSearchReestr').click(function () {
+     $('#btnClearSearchReestr').prop("disabled", true);
+     $('#rowdatareestr').html('');
+     $('#btnClearSearchReestr').prop("disabled", false);
+   }); */
+
+  /*   $('#btnTable2').click(function () {
+      $('#div-data-table').remove();
+      $('#btnTable2').prop("disabled", true);
+      $('<div id="div-data-table-spinner"></div><div id="div-data-table"></div>').appendTo('#div-data-table-row')
+      $("#div-data-table-spinner").attr("tabindex", -1).focus();
+      spinner('div-data-table-spinner');
+      google.script.run.withSuccessHandler(showDataReestr).getData2();
+    }); */
+
+  $('#clearBtnTable').click(function () {
+    $('#clearBtnTable').prop("disabled", true);
+    $('#div-data-table').remove();
+    document.getElementById('btnSearchReestrInfo').innerHTML = '';
+    document.getElementById('btnSearchFinInfo').innerHTML = '';
+    document.getElementById('btnSearchJobInfo').innerHTML = '';
+    $('#clearBtnTable').prop("disabled", false);
+  })
+
+  // кнопка аккордеона
+  $('#accordingButonReestr').click(accordingButon);
+  function accordingButon() {
+    if ($('#accordingButonReestr').attr('class') == 'accordion-button collapsed') {
+      $('#accordingButonReestr').text('Розвернути форму');
+    } else {
+      $('#accordingButonReestr').text('Звернути форму');
+    };
+  };
+
+  accordingButon();
+
+  // кнопки вчора + п'ятниця + сьогодні 
+  document.querySelectorAll('.btn-reestr-yft').forEach(el => {
+    el.addEventListener("click", function () {
+      this.disabled = true;
+      formaReestr.clearRecords();
+      switch (this.id) {
+        case 'btnReestrSY':
+          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+          SearchRecordsReestr(`Іде пошук на ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000))}`);
+          break;
+        case 'btnReestrSFri':
+          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
+          document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+          document.getElementById("checkDateReestr").value = '<';
+          SearchRecordsReestr(`Іде пошук з ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000 * 3))} по ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000))}`);
+          break;
+        case 'btnReestrST':
+          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
+          SearchRecordsReestr(`Іде пошук на ${formatDateDDtireMMtireYYYY(new Date(Date.now()))}`);
+          break;
+      }
+      formaReestr.clearRecords();
+      this.disabled = false;
+    })
+  })
+
+
+  $('#data-table').on('search.dt', function () {
+    $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
+  });
+
+  //перестановка дат
+  document.querySelectorAll('.form-reestr-date').forEach(elem => {
+    elem.addEventListener('change', permutationOfDates);
+  });
+
+  function permutationOfDates() {
+    const dateendReestrElem = document.getElementById("dateendreestr");
+    const datestartReestrElem = document.getElementById("datestartreestr");
+    const dateendReestr = formatDateYYYYtireMMtireDD(new Date(dateendReestrElem.value));
+    const datestartReestr = formatDateYYYYtireMMtireDD(new Date(datestartReestrElem.value));
+
+    if (dateendReestr != 'NaN-NaN-NaN' && datestartReestr != 'NaN-NaN-NaN') {
+      if (dateendReestr < datestartReestr) {
+        dateendReestrElem.value = datestartReestr;
+        datestartReestrElem.value = dateendReestr;
+      }
+    }
+  }
+
+  //кнопка маленькая левая1 (reestr)
+  /*   $('#btnSearchReestrInfo').click(function () {
+      $("#rowdatareestr").attr("tabindex", -1).focus();
+      SearchRecordsReestr();
+    }); */
+
+</script>

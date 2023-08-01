@@ -1,0 +1,129 @@
+<script>
+  ////INSPEKTOR
+  function buttonClickInspektor() {
+    clearDiv();
+    spinner('results');
+    hideBtnBuh();
+    addSearchPanel('results');
+    buildTableInspSearch();
+    openModalInsp();
+    // все кнопки с бухгалтера enabled
+    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
+  }
+
+  // пошук не пошук
+  function buildTableInspSearch() {
+    const dataInspektor = JSON.parse(sessionStorage.getItem('dataInspektor'));
+    const searhNodeInsp = document.querySelector('#input-search-insp');
+    let dataInspektorArr = '';
+    if (searhNodeInsp.value) {
+
+      // пошук по інспектору
+      dataInspektorArr = findInTable(dataInspektor, searhNodeInsp.value, 1)
+
+    } else {
+      dataInspektorArr = dataInspektor;
+    }
+    buildTableInsp(dataInspektorArr, 'tableInsp');
+  }
+
+  //будуємо таблицю інспектора
+  function buildTableInsp(dataInspektorArr, elem) {
+    let result = "<div class='col-xl-6 radius p-2'><table id='tableInspektor' data-bs-toggle=\"modal\" data-bs-target=\"#inspektorModal\" class='table table-sm'>";
+    result += "<tr><th>Виконавець</th><th>Сума, грн</th><td>"
+    for (let i = 0; i < dataInspektorArr.length; i++) {
+      result += "<tr>";
+      for (let j = 0; j < dataInspektorArr[i].length; j++) {
+        result += "<td>" + dataInspektorArr[i][j] + "</td>";
+      }
+      result += "</tr>";
+    }
+    result += "</table></div>";
+    document.getElementById(elem).innerHTML = result;
+  }
+
+  //будуємо панель пошуку
+  function addSearchPanel(elem) {
+    let result = `
+      <div class="row">
+        <div id="searchInsp">
+            <input type="search" id="input-search-insp" class="form-control input-search" placeholder="Пошук по інспекторах">
+        </div>
+        <div id="tableInsp"></div>
+      </div>      
+      `;
+    document.getElementById(elem).innerHTML = result;
+    const elemSearchInsp = document.querySelector('#input-search-insp');
+    elemSearchInsp.addEventListener('click', buildTableInspSearch);
+    elemSearchInsp.addEventListener('keyup', buildTableInspSearch);
+    elemSearchInsp.addEventListener('input', buildTableInspSearch);
+  }
+
+  // пошук по інспектору
+  function searchValueInsp() {
+    const arr = JSON.parse(sessionStorage.getItem('dataInspektor'));
+    const value = searhValueNodeInsp.value;
+    const data = findInTable(arr, value, 1);
+  }
+
+  function openModalInsp() {
+    document.addEventListener('click', function (event) {
+      if (event.target.nodeName === 'TD') {
+
+        //  const insp = event.target.textContent;
+        const insp = valueCellCol(event.target, 0);
+        const dataReestr = JSON.parse(sessionStorage.getItem('dataReestr'));
+        const data = dataReestr.map(x => [x[5], x[2], x[7], x[8], x[9]]).filter(x => (x[3] != x[4]));
+        debtsToInspectors(data.filter(x => (x[2] === insp)));
+      }
+    })
+  }
+
+  function debtsToInspectors(dataArray) {
+    let result = "<table id='tableInspektorModal'  class='table table-sm'>";
+    result += "<tr><th>Проєкт</th><th>Фірма</th><th>Виконавець</th><th>Сума</th><td>"
+    for (let i = 0; i < dataArray.length; i++) {
+      result += "<tr>";
+      for (let j = 0; j < dataArray[i].length; j++) {
+        result += "<td>" + dataArray[i][j] + "</td>";
+      } result += "</tr>";
+    }
+    result += "</table>";
+
+    document.getElementById('results-modal').innerHTML = result;
+    btnInspModal();
+  }
+
+  // клик по таблице модалки, запоминание номера проекта и переход на финансы
+  function btnInspModal() {
+    $('#tableInspektorModal tr td').bind('click', function () {
+      const proekt = valueCellCol(this, 0);
+      sessionStorage.removeItem('proekt')
+      sessionStorage.setItem('proekt', proekt);
+      const dataTarget = event.target.textContent;
+      formaReestr.clearRecords();
+      $('.btn-close').click();
+      $('#btnSearchFinMinus').click();
+      $('#btnClearSearchFinance').click();
+      $('#proektreestr').val(proekt);
+      $('#data-table_filter input').val(dataTarget);
+      $('#btnSearchReestrInfo').html(proekt);
+      $('#btnSearchFinInfo').html('fin ' + proekt);
+      $('#btnSearchFinPlus').html('fin+');
+      $('#btnSearchFinMinus').html('fin-');
+      $('#btnSearchJobInfo').html('job ' + proekt);
+      $('#nav-reestr-tab')[0].click();
+      $('#btnClearSearchReestr').click();
+      autoSearchOnOpen('.dataTables_filter input');
+      /* $('.btn-close').click();
+      $('#btnClearSearchFinance').click();
+      $('#nav-fin-tab')[0].click();
+      $('#proektfin').val(proekt);
+      $('#searchFinance').val(proekt);
+      autoSearchOnOpen('#searchFinance'); */
+    })
+  }
+
+  ////END INSPEKTOR
+
+</script>

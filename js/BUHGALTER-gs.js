@@ -43,8 +43,7 @@ function buhgalterTable() {
       const sheetBot = SpreadsheetApp.openById('1dY62dP8R3iTwyoNLvEeEJn5thoC-56Pb4ZNtZJsHGu4')
         .getSheetByName('bot')
       const valueBot = sheetBot.getRange(13, 1).getDisplayValue()
-      readLastRow(valueBot)
-      console.log('Виконано')
+      readLastRow(valueBot)      
       return arrPortal
     }
   } else {

@@ -4,4 +4,9 @@ node_modules
 package-lock.json
 package.json
 .vscode/
+<<<<<<< HEAD
 .clasp.json
+=======
+.claspignore
+clasp.json
+>>>>>>> class

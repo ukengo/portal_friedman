@@ -22,7 +22,7 @@
     document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
         el.addEventListener("click", function () {
             this.disabled = true;
-            ClearRecordReestr();
+            formaReestr.clearRecords();
             const dataReestr = JSON.parse(sessionStorage.getItem('dataReestr'));
             switch (this.id) {
                 case 'btnReestrSYOf':
@@ -40,7 +40,7 @@
                     SearchRecordsReestrLocal(dataReestr, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now()))}`);
                     break;
             }
-            ClearRecordReestr();
+            formaReestr.clearRecords();
             this.disabled = false;
         })
     })

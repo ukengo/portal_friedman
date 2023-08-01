@@ -1,0 +1,199 @@
+<script>
+
+  searchMobileNot(() => {
+    $('.arrow').slideToggle();
+  });
+
+  //функция снятия жирного шрифта при щелчке на левое меню
+  const removeNavBuhActive = () => $(".btn-buh").removeClass('nav-buh-active');
+
+  // применение жирного шрифта при щелчке на левое меню
+  $(".btn-buh").click(function () {
+    removeNavBuhActive();
+    $(this).addClass('nav-buh-active');
+  });
+
+  //показать стрелку на мобильном 
+  function hideBtnBuh() {
+    searchMobileNot(() => {
+      $('.btn-hide').hide(350);         
+      $('.bi-arrow-left').attr('visibility', 'visible');
+      $('.arrow').slideToggle();
+    });
+  }
+
+  //убрать стрелку на мобильном
+  $(".bi-arrow-left").click(function () {
+    $('.btn-hide').show();
+    $('.bi-arrow-left').attr('visibility', 'hidden');    
+    $('.arrow').slideToggle();
+    clearDiv();
+    removeNavBuhActive();
+  });
+
+  function clearDiv() {
+    document.getElementById('results').innerHTML = '';
+  }
+
+  //обработка кнопок
+  $('.buttons-buh li button').bind('click', function () {
+    sessionStorage.setItem('buttonsBuhLiButton', '#' + this.id);
+    // все кнопки с бухгалтера disabled
+    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = true);
+
+    switch ('#' + this.id) {
+      case '#buttonBuh':
+        buttonClickBuh();
+        break;
+      case '#buttonNevistavleno':
+        startDataNevistvleno();
+        break;
+      case '#buttonNeoplacheno':
+        startDataNeoplacheno();
+        break;
+      case '#buttonVraboteR':
+        startDataVraboteR();
+        break;
+      case '#buttonVraboteT':
+        startDataVraboteT();
+        break;
+      case '#buttonTermSum':
+        buttonClickTermSum();
+        break;
+      case '#buttonSotr2':
+        startDataSotr2();
+        break;
+      case '#buttonDateSost':
+        buttonClickDateSost();
+        break;
+      case '#buttonInspektor':
+        buttonClickInspektor();
+        break;
+      case '#buttonCashe':
+        buttonClickCashe();
+        break;
+    }
+  });
+
+
+  /* архивный SOTR*/
+  /*
+  $('#buttonSotr').bind('click', startDataSotr);
+    function startDataSotr(){
+      clearDiv()
+      spinner('results')
+      hideBtnBuh()
+      //buttonClickBuh()
+      startDataSotrCount()
+      startDataSotrDataLazorenko()
+     // startDataSotrDataDilanjan()
+      startDataSotrDataKinzerskiy()
+      startDataSotrDataZinonkina()
+    }
+  
+    function startDataSotrCount(){
+      google.script.run.withSuccessHandler(createTableSotrCount).startDataSotrGs();
+    }
+   
+    function startDataSotrDataLazorenko(){
+      google.script.run.withSuccessHandler(function createTableSotrLazorenko(arr){
+          const dataArraySotr = arr.resLazorenko
+          const nameSotr = arr.nameLazorenko
+          const countSotr = arr.countLazorenko
+          createTableSotData(dataArraySotr,nameSotr,1,countSotr)})
+          .startDataSotrGs();
+    }
+  
+    function startDataSotrDataDilanjan(){
+      google.script.run.withSuccessHandler(function createTableSotrDilanjan(arr){
+          const dataArraySotr = arr.resDilanjan
+          const nameSotr = arr.nameDilanjan
+          const countSotr = arr.countDilanjan
+          createTableSotData(dataArraySotr,nameSotr,2,countSotr)})
+          .startDataSotrGs();
+    }
+  
+    function startDataSotrDataKinzerskiy(){
+      google.script.run.withSuccessHandler(function createTableSotrKinzerskiy(arr){
+          const dataArraySotr = arr.resKinzerskiy
+          const nameSotr = arr.nameKinzerskiy
+          const countSotr = arr.countKinzerskiy
+          createTableSotData(dataArraySotr,nameSotr,3,countSotr)})
+          .startDataSotrGs();
+    }
+    
+    function startDataSotrDataZinonkina(){
+      google.script.run.withSuccessHandler(function createTableSotrZinonkina(arr){
+          const dataArraySotr = arr.resZinonkina
+          const nameSotr = arr.nameZinonkina
+          const countSotr = arr.countZinonkina
+          createTableSotData(dataArraySotr,nameSotr,4,countSotr)})
+          .startDataSotrGs();
+    }
+  
+    function createTableSotrCount(dataArray) {
+    const dataArrayCount = [
+                            [dataArray.nameLazorenko, dataArray.countLazorenko],
+                           // [dataArray.nameDilanjan, dataArray.countDilanjan],
+                            [dataArray.nameKinzerskiy, dataArray.countKinzerskiy],
+                            [dataArray.nameZinonkina, dataArray.countZinonkina],
+                            ]
+    
+        if(dataArrayCount){
+        var result = "<table class='table table-striped table-sm' style='font-size:0.9em'>"
+        
+        for(var i=0; i<dataArrayCount.length; i++) {
+            result += "<tr>";
+            
+            for(var j=0; j<dataArrayCount[i].length; j++){
+                result += "<td>"+dataArrayCount[i][j]+"</td>";
+            }
+            result += "</tr>";
+        }
+        result += "</table>";
+        result = "<h5 class='d-flex justify-content-center'>Sotr</h5>" + result;
+        var div = document.getElementById('results');
+        div.innerHTML = result;
+             
+       } else {
+        var div = document.getElementById('results');
+        div.innerHTML = "Data not found!";      
+      } 
+  } 
+  
+   
+    
+    function createTableSotData(dataArraySotr,nameSotr,item,countSotr) {
+     
+     dataArraySotr.slice()
+     dataArraySotr.splice(0, 2)
+     dataArraySotr = dataArraySotr.map(x => [x[1],x[2],x[3],x[4]])
+     
+        if(dataArraySotr){
+        let result = "<table class='table table-striped table-sm' style='font-size:0.9em'>"+
+                     "<thead style='white-space: nowrap'><tr>"
+          for(let i=0; i<dataArraySotr[0].length; i++){
+                result += "<th>"+dataArraySotr[0][i]+"</th>";
+            }               
+        result += "</tr>"+"</thead>";
+        for(let i=1; i<dataArraySotr.length; i++) {
+            result += `<tr valign="middle">`;
+            
+            for(let j=0; j<dataArraySotr[i].length; j++){
+                result += "<td>"+dataArraySotr[i][j]+"</td>";
+            }
+            result += "</tr>";
+        }
+        result += "</table>";
+        let div = document.getElementById('results'+item);
+        div.innerHTML = result;
+        document.getElementById('results'+item).innerHTML = nameSotr +' - '+ countSotr
+       } else {
+        var div = document.getElementById('results'+item);
+        div.innerHTML = "Data not found!";
+      }
+   
+  */
+  /* конец архивного SOTR */
+
+</script>

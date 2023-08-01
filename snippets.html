@@ -1,0 +1,236 @@
+<script>
+
+  // подсветка инпута при наличии данных (фон инпута)
+  /* $(".form-background-color input").change(function(){
+    
+      const val = $(this).val();
+      if(val) {
+        $(this).css('backgroundColor', '#F7DBE6');
+      } else {
+        $(this).css('backgroundColor', '');
+      }
+  }); */
+
+  // подсветка инпута при наличии данных при вводе (шрифт лабела)
+  /* $(".form-background-color input").change(function(){
+      const val = $(this).val();
+      if(val) {
+        $("label[for='" + $(this).attr('id') + "']").css('color', 'red');
+      } else {
+        $("label[for='" + $(this).attr('id') + "']").css('color', '');
+      }
+  }); */
+
+  // подсветка инпута при наличии данных при щелчке любом (шрифт лабела)
+  document.querySelector("body").addEventListener("input", labelred);
+
+  function labelred() {
+    const nodes = document.querySelectorAll('.form-background-color input, .form-background-color select');
+    const values = Array.from(nodes).map(inputElement => inputElement.value);
+    const noRed = Array.from($('.checkbox-finance .form-check-label'));
+    values.forEach((item, el) => {
+      item = item == 'on' ? '' : item;
+      if (item) {
+        document.querySelector("label[for='" + document.querySelectorAll('.form-background-color input, .form-background-color select')[el]
+          .getAttribute('id') + "']").style.color = '#dc3545';
+      } else {
+        document.querySelector("label[for='" + document.querySelectorAll('.form-background-color input, .form-background-color select')[el]
+          .getAttribute('id') + "']").style.color = '';
+      }
+    });
+    noRed.forEach((item) => {
+      item.style.color = '';
+    });
+  }
+
+  // перехват события вставки и обрезка пробелов в поле input[type="search"]
+  $(document).ready(trimmingSpaces);
+  function trimmingSpaces() {
+    var lastKeyCode = 0;
+    $('input[type="search"]').bind('keydown', function (e) {
+      lastKeyCode = e.keyCode;
+    });
+    // Bind on the input having changed.  As long as the previous character
+    // was not a space, BS or Del, trim the input.
+    $('input[type="search"]').bind('input', function (e) {
+      if (lastKeyCode != 32 && lastKeyCode != 8 && lastKeyCode != 46) {
+        $(this).val($(this).val().replace(/^\s+|\s+$/g, ''));
+      }
+    });
+  }
+
+  //очистка inputa щелчком по label и удаление красной расскраски
+  /* $("label").click(function () {
+    $(this).next().val('');
+    $(this).removeAttr('style');
+  }) */
+
+  clearInputClickLabel();
+  function clearInputClickLabel() {
+    document.querySelectorAll('label').forEach(el => el.addEventListener('click', function () {
+      this.removeAttribute('style');
+      const id = this.getAttribute('for');
+      if (!id) return;
+      document.getElementById(id).value = '';
+    }))
+  }
+
+  // очистка поля поиска прищелчке на крестике
+  document.querySelector('body').addEventListener('input', () => {
+    $('.input-search').triggerHandler('keyup');
+  })
+
+  // Функция удаления всего кроме текста (регулярное выражение)
+  function deleteExceptText(data) {
+    return data.replace(/[^a-zа-яё]/gi, '');
+  }
+
+  //Получаем значение определеннной ячейки определенного столбца таблицы при клике на таблицу
+  function valueCellCol(this_, colIndex) {
+    return $(this_).parent()[colIndex].childNodes[colIndex].innerHTML;
+  }
+
+  // проверяем форму на наличие чекбоксов или радиокнопок
+  const isCheckboxOrRadio = type => ['checkbox', 'rsdio'].includes(type);
+
+
+  // собираем данные форм в массив
+  function serializeForm(formNode) {
+    let res = [];
+    for (let field of formNode) {
+      const { name } = field;
+      if (name) {
+        const { type, checked, value } = field;
+        res[name] = isCheckboxOrRadio(type) ? checked : value;
+      }
+    }
+    // преобразовываем объект в массив данных
+    res = (Object.values(res));
+    return res;
+  }
+
+  // собираем данные форм в массив v2
+  function serializeFormV2(formId) {
+    let array = [];
+    Array.from(document.getElementById(formId).elements)
+      .forEach((element) => {
+        const value = element.type === 'checkbox' ? element.checked : element.value;
+        array.push(value);
+      })
+    return array
+  }
+
+  // собираем данные форм в массив v3
+  const serializeFormV3 = (formId) => {
+    const formElement = document.getElementById(formId);
+    const formData = new FormData(formElement);
+    const values = Object.fromEntries(formData.entries());
+    return values;
+  }
+
+  // Визначення номера строчки по значенню элемента стрчки.
+  function findNumRow(arr, value, numEl) {
+    for (var i = 0; i < arr.length; i++)
+      if (arr[i][numEl] == value)
+        return i;
+  }
+
+  function check1(item) {
+    if (item === true || item === 'TRUE') {
+      return 'checked'
+    } else {
+      return ''
+    }
+  }
+
+  // перетворення числа в додатне в полях "Сума" і "Кількість приват"
+  document.querySelectorAll('.num-plus').forEach(el => {
+    el.addEventListener('input', function () {
+      if (this.value < 0) {
+        this.value = -this.value
+      }
+    })
+  })
+
+  // пошук по таблиці де col - номер колонки, який ппропускається при пошуку
+  function findInTable(arr, value, col) {
+    const result = [];
+    let yi = '';
+    for (var i = 0; i < arr.length; i++) {
+      for (var j = 0; j < arr[i].length; j++) {
+        if (j === col) continue
+        if (yi !== i) {   // пропускаємо дублі  
+          //replace(/\s/g,'') видаляє всі пробільні символи (пробіли)
+
+          if (arr[i][j].toLowerCase().replace(/\s/g, '').includes(value.toLowerCase().replace(/\s/g, ''))) {
+            result.push(arr[i]);
+            yi = i;
+          }
+        }
+      }
+    }
+    return (result);
+  }
+
+  // сума по відфільтрованій таблиці
+  function summaTrFiltered(IdTable, IdElSumma) {
+    const trNone = document.querySelector(IdTable);
+    const trNone1 = getComputedStyle(trNone).display;
+    const tr = document.querySelectorAll(`${IdTable} tr`);
+    const divSummaFinance = document.querySelector(IdElSumma);
+    let sum = 0;
+    if (trNone1 === 'none') {
+      divSummaFinance.innerText = ``;
+      return false
+    }
+    for (let i = 0; i < tr.length; i++) {
+      if (tr[i].style.display != 'none') {
+        sum += strongToNumber(tr[i].getElementsByTagName("td")[1].innerText) * 1;
+      }
+    }
+    divSummaFinance.innerText = `Разом: ${sum.toFixed(2)} грн`;
+  }
+
+  // заміна switch
+  function changeSwitch(datas, data) {
+    return (datas[data]);
+  }
+
+  // закриття блоку по кнопці Clear
+  const btnClearSearchFinance = () => {
+    document.querySelectorAll('.btn-clear-search').forEach(elem => elem.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-delete')) {
+        document.querySelector('body').scrollIntoView();
+        e.target.closest('.btn-delete').innerHTML = '';
+      }
+      // якщо на кнопці є клас btn-clear-search-finance, то закрити блок і на сторінці фінансів
+      if (e.target.classList.contains('btn-clear-search-finance')) {
+        document.querySelector('#rowdatafin').innerHTML = '';
+      }
+    }))
+  }
+
+  const btnDisable = (btn) => {
+    btn.classList.remove('btn-outline-danger')
+    btn.classList.add('btn-danger');
+  }
+
+  const btnEnable = (btn) => {
+    btn.classList.remove('btn-danger');
+    btn.classList.add('btn-outline-danger');
+  }
+
+  //////////////////////////////
+  // Вібір для формування выпадаючих списків
+
+  // Общая функция
+  /**
+  flagNonUnique - это флаг, отвечающий за не уникальность. Если он true, то берется массив всех данных. Если он пропущен, то берется массив только уникальных данных.
+  */
+  function getDropDownArrayOnline(dataStorage, col, flagNonUnique) {
+    let arr = (JSON.parse(sessionStorage.getItem(dataStorage)).data).map(x => [x[col]]).flat();
+    const result = flagNonUnique ? arr : [...new Set(arr)];
+    return result;
+  }
+
+</script>

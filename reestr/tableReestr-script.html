@@ -82,7 +82,7 @@
     const sumoplataReestr = document.getElementById("sumoplatareestr").value;
     const primReestr = document.getElementById("primreestr").value;
     const primMoyoReestr = document.getElementById("primmoyoreestr").value;
-    const issuepartReestr = document.getElementById("issuepartreestr").checked;
+    const issuepartReestr = do6cument.getElementById("issuepartreestr").checked;
     const withoutaccountReestr = document.getElementById("withoutaccountreestr").checked;
     const stoppedReestr = document.getElementById("stoppedreestr").checked;
     const checkDateReestr = document.getElementById("checkDateReestr").value;
@@ -114,76 +114,91 @@
     let countClose = 0; // счетчик для подсчета количества закрытых при выборке
     let countOpen = 0; // счетчик для подсчета количества не закрытых при выборке
 
-    var displayTableReestr = '<form>';
-    displayTableReestr += '<table onkeypress=\"clickPressReestrUpdate(event)\" class=\"table table-bordered border-danger\" id=\"mainTableReestr\" >';
-    displayTableReestr += "<tr>";
-    displayTableReestr += "<th></th>";
-    displayTableReestr += `
-                              <th class="text-center">
-                              <button type="button" class="w-75 btn btn-outline-danger btn-sm btn-clear-search">X</button>
-                            </th>
-                          `;
-    displayTableReestr += "</tr>";
-
+    var displayTableReestr = `
+    <form>
+      <table onkeypress="clickPressReestrUpdate(event)" class="table table-bordered border-danger" id="mainTableReestr">
+        <tr>
+          <th></th>
+          <th class="text-center">
+            <button type="button" class="w-75 btn btn-outline-danger btn-sm btn-clear-search">X</button>
+          </th>
+        </tr>
+      `
     ar.forEach(function (item, index) {
 
-      displayTableReestr += "<tr id=\"ROWNUMBER:" + row_number_reestr + "\" >";
+      displayTableReestr += `
+        <tr id="ROWNUMBER:${row_number_reestr}">
+          <td>
+            <div class="row g-1 mt-1">        
+      `;
+      
+      displayTableReestr += `
+        <div class="col-auto">
+          <label for="up_dateendreestr${row_number_reestr}">Дата кінець</label>
+          <input type="date" id="up_dateendreestr${row_number_reestr}" value="${item[0]}" class="form-control form-control-sm"></div>      
+      
+        <div class="col-auto">
+          <label for="up_datestartreestr${row_number_reestr}">Дата початок</label>
+            <input type="date" id="up_datestartreestr"${row_number_reestr}" value="${item[1]}" class="form-control form-control-sm">
+        </div>
+      
+        <div class="col-md-5">
+          <label for="up_firmareestr${row_number_reestr}">Фірма</label>
+          <input type="text" list="firmareestr-datalist" id="up_firmareestr"${row_number_reestr}" value="${item[2]}" class="form-control form-control-sm>
+            <datalist id="firmareestr-datalist"></datalist>
+        </div>
+      `;
 
-      displayTableReestr += "<td>";
-      displayTableReestr += "<div class=\"row g-1 mt-1\">";
+      displayTableReestr += `
+        <div class="col-md-2">
+          <label for="up_rabotareestr${row_number_reestr}">Робота</label>
+          <input type="text" list="rabotareestr-datalist" id="up_rabotareestr"${row_number_reestr}" value="${item[3]}" class="form-control form-control-sm">
+            <datalist id="rabotareestr-datalist"></datalist>
+        </div>
+      
+        <div class="col-md-1">
+          <label for="up_coderabotareestr${row_number_reestr}">Код роб</label>
+          <input type="text" id="up_coderabotareestr"${row_number_reestr}" value="${item[4]}" class="form-control form-control-sm">
+        </div>
+      
+        <div class="col-md-2">
+          <label for="up_proektreestr${row_number_reestr}">Проєкт</label>
+          <input type="number" id="up_proektreestr"${row_number_reestr}" value="${item[5]}" class="form-control form-control-sm fw-bold">
+        </div>
 
-      displayTableReestr += "<div class=\"col-auto\">";
-      displayTableReestr += `<label for="up_dateendreestr${row_number_reestr}">Дата кінець</label>`;
-      displayTableReestr += "<input type=\"date\" id=\"up_dateendreestr" + row_number_reestr + "\" value=\"" + item[0] + "\" class=\"form-control form-control-sm\" /></div> ";
+        <div class="col-auto">
+          <label for="up_sotrreestr${row_number_reestr}">Співробітник</label>
+          <input type="text" list="sotrreestr-datalist" id="up_sotrreestr"${row_number_reestr}" value="${item[6]}" class="form-control form-control-sm">
+        </div>
 
-      displayTableReestr += "<div class=\"col-auto\">";
-      displayTableReestr += `<label for=\"up_datestartreestr${row_number_reestr}">Дата початок</label> `;
-      displayTableReestr += "<input type=\"date\" id=\"up_datestartreestr" + row_number_reestr + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" />";
-      displayTableReestr += "</div>";
+        <div class="col-auto">
+          <label for="up_ispolreestr${row_number_reestr}">Викон</label>
+          <input type="text" list="ispolreestr-datalist"  id="up_ispolreestr"${row_number_reestr}" value="${item[7]}" class="form-control form-control-sm fw-bold text-success">
+        </div>
 
-      displayTableReestr += "<div class=\"col-md-5\">";
-      displayTableReestr += `<label for=\"up_firmareestr${row_number_reestr}">Фірма</label>`;
-      displayTableReestr += "<input type=\"text\" list=\"firmareestr-datalist\" id=\"up_firmareestr" + row_number_reestr + "\" value=\"" + item[2] + "\" class=\"form-control form-control-sm\" /> <datalist id=\"firmareestr-datalist\"></datalist></div>";
+        <div class="col-md-2">
+          <label for="up_sumispolreestr${row_number_reestr}">Сума викону</label>
+          <input type="number" id="up_sumispolreestr"${row_number_reestr} " value="${item[8]}" class="form-control form-control-sm">
+        </div>      
+      
+        <div class="col-md-2">
+          <label for="up_sumoplatareestr${row_number_reestr}">Оплата викону</label>
+            <input type="number" id="up_sumoplatareestr"${row_number_reestr}" value="${item[9]}" class="form-control form-control-sm">
+        </div>
 
-      displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += `<label for=\"up_rabotareestr${row_number_reestr}">Робота</label>`;
-      displayTableReestr += "<input type=\"text\" list=\"rabotareestr-datalist\" id=\"up_rabotareestr" + row_number_reestr + "\" value=\"" + item[3] + "\" class=\"form-control form-control-sm\" /><datalist id=\"rabotareestr-datalist\"></datalist></div>";
+        <div class="col-md-4">
+          <label for="up_primreestr${row_number_reestr}">Примітки до проєкту</label>
+          <input type="text" list="primreestr-datalist" id="up_primreestr"${row_number_reestr}" value="${item[10]}" class="form-control form-control-sm">
+            <datalist id="primreestr-datalist"></datalist>
+        </div>
 
-      displayTableReestr += "<div class=\"col-md-1\">";
-      displayTableReestr += `<label for=\"up_coderabotareestr${row_number_reestr}">Код роб</label>`;
-      displayTableReestr += "<input type=\"text\" id=\"up_coderabotareestr" + row_number_reestr + "\" value=\"" + item[4] + "\" class=\"form-control form-control-sm\" /></div>";
-
-      displayTableReestr += "<div class=\"col-md-2\">"
-      displayTableReestr += `<label for=\"up_proektreestr${row_number_reestr}">Проєкт</label>`;
-      displayTableReestr += "<input type=\"number\" id=\"up_proektreestr" + row_number_reestr + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm fw-bold\" /></div>";
-
-
-      displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += `<label for=\"up_sotrreestr${row_number_reestr}">Співробітник</label>`;
-      displayTableReestr += "<input type=\"text\" list=\"sotrreestr-datalist\" id=\"up_sotrreestr" + row_number_reestr + "\" value=\"" + item[6] + "\" class=\"form-control form-control-sm\" /></div>";
-
-      displayTableReestr += "<div class=\"col-auto\">"
-      displayTableReestr += `<label for=\"up_ispolreestr${row_number_reestr}">Викон</label>`;
-      displayTableReestr += "<input type=\"text\" list=\"ispolreestr-datalist\"  id=\"up_ispolreestr" + row_number_reestr + "\" value=\"" + item[7] + "\" class=\"form-control form-control-sm fw-bold text-success\" /></div>";
-
-      displayTableReestr += "<div class=\"col-md-2\">"
-
-      displayTableReestr += `<label for=\"up_sumispolreestr${row_number_reestr}">Сума викону</label>`;
-      displayTableReestr += "<input type=\"number\" id=\"up_sumispolreestr" + row_number_reestr + "\" value=\"" + item[8] + "\" class=\"form-control form-control-sm\" /></div>";
-
-      displayTableReestr += "<div class=\"col-md-2\">"
-
-      displayTableReestr += `<label for=\"up_sumoplatareestr${row_number_reestr}">Оплата викону</label>`;
-      displayTableReestr += "<input type=\"number\" id=\"up_sumoplatareestr" + row_number_reestr + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div>";
-
-      displayTableReestr += "<div class=\"col-md-4\">"
-
-      displayTableReestr += `<label for=\"up_primreestr${row_number_reestr}">Примітки до проєкту</label>`;
-      displayTableReestr += "<input type=\"text\" list=\"primreestr-datalist\" id=\"up_primreestr" + row_number_reestr + "\" value=\"" + item[10] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primreestr-datalist\"></datalist></div>";
-
-      displayTableReestr += "<div class=\"col-md-4\">"
-      displayTableReestr += `<label for=\"up_primmoyoreestr${row_number_reestr}">Примітки мої</label>`;
-      displayTableReestr += "<input type=\"text\" list=\"primmoyoreestr-datalist\"  id=\"up_primmoyoreestr" + row_number_reestr + "\" value=\"" + item[11] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primmoyoreestr-datalist\"></datalist></div></div>";
+        <div class="col-md-4">
+        <label for="up_primmoyoreestr${row_number_reestr}">Примітки мої</label>
+        <input type="text" list="primmoyoreestr-datalist"  id="up_primmoyoreestr"${row_number_reestr}" value="${item[11]}" class="form-control form-control-sm">
+          <datalist id="primmoyoreestr-datalist"></datalist>
+        </div>
+      </div>      
+      `;
 
       displayTableReestr += `
         <div class="row g-1 mt-1">

@@ -15,7 +15,7 @@
     document.querySelector('#btnReestrSTOf').disabled = true;
     document.querySelector('#btnReestrSFriOf').disabled = true;
     document.querySelector('#btnReestrSYOf').disabled = true;
-    document.querySelector('#btnSearchReestrInfo').disabled = true;
+    //document.querySelector('#btnSearchReestrInfo').disabled = true;
     document.querySelector('#buttonWasteTab').disabled = true;
     document.querySelector('#buttonArrivalTab').disabled = true;
     document.querySelector('#btnTableАFinance').disabled = true;
@@ -29,7 +29,7 @@
       document.querySelector('#btnReestrSTOf').disabled = false;
       document.querySelector('#btnReestrSFriOf').disabled = false;
       document.querySelector('#btnReestrSYOf').disabled = false;
-      document.querySelector('#btnSearchReestrInfo').disabled = false;
+     // document.querySelector('#btnSearchReestrInfo').disabled = false;
       btnTable();
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {

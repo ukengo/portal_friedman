@@ -302,10 +302,10 @@
     var stoppedReestr = document.getElementById("up_stoppedreestr" + row_number_reestr).checked;
     google.script.run.withSuccessHandler(function (return_string) {
       btnEnable(btnDE);
-      document.querySelector('#btnSearchReestrInfo').disabled = true;
+     // document.querySelector('#btnSearchReestrInfo').disabled = true;
       google.script.run.withSuccessHandler((data) => {
         sessionStorage.setItem('dataReestr', JSON.stringify(data));
-        document.querySelector('#btnSearchReestrInfo').disabled = false;
+      //  document.querySelector('#btnSearchReestrInfo').disabled = false;
       }).getRecordsReestr();
       google.script.run.withSuccessHandler((data) => {
         sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));

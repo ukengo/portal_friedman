@@ -615,13 +615,14 @@
       google.script.run.withSuccessHandler(showDataReestr).getData2();
     }); */
 
-  $('#clearBtnTable').click(function () {
-    $('#clearBtnTable').prop("disabled", true);
+    $('#clearBtnTable').click(function () {
+    //$('#clearBtnTable').prop("disabled", true);
     $('#div-data-table').remove();
-    document.getElementById('btnSearchReestrInfo').innerHTML = '';
-    document.getElementById('btnSearchFinInfo').innerHTML = '';
-    document.getElementById('btnSearchJobInfo').innerHTML = '';
-    $('#clearBtnTable').prop("disabled", false);
+    clearBtnsTable();
+    // document.getElementById('btnSearchReestrInfo').innerHTML = '';
+    // document.getElementById('btnSearchFinInfo').innerHTML = '';
+    // document.getElementById('btnSearchJobInfo').innerHTML = '';
+    //$('#clearBtnTable').prop("disabled", false);
   })
 
   // кнопка аккордеона
@@ -685,6 +686,14 @@
       }
     }
   }
+
+    //очищує блок кнопок над таблицею
+    function clearBtnsTable() {
+      document.querySelectorAll('.btn-block-searh-reestr').forEach(elem => {
+        elem.innerHTML = ' - ';
+      })
+    } 
+    document.querySelector('#btnClearRecordsReestr').addEventListener('click', clearBtnsTable) 
 
   //кнопка маленькая левая1 (reestr)
   /*   $('#btnSearchReestrInfo').click(function () {

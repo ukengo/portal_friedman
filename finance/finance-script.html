@@ -385,7 +385,7 @@
               this.innerHTML = '';
               break;
           }
-          //   btnTableFinance();     
+          //   btnTableFinance();
         })
       });
     }
@@ -397,7 +397,7 @@
 
     //tableLineSelection() //полосы в таблице
     $('#btnTableАFinance').prop("disabled", false);
-    document.querySelector('#div-data-tablefinance-spinner').innerHTML = '';
+    //document.querySelector('#div-data-tablefinance-spinner').innerHTML = '';
     document.getElementById("searchFinance").click();
   }
 
@@ -448,12 +448,12 @@
       google.script.run.withSuccessHandler((data) => {
         sessionStorage.setItem('dataFin', JSON.stringify(data));
       }).getRecordsFin();
-      spinner('rowdatafin');
+      /* spinner('rowdatafin');
       if ($('#sffinModal').val()) {
         SearchRecordsFin($('#sffinModal').val());
       } else {
         SearchRecordsFinProekt1($('#proektfinModal').val());
-      }
+      } */
       //formaFin.clearRecords(); 
     }).changesRowFinanceModal(id, data, checkBox);
   }
@@ -514,13 +514,32 @@
   })
 
   //перехват кнопки (finance с переходом)
-  $('.btn-finance-transition').click(function () {
+  document.querySelector('#btnSearchFinInfo').addEventListener('click', e => {
+    if (e.target.innerHTML === '-') {
+      alert('Не введені дані');
+      return
+    }
+    document.querySelector('#proektfin').value = numEndStrong(e.target.innerHTML)
+    document.querySelector('#searchFinance').value = numEndStrong(e.target.innerHTML)
+    document.querySelector('#nav-fin-tab').click();
+    document.querySelector('#searchFinance').click();
+   // dataSearchFinanceNew();
+    
+  })
+
+  /* click(function () {
+    console.log(this.text());
+    
+    if (this.html() = '-') {
+      alert('Не введені дані');
+      return
+    }
     $('#proektfin').val(numEndStrong(this.textContent));
     $('#searchFinance').val(numEndStrong(this.textContent));
     $('#nav-fin-tab')[0].click();
     labelred();
     autoSearchOnOpen('#searchFinance');
-  })
+  }) */
 
 
   // кнопки Add R+ т Add R- (обработка кнопок)

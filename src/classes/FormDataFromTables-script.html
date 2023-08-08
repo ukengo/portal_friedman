@@ -27,7 +27,7 @@
     }
 
     /**
-    * Функція очистки полів форми. Також міняє колір лабела на чорний
+    * Метод очистки полів форми. Також міняє колір лабела на чорний
     */
     clearRecords() {
       this.$form.reset();
@@ -35,7 +35,7 @@
     }
 
     /**
-    * Функція робить лабел червоним, якщо інпут заповнений і чорним, якщо ні.
+    * Метод робить лабел червоним, якщо інпут заповнений і чорним, якщо ні.
     */
     #labelred() {
       this.$inputs.forEach(element => {
@@ -49,7 +49,7 @@
     }
 
     /**
-    * Функція очистки inputa кліком по label і видалення червоної розфарбовки полів форми.
+    * Метод очистки inputa кліком по label і видалення червоної розфарбовки полів форми.
     */
     #clearInputClickLabel(e) {
       e.target.removeAttribute('style');
@@ -59,7 +59,7 @@
     }
 
     /**
-    * Функція збирає всі дані інпутів в об'єкт, масив даних, масив ключів.
+    * Метод збирає всі дані інпутів в об'єкт, масив даних, масив ключів.
     */
     formaDataObj() {
       const isCheckboxOrRadio = type => ['checkbox', 'radio'].includes(type);
@@ -76,7 +76,30 @@
       return values
     }
 
-  }
+    /*
+    метод перевірки форми на заповненість
+    повертає false, коли жодне полене заповнене
+    повертає true, коли хоть одне поле заповнене
+    */
+ 
+    inputsIsNull() {
+      const dataArr = Object.values(this.formaDataObj());
+      let evalRows = [];
+      dataArr.forEach(elem => {
+        if (elem === '' || elem === false) {
+          evalRows.push('no');
+        } else {
+          evalRows.push('yes');
+        }
+      })
+      if (evalRows.indexOf('yes') === -1) {
+        return false
+      } else {
+        return true
+      }
+    }
+
+  } 
 
 
 

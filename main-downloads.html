@@ -1,6 +1,11 @@
 <script>
 
-  document.querySelector('#updateAll').addEventListener('click', function () {
+  document.querySelector('#delStorageAll').addEventListener('mouseup', () => {
+    sessionStorage.clear();
+    alert('storage очищено');
+  });
+
+  document.querySelector('#updateAll').addEventListener('mouseup', function () {    
     btnTable();
     btnTableFinance();
     onlineDownloads();
@@ -91,6 +96,6 @@
       sessionStorage.setItem('dataArrival', JSON.stringify(data));
     }).getLastTenRowsArriwal();
   }
-  onlineDownloads();
+ // onlineDownloads();
 
 </script>

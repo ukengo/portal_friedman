@@ -28,6 +28,7 @@
   }
 
   function afterDropDownReturned(arrayOfArrays, datalist) {
+    if (!arrayOfArrays) return false;
     let selectorDatalist = document.getElementById(datalist);
     if (selectorDatalist) {
       selectorDatalist.innerHTML = null;

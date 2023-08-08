@@ -228,10 +228,14 @@
   flagNonUnique - это флаг, отвечающий за не уникальность. Если он true, то берется массив всех данных. Если он пропущен, то берется массив только уникальных данных.
   */
   function getDropDownArrayOnline(dataStorage, col, flagNonUnique) {
+    if (!sessionStorage.getItem(dataStorage)) return false;
     let arr = (JSON.parse(sessionStorage.getItem(dataStorage)).data).map(x => [x[col]]).flat();
     const result = flagNonUnique ? arr : [...new Set(arr)];
     return result;
   }
 
+  // приймаємо рамки на кнопках
+
+  document.querySelectorAll('.btn').forEach(btn => btn.classList.add('shadow-none'));
 
 </script>

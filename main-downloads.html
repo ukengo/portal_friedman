@@ -6,35 +6,54 @@
     onlineDownloads();
   });
 
-  setInterval(onlineDownloads, 3600000);
+  refreshCacheLong();
+  function refreshCacheLong() {
+    console.log('refreshLong');
+    const minLongStart = 60;
+    onlineDownloads();
+    const refreshLong = setTimeout(refreshCacheLong, minLongStart * 1000 * 60);
+  }
+
+  document.addEventListener('click', (event) => {
+    if (event.target.tagName === 'INPUT') {
+      const minShortStart = 10;
+      const minShortStop = 15;
+      const refreshShort = setTimeout(() => {
+        onlineDownloads(); console.log('refreshShort');
+      }, minShortStart * 1000 * 60);
+      const refreshShortStop = setTimeout(() => {
+        clearInterval(refreshShort)
+        console.log('refreshShortStop');
+      }, minShortStop * 1000 * 60);
+    }
+  });
 
   // завантаженя в локал
   function onlineDownloads() {
 
-    document.querySelector('#btnSearchReestrOf').disabled = true;
-    document.querySelector('#btnReestrSTOf').disabled = true;
-    document.querySelector('#btnReestrSFriOf').disabled = true;
-    document.querySelector('#btnReestrSYOf').disabled = true;
+    // document.querySelector('#btnSearchReestrOf').disabled = true;
+    // document.querySelector('#btnReestrSTOf').disabled = true;
+    // document.querySelector('#btnReestrSFriOf').disabled = true;
+    // document.querySelector('#btnReestrSYOf').disabled = true;
     //document.querySelector('#btnSearchReestrInfo').disabled = true;
-    document.querySelector('#buttonWasteTab').disabled = true;
-    document.querySelector('#buttonArrivalTab').disabled = true;
-    document.querySelector('#btnTableАFinance').disabled = true;
+    // document.querySelector('#buttonWasteTab').disabled = true;
+    // document.querySelector('#buttonArrivalTab').disabled = true;
+    // document.querySelector('#btnTableАFinance').disabled = true;
     document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
 
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataReestr', JSON.stringify(data));
 
       document.querySelector('.bi-arrow-repeat').style.color = 'white';
-      document.querySelector('#btnSearchReestrOf').disabled = false;
-      document.querySelector('#btnReestrSTOf').disabled = false;
-      document.querySelector('#btnReestrSFriOf').disabled = false;
-      document.querySelector('#btnReestrSYOf').disabled = false;
-     // document.querySelector('#btnSearchReestrInfo').disabled = false;
-      btnTable();
+      // document.querySelector('#btnSearchReestrOf').disabled = false;
+      // document.querySelector('#btnReestrSTOf').disabled = false;
+      // document.querySelector('#btnReestrSFriOf').disabled = false;
+      // document.querySelector('#btnReestrSYOf').disabled = false;
+      // document.querySelector('#btnSearchReestrInfo').disabled = false;
+      //btnTable();
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataFin', JSON.stringify(data));
-      document.querySelector('#btnTableАFinance').disabled = false;
     }).getRecordsFin();
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));
@@ -64,15 +83,12 @@
     }).getLastTenRowsWaste();
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataCashe', JSON.stringify(data));
-      //buildDatalistCashe();
     }).getDropDownArrayCashe();
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataWaste', JSON.stringify(data));
-      document.querySelector('#buttonWasteTab').disabled = false;
     }).getLastTenRowsWaste();
     google.script.run.withSuccessHandler((data) => {
       sessionStorage.setItem('dataArrival', JSON.stringify(data));
-      document.querySelector('#buttonArrivalTab').disabled = false;
     }).getLastTenRowsArriwal();
   }
   onlineDownloads();

@@ -37,17 +37,17 @@
     })
     const ro = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(naydenofin)
 
-    if (naydenofin) naydenofin = "Сума: " + ro + " грн.";
+    if (naydenofin) naydenofin = `Сума: ${ro} грн.`;
     else naydenofin = "Немає фінансових рухів";
 
     var displayTable = '<form>';
     displayTable += '<table onkeypress=\"clickPressFinanceUpdate(event)\" class=\"table table-bordered border-success mb-2 mt-2\" id=\"mainTableFin\" >';
-    displayTable += "<tr>";
-    displayTable += `<th width="550">${naydenofin}</th>`;
+    displayTable += `<tr>`;
+    displayTable += `<th width="550" class="fw-bold text-danger">${naydenofin}</th>`;
     displayTable += `<th width="1">
                       <button type="button" class="w-100 btn btn-outline-danger btn-sm shadow-none  btn-clear-search btn-clear-search-finance">X</button> 
                     </th>`
-    displayTable += "</tr>";
+    displayTable += `</tr>`;
 
     ar.forEach(function (item, index) {
 
@@ -64,7 +64,7 @@
       displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
       displayTable += "<label for=\"up_summafin\">Сума</label> ";
-      displayTable += "<input type=\"number\" id=\"up_summafin" + row_number_fin + "\" value=\"" + item[1] + "\" class=\"form-control form-control-sm\" /></div></div> ";
+      displayTable += `<input type="number" id="up_summafin"${row_number_fin}" value="${item[1]}" class="form-control form-control-sm fw-bold text-danger"></div></div>`;
 
       displayTable += "<div class=\"col-md-1\">"
       displayTable += "<div class=\"form-label\">"
@@ -150,14 +150,6 @@
 
     $('#btnSearchFinance').prop("disabled", false);
   }
-
-  // подія кліку на кнопку закриття форми пошуку
-  /*   const btnClearSearchFinance = () => {
-      document.querySelectorAll('.btn-clear-search-finance').forEach(elem => elem.addEventListener('click', (e) => {
-        document.querySelector('#rowdatafin').innerHTML = '';
-        document.querySelector('#SearchFinInReestr').innerHTML = '';
-      }))
-    } */
 
   // cрабатывание по кнопке Enter
   document.getElementById('exampleModalFinance').addEventListener('keydown', event => {
@@ -271,16 +263,16 @@
       const dataArrayProcessed = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]]);
       const dataArrayProcessedFiltered = findInTable(dataArrayProcessed, value, 6);
       // const dataArrayAttr = dataArray.map(x => [x[6]]);
-      var result = "<table id='table-finance-search' class='table mt-3 table-bordered table-hover table-line-selection' style='font-size:0.9em'>"
+      var result = `<table id='table-finance-search' class='table mt-3 table-bordered table-hover table-line-selection' style='font-size:0.9em'>`
       for (var i = 0; i < findInTable(dataArrayProcessedFiltered, value).length; i++) {
 
         result += "<tr>";
         for (var j = 0; j < findInTable(dataArrayProcessedFiltered, value)[i].length; j++) {
           if (j === 6) continue // пропускаємо ID
-          result += "<td>" + findInTable(dataArrayProcessedFiltered, value)[i][j] + "</td>";
+          result += `<td>${findInTable(dataArrayProcessedFiltered, value)[i][j]}</td>`;
         }
         result += `
-          <td align="center">
+          <td align="center" class="d-flex">
               <button type="button"
                 id="btnFinanceY"
                 data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
@@ -309,9 +301,9 @@
                   Edit
                 </button>
               </td>`
-        result += "</tr>";
+        result += `</tr>`;
       }
-      result += "</table>";
+      result += `</table>`;
 
       div.innerHTML = result;
       summaTrFiltered('#table-finance-search', '#summaFinsnce');
@@ -412,23 +404,6 @@
     document.querySelector('#dateoplfinModal').style.cssText = 'font-weight: bold';
   });
 
-  // дата в модалке если заполненная, то жирным
-  /*   if (document.querySelector('#dateoplfinModal').value) {
-      document.querySelector('#dateoplfinModal').style.cssText = 'font-weight: bold';
-    } else {
-      document.querySelector('#dateoplfinModal').style.cssText = 'font-weight: normal';
-    } */
-
-  // отображение скрытие таблицы с учетом результатов поиска, если поле Ппоиска заполнено, показывает результаты ,если пусто, скрывает
-  /*   function dataSearchFinance() {
-      if (this.value && this.value.length >= 3) {
-        $('#data-table-finance').show();   // если в поле поиска нажимается клавиша, таблица отображается (с учетом поиска) 
-      } else {
-        $('#data-table-finance').hide();
-      }
-      summaTr()
-    } */
-
   //кнопка сохранения в модальном окне
   $('#btnSaveModalFinance').on("click", btnSaveModalFinance)
   function btnSaveModalFinance() {
@@ -448,13 +423,6 @@
       google.script.run.withSuccessHandler((data) => {
         sessionStorage.setItem('dataFin', JSON.stringify(data));
       }).getRecordsFin();
-      /* spinner('rowdatafin');
-      if ($('#sffinModal').val()) {
-        SearchRecordsFin($('#sffinModal').val());
-      } else {
-        SearchRecordsFinProekt1($('#proektfinModal').val());
-      } */
-      //formaFin.clearRecords(); 
     }).changesRowFinanceModal(id, data, checkBox);
   }
 
@@ -515,32 +483,17 @@
 
   //перехват кнопки (finance с переходом)
   document.querySelector('#btnSearchFinInfo').addEventListener('click', e => {
-    if (e.target.innerHTML === '-') {
-      alert('Не введені дані');
-      return
-    }
+    /*     if (e.target.innerHTML === '-') {
+          alert('Не введені дані');
+          return
+        } */
     document.querySelector('#proektfin').value = numEndStrong(e.target.innerHTML)
     document.querySelector('#searchFinance').value = numEndStrong(e.target.innerHTML)
     document.querySelector('#nav-fin-tab').click();
     document.querySelector('#searchFinance').click();
-   // dataSearchFinanceNew();
-    
+    // dataSearchFinanceNew();
+
   })
-
-  /* click(function () {
-    console.log(this.text());
-    
-    if (this.html() = '-') {
-      alert('Не введені дані');
-      return
-    }
-    $('#proektfin').val(numEndStrong(this.textContent));
-    $('#searchFinance').val(numEndStrong(this.textContent));
-    $('#nav-fin-tab')[0].click();
-    labelred();
-    autoSearchOnOpen('#searchFinance');
-  }) */
-
 
   // кнопки Add R+ т Add R- (обработка кнопок)
   $('#add_button_fin button').click(function () {
@@ -600,14 +553,10 @@
 
   //обход чекбоксов и определение клика
   function inputCheckboxChecked() {
-    // const valueInput = document.getElementsByTagName('input');
-    // const valueCheckbox = valueInput.querySelectorAll('[type=checkbox]')
     const value = $("input:checkbox");
-
     for (let i = 0; i < value.length; i++) {
       if (value[i].checked) {
         return value[i].value;
-
       }
     }
   }
@@ -626,7 +575,7 @@
       if (array[0]) {
         array.push(finMultiNum);
         finMultiNum++;
-        if (vatieButton === '-') array[1] = -array[1];
+        if (vatieButton === '--') array[1] = -array[1];
         arrFinMulti.push(array);
         btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
       }
@@ -637,7 +586,7 @@
     $('#btnModalMultiple').click(() => {
       if (!arrFinMulti) return
       if (arrFinMulti !== undefined) {
-        let result = "<table id='tableArrFinMulti' class='table mt-3 table-bordered table-hover table-line-selection'>"
+        let result = `<table id='tableArrFinMulti' class='table mt-3 table-bordered table-hover table-line-selection'>`
         // будуємо таблицю
         let = rowNumberFinMulti = 0;
         //result += `<tr><td></td></tr>`;
@@ -657,9 +606,9 @@
             </svg>            
           </td>`;
           rowNumberFinMulti++;
-          result += "</tr>";
+          result += `</tr>`;
         }
-        result += "</table>";
+        result += `</table>`;
         result += `
                   <div id="divClearArrFinMulti">
                     <button type="button" class="btn btn-primary btn-danger mt-1" id="btnClearArrFinMulti" data-bs-dismiss="modal">Clear</button>

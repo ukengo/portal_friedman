@@ -1,5 +1,5 @@
 <script>
-  
+
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
     if (event.keyCode == 13) {
@@ -80,7 +80,7 @@
       alert('Не заповнена стаття витрат');
       return
     }
-   // let vrabotevseArriwalWaste = document.getElementById("vrabotevseArriwalWaste");
+    // let vrabotevseArriwalWaste = document.getElementById("vrabotevseArriwalWaste");
 
     if (rowDataRangeArrivalWaste()[4] === "Не заповнено ні одного поля суми") {
       alert("Не заповнено ні одного поля суми");
@@ -433,7 +433,6 @@
   }
   startova();
 
-
   // вставка суми доходу/витрат при фільтрації
   const mutationObserverAw = () => {
     let observer = new MutationObserver(function (mutations) {
@@ -461,5 +460,5 @@
     document.querySelector('#dataTableArriwalWaste').innerHTML = '';
     document.querySelector('#divDataTableArriwalWaste').style.height = "10%";
   })
-  
+
 </script>

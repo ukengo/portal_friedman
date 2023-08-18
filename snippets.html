@@ -235,7 +235,15 @@
   }
 
   // приймаємо рамки на кнопках
-
-  document.querySelectorAll('.btn').forEach(btn => btn.classList.add('shadow-none'));
+  //кнопки з пустим value
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.classList.add('shadow-none');
+    btn.addEventListener('click', () => {
+      if ((btn.innerText === '' || btn.innerText === '-' || btn.innerText === ' - ') && !btn.value) {
+        alert('Не введені дані');
+        return
+      }
+    });
+  })
 
 </script>

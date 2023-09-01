@@ -280,9 +280,9 @@
     const updateButtonReestr = document.querySelectorAll('.update_button_reestr');
     document.querySelectorAll('.btn-update-plus').forEach(elem => {
 
-     /*  // приймаємо рамку на кнопці
-      elem.classList.add('shadow-none');
- */
+      /*  // приймаємо рамку на кнопці
+       elem.classList.add('shadow-none');
+  */
       elem.addEventListener('click', () => {
         updateButtonReestr.forEach(elem => elem.click());
         Array.from(updateButtonReestr).every(elem => {
@@ -542,6 +542,7 @@
     document.getElementById('btnSearchFinInfo').innerHTML = 'fin ' + text[4];
     document.getElementById('btnSearchFinPlus').innerHTML = 'fin+';
     document.getElementById('btnSearchJobInfo').innerHTML = 'job ' + text[4];
+    document.getElementById('btnSendMail').innerHTML = 'mail ' + text[4];
     document.querySelector('#data-table_filter input').value = event.target.innerHTML;
   };
 
@@ -563,10 +564,10 @@
 
   //кнопка маленькая средняя (finance plus без перехода)
   $('#btnSearchFinPlus').click(function () {
- /*    if (document.getElementById("btnSearchFinPlus").innerHTML === '-') {
-      alert('Не введені дані');
-      return
-    } */
+    /*    if (document.getElementById("btnSearchFinPlus").innerHTML === '-') {
+         alert('Не введені дані');
+         return
+       } */
     sessionStorage.removeItem('test');
     // document.getElementById("btnSearchFinPlus").disabled = true;
     const proektFin = sessionStorage.getItem('proekt');
@@ -714,10 +715,26 @@
   }
   document.querySelector('#btnClearRecordsReestr').addEventListener('click', clearBtnsTable)
 
-  //кнопка маленькая левая1 (reestr)
-  /*   $('#btnSearchReestrInfo').click(function () {
-      $("#rowdatareestr").attr("tabindex", -1).focus();
-      SearchRecordsReestr();
-    }); */
+  // робота з модалкою  sendBuhModal /////////////////////////////////////////////
+  // обробка кнопки btnsendbuh
+  document.querySelector('#btnSendMail').addEventListener('click', event => {
+    document.querySelector('#sendbuhproekt').value = numEndStrong(event.target.innerHTML);
+  })
+  document.querySelector('#sendBuhModal')
+    .addEventListener('show.bs.modal', event => {
+      const formaModalSendBuh = new FormDataFromTables('#sendBuhModalForm');
+      formaModalSendBuh.labelred()
+      //console.log(formaModalSendBuh);
+    })
 
+
+
+  /* {
+  event.target.disabled = true;
+  google.script.run
+    .withSuccessHandler(() => {
+      event.target.disabled = false;
+    })
+    .sendEmailBuhInvoice(numEndStrong(event.target.innerHTML));
+}) */
 </script>

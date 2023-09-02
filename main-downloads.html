@@ -5,7 +5,7 @@
     alert('storage очищено');
   });
 
-  document.querySelector('#updateAll').addEventListener('mouseup', function () {    
+  document.querySelector('#updateAll').addEventListener('mouseup', function () {
     btnTable();
     btnTableFinance();
     onlineDownloads();
@@ -19,19 +19,31 @@
     const refreshLong = setTimeout(refreshCacheLong, minLongStart * 1000 * 60);
   }
 
+  // вмикання автооновлення
+
   document.addEventListener('click', (event) => {
     if (event.target.tagName === 'INPUT') {
-      const minShortStart = 10;
-      const minShortStop = 15;
+      let condition = 0;
+      const minShortStart = 50; // у хвилинах      
+      const minShortStop = 60; // у хвилинах      
       const refreshShort = setTimeout(() => {
-        onlineDownloads(); console.log('refreshShort');
+        //console.log(condition + ' 1');
+        if (!condition) {
+          onlineDownloads();
+          console.log('refreshShort');
+          condition = 1;
+          //console.log(condition + ' 2');
+        }
       }, minShortStart * 1000 * 60);
       const refreshShortStop = setTimeout(() => {
-        clearInterval(refreshShort)
+        clearInterval(refreshShort);
+        condition = 0;
+        //console.log(condition + ' 3');
         console.log('refreshShortStop');
       }, minShortStop * 1000 * 60);
     }
   });
+
 
   // завантаженя в локал
   function onlineDownloads() {

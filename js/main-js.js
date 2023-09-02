@@ -813,7 +813,7 @@ function AddRecordFinMultiple(arrFinMulti) {
   dataFinance().insertRowsAfter(99, rows);
 
   //формируем id
-  const idFinId = new Date().getTime();
+  const idFinId = (new Date().getTime()) * getRandom();
 
   // обробляємо інпути
   let data = [];

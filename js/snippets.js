@@ -10,5 +10,5 @@ function formatDateYYYYdotMMdotDD(date) {
 
 //генерация случайного числа
 function getRandom() {
-    return Math.round(Math.random() * 132)
+    return Math.round(Math.random() * 100)
 }

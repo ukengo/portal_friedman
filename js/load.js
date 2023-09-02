@@ -98,12 +98,12 @@ function include(filename) {
     .getContent();
 }
 
-function doGet() {
+/* function doGet() {
   return HtmlService.createTemplateFromFile('main-HTML').evaluate()
     //Responsive
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setTitle('Portal Friedman')
-}
+} */
 
 /* function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename)

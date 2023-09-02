@@ -1,0 +1,77 @@
+<script>
+
+  const inputsModalSendBuh = (acc) => {
+    return `
+    <div class="row my-1">
+            <div class="col-2">
+              <label for="sendbuhproekt">Проєкт</label>
+              <input type="number" name="sendbuhproekt" id="sendbuhproekt" class="form-control fw-bold">
+            </div>
+            <div class="col-2">
+              <label for="sendbuhforma">Форма</label>
+              <select class="form-control" name="sendbuhforma" id="sendbuhforma">
+                <option>ФОП</option>
+                <option>ТОВ</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <label for="sendbuhsumma">Сума</label>
+              <input type="number" name="sendbuhsumma" id="sendbuhsumma" class="form-control">
+            </div>
+            <div class="col-2">
+              <label for="sendbuhcurrency">Валюта</label>
+              <select class="form-control" name="sendbuhcurrency" id="sendbuhcurrency">
+                <option>грн</option>
+                <option>$</option>
+                <option>євро</option>
+                <option></option>
+              </select>
+            </div>
+            <div class="col-2">
+              <label for="sendbuhvat">ПДВ</label>
+              <select class="form-control" name="sendbuhvat" id="sendbuhvat">
+                <option></option>
+                <option>з ПДВ</option>
+                <option>без ПДВ</option>
+              </select>
+            </div>
+            <div class="row">
+              <div class="col-10">
+                <label for="sendbuhprim">Примітки</label>
+                <input type="text" name="sendbuhprim" id="sendbuhprim" class="form-control">
+              </div>
+            </div>
+          </div>
+          <hr>
+          `
+  }
+
+  const html = `
+  <form id="sendBuhModalForm">
+    
+${inputsModalSendBuh(0)}
+          <div class="row mb-2">
+            <div class="col">
+              <label for="sendbuhcont">Контакти</label>
+              <textarea type="text" name="sendbuhcont" id="sendbuhcont" class="form-control"></textarea>
+            </div>
+          </div>
+        </form>
+        `
+
+  // відкриття модального вікна
+  document.querySelector('#btnSendMail').addEventListener('click', event => {
+    const buhModal = document.querySelector('.modal-mailbuh-body');
+    buhModal.innerHTML = html;
+    document.querySelector('#sendbuhproekt').value = numEndStrong(event.target.innerHTML);
+  })
+
+  // відправка даних з модального овікна на бек
+  document.querySelector('#btnSendBuh').addEventListener('click', () => {
+    const formaModalSendBuh = new FormDataFromTables('#sendBuhModalForm');
+    const data = formaModalSendBuh.formaDataObj();
+    google.script.run.sendEmailBuhInvoice(data);
+  })
+
+</script>

@@ -714,27 +714,5 @@
     })
   }
   document.querySelector('#btnClearRecordsReestr').addEventListener('click', clearBtnsTable)
-
-  // робота з модалкою  sendBuhModal /////////////////////////////////////////////
-  // обробка кнопки btnsendbuh
-  document.querySelector('#btnSendMail').addEventListener('click', event => {
-    document.querySelector('#sendbuhproekt').value = numEndStrong(event.target.innerHTML);
-  })
-  document.querySelector('#sendBuhModal')
-    .addEventListener('show.bs.modal', event => {
-      const formaModalSendBuh = new FormDataFromTables('#sendBuhModalForm');
-      formaModalSendBuh.labelred()
-      //console.log(formaModalSendBuh);
-    })
-
-
-
-  /* {
-  event.target.disabled = true;
-  google.script.run
-    .withSuccessHandler(() => {
-      event.target.disabled = false;
-    })
-    .sendEmailBuhInvoice(numEndStrong(event.target.innerHTML));
-}) */
+ 
 </script>

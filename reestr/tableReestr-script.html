@@ -132,11 +132,22 @@
             <div class="row g-1 mt-1">        
       `;
 
-      displayTableReestr += `
+      if (item[14]) {
+        displayTableReestr += `
         <div class="col-auto">
           <label for="up_dateendreestr${row_number_reestr}">Дата кінець</label>
-          <input type="date" id="up_dateendreestr${row_number_reestr}" value="${item[0]}" class="form-control form-control-sm"></div>      
-      
+          <input type="date" id="up_dateendreestr${row_number_reestr}" value="${item[0]}" class="form-control form-control-sm text-danger"></div>`
+      } else {
+        displayTableReestr += `
+        <div class="col-auto">
+          <label for="up_dateendreestr${row_number_reestr}">Дата кінець</label>
+          <input type="date" id="up_dateendreestr${row_number_reestr}" value="${item[0]}" class="form-control form-control-sm"></div>`
+      }
+      /* displayTableReestr += `
+        <div class="col-auto">
+          <label for="up_dateendreestr${row_number_reestr}">Дата кінець</label>
+          <input type="date" id="up_dateendreestr${row_number_reestr}" value="${item[0]}" class="form-control form-control-sm"></div>` */
+      displayTableReestr += `
         <div class="col-auto">
           <label for="up_datestartreestr${row_number_reestr}">Дата початок</label>
             <input type="date" id="up_datestartreestr${row_number_reestr}" value="${item[1]}" class="form-control form-control-sm">
@@ -144,7 +155,7 @@
       
         <div class="col-md-5">
           <label for="up_firmareestr${row_number_reestr}">Фірма</label>
-          <input type="text" list="firmareestr-datalist" id="up_firmareestr${row_number_reestr}" value="${item[2]}" class="form-control form-control-sm>
+          <input type="text" list="firmareestr-datalist" id="up_firmareestr${row_number_reestr}" value="${item[2]}" class="form-control form-control-sm fw-bold fst-italic">
             <datalist id="firmareestr-datalist"></datalist>
         </div>
       `;
@@ -247,6 +258,7 @@
 
       displayTableReestr += "</td>";
       displayTableReestr += "</tr>";
+
       row_number_reestr++;
 
       // считаем количество остановленных
@@ -265,9 +277,18 @@
       }
     });
 
+    if (countStopped) {
+      countClose = countClose - countStopped;
+    }
+
     displayTableReestr += '</table></form>'
     document.getElementById("rowdatareestr").innerHTML = displayTableReestr;
-    document.querySelector("#mainTableReestr th").innerHTML = `Закритих: ${countClose}. Не закритих: ${countOpen}. Зупинених: ${countStopped}. Всього: ${countClose + countStopped + countOpen}`;
+    document.querySelector("#mainTableReestr th").innerHTML = `
+      Закритих: ${countClose}. 
+      Не закритих: ${countOpen}. 
+      Зупинених: ${countStopped}.       
+      Всього: ${countClose + countStopped + countOpen}
+    `;
     // $("#rowdatareestr").attr("tabindex",-1).focus();
     // startTableReestr()
     $('#btnSearchReestr').prop("disabled", false);
@@ -319,11 +340,11 @@
       btnEnable(btnDE);
       // document.querySelector('#btnSearchReestrInfo').disabled = true;
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataReestr', JSON.stringify(data));
+        localStorage.setItem('dataReestr', JSON.stringify(data));
         //  document.querySelector('#btnSearchReestrInfo').disabled = false;
       }).getRecordsReestr();
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));
+        localStorage.setItem('dataNevistavleno', JSON.stringify(data));
       }).startDataNevistvleno();
     }).UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr);
 
@@ -332,13 +353,13 @@
   function FinanceRecordReestr(row_number_reestr) {
     const btnDE = document.getElementById("finance_button_reestr" + row_number_reestr);
     btnDisable(btnDE);
-    sessionStorage.removeItem('test');
+    localStorage.removeItem('test');
     let proektFin = document.getElementById(`up_proektreestr${row_number_reestr}`).value;
     SearchRecordsFinProekt1(proektFin);
     let checkTest = setInterval(function () {
-      if (sessionStorage.getItem('test')) {
+      if (localStorage.getItem('test')) {
         btnEnable(btnDE);
-        document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = sessionStorage.getItem('test');
+        document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = localStorage.getItem('test');
         const elements = document.querySelectorAll(`#rowdatafin1${row_number_reestr} .delete-fin`);
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
@@ -356,7 +377,7 @@
   function btnTable() {
     if ($('.dataTables_filter input').length) { // проверка на наличие селектора
       const valueSearch = $('.dataTables_filter input').val(); // данные в поле поиска
-      sessionStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш
+      localStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш
     };
 
     $('#div-data-table').remove();
@@ -375,7 +396,7 @@
 
   function showData(dataArray) {
     $(document).ready(function () {
-      // sessionStorage.setItem('DataLength', dataArray.length);//записываем в кеш длину
+      // localStorage.setItem('DataLength', dataArray.length);//записываем в кеш длину
       let oTable = $('#data-table').DataTable({
         data: dataArray.map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25], x[18]]),
         //CHANGE THE TABLE HEADINGS BELOW TO MATCH WITH YOUR SELECTED DATA RANGE
@@ -396,7 +417,7 @@
           { "title": "Проєкт" },
           { "title": "Співробітник" },
           { "title": "Виконавець" },
-          { "title": "Сумма викону" },
+          { "title": "Сума викону" },
           { "title": "Оплата викону" },
           { "title": "Примітки" },
           { "title": "Примітки мої" },
@@ -455,7 +476,7 @@
       a.insertBefore(elem, c);
 
       // считывваем из кеша данные для поиска и вставляем в поле поиска
-      const valueSearch = sessionStorage.getItem('dataTables_filter_input');
+      const valueSearch = localStorage.getItem('dataTables_filter_input');
       $('.dataTables_filter input').val(valueSearch);
       autoSearchOnOpen('.dataTables_filter input');
       // end
@@ -535,7 +556,7 @@
     }
 
     labelred();
-    sessionStorage.setItem('proekt', text[4]);
+    localStorage.setItem('proekt', text[4]);
     // вставка значения из кеша на кнопку и в поле поиска таблицы
     document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;
     // document.getElementById('btnSearchReestrInfoLocal').innerHTML = text[4];
@@ -568,16 +589,16 @@
          alert('Не введені дані');
          return
        } */
-    sessionStorage.removeItem('test');
+    localStorage.removeItem('test');
     // document.getElementById("btnSearchFinPlus").disabled = true;
-    const proektFin = sessionStorage.getItem('proekt');
+    const proektFin = localStorage.getItem('proekt');
     $('#proektfin').val(numEndStrong(proektFin));
     $('#searchFinance').val(numEndStrong(proektFin));
     SearchRecordsFinProekt1(proektFin);
     let checkTest = setInterval(function () {
-      if (sessionStorage.getItem('test')) {
+      if (localStorage.getItem('test')) {
         // document.getElementById("btnSearchFinPlus").disabled = false;
-        document.getElementById("SearchFinInReestr").innerHTML = sessionStorage.getItem('test');
+        document.getElementById("SearchFinInReestr").innerHTML = localStorage.getItem('test');
         const elements = document.querySelectorAll(`#SearchFinInReestr .delete-fin`);
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);

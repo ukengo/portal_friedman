@@ -21,8 +21,8 @@
 
   //таблица Реестр оформлений - Статьи из Прочие поступления и Прочие траты
   function getDropDownArrayStatyaArrivalWaste() {
-    const storageDataArrival = sessionStorage.getItem('dataArrival');
-    const storageDataAWaste = sessionStorage.getItem('dataWaste');
+    const storageDataArrival = localStorage.getItem('dataArrival');
+    const storageDataAWaste = localStorage.getItem('dataWaste');
     if (!storageDataArrival || !storageDataAWaste) return false;
     const dohod = (JSON.parse(storageDataArrival).data).map(x => [x[4]]);
     const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
@@ -177,7 +177,7 @@
 
   function startDataWaste() {
     spinner("dataTableArriwalWaste");
-    createTableArriwalWaste(JSON.parse(sessionStorage.getItem('dataWaste')));
+    createTableArriwalWaste(JSON.parse(localStorage.getItem('dataWaste')));
     /* google.script.run
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsWaste(); */
@@ -189,7 +189,7 @@
 
   function startDataArriwal() {
     spinner("dataTableArriwalWaste");
-    createTableArriwalWaste(JSON.parse(sessionStorage.getItem('dataArrival')));
+    createTableArriwalWaste(JSON.parse(localStorage.getItem('dataArrival')));
     /* google.script.run
       .withSuccessHandler(createTableArriwalWaste)
       .getLastTenRowsArriwal(); */
@@ -275,7 +275,7 @@
     }
     if (!dataArray.data) return
     else {
-      //sessionStorage.setItem('dataWaste', JSON.stringify(dataArray.data));      
+      //localStorage.setItem('dataWaste', JSON.stringify(dataArray.data));      
       searchValueAw();
       function searchValueAw() {
         const searhValueNode = document.querySelector('#search');
@@ -306,11 +306,11 @@
     autoSearchOnOpen(".input-search"); // автопоиск при открытии    
 
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataWaste', JSON.stringify(data));
+      localStorage.setItem('dataWaste', JSON.stringify(data));
       document.querySelector('#buttonWasteTab').disabled = false;
     }).getLastTenRowsWaste();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataCashe', JSON.stringify(data));
+      localStorage.setItem('dataCashe', JSON.stringify(data));
       //buildDatalistCashe();
     }).getDropDownArrayCashe();
 
@@ -391,7 +391,7 @@
       google.script.run
         .withSuccessHandler(() => {
           google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataArrival', JSON.stringify(data));
+            localStorage.setItem('dataArrival', JSON.stringify(data));
             startDataArriwal();
           }).getLastTenRowsArriwal();
         })
@@ -400,7 +400,7 @@
       google.script.run
         .withSuccessHandler(() => {
           google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataWaste', JSON.stringify(data));
+            localStorage.setItem('dataWaste', JSON.stringify(data));
             startDataWaste();
           }).getLastTenRowsWaste();
 

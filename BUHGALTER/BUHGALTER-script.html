@@ -37,7 +37,7 @@
 
   //обработка кнопок
   $('.buttons-buh li button').bind('click', function () {
-    sessionStorage.setItem('buttonsBuhLiButton', '#' + this.id);
+    localStorage.setItem('buttonsBuhLiButton', '#' + this.id);
     // все кнопки с бухгалтера disabled
     document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = true);
 

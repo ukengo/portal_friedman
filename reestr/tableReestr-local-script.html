@@ -4,18 +4,18 @@
 
 
   document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
-    SearchRecordsReestrLocal(JSON.parse(sessionStorage.getItem('dataReestr')));
+    SearchRecordsReestrLocal(JSON.parse(localStorage.getItem('dataReestr')));
   });
   document.querySelector('#financeAccoddion').addEventListener('keypress', (e) => {
     if (e.keyCode == 13) {
-      SearchRecordsReestrLocal(JSON.parse(sessionStorage.getItem('dataReestr')));
+      SearchRecordsReestrLocal(JSON.parse(localStorage.getItem('dataReestr')));
     }
   });
 
   //кнопка маленькая левая (reestr)
   $('#btnSearchReestrInfo').click(function () {
     $("#rowdatareestr").attr("tabindex", -1).focus();
-    SearchRecordsReestrLocal(JSON.parse(sessionStorage.getItem('dataReestr')));
+    SearchRecordsReestrLocal(JSON.parse(localStorage.getItem('dataReestr')));
   });
 
   // кнопки вчора + п'ятниця + сьогодні онлайн
@@ -23,7 +23,7 @@
     el.addEventListener("click", function () {
       //this.disabled = true;
       formaReestr.clearRecords();
-      const dataReestr = JSON.parse(sessionStorage.getItem('dataReestr'));
+      const dataReestr = JSON.parse(localStorage.getItem('dataReestr'));
       if (!dataReestr) { alert('storage пустий'); return }
       switch (this.id) {
         case 'btnReestrSYOf':
@@ -83,7 +83,6 @@
     const issuepartReestr = Object.values(formaReestr.formaDataObj())[13];
     const withoutaccountReestr = Object.values(formaReestr.formaDataObj())[14];
     const stoppedReestr = Object.values(formaReestr.formaDataObj())[15];
-
 
     // остановка скриипта, если не выбраны критерии поиска в инпутах
     if (!formaReestr.inputsIsNull()) {

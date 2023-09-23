@@ -14,8 +14,8 @@
     } */
 
   function buildDatalistCashe() {
-    const description = (JSON.parse(sessionStorage.getItem('dataCashe')).description);
-    const remark = (JSON.parse(sessionStorage.getItem('dataCashe')).remark);
+    const description = (JSON.parse(localStorage.getItem('dataCashe')).description);
+    const remark = (JSON.parse(localStorage.getItem('dataCashe')).remark);
     afterDropDownReturned(description, 'description_cashe-datalist');
     afterDropDownReturned(remark, 'remark_cashe-datalist');
     // все кнопки с бухгалтера enabled

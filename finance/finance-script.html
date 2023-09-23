@@ -141,7 +141,7 @@
     displayTable += '</table></form>';
 
     document.getElementById("rowdatafin").innerHTML = displayTable;
-    sessionStorage.setItem('test', displayTable);
+    localStorage.setItem('test', displayTable);
     doubleCheck();
     updateRecordFinButton();
 
@@ -355,7 +355,7 @@
             case `btnFinanceY`:
               google.script.run.withSuccessHandler(() => {
                 google.script.run.withSuccessHandler((data) => {
-                  sessionStorage.setItem('dataFin', JSON.stringify(data));
+                  localStorage.setItem('dataFin', JSON.stringify(data));
                 }).getRecordsFin();
               }).changesRowFinanceYFT(dataId, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)));
               this.innerHTML = '';
@@ -363,7 +363,7 @@
             case `btnFinanceFri`:
               google.script.run.withSuccessHandler(() => {
                 google.script.run.withSuccessHandler((data) => {
-                  sessionStorage.setItem('dataFin', JSON.stringify(data));
+                  localStorage.setItem('dataFin', JSON.stringify(data));
                 }).getRecordsFin();
               }).changesRowFinanceYFT(dataId, formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)));
               this.innerHTML = '';
@@ -371,7 +371,7 @@
             case `btnFinanceT`:
               google.script.run.withSuccessHandler(() => {
                 google.script.run.withSuccessHandler((data) => {
-                  sessionStorage.setItem('dataFin', JSON.stringify(data));
+                  localStorage.setItem('dataFin', JSON.stringify(data));
                 }).getRecordsFin();
               }).changesRowFinanceYFT(dataId, formatDateYYYYtireMMtireDD(new Date(Date.now())));
               this.innerHTML = '';
@@ -421,7 +421,7 @@
     $('#exampleModalFinance').modal('hide');
     google.script.run.withSuccessHandler(() => {
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataFin', JSON.stringify(data));
+        localStorage.setItem('dataFin', JSON.stringify(data));
       }).getRecordsFin();
     }).changesRowFinanceModal(id, data, checkBox);
   }
@@ -518,7 +518,7 @@
     //spinner('rowdatafin')
     google.script.run.withSuccessHandler(function (return_string) {
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataFin', JSON.stringify(data));
+        localStorage.setItem('dataFin', JSON.stringify(data));
       }).getRecordsFin();
       //  document.getElementById("proektfin").value = proektFin;
       // SearchRecordsFinProekt();
@@ -655,7 +655,7 @@
         btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
         google.script.run.withSuccessHandler(function () {
           google.script.run.withSuccessHandler((data) => {
-            sessionStorage.setItem('dataFin', JSON.stringify(data));
+            localStorage.setItem('dataFin', JSON.stringify(data));
           }).getRecordsFin();
           arrFinMulti = [];
           btnFimMultipleAdd.innerText = 'Add';

@@ -3,14 +3,14 @@
     clearDiv();
     spinner('results');
     hideBtnBuh();
-    createTableVrbote(JSON.parse(sessionStorage.getItem('dataVraboteT')));
+    createTableVrbote(JSON.parse(localStorage.getItem('dataVraboteT')));
   }
 
   function startDataVraboteR() {
     clearDiv();
     spinner('results');
     hideBtnBuh();
-    createTableVrbote(JSON.parse(sessionStorage.getItem('dataVraboteR')));
+    createTableVrbote(JSON.parse(localStorage.getItem('dataVraboteR')));
   }
 
   function createTableVrbote(dataArray) {

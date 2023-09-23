@@ -4,7 +4,7 @@
         spinner('results');
         hideBtnBuh();
         // google.script.run.withSuccessHandler(createTableNeoplacheno).startDataNeoplacheno();
-        createTableNeoplacheno(JSON.parse(sessionStorage.getItem('dataNeoplacheno')));
+        createTableNeoplacheno(JSON.parse(localStorage.getItem('dataNeoplacheno')));
     }
 
     function createTableNeoplacheno(dataArray) {

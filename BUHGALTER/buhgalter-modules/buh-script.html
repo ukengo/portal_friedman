@@ -11,16 +11,16 @@
   function displayResults(dataArray) {
     if (dataArray) {
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataFin', JSON.stringify(data));
+        localStorage.setItem('dataFin', JSON.stringify(data));
       }).getRecordsFin();
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataFin', JSON.stringify(data));
+        localStorage.setItem('dataFin', JSON.stringify(data));
       }).getRecordsFin();
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));
+        localStorage.setItem('dataNevistavleno', JSON.stringify(data));
       }).startDataNevistvleno();
       google.script.run.withSuccessHandler((data) => {
-        sessionStorage.setItem('dataNeoplacheno', JSON.stringify(data));
+        localStorage.setItem('dataNeoplacheno', JSON.stringify(data));
       }).startDataNeoplacheno();
       let result = "<table class='table table-striped table-sm'>"
       for (let i = 0; i < dataArray.length; i++) {

@@ -1,6 +1,6 @@
 <script>
     function SearchRecordsFinProekt1(proektFin) {
-        const dataFin = JSON.parse(sessionStorage.getItem('dataFin'));
+        const dataFin = JSON.parse(localStorage.getItem('dataFin'));
         array(dataFin.filter(x => x[0] == proektFin));
     }
 

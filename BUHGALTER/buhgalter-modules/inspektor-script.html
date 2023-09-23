@@ -13,7 +13,7 @@
 
   // пошук не пошук
   function buildTableInspSearch() {
-    const dataInspektor = JSON.parse(sessionStorage.getItem('dataInspektor'));
+    const dataInspektor = JSON.parse(localStorage.getItem('dataInspektor'));
     const searhNodeInsp = document.querySelector('#input-search-insp');
     let dataInspektorArr = '';
     if (searhNodeInsp.value) {
@@ -61,7 +61,7 @@
 
   // пошук по інспектору
   function searchValueInsp() {
-    const arr = JSON.parse(sessionStorage.getItem('dataInspektor'));
+    const arr = JSON.parse(localStorage.getItem('dataInspektor'));
     const value = searhValueNodeInsp.value;
     const data = findInTable(arr, value, 1);
   }
@@ -72,7 +72,7 @@
 
         //  const insp = event.target.textContent;
         const insp = valueCellCol(event.target, 0);
-        const dataReestr = JSON.parse(sessionStorage.getItem('dataReestr'));
+        const dataReestr = JSON.parse(localStorage.getItem('dataReestr'));
         const data = dataReestr.map(x => [x[5], x[2], x[7], x[8], x[9]]).filter(x => (x[3] != x[4]));
         debtsToInspectors(data.filter(x => (x[2] === insp)));
       }
@@ -98,8 +98,8 @@
   function btnInspModal() {
     $('#tableInspektorModal tr td').bind('click', function () {
       const proekt = valueCellCol(this, 0);
-      sessionStorage.removeItem('proekt')
-      sessionStorage.setItem('proekt', proekt);
+      localStorage.removeItem('proekt')
+      localStorage.setItem('proekt', proekt);
       const dataTarget = event.target.textContent;
       formaReestr.clearRecords();
       $('.btn-close').click();

@@ -126,9 +126,9 @@
         // функция, которая при перезагрузке открывает последнюю просмотренную страницу
         function lastPageOnReload() {
           const elem = $('.nav-link').click(function () {
-            sessionStorage.setItem('idElemNavLink', this.id);
+            localStorage.setItem('idElemNavLink', this.id);
           });
-          const getItemStorage = sessionStorage.getItem('idElemNavLink');
+          const getItemStorage = localStorage.getItem('idElemNavLink');
           if (getItemStorage) {
             $(`#${getItemStorage}`)[0].click();
           } else {
@@ -138,8 +138,8 @@
 
         // функция, которая проверяет, если последняя сраница была Бухгалтер, запускает последнюю нажатую кнопку
         function ifLastBuc() {
-          //if(sessionStorage.getItem('idElemNavLink') === 'nav-buhgalter-tab') {
-          $(sessionStorage.getItem('buttonsBuhLiButton')).click();
+          //if(localStorage.getItem('idElemNavLink') === 'nav-buhgalter-tab') {
+          $(localStorage.getItem('buttonsBuhLiButton')).click();
           // все кнопки с бухгалтера enabled
           document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
           // } 

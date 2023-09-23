@@ -1,7 +1,7 @@
 <script>
 
   document.querySelector('#delStorageAll').addEventListener('mouseup', () => {
-    sessionStorage.clear();
+    localStorage.clear();
     alert('storage очищено');
   });
 
@@ -47,7 +47,7 @@
     document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
 
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataReestr', JSON.stringify(data));
+      localStorage.setItem('dataReestr', JSON.stringify(data));
 
       document.querySelector('.bi-arrow-repeat').style.color = 'white';
       // document.querySelector('#btnSearchReestrOf').disabled = false;
@@ -58,42 +58,42 @@
       //btnTable();
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataFin', JSON.stringify(data));
+      localStorage.setItem('dataFin', JSON.stringify(data));
     }).getRecordsFin();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataNevistavleno', JSON.stringify(data));
+      localStorage.setItem('dataNevistavleno', JSON.stringify(data));
     }).startDataNevistvleno();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataNeoplacheno', JSON.stringify(data));
+      localStorage.setItem('dataNeoplacheno', JSON.stringify(data));
     }).startDataNeoplacheno();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataSotr2', JSON.stringify(data));
+      localStorage.setItem('dataSotr2', JSON.stringify(data));
     }).testSotrCount();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataInspektor', JSON.stringify(data));
+      localStorage.setItem('dataInspektor', JSON.stringify(data));
     }).inspektorGs();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataVraboteR', JSON.stringify(data));
+      localStorage.setItem('dataVraboteR', JSON.stringify(data));
     }).startDataVraboteR();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataVraboteT', JSON.stringify(data));
+      localStorage.setItem('dataVraboteT', JSON.stringify(data));
     }).startDataVraboteT();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataArrival', JSON.stringify(data));
+      localStorage.setItem('dataArrival', JSON.stringify(data));
       startArrivalWaste();
     }).getLastTenRowsArriwal();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataWaste', JSON.stringify(data));
+      localStorage.setItem('dataWaste', JSON.stringify(data));
       startArrivalWaste();
     }).getLastTenRowsWaste();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataCashe', JSON.stringify(data));
+      localStorage.setItem('dataCashe', JSON.stringify(data));
     }).getDropDownArrayCashe();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataWaste', JSON.stringify(data));
+      localStorage.setItem('dataWaste', JSON.stringify(data));
     }).getLastTenRowsWaste();
     google.script.run.withSuccessHandler((data) => {
-      sessionStorage.setItem('dataArrival', JSON.stringify(data));
+      localStorage.setItem('dataArrival', JSON.stringify(data));
     }).getLastTenRowsArriwal();
   }
  // onlineDownloads();

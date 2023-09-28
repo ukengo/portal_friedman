@@ -146,7 +146,7 @@
     document.getElementById("idjob").value = '';
     document.getElementById("firmajob").value = '';
     document.getElementById("originaljob").checked = false;
-    labelred();
+   // labelred();
   }
 
   function UpdateRecordjob(row_number_job) {
@@ -182,7 +182,7 @@
     var originalJob = document.getElementById("originaljob").checked;
 
     google.script.run.withSuccessHandler(function (return_string) {
-      //ClearRecordjob()
+      ClearRecordjob()
       document.getElementById("proektjob").value = proektJob;
       SearchRecordsjobProekt();
 
@@ -295,7 +295,7 @@
     $('#proektjob').val(numEndStrong((this.textContent)));
     $('#searchJob').val(numEndStrong((this.textContent)));
     $('#nav-job-tab')[0].click();
-    labelred();
+   // labelred();
     autoSearchOnOpen('#searchJob');
   });
 

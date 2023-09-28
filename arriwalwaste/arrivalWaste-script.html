@@ -1,5 +1,9 @@
 <script>
 
+  //new FormDataFromTables('#form-aw');
+  //console.log(document.querySelector('#btnArriwalwasteY').getAttribute('type'));
+
+
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
     if (event.keyCode == 13) {
@@ -62,12 +66,13 @@
     if (summaPrivat && !summa) {
       if (!costPrivat) {
         waste = "Не заповнено вартості комісії приват";
+      } else {
+        localStorage.setItem('costPrivat', costPrivat);
+        summa = +summaPrivat * +costPrivat;
+        waste = "Приват комісія";
+        forma = "тов";
+        firmaArrivalWaste = "";
       }
-      localStorage.setItem('costPrivat', costPrivat);
-      summa = +summaPrivat * +costPrivat;
-      waste = "Приват комісія";
-      forma = "тов";
-      firmaArrivalWaste = "";
     }
 
     const rowData = [date, +summa, forma, firmaArrivalWaste, waste];
@@ -460,5 +465,17 @@
     document.querySelector('#dataTableArriwalWaste').innerHTML = '';
     document.querySelector('#divDataTableArriwalWaste').style.height = "10%";
   })
+
+  // розфарбовка поля вартості комісії приват в червоний при відсутності даних
+  const costPrivatColor = () => {
+    const costpriv = document.querySelector('#costPrivat');
+    if (!costpriv.value || costpriv.value <= 0) {
+      costpriv.style.backgroundColor = '#dc35457a';
+    } else {
+      costpriv.style.removeProperty('background-color');
+    }
+    costpriv.addEventListener('input', costPrivatColor);
+  }
+  costPrivatColor();
 
 </script>

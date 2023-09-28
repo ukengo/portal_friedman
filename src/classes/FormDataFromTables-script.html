@@ -6,20 +6,18 @@
   class FormDataFromTables {
     constructor(formId) {
       this.$form = document.querySelector(formId);
-
       this.#setup();
-
     }
 
     #setup() {
-      this.$form.addEventListener('input', this.labelred);
-      this.$inputs = this.$form.querySelectorAll('input');
+      this.#labelred();
+      this.#labelredInputEvent();
+      //this.$inputs = this.$form.querySelectorAll('input');
       this.$labels = this.$form.querySelectorAll('label');
-
-      this.labelred = this.#labelred.bind(this);
-      this.clearRecords = this.clearRecords.bind(this);
+      this.clearRecords = this.clearRecords.bind(this);/* 
+      
+      this.#clearRecords(); */
       this.clearInputClickLabel = this.#clearInputClickLabel.bind(this);
-
       this.$labels.forEach(element => element.addEventListener('click', this.clearInputClickLabel));
       document.querySelectorAll('.btn-clear-form-all').forEach(element => {
         element.addEventListener('click', this.clearRecords);
@@ -37,8 +35,9 @@
     /**
     * Метод робить лабел червоним, якщо інпут заповнений і чорним, якщо ні.
     */
+
     #labelred() {
-      this.$inputs.forEach(element => {
+      this.$form.querySelectorAll('input, select, textarea').forEach(element => {
         const $labels = this.$form.querySelector(`[for="${element.id}"]`);
         if (element.value && element.getAttribute('type') != 'checkbox') {
           $labels.style.color = '#dc3545';
@@ -46,6 +45,12 @@
           $labels.style.color = '';
         }
       });
+    }
+
+    #labelredInputEvent() {
+      this.$form.addEventListener('input', () => {
+        this.#labelred();
+      })
     }
 
     /**
@@ -81,7 +86,7 @@
     повертає false, коли жодне полене заповнене
     повертає true, коли хоть одне поле заповнене
     */
- 
+
     inputsIsNull() {
       const dataArr = Object.values(this.formaDataObj());
       let evalRows = [];
@@ -98,21 +103,5 @@
         return true
       }
     }
-
-  } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 </script>

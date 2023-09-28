@@ -1,5 +1,5 @@
 <script>
-  const formaFin = new FormDataFromTables('#formFinStart');
+ const formaFin = new FormDataFromTables('#formFinStart');
 
   function startTableFinance() {
     $("#proektfin-datalist").empty();
@@ -468,7 +468,7 @@
         $('#firmafin').val(text[6]);
         break;
     }
-    labelred();
+    //labelred();
     // вставка значения из кеша на кнопку и в поле поиска таблицы
     document.getElementById('btnSearchFinanceInfo').innerHTML = event.target.innerHTML;
     document.getElementById('btnSearchFinanceReestrInfo').innerHTML = 'reestr ' + text[0];

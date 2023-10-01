@@ -1,9 +1,10 @@
 <script>
 
   //new FormDataFromTables('#form-aw');
-  //console.log(document.querySelector('#btnArriwalwasteY').getAttribute('type'));
-  
-  
+const tato = new FormDataFromTables('#form-aw');
+console.log(tato);
+tato.ba
+
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
     if (event.keyCode == 13) {
@@ -39,6 +40,16 @@
     afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
   }
 
+  /*   const costPrivat = () => {
+      const inputPrivat = document.querySelector('#costPrivat');
+      inputPrivat.value = localStorage.getItem('costPrivat');
+      const event = new Event('change');
+      inputPrivat.dispatchEvent(event);
+    }
+    costPrivat();
+    const event = new Event('change');  
+    document.querySelector('#costPrivat').dispatchEvent(event); */
+
   document.querySelector('#costPrivat').value = localStorage.getItem('costPrivat');
 
   function rowDataRangeArrivalWaste() {
@@ -56,22 +67,22 @@
       firmaArrivalWaste = "";
     }
 
-    if (summaPrivat && summa) {
-      waste = "Заповнені обидва поля суми";
-      firmaArrivalWaste = "";
+    if (!summaPrivat && !summa) {
       summa = "";
-      summaPrivat = "";
+      waste = "Не заповнено ні одного поля суми";
+      firmaArrivalWaste = "";
     }
 
     if (summaPrivat && !summa) {
       if (!costPrivat) {
         waste = "Не заповнено вартості комісії приват";
+      } else {
+        localStorage.setItem('costPrivat', costPrivat);
+        summa = +summaPrivat * +costPrivat;
+        waste = "Приват комісія";
+        forma = "тов";
+        firmaArrivalWaste = "";
       }
-      localStorage.setItem('costPrivat', costPrivat);
-      summa = +summaPrivat * +costPrivat;
-      waste = "Приват комісія";
-      forma = "тов";
-      firmaArrivalWaste = "";
     }
 
     const rowData = [date, +summa, forma, firmaArrivalWaste, waste];
@@ -96,6 +107,11 @@
     }
     if (rowDataRangeArrivalWaste()[4] === "Не заповнено вартості комісії приват") {
       alert("Не заповнено вартості комісії приват");
+      return false;
+    }
+
+    if (rowDataRangeArrivalWaste()[4] === "Не заповнена ціна привату") {
+      alert("Не заповнена ціна привату");
       return false;
     }
 
@@ -177,6 +193,7 @@
   document
     .getElementById("buttonArrivalTab")
     .addEventListener("click", startDataArriwal);
+
   document.getElementById("date").valueAsDate = new Date();
 
   function startDataWaste() {
@@ -464,5 +481,17 @@
     document.querySelector('#dataTableArriwalWaste').innerHTML = '';
     document.querySelector('#divDataTableArriwalWaste').style.height = "10%";
   })
+
+  // розфарбовка поля вартості комісії приват в червоний при відсутності даних
+  const costPrivatColor = () => {
+    const costpriv = document.querySelector('#costPrivat');
+    if (!costpriv.value) {
+      costpriv.style.backgroundColor = '#dc35457a';
+    } else {
+      costpriv.style.removeProperty('background-color');
+    }
+    costpriv.addEventListener('input', costPrivatColor);
+  }
+  costPrivatColor();
 
 </script>

@@ -6,28 +6,28 @@
   class FormDataFromTables {
     constructor(formId) {
       this.$form = document.querySelector(formId);
-      this.#setup();
+     // this.#setup();
     }
 
-    #setup() {
+/*     #setup() {
       this.#labelred();
       this.#labelredInputEvent();
       //this.$inputs = this.$form.querySelectorAll('input');
       this.$labels = this.$form.querySelectorAll('label');
-      this.clearRecords = this.clearRecords.bind(this);/* 
-      
-      this.#clearRecords(); */
+      this.#clearRecords();
       this.clearInputClickLabel = this.#clearInputClickLabel.bind(this);
       this.$labels.forEach(element => element.addEventListener('click', this.clearInputClickLabel));
       document.querySelectorAll('.btn-clear-form-all').forEach(element => {
         element.addEventListener('click', this.clearRecords);
       });
-    }
+    } */
+
+
 
     /**
     * Метод очистки полів форми. Також міняє колір лабела на чорний
     */
-    clearRecords() {
+    #clearRecords() {
       this.$form.reset();
       this.#labelred();
     }
@@ -39,10 +39,12 @@
     #labelred() {
       this.$form.querySelectorAll('input, select, textarea').forEach(element => {
         const $labels = this.$form.querySelector(`[for="${element.id}"]`);
-        if (element.value && element.getAttribute('type') != 'checkbox') {
-          $labels.style.color = '#dc3545';
-        } else {
-          $labels.style.color = '';
+        if ($labels) {
+          if (element.value && element.getAttribute('type') != 'checkbox') {
+            $labels.style.color = '#dc3545';
+          } else {
+            $labels.style.color = '';
+          }
         }
       });
     }
@@ -103,5 +105,13 @@
         return true
       }
     }
+
+    baba() {
+
+    }
+
   }
+
+
+
 </script>

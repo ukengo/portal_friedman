@@ -6,23 +6,27 @@
   class FormDataFromTables {
     constructor(formId) {
       this.$form = document.querySelector(formId);
-     // this.#setup();
+      this.#setup();
     }
 
-/*     #setup() {
+    #setup() {
       this.#labelred();
+      this.labelred = this.#labelred.bind(this);
+      this.clearRecords = this.#clearRecords.bind(this);
       this.#labelredInputEvent();
       //this.$inputs = this.$form.querySelectorAll('input');
       this.$labels = this.$form.querySelectorAll('label');
-      this.#clearRecords();
-      this.clearInputClickLabel = this.#clearInputClickLabel.bind(this);
-      this.$labels.forEach(element => element.addEventListener('click', this.clearInputClickLabel));
+     // this.#clearRecords();
+
+     // this.clearInputClickLabel = this.#clearInputClickLabel.bind(this);
+      
+      this.$labels.forEach(element => element.addEventListener('click', this.#clearInputClickLabel));
+      
+      
       document.querySelectorAll('.btn-clear-form-all').forEach(element => {
         element.addEventListener('click', this.clearRecords);
       });
-    } */
-
-
+    }
 
     /**
     * Метод очистки полів форми. Також міняє колір лабела на чорний
@@ -106,11 +110,9 @@
       }
     }
 
-    baba() {
-
-    }
 
   }
+
 
 
 

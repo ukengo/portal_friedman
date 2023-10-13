@@ -1,10 +1,5 @@
 <script>
 
-  //new FormDataFromTables('#form-aw');
-const tato = new FormDataFromTables('#form-aw');
-console.log(tato);
-tato.ba
-
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
     if (event.keyCode == 13) {
@@ -50,7 +45,7 @@ tato.ba
     const event = new Event('change');  
     document.querySelector('#costPrivat').dispatchEvent(event); */
 
-  document.querySelector('#costPrivat').value = localStorage.getItem('costPrivat');
+  document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
 
   function rowDataRangeArrivalWaste() {
     const date = document.getElementById("date").value;
@@ -485,13 +480,14 @@ tato.ba
   // розфарбовка поля вартості комісії приват в червоний при відсутності даних
   const costPrivatColor = () => {
     const costpriv = document.querySelector('#costPrivat');
-    if (!costpriv.value) {
+    if (!+costpriv.value) {
       costpriv.style.backgroundColor = '#dc35457a';
     } else {
       costpriv.style.removeProperty('background-color');
     }
     costpriv.addEventListener('input', costPrivatColor);
   }
-  costPrivatColor();
+  costPrivatColor();  
+
 
 </script>

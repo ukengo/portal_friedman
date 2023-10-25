@@ -39,7 +39,17 @@
     afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
   }
 
-  document.querySelector('#costPrivat').value = localStorage.getItem('costPrivat');
+  /*   const costPrivat = () => {
+      const inputPrivat = document.querySelector('#costPrivat');
+      inputPrivat.value = localStorage.getItem('costPrivat');
+      const event = new Event('change');
+      inputPrivat.dispatchEvent(event);
+    }
+    costPrivat();
+    const event = new Event('change');  
+    document.querySelector('#costPrivat').dispatchEvent(event); */
+
+  document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
 
   function rowDataRangeArrivalWaste() {
     const date = document.getElementById("date").value;
@@ -56,11 +66,10 @@
       firmaArrivalWaste = "";
     }
 
-    if (summaPrivat && summa) {
-      waste = "Заповнені обидва поля суми";
-      firmaArrivalWaste = "";
+    if (!summaPrivat && !summa) {
       summa = "";
-      summaPrivat = "";
+      waste = "Не заповнено ні одного поля суми";
+      firmaArrivalWaste = "";
     }
 
     if (summaPrivat && !summa) {
@@ -97,6 +106,11 @@
     }
     if (rowDataRangeArrivalWaste()[4] === "Не заповнено вартості комісії приват") {
       alert("Не заповнено вартості комісії приват");
+      return false;
+    }
+
+    if (rowDataRangeArrivalWaste()[4] === "Не заповнена ціна привату") {
+      alert("Не заповнена ціна привату");
       return false;
     }
 
@@ -178,6 +192,7 @@
   document
     .getElementById("buttonArrivalTab")
     .addEventListener("click", startDataArriwal);
+
   document.getElementById("date").valueAsDate = new Date();
 
   function startDataWaste() {
@@ -469,13 +484,14 @@
   // розфарбовка поля вартості комісії приват в червоний при відсутності даних
   const costPrivatColor = () => {
     const costpriv = document.querySelector('#costPrivat');
-    if (!costpriv.value || costpriv.value <= 0) {
+    if (!+costpriv.value) {
       costpriv.style.backgroundColor = '#dc35457a';
     } else {
       costpriv.style.removeProperty('background-color');
     }
     costpriv.addEventListener('input', costPrivatColor);
   }
-  costPrivatColor();
+  costPrivatColor();  
+
 
 </script>

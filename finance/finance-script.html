@@ -1,5 +1,5 @@
 <script>
- const formaFin = new FormDataFromTables('#formFinStart');
+  const formaFin = new FormDataFromTables('#formFinStart');
 
   function startTableFinance() {
     $("#proektfin-datalist").empty();
@@ -272,7 +272,7 @@
           result += `<td>${findInTable(dataArrayProcessedFiltered, value)[i][j]}</td>`;
         }
         result += `
-          <td align="center" class="d-flex">
+          <td align="center" class="d-flex justify-content-around">
               <button type="button"
                 id="btnFinanceY"
                 data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
@@ -309,14 +309,14 @@
       summaTrFiltered('#table-finance-search', '#summaFinsnce');
       clickTableFin();
 
-/*       document.querySelectorAll('.btnbtn-fin-edit').forEach(el => {
-        el.addEventListener('click', function () {
-          const idRow = this.getAttribute('data-id');
-        })
-      }) */
+      /*       document.querySelectorAll('.btnbtn-fin-edit').forEach(el => {
+              el.addEventListener('click', function () {
+                const idRow = this.getAttribute('data-id');
+              })
+            }) */
 
       // редактирование таблицы showDataFinance через модальное окно
-      $('.btnbtn-fin-edit').click(function () {
+      function btnFinEdit() {
         var myModal = new bootstrap.Modal(document.getElementById('exampleModalFinance'));
         const row = this.getAttribute('data-id');
         const allModal = dataArray.filter(el => el[6] === row).flat();
@@ -340,7 +340,8 @@
             $('#dateoplfinModal').val('');
           }
         })
-      })
+      }
+      $('.btnbtn-fin-edit').click(btnFinEdit);
 
       // кнопки вчора + п'ятниця + сьогодні 
       document.querySelectorAll('.btn-finance-yft').forEach(el => {
@@ -443,8 +444,7 @@
     const data = [...event.target.parentNode.children];
     const text = getDataFromTd(data);
     const col = event.srcElement.cellIndex;
-    if (col === 7) return false;
-
+    if (col === 7 || col === 8) return false;
     switch (col) {
       case 0:
         $('#proektfin').val(text[0]);

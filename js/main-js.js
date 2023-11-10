@@ -762,7 +762,7 @@ function getDateFin(date) {
 } */
 
 function UpdateRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, sumIspolFin, oplataIspolFin, checkBox) {
-  console.log(checkBox)
+  //console.log(checkBox)
   var getLastRow = dataFinance().getDataRange().getValues().length;
   var table_values = dataFinance().getRange(100, 1, getLastRow, 15).getValues();
   const range = dataBase().getRange(1, 1, dataBase().getLastRow() + 1, dataBase().getLastColumn() + 1);

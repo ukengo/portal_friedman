@@ -53,7 +53,7 @@
         </form>
 `
 
-  // відкриття модального вікна
+  // відкриття модального вікна для відправки пошти буху
   document.querySelector('#btnSendMail').addEventListener('click', event => {
     const buhModal = document.querySelector('.modal-mailbuh-body');
     buhModal.innerHTML = html;
@@ -61,11 +61,11 @@
     new FormDataFromTables('#sendBuhModalForm');
   })
 
-  // відправка даних з модального вікна на бек
+  // відправка даних з модального вікна на бек для відправки пошти буху
   document.querySelector('#btnSendBuh').addEventListener('click', () => {
-   const formaModalSendBuh = new FormDataFromTables('#sendBuhModalForm');
+    const formaModalSendBuh = new FormDataFromTables('#sendBuhModalForm');
     const data = formaModalSendBuh.formaDataObj();
     google.script.run.sendEmailBuhInvoice(data);
-  })
+  });
 
 </script>

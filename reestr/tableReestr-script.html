@@ -1,6 +1,6 @@
 <script>
 
- const formaReestr = new FormDataFromTables('#financeAccoddion');
+  const formaReestr = new FormDataFromTables('#financeAccoddion');
 
 
   function startTableReestrClear() {
@@ -126,8 +126,8 @@
       `
     ar.forEach(function (item, index) {
 
-      displayTableReestr += `
-        <tr id="ROWNUMBER:${row_number_reestr}">
+      displayTableReestr += `      
+      <tr id="ROWNUMBER:${row_number_reestr}">
           <td>
             <div class="row g-1 mt-1">        
       `;
@@ -555,7 +555,7 @@
         break;
     }
 
-   // labelred();
+    // labelred();
     localStorage.setItem('proekt', text[4]);
     // вставка значения из кеша на кнопку и в поле поиска таблицы
     document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;

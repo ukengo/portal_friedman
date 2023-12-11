@@ -90,7 +90,7 @@
             body += `<br>${sendbuhprim}`;
           }
           if (sendbuhcont) {
-            body += `<br>${sendbuhcont}`;
+            body += `<br>${sendbuhcont.replace(new RegExp('---', 'g'), '<br>')}`;
           }
           body += `</p>`;
 
@@ -109,13 +109,13 @@
     const modalMailbuhmailSendText = document.querySelector('.modal-mailbuh-mail-send-text');
     // cрабатывание по кнопке Enter
     modaMailbuhBody.addEventListener('keydown', event => {
-      if (event.keyCode == 13) {
+      if (event.ctrlKey && event.keyCode == 13) {
         google.script.run.withSuccessHandler(() => {
           document.querySelector('.modal-mailbuh-mail-send-text').innerHTML = `
-            <p style="font-size: 1.1rem; color: #dc3545; font-weight: 700; text-align: center;">
-              Відправлено
-            </p>
-          `;
+                    <p style="font-size: 1.1rem; color: #dc3545; font-weight: 700; text-align: center;">
+                      Відправлено
+                    </p>
+                  `;
         }).sendEmailBuhInvoice(buhproekt, sendMail);
       }
     })

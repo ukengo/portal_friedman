@@ -22,10 +22,10 @@ const sendEmailBuhInvoice = (sendbuhproekt, sendMail) => {
     }
     body += `</p>`; */
 
-  /*MailApp.sendEmail("friedmanukraine@gmail.com", `Виставити рахунок до пр${sendbuhproekt}`, "тіло електронного листа", {
+  /* MailApp.sendEmail("friedmanukraine@gmail.com", `Виставити рахунок до пр${sendbuhproekt}`, "тіло електронного листа", {
     name: 'Віталий Мельник (Фрідман-Україна)',
     htmlBody: sendMail
-  });*/
+  }); */
   MailApp.sendEmail("friedmanukraine@gmail.com, vat.friedman@gmail.com", `Виставити рахунок до пр${sendbuhproekt}`, "тіло електронного листа", {
     name: 'Віталий Мельник (Фрідман-Україна)',
     htmlBody: sendMail

@@ -52,7 +52,7 @@
           </div>
         </form>
         <div class="modal-mailbuh-mail"></div>
-        <div class="modal-mailbuh-mail-send-text"></div>
+        <div class="modal-mailbuh-mail-send-text" id="modalMailbuhMailSendText"></div>
 `
 
     // відкриття модального вікна для відправки пошти буху
@@ -106,12 +106,14 @@
     document.querySelector('#btnSendBuh').addEventListener('click', () => {
       google.script.run.sendEmailBuhInvoice(buhproekt, sendMail);
     });
-    const modalMailbuhmailSendText = document.querySelector('.modal-mailbuh-mail-send-text');
+        
     // cрабатывание по кнопке Enter
     modaMailbuhBody.addEventListener('keydown', event => {
+      const sendTextElement = document.querySelector('.modal-mailbuh-mail-send-text');
       if (event.ctrlKey && event.keyCode == 13) {
+        spinner('modalMailbuhMailSendText', 'Відправляємо...');
         google.script.run.withSuccessHandler(() => {
-          document.querySelector('.modal-mailbuh-mail-send-text').innerHTML = `
+          sendTextElement.innerHTML = `
                     <p style="font-size: 1.1rem; color: #dc3545; font-weight: 700; text-align: center;">
                       Відправлено
                     </p>

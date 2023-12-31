@@ -5,7 +5,7 @@
     alert('storage очищено');
   });
 
-  document.querySelector('#updateAll').addEventListener('mouseup', function () {    
+  document.querySelector('#updateAll').addEventListener('mouseup', function () {
     btnTable();
     btnTableFinance();
     onlineDownloads();
@@ -19,19 +19,19 @@
     const refreshLong = setTimeout(refreshCacheLong, minLongStart * 1000 * 60);
   }
 
-/*   document.addEventListener('click', (event) => {
-    if (event.target.tagName === 'INPUT') {
-      const minShortStart = 10;
-      const minShortStop = 15;
-      const refreshShort = setTimeout(() => {
-        onlineDownloads(); console.log('refreshShort');
-      }, minShortStart * 1000 * 60);
-      const refreshShortStop = setTimeout(() => {
-        clearInterval(refreshShort)
-        console.log('refreshShortStop');
-      }, minShortStop * 1000 * 60);
-    }
-  }); */
+  /*   document.addEventListener('click', (event) => {
+      if (event.target.tagName === 'INPUT') {
+        const minShortStart = 10;
+        const minShortStop = 15;
+        const refreshShort = setTimeout(() => {
+          onlineDownloads(); console.log('refreshShort');
+        }, minShortStart * 1000 * 60);
+        const refreshShortStop = setTimeout(() => {
+          clearInterval(refreshShort)
+          console.log('refreshShortStop');
+        }, minShortStop * 1000 * 60);
+      }
+    }); */
 
   // завантаженя в локал
   function onlineDownloads() {
@@ -95,6 +95,9 @@
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataArrival', JSON.stringify(data));
     }).getLastTenRowsArriwal();
+    google.script.run.withSuccessHandler((data) => {
+      localStorage.setItem('stopAw', JSON.stringify(data));
+    }).stopArrivalWaste();
   }
  // onlineDownloads();
 

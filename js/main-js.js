@@ -27,6 +27,12 @@ function addNewRowMinusThreee(rowData) {
   return rowData
 } */
 
+// отримуємо список стоп призначень і дохід витрати
+function stopArrivalWaste() {
+  const stopAw = dataSpiskiReestr().getRange('R2:R').getValues().flat();
+  return stopAw.filter(element => element !== '');  
+}
+
 function addNewRowWaste(rowData) {
   const vasteDate = String(rowData.splice(0, 1));
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate));

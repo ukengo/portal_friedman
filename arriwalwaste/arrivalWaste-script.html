@@ -3,7 +3,6 @@
   //new FormDataFromTables('#form-aw');
   //console.log(document.querySelector('#btnArriwalwasteY').getAttribute('type'));
 
-
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
     if (event.keyCode == 13) {
@@ -30,9 +29,15 @@
     if (!storageDataArrival || !storageDataAWaste) return false;
     const dohod = (JSON.parse(storageDataArrival).data).map(x => [x[4]]);
     const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
-    return [...new Set(rashod.concat(dohod).filter(String).flat())]
+    const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
+    const stopAw = JSON.parse(localStorage.getItem('stopAw'));
+    /*
+   arrInput - масив вхідний
+   stringsInput - одноміоний масив слів для пошуку
+   gage - міра сасиву: 0-одномірний, 1- двомірний, за замовчуванням - одномірний
+   */
+     return searchingSubstringInArrayStrings(dohodRashod, stopAw, gage = 0);
   }
-
 
   function startArrivalWaste() {
     startArrivalWasteClear();
@@ -492,7 +497,7 @@
     }
     costpriv.addEventListener('input', costPrivatColor);
   }
-  costPrivatColor();  
+  costPrivatColor();
 
 
 </script>

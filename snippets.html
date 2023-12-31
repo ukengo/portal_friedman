@@ -240,10 +240,25 @@
     btn.classList.add('shadow-none');
     btn.addEventListener('click', () => {
       if ((btn.innerText === '' || btn.innerText === '-' || btn.innerText === ' - ') && !btn.value) {
-        alert('Не введені дані');        
+        alert('Не введені дані');
         return
       }
     });
   })
+
+  // Пошук підрядка в масиві рядків і формування нового масиву без рядків вхідного, які містять вказані підрядки
+  /*
+  arrInput - масив вхідний
+  stringsInput - одноміоний масив слів для пошуку
+  gage - міра сасиву слів для пошуку: 0-одномірний, 1- двомірний, за замовчуванням - одномірний
+  */
+  function searchingSubstringInArrayStrings(arrInput, stringsInput, gage = 0) {
+    if (gage) arrInput = arrInput.flat();
+    let result = arrInput;
+    stringsInput.forEach(elem => {
+      result = result.map((item, i) => item.toLowerCase().indexOf(elem.toLowerCase()) >= 0 ? 0 : item).filter(item => item != 0);
+    });
+    return result;
+  }
 
 </script>

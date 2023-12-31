@@ -34,10 +34,10 @@ const dataFinance = () => {
   return ret
 }
 
-/* const dataSpiskiReestr = () => {
+ const dataSpiskiReestr = () => {
     const ret = SpreadsheetApp.openByUrl(URLREESTR()).getSheetByName("Списки")
     return ret
-} */
+}
 
 const dataVrabote = () => {
   const ret = SpreadsheetApp.openByUrl(URLREESTR()).getSheetByName("В работе")

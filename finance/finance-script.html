@@ -273,20 +273,20 @@
         }
         result += `
           <td align="center" class="d-flex justify-content-around">
-              <button type="button"
-                id="btnFinanceY"
+              <button type="button"                
+                data-name="btnFinanceY"
                 data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
                 class="btn btn-sm btn-light btn-finance-yft">
                   Y  
               </button>
-              <button type="button"
-                id="btnFinanceFri"
+              <button type="button"                
+                data-name="btnFinanceFri"
                 data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
                 class="btn btn-sm btn-light mx-2 btn-finance-yft">
                 Fri
               </button>
               <button type="button"
-                id="btnFinanceT"
+                data-name="btnFinanceT"
                 data-id="${findInTable(dataArrayProcessedFiltered, value)[i][6]}"
                 class="btn btn-sm btn-light btn-finance-yft">
                   T  
@@ -352,7 +352,7 @@
             return
           }
           //const id = dataArray[row][6];
-          switch (this.id) {
+          switch (this.dataset.name) {
             case `btnFinanceY`:
               google.script.run.withSuccessHandler(() => {
                 google.script.run.withSuccessHandler((data) => {

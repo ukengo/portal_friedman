@@ -36,10 +36,18 @@
       div.innerHTML = result;
     } else {
       let div = document.getElementById('results');
-      div.innerHTML = "Data not found!";
+     // div.innerHTML = "Data not found!";
+      alert("Data not found!");
+      sendBuhHtmlBuild();
     }
     // все кнопки с бухгалтера enabled
-    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
+    //document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
+  }
+
+  function displayResultsSendBuh() {
+  //  document.getElementById('results').innerHTML = "";
+    alert("Useful!");
+    sendBuhHtmlBuild()
   }
 
 </script>

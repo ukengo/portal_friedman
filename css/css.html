@@ -169,12 +169,6 @@
     overflow: auto;
   }
 
-  @media (max-width: 768px) {
-    html {
-      font-size: 14px;
-    }
-  }
-
   /*перефарбовуємо іконку календаря в input date*/
   #calendar::-webkit-calendar-picker-indicator {
     filter: invert(1);
@@ -191,4 +185,53 @@
     height: 6.25rem;
   }
 
+
+  .date-regular {
+    /* display: flex; */
+    /* flex-direction: column; */
+    width: 30px;
+    /* justify-content: space-between */
+    /*   flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+    
+    padding-left: 2px; */
+  }
+
+  .date-regular-plus {
+    /* padding-top: 10px;
+    width: 1px;
+    height: 25px; */
+    font-size: 2.0rem;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    z-index: 100;
+    height: 24px;
+  }
+
+  .date-regular-minus {
+    /*   padding-left: 3px;
+    width: 1px;
+    height: 10px; */
+    font-size: 3rem;
+    cursor: pointer;
+    position: absolute;
+    top: 11px;
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 14px;
+    }
+
+    .date-regular {
+      display: none;
+    }
+  }
+
+  .date-regular {
+    position: relative;
+  }
 </style>

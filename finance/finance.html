@@ -18,26 +18,32 @@
         <div class="col-md-2">
           <div class="form">
             <label for="summafin">Сума</label>
-            <input type="number" name="summafin" id="summafin" class="form-control form-control-sm"/>
+            <input type="number" name="summafin" id="summafin" class="form-control form-control-sm" />
           </div>
         </div>
 
         <div class="col-md-1">
           <div class="form">
             <label for="priznakfin">Ознака</label>
-            <input type="text" name="priznakfin" id="priznakfin" list="priznakfin-datalist" class="form-control form-control-sm" />
+            <input type="text" name="priznakfin" id="priznakfin" list="priznakfin-datalist"
+              class="form-control form-control-sm" />
             <datalist id="priznakfin-datalist"></datalist>
           </div>
         </div>
 
         <div class="col-md-2">
-          <div class="form">
+          <div class="form ">
             <label for="dateoplfin">Дата оплати</label>
             <input type="date" name="dateoplfin" id="dateoplfin" class="form-control form-control-sm" />
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-1 date-regular">
+          <div class="date-regular-plus">+</div>
+          <div class="date-regular-minus">-</div>
+        </div>
+
+        <div class="col-md-2">
           <div class="form">
             <label for="sffin">Рф</label>
             <input type="text" name="sffin" id="sffin" list="sffin-datalist" class="form-control form-control-sm" />
@@ -56,7 +62,8 @@
         <div class="col-md-6">
           <div class="form">
             <label for="primfin">Примітка</label>
-            <input type="text" name="primfin" id="primfin" list="primfin-datalist" class="form-control form-control-sm" />
+            <input type="text" name="primfin" id="primfin" list="primfin-datalist"
+              class="form-control form-control-sm" />
             <datalist id="primfin-datalist"></datalist>
           </div>
         </div>
@@ -64,7 +71,8 @@
         <div class="col-md-6">
           <div class="form">
             <label for="firmafin">Фірма</label>
-            <input type="text" name="firmafin" id="firmafin" list="firmafin-datalist" class="form-control form-control-sm" />
+            <input type="text" name="firmafin" id="firmafin" list="firmafin-datalist"
+              class="form-control form-control-sm" />
             <datalist id="firmafin-datalist"></datalist>
           </div>
         </div>
@@ -74,14 +82,16 @@
           <div class="form-check">
             <span class="check-style"></span>
             <label for="issuepartfinance" class="form-check-label">Виставлено частково</label>
-            <input type="checkbox" name="issuepartfinance" id="issuepartfinance" class="form-check-input" value="part" />
+            <input type="checkbox" name="issuepartfinance" id="issuepartfinance" class="form-check-input"
+              value="part" />
           </div>
         </div>
         <div class="col-md-auto">
           <div class="form-check">
             <span class="check-style"></span>
             <label for="issuecompletfinance" class="form-check-label">Виставлено повністю</label>
-            <input type="checkbox" name="issuecompletfinance" id="issuecompletfinance" class="form-check-input" value="complet" />
+            <input type="checkbox" name="issuecompletfinance" id="issuecompletfinance" class="form-check-input"
+              value="complet" />
           </div>
         </div>
         <div class="col-md-auto">
@@ -136,7 +146,7 @@
     <div class="row g-1 mt-1">
       <div class="col-md-4">
         <div class="row row-centered">
-          <button id="search-t-finance-UP" class="btn btn-light shadow-none col-sm-1 text-center px-1 search-t-finance">Up</button>
+          <button class="btn btn-light shadow-none col-sm-1 text-center px-1 search-t-finance">Up</button>
           <div class="col-sm-10">
             <input type="search" class="form-control input-search input-paste-finance" id="searchFinance"
               placeholder="Пошук по таблиці" onkeypress="clickPressFinanceShearh(event)">

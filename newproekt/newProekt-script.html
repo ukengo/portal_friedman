@@ -36,10 +36,10 @@
     }).addpRoekt();
   }
 
-  // при клике на инпутах вставляется новый прокт
+  // при клике на инпутах вставляется новый проект
   $('.form-click-proekt').on('click touchstart', afterproekt);
 
-  // при старте страницы вставляется новый прокт
+  // при старте страницы вставляется новый проект
   $(afterproekt);
 
   // получение массива данних с инпутов формы ввода
@@ -91,7 +91,7 @@
       }).startDataVraboteR();
       google.script.run.withSuccessHandler((data) => {
         localStorage.setItem('dataVraboteT', JSON.stringify(data));
-      }).startDataVraboteT();      
+      }).startDataVraboteT();
       btnTable();
       document.getElementById("mainButton").disabled = false;
     }).addNewRow(rowDataRangeProekt());
@@ -121,7 +121,7 @@
       }).startDataVraboteR();
       google.script.run.withSuccessHandler((data) => {
         localStorage.setItem('dataVraboteT', JSON.stringify(data));
-      }).startDataVraboteT();      
+      }).startDataVraboteT();
       btnTable();
       document.getElementById("buttonOtOrgana").disabled = false;
     }).addNewRow(rowDataRangeProekt())
@@ -148,5 +148,18 @@
   document.getElementById('buttonBezAf').addEventListener('click', buttonClickBezAf)
 
   document.getElementById('date-nach').valueAsDate = new Date();
+
+  // вставка сьогоднішньої дати при кліку на лабелі
+  
+ 
+  
+/*     document.getElementById('date-con').addEventListener('click', () => {
+      if (!document.getElementById('date-con').value) {
+      console.log(document.getElementById('date-con').value);      
+      document.getElementById('date-con').valueAsDate = new Date();
+    }  else {
+      document.getElementById('date-con').value = '';
+    }
+  }); */
 
 </script>

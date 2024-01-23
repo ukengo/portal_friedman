@@ -1,0 +1,42 @@
+<script>
+
+  // будуємо сторінку
+  function sendBuhHtmlBuild() {
+    hideBtnBuh(); // включение выпадающего окна со стрелкой на мобильном
+    const temp = document.querySelector('#BUHGALTER_1-site');
+    const clon = temp.content.cloneNode(true);
+    const result = document.querySelector('#results');
+    if (result.firstChild) {
+      while (result.firstChild) {
+        result.removeChild(result.firstChild);
+      }
+    }
+    result.appendChild(clon);
+    buttonProcessingBUHGALTER();
+    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
+  }
+
+  // обробка кнопок
+  function buttonProcessingBUHGALTER() {
+    document.querySelectorAll('.btn-buh-buh').forEach(element => {
+      element.addEventListener('click', e => {
+        switch (e.target.id) {
+          case 'button-buh-buh':
+            buttonClickBuh();
+            break;
+          case 'button-buh-send':
+            sendBuhBib();
+            break;
+        }
+      })
+    });
+  }
+
+  function sendBuhBib() {
+    clearDiv();
+    spinner('results');
+    hideBtnBuh();
+    google.script.run.withSuccessHandler(displayResultsSendBuh).sendBuh();
+  }
+
+</script>

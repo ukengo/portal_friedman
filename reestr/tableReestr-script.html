@@ -256,6 +256,20 @@
                               <button type="button" class="btn btn-outline-danger shadow-none btn-clear-search">X</button>
       `;
 
+      displayTableReestr += `
+      <div class="d-flex">
+              <button type="button" value="Y" data-num="${row_number_reestr}" id="btnReestrY${row_number_reestr}" class="btn btn-outline-danger shadow-none btn-yft">
+                  Y  
+              </button>
+              <button type="button" value="Fri" data-num="${row_number_reestr}" id="btnReestrFri${row_number_reestr}" class="btn btn-outline-danger shadow-none btn-yft mx-1">
+                Fri
+              </button>
+              <button type="button" value="T" data-num="${row_number_reestr}" id="btnReestrT${row_number_reestr}" class="btn btn-outline-danger shadow-none btn-yft">
+                  T  
+              </button>
+      </div>
+      `;
+
       displayTableReestr += "</td>";
       displayTableReestr += "</tr>";
 
@@ -735,5 +749,17 @@
     })
   }
   document.querySelector('#btnClearRecordsReestr').addEventListener('click', clearBtnsTable)
+
+  // кнопки вчора + п'ятниця + сьогодні
+  function btnYFTReestr() {
+    document.querySelectorAll(".btn-yft").forEach(element => {
+      element.addEventListener('click', e => {
+        const num = e.target.dataset.num;
+        const btnValue = e.target.value;
+        const date = document.querySelector(`#up_dateendreestr${num}`);
+        yesterdayFridayToday1(btnValue, date);
+      })
+    });
+  }
 
 </script>

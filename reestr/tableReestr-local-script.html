@@ -1,8 +1,5 @@
 <script>
 
-
-
-
   document.querySelector('#btnSearchReestrOf').addEventListener('click', () => {
     SearchRecordsReestrLocal(JSON.parse(localStorage.getItem('dataReestr')));
   });
@@ -98,6 +95,7 @@
     const res = searchRecordsReestrOnline(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr, allRecords);
 
     searchRecordsReestrTable(res);
+    btnYFTReestr();
   }
 
 

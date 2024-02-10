@@ -857,6 +857,7 @@ function AddRecordFinMultiple(arrFinMulti) {
       }
     }
   }
+  removalDuplicates();
 }
 
 // функция обработка вставки "частичная оплата"

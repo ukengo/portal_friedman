@@ -351,7 +351,6 @@
             alert('Немає ID');
             return
           }
-          //const id = dataArray[row][6];
           switch (this.dataset.name) {
             case `btnFinanceY`:
               google.script.run.withSuccessHandler(() => {
@@ -669,5 +668,37 @@
     })
   }());
 
+  // регулюання дати у вікні пошуку
+  document.querySelector('.date-regular').addEventListener('click', dataRegulation);
+  document.querySelector('#dateoplfin').addEventListener('focus', dataRegulation);
+
+  function dataRegulation(e) {
+    const targetClass = e.target.className;
+    const date = document.querySelector('#dateoplfin');
+    let dateValue = formaFin.formaDataObj().dateoplfin;
+    if (!dateValue) {
+      date.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
+    } else {
+      if (targetClass === 'date-regular-plus') {
+        date.valueAsDate = new Date(new Date(dateValue).setDate(new Date(dateValue).getDate() + 1));
+      };
+      if (targetClass === 'date-regular-minus') {
+        date.valueAsDate = new Date(new Date(dateValue).setDate(new Date(dateValue).getDate() - 1));
+      };
+    }
+    formaFin.labelred();
+  }
+
+  // "гот" за змовчуванням
+  document.querySelector('#summafin').addEventListener('focus', e => {
+    const summafin = document.querySelector('#summafin');
+    if (!document.querySelector('#summafin').value
+      &&
+      !document.querySelector('#summafin').value
+    ) {
+      document.querySelector('#priznakfin').value = 'гот';
+    }
+    formaFin.labelred();
+  });
 
 </script>

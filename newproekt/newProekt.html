@@ -2,75 +2,82 @@
   <div class="row col-lg-6 offset-lg-2 offset-lg-3">
     <h5>Внесення нового проєкту</h5>
   </div>
-  <div class="row">
-    <div class="col-lg-6 offset-lg-2 offset-lg-3">
-      <div class="radius p-3">
+  <form action="" id="formNewProekt">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-2 offset-lg-3">
+        <div class="radius p-3">
+          <div class="row">
+
+            <div class="col-4">
+              <div class="form">
+                <label for="proekt">Проєкт</label>
+                <input type="number" class="form-control form-click-proekt" id="proekt" />
+              </div>
+            </div>
+            <div class="form">
+              <label for="firma">Фірма</label>
+              <input type="text" class="form-control form-click-proekt" list="firma-datalist" id="firma" />
+              <datalist id="firma-datalist"></datalist>
+            </div>
+            <div class="form">
+              <label for="rabota">Робота</label>
+              <input type="text" class="form-control form-click-proekt" list="rabota-datalist" id="rabota" />
+              <datalist id="rabota-datalist"></datalist>
+            </div>
+
+            <div class="col-6">
+              <div class="form">
+                <label for="code-rabota">Код роботи</label>
+                <input type="text" class="form-control form-click-proekt" list="code-rabota-datalist"
+                  id="code-rabota" />
+                <datalist id="code-rabota-datalist"></datalist>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form">
+                <label for="sotr">Співробітник</label>
+                <input type="text" class="form-control form-click-proekt" list="sotr-datalist" id="sotr" />
+                <datalist id="sotr-datalist"></datalist>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form">
+                <label for="date-nach">Дата початок</label>
+                <input type="date" class="form-control form-click-proekt" id="date-nach">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form">
+                <label for="date-con">Дата кінець</label>
+                <input type="date" class="form-control form-click-proekt" id="date-con" />
+              </div>
+            </div>
+            <div class="form">
+              <label for="sch">рф</label>
+              <input type="text" class="form-control form-click-proekt" id="sch" />
+            </div>
+            <div class="form">
+              <label for="prim">Примітки</label>
+              <input type="text" class="form-control form-click-proekt" list="prim-datalist" id="prim" />
+              <datalist id="prim-datalist"></datalist>
+            </div>
+          </div>
+        </div>
         <div class="row">
-
-          <div class="col-4">
-            <div class="form">
-              <label for="proekt">Проєкт</label>
-              <input type="number" class="form-control form-click-proekt" id="proekt" />
-            </div>
-          </div>
-          <div class="form">
-            <label for="firma">Фірма</label>
-            <input type="text" class="form-control form-click-proekt" list="firma-datalist" id="firma" />
-            <datalist id="firma-datalist"></datalist>
-          </div>
-          <div class="form">
-            <label for="rabota">Робота</label>
-            <input type="text" class="form-control form-click-proekt" list="rabota-datalist" id="rabota" />
-            <datalist id="rabota-datalist"></datalist>
-          </div>
-
-          <div class="col-6">
-            <div class="form">
-              <label for="code-rabota">Код роботи</label>
-              <input type="text" class="form-control form-click-proekt" list="code-rabota-datalist" id="code-rabota" />
-              <datalist id="code-rabota-datalist"></datalist>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form">
-              <label for="sotr">Співробітник</label>
-              <input type="text" class="form-control form-click-proekt" list="sotr-datalist" id="sotr" />
-              <datalist id="sotr-datalist"></datalist>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form">
-              <label for="date-nach">Дата початок</label>
-              <input type="date" class="form-control form-click-proekt" id="date-nach">
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form">
-              <label for="date-con">Дата кінець</label>
-              <input type="date" class="form-control form-click-proekt" id="date-con" />
-            </div>
-          </div>
-          <div class="form">
-            <label for="sch">рф</label>
-            <input type="text" class="form-control form-click-proekt" id="sch" />
-          </div>
-          <div class="form">
-            <label for="prim">Примітки</label>
-            <input type="text" class="form-control form-click-proekt" list="prim-datalist" id="prim" />
-            <datalist id="prim-datalist"></datalist>
+          <div class="col-sm-12 d-flex justify-content-evenly mt-2">
+            <button type="button" class="btn btn-danger" id="mainButton"
+              title="Запись строки в реестр + создание пустой папки с проектом.">&nbsp;&nbsp;&nbsp;&#128209;&nbsp;&nbsp;&nbsp;</button>
+            <button type="button" class="btn btn-danger" id="buttonBezAf"
+              title="Запись строки в реестр. Папка с проектом не создается.">&#128209;без Аф</button>
+            <button type="button" class="btn btn-danger" id="buttonAf"
+              title="Создание пустой папки в Аф без записи в реестре.">Аф без&#128209;</button>
+            <button type="button" class="btn btn-danger" id="buttonOtOrgana"
+              title="Запись строки в реестр. Создание папки с проектом с подпапками... 'От органа'">&#128209;і Від
+              органу</button>
+            <button type="button" class="btn btn-danger" id="buttonOchistka">Очистити</button>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-12 d-flex justify-content-evenly mt-2">
-          <button type="button" class="btn btn-danger"
-            id="mainButton" title="Запись строки в реестр + создание пустой папки с проектом.">&nbsp;&nbsp;&nbsp;&#128209;&nbsp;&nbsp;&nbsp;</button>
-          <button type="button" class="btn btn-danger" id="buttonBezAf" title="Запись строки в реестр. Папка с проектом не создается.">&#128209;без Аф</button>
-          <button type="button" class="btn btn-danger" id="buttonAf" title="Создание пустой папки в Аф без записи в реестре.">Аф без&#128209;</button>
-          <button type="button" class="btn btn-danger" id="buttonOtOrgana" title="Запись строки в реестр. Создание папки с проектом с подпапками... 'От органа'">&#128209;і Від органу</button>
-          <button type="button" class="btn btn-danger" id="buttonOchistka">Очистити</button>
-        </div>
-      </div>
-    </div>    
-  </div>
+    </div>
+  </form>
 </div>

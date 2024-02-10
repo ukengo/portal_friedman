@@ -301,6 +301,18 @@
         break;
     }
   }
+
+  //вставка значення в інпут при фокусі на іншому імпуті
+  function inputToFocus(inputInput, inputOutput, string, form) {
+    inputInput.addEventListener('focus', e => {
+      if (!inputInput.value) {
+        inputOutput.value = string;
+      }
+      if (form) {
+        form.labelred();
+      }
+    });
+  }
   // кінець вставка дати вчора, п'ятниця, сьогодні
 
 </script>

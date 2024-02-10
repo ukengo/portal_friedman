@@ -1,4 +1,5 @@
 <script>
+  const formNewProekt = new FormDataFromTables('#formNewProekt');
 
   // формирование раскрывающихся списков  
   function startTableNewProekt() {
@@ -32,7 +33,8 @@
   // подстановка номера проекта при добавлении нового проекта
   function afterproekt() {
     google.script.run.withSuccessHandler(function (array) {
-      document.getElementById('proekt').value = array + 1
+      document.getElementById('proekt').value = array + 1;
+      formNewProekt.labelred();
     }).addpRoekt();
   }
 
@@ -149,15 +151,28 @@
 
   document.getElementById('date-nach').valueAsDate = new Date();
 
+
+  // "Мельник" за змовчуванням
+  /*   document.querySelector('#code-rabota').addEventListener('focus', e => {
+      //const summafin = document.querySelector('#code-rabota');
+      if (!document.querySelector('#code-rabota').value) {
+        document.querySelector('#sotr').value = 'Мельник';
+      }
+      formaFin.labelred();
+    }); */
+
+  inputToFocus(
+    document.querySelector('#code-rabota'),
+    document.querySelector('#sotr'),
+    'Мельник',
+    formNewProekt);
+
   // вставка сьогоднішньої дати при кліку на лабелі
-  
- 
-  
-/*     document.getElementById('date-con').addEventListener('click', () => {
-      if (!document.getElementById('date-con').value) {
-      console.log(document.getElementById('date-con').value);      
+/*   document.getElementById('date-con').addEventListener('click', () => {
+    if (!document.getElementById('date-con').value) {
+      console.log(document.getElementById('date-con').value);
       document.getElementById('date-con').valueAsDate = new Date();
-    }  else {
+    } else {
       document.getElementById('date-con').value = '';
     }
   }); */

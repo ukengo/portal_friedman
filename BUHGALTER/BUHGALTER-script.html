@@ -16,7 +16,7 @@
   //показать стрелку на мобильном 
   function hideBtnBuh() {
     searchMobileNot(() => {
-      $('.btn-hide').hide(350);         
+      $('.btn-hide').hide(350);
       $('.bi-arrow-left').attr('visibility', 'visible');
       $('.arrow').slideToggle();
     });
@@ -25,7 +25,7 @@
   //убрать стрелку на мобильном
   $(".bi-arrow-left").click(function () {
     $('.btn-hide').show();
-    $('.bi-arrow-left').attr('visibility', 'hidden');    
+    $('.bi-arrow-left').attr('visibility', 'hidden');
     $('.arrow').slideToggle();
     clearDiv();
     removeNavBuhActive();
@@ -40,10 +40,9 @@
     localStorage.setItem('buttonsBuhLiButton', '#' + this.id);
     // все кнопки с бухгалтера disabled
     document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = true);
-
     switch ('#' + this.id) {
       case '#buttonBuh':
-        buttonClickBuh();
+        sendBuhHtmlBuild();  
         break;
       case '#buttonNevistavleno':
         startDataNevistvleno();

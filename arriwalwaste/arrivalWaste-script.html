@@ -36,7 +36,7 @@
    stringsInput - одноміоний масив слів для пошуку
    gage - міра сасиву: 0-одномірний, 1- двомірний, за замовчуванням - одномірний
    */
-     return searchingSubstringInArrayStrings(dohodRashod, stopAw, gage = 0);
+    return searchingSubstringInArrayStrings(dohodRashod, stopAw, gage = 0);
   }
 
   function startArrivalWaste() {
@@ -167,24 +167,14 @@
     document.getElementById("sftermkar").value = "";
   }
 
-  // кнопки вчора + п'ятниця + сьогодні 
-  document.querySelectorAll('.btn-arriwalwaste-yft').forEach(el => {
-    el.addEventListener("click", function () {
-      this.disabled = true;
-      switch (this.id) {
-        case 'btnArriwalwasteY':
-          document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-          break;
-        case 'btnArriwalwasteFri':
-          document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
-          break;
-        case 'btnArriwalwasteT':
-          document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
-          break;
-      }
-      this.disabled = false;
+  // кнопки вчора + п'ятниця + сьогодні  
+  document.querySelectorAll(".btn-yft").forEach(elem => {
+    const date = document.querySelector("#date");
+    elem.addEventListener('click', e => {
+      yesterdayFridayToday1(e.target.value, date)
     })
-  });
+  })
+  // кінець кнопки вчора + п'ятниця + сьогодні
 
   document
     .getElementById("buttonWaste")

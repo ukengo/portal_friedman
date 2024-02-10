@@ -65,14 +65,17 @@
     $(this).removeAttr('style');
   }) */
 
+  //очистка inputa щелчком по label и удаление красной расскраски
   clearInputClickLabel();
   function clearInputClickLabel() {
-    document.querySelectorAll('label').forEach(el => el.addEventListener('click', function () {
+    document.querySelectorAll('label').forEach(el => el.addEventListener('click', function (e) {
+      e.preventDefault();
       this.removeAttribute('style');
       const id = this.getAttribute('for');
       if (!id) return;
       document.getElementById(id).value = '';
-    }))
+    }));
+    //document.querySelector('#dateoplfin').addEventListener('focus', dataRegulation);
   }
 
   // очистка поля поиска прищелчке на крестике
@@ -128,7 +131,7 @@
     return values;
   }
 
-  // Визначення номера строчки по значенню элемента стрчки.
+  // Визначення номера строчки по значенню элемента строчки.
   function findNumRow(arr, value, numEl) {
     for (var i = 0; i < arr.length; i++)
       if (arr[i][numEl] == value)
@@ -260,5 +263,44 @@
     });
     return result;
   }
+
+  // вставка дати вчора, п'ятниця, сьогодні 
+  /*   function yesterdayFridayToday(btnY, btnFri, btnT, elem) {
+      document.querySelectorAll('.btn-yft').forEach(el => {
+        el.addEventListener("click", function () {
+          switch (this.id) {
+            case 'btnArriwalwasteY':
+              // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)); 
+              elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
+              break;
+            case 'btnArriwalwasteFri':
+              // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)); 
+              elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 3));
+              break;
+            case 'btnArriwalwasteT':
+              // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now())); 
+              elem.valueAsDate = new Date(new Date().setDate(new Date().getDate()));
+              break;
+          }
+        })
+      });
+    } */
+  function yesterdayFridayToday1(btnValue, elem) {
+    switch (btnValue.trim()) {
+      case 'Y':
+        // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)); 
+        elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
+        break;
+      case 'Fri':
+        // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)); 
+        elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 3));
+        break;
+      case 'T':
+        // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now())); 
+        elem.valueAsDate = new Date(new Date().setDate(new Date().getDate()));
+        break;
+    }
+  }
+  // кінець вставка дати вчора, п'ятниця, сьогодні
 
 </script>

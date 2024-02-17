@@ -65,7 +65,9 @@
   }
   function clickPressReestrUpdate(event) {
     if (event.keyCode == 13) {
-      UpdateRecordReestr(parseInt(document.activeElement.id.replace(/[^\d]/g, '')))
+      UpdateRecordReestr(parseInt(document.activeElement.id.replace(/[^\d]/g, '')));
+console.log(parseInt(document.activeElement.id.replace(/[^\d]/g, '')));
+
     }
   }
 

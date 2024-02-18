@@ -149,7 +149,7 @@
     </div>
   </div>
   <div class="row mb-4 mt-2">
-    <div class="col">
+    <div class="col-12 col-lg-5">
       <div class="btn-group my-1" role="group" aria-label="Basic example">
         <!-- <button type="button" class="btn btn-danger" id="btnSearchReestr">
           Search
@@ -158,14 +158,14 @@
           Search
         </button>
         <button type="button" id="btnClearRecordsReestr" class="btn btn-danger shadow-none btn-clear-form-all">
-          Clear Records
+          Clear Rec
         </button>
       </div>
       <!-- <button type="button" class="btn btn-danger" id="btnClearSearchReestr">
         Clear
       </button> -->
       <button type="button" class="btn btn-danger" onclick="startTableReestr()">
-        Up Record
+        Up Rec
       </button>
       <!-- <input type="button" value="Table" class="btn btn-danger" id="btnTable" /> -->
       <div class="btn-group my-1" role="group" aria-label="Basic example">
@@ -178,11 +178,13 @@
         </button>
       </div>
     </div>
-    <div class="col">
-      <button type="button" class="btn btn-danger my-1 btn-reestr-yft" id="btnReestrSY">SY</button>
-      <button type="button" class="btn btn-danger my-1 btn-reestr-yft" id="btnReestrSFri">SFri</button>
-      <button type="button" class="btn btn-danger my-1 btn-reestr-yft" id="btnReestrST">ST</button>
-      <button type="button" class="btn btn-danger my-1 ms-5 btn-reestr-yft-of" id="btnReestrSYOf">SYOf</button>
+    <div class="col-md-3 btn-reestr-yft d-none d-md-block">
+      <button type="button" class="btn btn-danger my-1" id="btnReestrSY">SY</button>
+      <button type="button" class="btn btn-danger my-1" id="btnReestrSFri">SFri</button>
+      <button type="button" class="btn btn-danger my-1" id="btnReestrST">ST</button>
+    </div>
+    <div class="col-md">
+      <button type="button" class="btn btn-danger my-1 btn-reestr-yft-of" id="btnReestrSYOf">SYOf</button>
       <button type="button" class="btn btn-danger my-1 btn-reestr-yft-of" id="btnReestrSFriOf">SFriOf</button>
       <button type="button" class="btn btn-danger my-1 btn-reestr-yft-of" id="btnReestrSTOf">STOf</button>
     </div>
@@ -203,7 +205,7 @@
         -
       </button>
       <button type="button" class="btn btn-danger me-1 btn-block-searh-reestr shadow-none"
-        id="btnSearchFinPlus">-</button>      
+        id="btnSearchFinPlus">-</button>
       <button type="button" class="btn btn-danger me-1 btn-finance-transition btn-block-searh-reestr shadow-none"
         id="btnSearchFinInfo">-</button>
       <button type="button" class="btn btn-danger me-1 btn-job-transition btn-block-searh-reestr shadow-none"

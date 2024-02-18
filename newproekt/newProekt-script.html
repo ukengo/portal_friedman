@@ -34,12 +34,14 @@
   function afterproekt() {
     google.script.run.withSuccessHandler(function (array) {
       document.getElementById('proekt').value = array + 1;
+      document.getElementById('date-nach').valueAsDate = new Date();
       formNewProekt.labelred();
     }).addpRoekt();
   }
 
   // при клике на инпутах вставляется новый проект
   $('.form-click-proekt').on('click touchstart', afterproekt);
+
 
   // при старте страницы вставляется новый проект
   $(afterproekt);

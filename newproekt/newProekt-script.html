@@ -1,4 +1,5 @@
 <script>
+  const formNewProekt = new FormDataFromTables('#formNewProekt');
 
   // формирование раскрывающихся списков  
   function startTableNewProekt() {
@@ -32,12 +33,15 @@
   // подстановка номера проекта при добавлении нового проекта
   function afterproekt() {
     google.script.run.withSuccessHandler(function (array) {
-      document.getElementById('proekt').value = array + 1
+      document.getElementById('proekt').value = array + 1;
+      document.getElementById('date-nach').valueAsDate = new Date();
+      formNewProekt.labelred();
     }).addpRoekt();
   }
 
   // при клике на инпутах вставляется новый проект
   $('.form-click-proekt').on('click touchstart', afterproekt);
+
 
   // при старте страницы вставляется новый проект
   $(afterproekt);
@@ -77,6 +81,7 @@
       .createNewFolder(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
+    formNewProekt.labelred();
   }
 
   function buttonClickEnter() {
@@ -106,6 +111,7 @@
     }).addNewRow(rowDataRangeProekt());
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
+    formNewProekt.labelred();
   }
 
   function buttonClickOtOrgana() {
@@ -127,18 +133,19 @@
     }).addNewRow(rowDataRangeProekt())
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
-
+    formNewProekt.labelred();
   }
 
   function buttonClickOchistka() {
     startTableNewProekt() // формирование раскрывающихся списков
-    document.getElementById('firma').value = ""
-    document.getElementById('rabota').value = ""
-    document.getElementById('code-rabota').value = ""
-    document.getElementById('date-con').value = ""
-    document.getElementById('sch').value = ""
-    document.getElementById('prim').value = ""
-    document.getElementById('sotr').value = ""
+    document.getElementById('firma').value = "";
+    document.getElementById('rabota').value = "";
+    document.getElementById('code-rabota').value = "";
+    document.getElementById('date-con').value = "";
+    document.getElementById('sch').value = "";
+    document.getElementById('prim').value = "";
+    document.getElementById('sotr').value = "";
+    formNewProekt.labelred();
   }
 
   document.getElementById('mainButton').addEventListener('click', buttonClickEnter)
@@ -149,17 +156,29 @@
 
   document.getElementById('date-nach').valueAsDate = new Date();
 
+  // "Мельник" за змовчуванням
+  /*   document.querySelector('#code-rabota').addEventListener('focus', e => {
+      //const summafin = document.querySelector('#code-rabota');
+      if (!document.querySelector('#code-rabota').value) {
+        document.querySelector('#sotr').value = 'Мельник';
+      }
+      formaFin.labelred();
+    }); */
+
+  inputToFocus(
+    document.querySelector('#code-rabota'),
+    document.querySelector('#sotr'),
+    'Мельник',
+    formNewProekt);
+
   // вставка сьогоднішньої дати при кліку на лабелі
-  
- 
-  
-/*     document.getElementById('date-con').addEventListener('click', () => {
+  /*   document.getElementById('date-con').addEventListener('click', () => {
       if (!document.getElementById('date-con').value) {
-      console.log(document.getElementById('date-con').value);      
-      document.getElementById('date-con').valueAsDate = new Date();
-    }  else {
-      document.getElementById('date-con').value = '';
-    }
-  }); */
+        console.log(document.getElementById('date-con').value);
+        document.getElementById('date-con').valueAsDate = new Date();
+      } else {
+        document.getElementById('date-con').value = '';
+      }
+    }); */
 
 </script>

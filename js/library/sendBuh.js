@@ -54,7 +54,6 @@ function searchFile(fileName) {
 }
 
 function deleteFile(fileName) {
-  const fgt = searchFile(fileName)
-  console.log(fgt)
+  const fgt = searchFile(fileName)  
   Drive.Files.remove(fgt)
 }

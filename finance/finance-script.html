@@ -41,8 +41,9 @@
     else naydenofin = "Немає фінансових рухів";
 
     var displayTable = '<form>';
-    displayTable += '<table onkeypress=\"clickPressFinanceUpdate(event)\" class=\"table table-bordered border-success mb-2 mt-2\" id=\"mainTableFin\" >';
-    displayTable += `<tr>`;
+    displayTable += '<table onkeypress="clickPressFinanceUpdate(event)" class="table table-bordered border-success mb-2 mt-2" id="mainTableFin" >';
+    displayTable += `<tbody class="border-2">`;
+    displayTable += `<tr class="border-2">`;
     displayTable += `<th width="550" class="fw-bold text-danger">${naydenofin}</th>`;
     displayTable += `<th width="1">
                       <button type="button" class="w-100 btn btn-outline-danger btn-sm shadow-none  btn-clear-search btn-clear-search-finance">X</button> 
@@ -51,7 +52,7 @@
 
     ar.forEach(function (item, index) {
 
-      displayTable += "<tr class=\"radius\" id=\"ROWNUMBER:" + row_number_fin + "\" >";
+      displayTable += "<tr class=\"radius\" id=\"ROWNUMBERf:" + row_number_fin + "\" >";
 
       displayTable += "<td colspan=\"2\">"
       displayTable += "<div class=\"row\">"
@@ -138,7 +139,7 @@
       row_number_fin++;
     });
 
-    displayTable += '</table></form>';
+    displayTable += '</table></tbody></form>';
 
     document.getElementById("rowdatafin").innerHTML = displayTable;
     localStorage.setItem('test', displayTable);
@@ -690,15 +691,10 @@
   }
 
   // "гот" за змовчуванням
-  document.querySelector('#summafin').addEventListener('focus', e => {
-    const summafin = document.querySelector('#summafin');
-    if (!document.querySelector('#summafin').value
-      &&
-      !document.querySelector('#summafin').value
-    ) {
-      document.querySelector('#priznakfin').value = 'гот';
-    }
-    formaFin.labelred();
-  });
+  inputToFocus(
+    document.querySelector('#summafin'),
+    document.querySelector('#priznakfin'),
+    'гот',
+    formaFin);
 
 </script>

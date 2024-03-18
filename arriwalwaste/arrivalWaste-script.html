@@ -170,6 +170,7 @@
   // кнопки вчора + п'ятниця + сьогодні  
   document.querySelectorAll(".btn-yft").forEach(elem => {
     const date = document.querySelector("#date");
+
     elem.addEventListener('click', e => {
       yesterdayFridayToday1(e.target.value, date)
     })

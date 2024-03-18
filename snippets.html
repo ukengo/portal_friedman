@@ -204,12 +204,15 @@
     document.querySelectorAll('.btn-clear-search').forEach(elem => elem.addEventListener('click', (e) => {
       if (e.target.closest('.btn-delete')) {
         // document.querySelector('body').scrollIntoView();
+        console.log(e.target.closest('.btn-delete'));
         e.target.closest('.btn-delete').innerHTML = '';
       }
       // якщо на кнопці є клас btn-clear-search-finance, то закрити блок і на сторінці фінансів
       if (e.target.classList.contains('btn-clear-search-finance')) {
         document.querySelector('#rowdatafin').innerHTML = '';
       }
+      formaReestr.clearRecords();
+      clearBtnsTable();
     }))
   }
 
@@ -286,20 +289,45 @@
       });
     } */
   function yesterdayFridayToday1(btnValue, elem) {
-    switch (btnValue.trim()) {
-      case 'Y':
-        // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)); 
-        elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
-        break;
-      case 'Fri':
-        // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)); 
-        elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 3));
-        break;
-      case 'T':
-        // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now())); 
-        elem.valueAsDate = new Date(new Date().setDate(new Date().getDate()));
-        break;
+    if (elem) {
+      switch (btnValue.trim()) {
+        case 'Y':
+          // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)); 
+          ///25280511
+          console.log(1);
+          console.log(date);
+          console.log(new Date(new Date().setDate(new Date().getDate() - 1)));
+          elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
+          break;
+        case 'Fri':
+          ///25280511
+          console.log(2);
+          console.log(date);
+          // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)); 
+          elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 3));
+          break;
+        case 'T':
+          ///25280511
+          console.log(3);
+          console.log(date);
+          // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now())); 
+          elem.valueAsDate = new Date(new Date().setDate(new Date().getDate()));
+          break;
+      }
     }
+  }
+
+
+  //вставка значення в інпут при фокусі на іншому імпуті
+  function inputToFocus(inputInput, inputOutput, string, form) {
+    inputInput.addEventListener('focus', e => {
+      if (!inputInput.value) {
+        inputOutput.value = string;
+      }
+      if (form) {
+        form.labelred();
+      }
+    });
   }
   // кінець вставка дати вчора, п'ятниця, сьогодні
 

@@ -65,7 +65,7 @@
   }
   function clickPressReestrUpdate(event) {
     if (event.keyCode == 13) {
-      UpdateRecordReestr(parseInt(document.activeElement.id.replace(/[^\d]/g, '')))
+      UpdateRecordReestr(parseInt(document.activeElement.id.replace(/[^\d]/g, '')));
     }
   }
 
@@ -127,7 +127,7 @@
     ar.forEach(function (item, index) {
 
       displayTableReestr += `      
-      <tr id="ROWNUMBER:${row_number_reestr}">
+      <tr class="<!--tabte-reestr-border  border-5-->" id="ROWNUMBER:${row_number_reestr}">
           <td>
             <div class="row g-1 mt-1">        
       `;
@@ -273,6 +273,10 @@
       displayTableReestr += "</td>";
       displayTableReestr += "</tr>";
 
+      displayTableReestr += `    <tr class="table-danger">
+      <td colspan="3"></td>
+    </tr>`;
+      
       row_number_reestr++;
 
       // считаем количество остановленных
@@ -373,7 +377,9 @@
     let checkTest = setInterval(function () {
       if (localStorage.getItem('test')) {
         btnEnable(btnDE);
+        
         document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = localStorage.getItem('test');
+        document.getElementById("rowdatafin").innerHTML = '';
         const elements = document.querySelectorAll(`#rowdatafin1${row_number_reestr} .delete-fin`);
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
@@ -381,6 +387,9 @@
       // закриття блоку по кнопці Clear
       btnClearSearchFinance();
     }, 1);
+    /* [...document.getElementsByClassName('tabte-reestr-border')].forEach(element => {
+      element.classList.add("border-5");
+    })*/
   }
 
   function FinanceRecordReestrClose(row_number_reestr) {
@@ -391,7 +400,7 @@
   function btnTable() {
     if ($('.dataTables_filter input').length) { // проверка на наличие селектора
       const valueSearch = $('.dataTables_filter input').val(); // данные в поле поиска
-      localStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш
+      localStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш      
     };
 
     $('#div-data-table').remove();
@@ -400,13 +409,13 @@
     $("#div-data-table-spinner").attr("tabindex", -1).focus();
     spinner('div-data-table-spinner')
     google.script.run.withSuccessHandler(showData).getData();
-
+    dblClickTableReestr();
     //tableLineSelection() //полосы в таблице
   }
 
   // открытие полной таблицы проектов при загрузке окна (автооткрытие)
-  searchMobile(btnTable);
-
+  // searchMobile(btnTable);
+  btnTable();
 
   function showData(dataArray) {
     $(document).ready(function () {
@@ -417,6 +426,7 @@
         lengthMenu: [[25, 50, 100, 500, -1, 0], [25, 50, 100, 500, "Все", "Пусто"]],
         responsive: true,
         autoWidth: false,
+        responsive: true,
         order: [[11, 'desc']], // колонка 10 это номера строк, по ним сортировка
         columnDefs: [
           {
@@ -474,12 +484,10 @@
 
       // пошук при кліку на Search:
 
-
       var a = document.querySelector('.dataTables_wrapper .dataTables_filter');
       var b = document.querySelector('.dataTables_wrapper .dataTables_filter input');
       var c = document.querySelector('.dataTables_wrapper .dataTables_filter label');
       // var cName = document.querySelector('.dataTables_wrapper .dataTables_filter label[for="name"]');
-
 
       // перезавантаження таблиці
       var elem = document.createElement("button");
@@ -489,11 +497,21 @@
       elem.addEventListener('click', btnTable);
       a.insertBefore(elem, c);
 
-      // считывваем из кеша данные для поиска и вставляем в поле поиска
+      // считываем из кеша данные для поиска и вставляем в поле поиска
       const valueSearch = localStorage.getItem('dataTables_filter_input');
-      $('.dataTables_filter input').val(valueSearch);
+      const dataTablesFilterInput = document.querySelector('.dataTables_filter input');
+      dataTablesFilterInput.value = valueSearch;
       autoSearchOnOpen('.dataTables_filter input');
       // end
+
+      //очищення поля пошуку кліком на інпут пошуку
+      document.querySelector('.search-t-reestr ~ label').addEventListener('click', e => {
+        if (e.srcElement.innerText) {
+          dataTablesFilterInput.value = '';
+          autoSearchOnOpen('.dataTables_filter input');
+        }
+        localStorage.removeItem('dataTables_filter_input');
+      });
 
       /* // при поиске если введены критерии поиска, то ищется по всей таблице, если строка поиска пустая, то отображается количество строк по умолчанию
       $('#searchReestr').keyup(function() {
@@ -521,7 +539,6 @@
 
   //возвращает текст из определенной колонки и номер колонки, записыает в кеш, потом вставляет из кеша
   function clickTableReestr() {
-
     clickTables('#data-table', clickTapHandling);
   }
 
@@ -568,7 +585,7 @@
         $('#proektreestr').val(text[4]);
         break;
     }
-
+    formaReestr.labelred();
     // labelred();
     localStorage.setItem('proekt', text[4]);
     // вставка значения из кеша на кнопку и в поле поиска таблицы
@@ -579,8 +596,22 @@
     document.getElementById('btnSearchJobInfo').innerHTML = 'job ' + text[4];
     document.getElementById('btnSendMail').innerHTML = 'mail ' + text[4];
     document.querySelector('#data-table_filter input').value = event.target.innerHTML;
-  };
+    if (col != 4) {
+      autoSearchOnOpen('.dataTables_filter input');
+    }
+  }
 
+  //обработка подвійного кліку по таблице (на проєкті)
+  function dblClickTableReestr() {
+    const dataTable = document.querySelector('#data-table');
+    if (dataTable) {
+      document.querySelector('#data-table').addEventListener('dblclick', () => {
+        SearchRecordsReestrLocal(JSON.parse(localStorage.getItem('dataReestr')));
+      })
+    }
+  }
+
+  dblClickTableReestr();
   // разворачиваем коллапс при старте с настольного
   /* function collap() {
   $('#accordingButonReestr')[0].click();
@@ -604,6 +635,7 @@
          return
        } */
     localStorage.removeItem('test');
+
     // document.getElementById("btnSearchFinPlus").disabled = true;
     const proektFin = localStorage.getItem('proekt');
     $('#proektfin').val(numEndStrong(proektFin));
@@ -613,6 +645,7 @@
       if (localStorage.getItem('test')) {
         // document.getElementById("btnSearchFinPlus").disabled = false;
         document.getElementById("SearchFinInReestr").innerHTML = localStorage.getItem('test');
+        document.getElementById("rowdatafin").innerHTML = '';
         const elements = document.querySelectorAll(`#SearchFinInReestr .delete-fin`);
         elements.forEach(elem => elem.remove());
         clearInterval(checkTest);
@@ -761,5 +794,15 @@
       })
     });
   }
+
+  // закриття блоку по Esc
+  document.addEventListener("keydown", (e) => {
+    if (e.code == "Escape") {
+      document.querySelector('#rowdatareestr').innerHTML = '';
+      document.querySelector('#SearchFinInReestr').innerHTML = '';
+      console.log('da');
+    }
+  });
+
 
 </script>

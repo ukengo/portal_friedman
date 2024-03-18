@@ -27,7 +27,7 @@
 
     ar.forEach(function (item, index) {
 
-      displayTableJob += "<tr id=\"ROWNUMBER:" + row_number_job + "\" >";
+      displayTableJob += "<tr id=\"ROWNUMBERj:" + row_number_job + "\" >";
 
       displayTableJob += "<td>"
       displayTableJob += "<div class=\"row\">"
@@ -290,8 +290,7 @@
   $("#btnTableJob").click(btnTableJob);
 
   //перехват кнопки (job с переходом)
-  $('.btn-job-transition').click(function () {
-    console.log('btnSearchFinanceJobInfo');
+  $('.btn-job-transition').click(function () {    
     $('#proektjob').val(numEndStrong((this.textContent)));
     $('#searchJob').val(numEndStrong((this.textContent)));
     $('#nav-job-tab')[0].click();

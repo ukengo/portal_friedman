@@ -11,12 +11,9 @@
             <label for="date">Дата</label>
             <div class="btn-group" role="group" aria-label="">
               <input type="date" class="form-control" id="date" />
-              <input type="button" id="btnArriwalwasteY" value=" Y "
-                class="btn btn-danger btn-sm ms-1 btn-yft">
-              <input type="button" id="btnArriwalwasteFri" value="Fri"
-                class="btn btn-danger btn-sm ms-1 btn-yft">
-              <input type="button" id="btnArriwalwasteT" value=" T "
-                class="btn btn-danger btn-sm ms-1 btn-yft">
+              <input type="button" id="btnArriwalwasteY" value=" Y " class="btn btn-danger btn-sm ms-1 btn-yft">
+              <input type="button" id="btnArriwalwasteFri" value="Fri" class="btn btn-danger btn-sm ms-1 btn-yft">
+              <input type="button" id="btnArriwalwasteT" value=" T " class="btn btn-danger btn-sm ms-1 btn-yft">
             </div>
           </div>
 
@@ -99,13 +96,12 @@
       <div id="divDataTableArriwalWaste" class="row" style="overflow: auto;">
         <div id="dataTableArriwalWaste" class="table-responsive-xs radius"></div>
       </div>
-
-
     </div>
-
   </div>
   <div id='arriwalwasteatrong'></div>
 </div>
+
+<?!= include("arriwalwaste/workers/workers")?> 
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

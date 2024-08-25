@@ -98,7 +98,7 @@
           //деконстуризація - розкидаємо дані по перемінних
           let { sendbuhcurrency, sendbuhprim, sendbuhforma, sendbuhvat, sendbuhproekt, sendbuhsumma, sendbuhcont, free_text } = data;
 
-          //створємо контекнер
+          //створємо контейнер
           let body = '';
 
           //навішуємо формат
@@ -107,7 +107,7 @@
 
           //формуємо інформацію для показу і для відправки
           if (!free_text) {
-            
+
             if (!sendbuhsumma) {
               body += `<br>${sendbuhcont}`;
               // sendbuhproekt = '';

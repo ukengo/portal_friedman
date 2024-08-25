@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ua">
 
 <head>
   <!-- Required meta tags -->
@@ -7,8 +7,14 @@
 
   <!-- Bootstrap CSS -->
   <?!= include("bootstrap-css") ?>
-  <?!= include("css/css") ?>
   <?!= include("bootstrap-script") ?>
+
+    <!-- CSS -->
+  <?!= include("css/reset-css") ?>
+  <?!= include("css/css") ?>
+  <?!= include("css/workers-css") ?>
+  
+  
 
 </head>
 
@@ -100,6 +106,8 @@
 
       <div id="app"></div>
 
+      <!-- Підключаємо скрипти
+      ============================================================================= -->
       <?!= include("snippets")?>
       <?!= include("src/classes/FormDataFromTables-script")?>
       <?!= include("main-downloads")?>
@@ -111,9 +119,7 @@
       <?!= include("reestr/tableReestr-script")?>
       <?!= include("reestr/tr-modal-script")?>
       <?!= include("job/job-script")?>
-
-
-
+      <?!= include("arriwalwaste/workers/workers-script")?>
 
       <script>
         "use strict";

@@ -1,3 +1,4 @@
+
 <style>
   /*прибираємо стрибок сторінки у браузері*/
   html {
@@ -13,7 +14,7 @@
   .nav-maim-data-time,
   .nav-maim-data-date {
     cursor: pointer;
-  }  
+  }
 
   .modal-footer {
     padding: .8rem 0;
@@ -191,37 +192,29 @@
     height: 6.25rem;
   }
 
-
-  .date-regular {
-    /* display: flex; */
-    /* flex-direction: column; */
+  .data-regular {
     width: 30px;
     user-select: none;
-    /* justify-content: space-between */
-    /*   flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding-left: 2px; */
   }
 
-  .date-regular-plus {
-    /* padding-top: 10px;
-    width: 1px;
-    height: 25px; */
+  .data-regular__plus {
+    height: 24px;
     font-size: 2.0rem;
     cursor: pointer;
+  }
+
+  .data-regular__minus {
+    font-size: 3rem;
+    cursor: pointer;
+  }
+
+  .date-regular__plus {
     position: absolute;
     top: 3px;
     z-index: 100;
-    height: 24px;
   }
 
-  .date-regular-minus {
-    /*   padding-left: 3px;
-    width: 1px;
-    height: 10px; */
-    font-size: 3rem;
-    cursor: pointer;
+  .date-regular__minus {
     position: absolute;
     top: 11px;
   }
@@ -237,6 +230,11 @@
   }
 
   .date-regular {
-    position: relative;    
+    position: relative;
   }
+
+/*   .workers__regular {
+    line-height: 25px;
+  }
+   */
 </style>

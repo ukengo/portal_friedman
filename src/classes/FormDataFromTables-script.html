@@ -16,13 +16,13 @@
       this.#labelredInputEvent();
       //this.$inputs = this.$form.querySelectorAll('input');
       this.$labels = this.$form.querySelectorAll('label');
-     // this.#clearRecords();
+      // this.#clearRecords();
 
-     // this.clearInputClickLabel = this.#clearInputClickLabel.bind(this);
-      
+      // this.clearInputClickLabel = this.#clearInputClickLabel.bind(this);
+
       this.$labels.forEach(element => element.addEventListener('click', this.#clearInputClickLabel));
-      
-      
+
+
       document.querySelectorAll('.btn-clear-form-all').forEach(element => {
         element.addEventListener('click', this.clearRecords);
       });

@@ -2,10 +2,6 @@
 <script>
   const workersPay = () => {
 
-
-
-
-
     const workers = [
       "Діланян",
       "Зіновкіна",
@@ -23,12 +19,16 @@
         const workersItem = document.createElement('div');
         workersItem.classList.add('workers__item');
         const label = document.createElement('label');
-        label.classList.add('workers__item-label')
+        label.classList.add('workers__item-label');
+        label.setAttribute('for', `workers${index}`);
         label.innerHTML = `${+index + 1}. ${element}`;
         workersItem.appendChild(label);
         const input = document.createElement('input');
+        input.setAttribute('name', `workers${index}`);
         input.classList.add('workers__item-input', 'form-control');
         input.setAttribute('type', 'text');
+        input.setAttribute('id', `workers${index}`);
+        input.setAttribute('type', `number`);
         label.appendChild(input);
         workersItems.appendChild(workersItem);
       });
@@ -39,9 +39,18 @@
     const formaWorkers = new FormDataFromTables('#workers-form');
     formaWorkers.labelred();
 
-    console.log(document.querySelector('.workers__item-label'));
+    // згорнути/розгорнути блок
+    document.querySelector('.workers__title').addEventListener('click', () => {
+      document.querySelector('.workers__list').classList.toggle('visible');
+    }) ;
     
     
+    
+    
+    document.querySelector('.workers__btn').addEventListener('click', () => {
+      console.log(formaWorkers.formaDataObj());
+    });
+
 
 
   }

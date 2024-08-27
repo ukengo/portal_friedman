@@ -34,8 +34,8 @@ function stopArrivalWaste() {
 }
 
 function addNewRowWaste(rowData) {
-  const vasteDate = String(rowData.splice(0, 1));
-  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate));
+  const wasteDate = String(rowData.splice(0, 1));
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(wasteDate));
   dataWaste().appendRow(rowData);
   return getLastTenRowsWaste();
 }

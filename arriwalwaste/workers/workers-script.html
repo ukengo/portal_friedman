@@ -2,56 +2,110 @@
 <script>
   const workersPay = () => {
 
-    const workers = [
-      "Діланян",
-      "Зіновкіна",
-      "Лазоренко",
-      "Радюк",
-    ]
+    const workers = {
+      Dilanjan: 'Діланян',
+      Zinovkina: 'Зіновкіна',
+      Lazorenko: 'Лазоренко',
+      Radiuk: 'Радюк',
+    }
 
+    localStorage.removeItem('workers');
     localStorage.setItem('workers', JSON.stringify(workers));
 
     // рендеримо форму на сторінці
     const workersPayBuild = () => {
       const workersStorage = JSON.parse(localStorage.getItem('workers'));
+
       const workersItems = document.querySelector('.workers__items');
-      workersStorage.forEach((element, index) => {
+      let count = 1;
+      for (key in workersStorage) {
         const workersItem = document.createElement('div');
         workersItem.classList.add('workers__item');
         const label = document.createElement('label');
         label.classList.add('workers__item-label');
-        label.setAttribute('for', `workers${index}`);
-        label.innerHTML = `${+index + 1}. ${element}`;
+        label.setAttribute('for', key);
+        label.innerHTML = `${count}. ${workersStorage[key]}`;
+        count++;
         workersItem.appendChild(label);
         const input = document.createElement('input');
-        input.setAttribute('name', `workers${index}`);
+        input.setAttribute('name', key);
         input.classList.add('workers__item-input', 'form-control');
         input.setAttribute('type', 'text');
-        input.setAttribute('id', `workers${index}`);
+        input.setAttribute('id', key);
         input.setAttribute('type', `number`);
         label.appendChild(input);
         workersItems.appendChild(workersItem);
-      });
+      };
     };
     workersPayBuild();
 
-    //створюємо новий об'єкт із класу
+    //створюємо новий об'єкт Workers із класу
     const formaWorkers = new FormDataFromTables('#workers-form');
     formaWorkers.labelred();
+
+    //створюємо новий об'єкт formAW із класу
+    const formAW = new FormDataFromTables('#form-aw');
+
 
     // згорнути/розгорнути блок
     document.querySelector('.workers__title').addEventListener('click', () => {
       document.querySelector('.workers__list').classList.toggle('visible');
-    }) ;
-    
-    
-    
-    
-    document.querySelector('.workers__btn').addEventListener('click', () => {
-      console.log(formaWorkers.formaDataObj());
     });
 
 
+    // кнопка Workers
+    document.querySelector('.workers__btn').addEventListener('click', () => {
+
+      // забираємо в масив дані з форми formAW
+      const dataFormAwArr = Object.values(formAW.formaDataObj());
+
+      // забираємо в об'єкт дані з форми workers-form
+      const dataWorkersObject = formaWorkers.formaDataObj();
+
+      // два об'єкти в один
+      const extendObjWorks = extendObj(workers, dataWorkersObject)
+      //const rowData = [date, +summa, forma, firmaArrivalWaste, waste];
+
+      // формуємо масив із Workers
+      const dataWorksAll = Object
+        .entries(extendObjWorks)
+        .map(entry => ([dataFormAwArr[0], entry[1], 'гот', '', `${entry[0]} ЗП`]));
+
+      // відфільтровуємо співробітників без ЗП
+      let dataWorksRealy = dataWorksAll.filter(item => item[1] !== "");
+
+      // Функція обробки і формування масиву для передачі на бек
+      function dataWorksToBackend() {
+        if (dataWorksRealy.length) {
+          
+          // якщо заповнене хоч одне поле конкретного воркера, то передаємо workers
+          return dataWorksRealy;
+        } else if (dataFormAwArr[1]) {
+          
+          // якщо НЕ заповнене хоч одне поле конкретного воркера, але заповнена сума ЗП одна для всіх, то передаємо її для кожного
+          dataWorksRealy = dataWorksAll.map(el => [el[0], dataFormAwArr[1], 'гот', '', el[4]]);
+          return dataWorksRealy;
+        }
+        else {
+          // якщо НЕ заповнене хоч одне поле конкретного воркера, і НЕ заповнена сума ЗП одна для всіх, то повертаємо false
+          return false;
+        }
+      }
+
+      // передаємо на бек
+
+
+    });
+
+    // допоміжні функції
+    // переносить властивості з об'єкта obj2 в об'єкт obj1 (два об'єкти в один).
+    function extendObj(obj1, obj2) {
+      let res = {};
+      for (key in obj2) {
+        res[obj1[key]] = obj2[key];
+      }
+      return res;
+    }
 
   }
   workersPay();

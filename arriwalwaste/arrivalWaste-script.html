@@ -58,6 +58,8 @@
 
   document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
 
+  
+  // Збираємо дані з форми
   function rowDataRangeArrivalWaste() {
     const date = document.getElementById("date").value;
     let summa = +document.getElementById("summa").value;
@@ -121,7 +123,7 @@
       return false;
     }
 
-    startArrivalWaste();
+    startArrivalWaste(); // формуємо datalist
     if (this.id === "buttonWaste") {
       spinner("dataTableArriwalWaste");
       if (!rowDataTermKar()[4]) {
@@ -282,6 +284,7 @@
     })
   }
 
+  // рендеринг таблиці справа
   function createTableArriwalWaste(dataArray) {
     var div = document.getElementById("dataTableArriwalWaste");
 

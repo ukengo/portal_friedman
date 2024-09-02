@@ -1,4 +1,3 @@
-
 <style>
   /*прибираємо стрибок сторінки у браузері*/
   html {
@@ -192,31 +191,25 @@
     height: 6.25rem;
   }
 
-  .data-regular {
+  .date-regular {
     width: 30px;
     user-select: none;
-  }
-
-  .data-regular__plus {
-    height: 24px;
-    font-size: 2.0rem;
-    cursor: pointer;
-  }
-
-  .data-regular__minus {
-    font-size: 3rem;
-    cursor: pointer;
   }
 
   .date-regular__plus {
     position: absolute;
     top: 3px;
+    height: 24px;
+    font-size: 2.0rem;
     z-index: 100;
+    cursor: pointer;
   }
 
   .date-regular__minus {
     position: absolute;
     top: 11px;
+    font-size: 3rem;
+    cursor: pointer;
   }
 
   @media (max-width: 768px) {
@@ -233,7 +226,7 @@
     position: relative;
   }
 
-/*   .workers__regular {
+  /*   .workers__regular {
     line-height: 25px;
   }
    */

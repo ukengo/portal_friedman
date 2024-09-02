@@ -30,15 +30,30 @@ function addNewRowMinusThreee(rowData) {
 // отримуємо список стоп призначень і дохід витрати
 function stopArrivalWaste() {
   const stopAw = dataSpiskiReestr().getRange('R2:R').getValues().flat();
-  return stopAw.filter(element => element !== '');  
+  return stopAw.filter(element => element !== '');
 }
 
+// добавляємо рядок витрат на сторінку "Прочие траты"
+// із фронта може передаватися або одномірний масив, який вставляється в одну строку, або двомірний, який треба розібрати по строкам
+///////////////////////////////////////////////////////////
+
+// загальна функція вставки одномірного масиву
 function addNewRowWaste(rowData) {
   const wasteDate = String(rowData.splice(0, 1));
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(wasteDate));
   dataWaste().appendRow(rowData);
   return getLastTenRowsWaste();
 }
+
+// приватна функція вставки двомірного масиву з використанням функція вставки одномірного масиву
+function addNewRowWaste2D(rowData2D) {
+  rowData2D.forEach(el => {
+    addNewRowWaste(el);
+  });
+  return getLastTenRowsWaste();
+}
+/////////////////////////////////////////////////////////////////////
+
 
 function addNewRowArrival(rowData) {
   const arrivalDate = String(rowData.splice(0, 1))
@@ -989,7 +1004,7 @@ function startDataSotrGs() {
 ////////////////////////////////////////////////
 //ТАБЛИЦА РЕЕСТР ОФОРМЛЕНИЙ
 
-function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr) {
+function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr, fullPayment) {
 
   var returnRows = [];
   var allRecords = getRecordsReestr();
@@ -1188,6 +1203,17 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
       evalRows.push('yes');
     }
 
+    if (fullPayment != '') {
+      if (value[16] == fullPayment) {
+        evalRows.push('yes');
+      } else {
+        evalRows.push('no');
+      }
+    }
+    else {
+      evalRows.push('yes');
+    }
+
     if (evalRows.indexOf("no") == -1) {
       returnRows.push(value);
     }
@@ -1198,20 +1224,17 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
 
 }
 
-
 function getRecordsReestr() {
   const dateRee = dataBase().getDataRange().getValues().slice(1);
   const dataMapRee = dateRee.filter(x => x[5] != '')
-    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18]]);
-  //const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '').sort((a, b) => b[5] - a[5]);
-  //const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '').sort((a, b) => b[5] - a[5]);
+    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18], x[24]]);
   const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '');
   const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '');
   const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1);
   return dataFilterMapReeDate.reverse();
 }
 
-function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr) {
+function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, fullPaymentReestr) {
 
   var getLastRowUpr = dataSheet().getLastRow();
   var table_values_upr = dataSheet().getRange(2, 1, getLastRowUpr - 1, 9).getValues();
@@ -1229,7 +1252,7 @@ function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabot
     }
   }
   var getLastRowRee = dataBase().getLastRow();
-  var table_values_ree = dataBase().getRange(2, 1, getLastRowRee, 25).getValues();
+  var table_values_ree = dataBase().getRange(2, 1, getLastRowRee, 26).getValues();
   for (i = 0; i < table_values_ree.length; i++) {
     if (table_values_ree[i][5] == proektReestr) {
 
@@ -1240,6 +1263,7 @@ function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabot
       dataBase().getRange(i + 2, 24).setValue(issuepartReestr);
       dataBase().getRange(i + 2, 23).setValue(withoutaccountReestr);
       dataBase().getRange(i + 2, 19).setValue(stoppedReestr);
+      dataBase().getRange(i + 2, 25).setValue(fullPaymentReestr);
     }
   }
   return 'SUCCESS';

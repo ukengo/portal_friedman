@@ -1,12 +1,12 @@
 <script>
-    //TermSum
-    function buttonClickTermSum() {
-        clearDiv();
-        spinner('results');
-        hideBtnBuh();
-        google.script.run.withSuccessHandler(function displayResultsTermSum(dataTermSum) {
-            let result =
-                `<div class='col-xl-5 radius p-2'>
+  //TermSum
+  function buttonClickTermSum() {
+    clearDiv();
+    spinner('results');
+    hideBtnBuh();
+    google.script.run.withSuccessHandler(function displayResultsTermSum(dataTermSum) {
+      let result =
+        `<div class='col-xl-5 radius p-2'>
                 <table class='table table-sm' >
                     <tr>
                         <td>
@@ -25,9 +25,9 @@
                     </tr>
                 </table>
             </div>`;
-            document.getElementById('results').innerHTML = result;
-        }).dataTermSum();
-        // все кнопки с бухгалтера enabled
-        document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
-    }
+      document.getElementById('results').innerHTML = result;
+    }).dataTermSum();
+    // все кнопки с бухгалтера enabled
+    document.querySelectorAll(".btn-buh").forEach(btn => btn.disabled = false);
+  }
 </script>

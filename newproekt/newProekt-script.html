@@ -35,7 +35,7 @@
     google.script.run.withSuccessHandler(function (array) {
       document.getElementById('proekt').value = array + 1;
       document.getElementById('date-nach').valueAsDate = new Date();
-      formNewProekt.labelred();
+      //formNewProekt.labelred();
     }).addpRoekt();
   }
 
@@ -81,7 +81,7 @@
       .createNewFolder(rowDataRangeProekt()[5], rowDataRangeProekt()[2], rowDataRangeProekt()[8])
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
-    formNewProekt.labelred();
+    //formNewProekt.labelred();
   }
 
   function buttonClickEnter() {
@@ -111,7 +111,7 @@
     }).addNewRow(rowDataRangeProekt());
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
-    formNewProekt.labelred();
+    //formNewProekt.labelred();
   }
 
   function buttonClickOtOrgana() {
@@ -133,7 +133,7 @@
     }).addNewRow(rowDataRangeProekt())
     buttonClickOchistka()
     document.getElementById('proekt').value = rowDataRangeProekt()[5] * 1 + 1
-    formNewProekt.labelred();
+    //formNewProekt.labelred();
   }
 
   function buttonClickOchistka() {
@@ -144,15 +144,15 @@
     document.getElementById('date-con').value = "";
     document.getElementById('sch').value = "";
     document.getElementById('prim').value = "";
-    document.getElementById('sotr').value = "";
+    document.getElementById('sotr').value = "";    
     formNewProekt.labelred();
   }
 
-  document.getElementById('mainButton').addEventListener('click', buttonClickEnter)
-  document.getElementById('buttonAf').addEventListener('click', buttonClickAf)
-  document.getElementById('buttonOtOrgana').addEventListener('click', buttonClickOtOrgana)
-  document.getElementById('buttonOchistka').addEventListener('click', buttonClickOchistka)
-  document.getElementById('buttonBezAf').addEventListener('click', buttonClickBezAf)
+  document.getElementById('mainButton').addEventListener('click', buttonClickEnter);
+  document.getElementById('buttonAf').addEventListener('click', buttonClickAf);
+  document.getElementById('buttonOtOrgana').addEventListener('click', buttonClickOtOrgana);
+  document.getElementById('buttonOchistka').addEventListener('click', buttonClickOchistka);
+  document.getElementById('buttonBezAf').addEventListener('click', buttonClickBezAf);
 
   document.getElementById('date-nach').valueAsDate = new Date();
 

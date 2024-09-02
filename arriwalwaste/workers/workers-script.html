@@ -1,12 +1,15 @@
 <!-- внесення ЗП співробітників   -->
+
 <script>
   const workersPay = () => {
 
     const workers = {
-      Dilanjan: 'Діланян',
-      Zinovkina: 'Зіновкіна',
-      Lazorenko: 'Лазоренко',
-      Radiuk: 'Радюк',
+      Dilanjan: 'Діланян ЗП',
+      Lazorenko: 'Лазоренко ЗП',
+      Radiuk: 'Радюк ЗП',
+      Zinovkina: 'Зіновкіна ЗП',
+      Zinovkina_k: 'Зіновкіна комісія',
+      //Kinz: 'Кінзерський',
     }
 
     localStorage.removeItem('workers');
@@ -15,7 +18,6 @@
     // рендеримо форму на сторінці
     const workersPayBuild = () => {
       const workersStorage = JSON.parse(localStorage.getItem('workers'));
-
       const workersItems = document.querySelector('.workers__items');
       let count = 1;
       for (key in workersStorage) {
@@ -41,20 +43,20 @@
 
     //створюємо новий об'єкт Workers із класу
     const formaWorkers = new FormDataFromTables('#workers-form');
-    formaWorkers.labelred();
 
     //створюємо новий об'єкт formAW із класу
-    const formAW = new FormDataFromTables('#form-aw');
+    const formAW = new FormDataFromTablesWithoutRed('#form-aw');
 
 
     // згорнути/розгорнути блок
-    document.querySelector('.workers__title').addEventListener('click', () => {
-      document.querySelector('.workers__list').classList.toggle('visible');
-    });
-
+    /*     const workersList = document.querySelector('.workers__list');
+        document.querySelector('.workers__title').addEventListener('click', () => {
+          workersList.classList.toggle('visible');
+        }); */
 
     // кнопка Workers
     document.querySelector('.workers__btn').addEventListener('click', () => {
+      document.querySelector('.workers__btn').disabled = true;
 
       // забираємо в масив дані з форми formAW
       const dataFormAwArr = Object.values(formAW.formaDataObj());
@@ -64,24 +66,24 @@
 
       // два об'єкти в один
       const extendObjWorks = extendObj(workers, dataWorkersObject)
-      //const rowData = [date, +summa, forma, firmaArrivalWaste, waste];
 
       // формуємо масив із Workers
       const dataWorksAll = Object
         .entries(extendObjWorks)
-        .map(entry => ([dataFormAwArr[0], entry[1], 'гот', '', `${entry[0]} ЗП`]));
+        .map(entry => ([dataFormAwArr[0], entry[1], 'гот', '', `${entry[0]}`]));
 
       // відфільтровуємо співробітників без ЗП
       let dataWorksRealy = dataWorksAll.filter(item => item[1] !== "");
 
       // Функція обробки і формування масиву для передачі на бек
       function dataWorksToBackend() {
+
         if (dataWorksRealy.length) {
-          
+
           // якщо заповнене хоч одне поле конкретного воркера, то передаємо workers
           return dataWorksRealy;
         } else if (dataFormAwArr[1]) {
-          
+
           // якщо НЕ заповнене хоч одне поле конкретного воркера, але заповнена сума ЗП одна для всіх, то передаємо її для кожного
           dataWorksRealy = dataWorksAll.map(el => [el[0], dataFormAwArr[1], 'гот', '', el[4]]);
           return dataWorksRealy;
@@ -93,8 +95,22 @@
       }
 
       // передаємо на бек
-
-
+      if (!dataWorksToBackend()) {
+        document.querySelector('.workers__btn').disabled = false;
+        alert("Не заповнено ні одного поля суми");
+        return
+      } else {
+        google.script.run
+          .withSuccessHandler((data) => {
+            createTableArriwalWaste(data)
+            document.querySelector('.workers__btn').disabled = false;
+          })
+          .addNewRowWaste2D(dataWorksToBackend());
+        formaWorkers.clearRecords();
+        /* workersList.classList.remove('visible'); */
+        document.querySelector('.accordion-button--workers').classList.add('collapsed');
+        document.querySelector('#flush-collapseOneWorkers').classList.remove('show');
+      }
     });
 
     // допоміжні функції
@@ -106,7 +122,7 @@
       }
       return res;
     }
-
   }
+
   workersPay();
 </script>

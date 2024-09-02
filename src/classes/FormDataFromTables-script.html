@@ -6,14 +6,15 @@
   class FormDataFromTables {
     constructor(formId) {
       this.$form = document.querySelector(formId);
-      this.#setup();
+      this.setup();
     }
 
-    #setup() {
+    setup() {
       this.#labelred();
       this.labelred = this.#labelred.bind(this);
       this.clearRecords = this.#clearRecords.bind(this);
-      this.#labelredInputEvent();
+      this.labelredInputEvent();
+
       //this.$inputs = this.$form.querySelectorAll('input');
       this.$labels = this.$form.querySelectorAll('label');
       // this.#clearRecords();
@@ -53,11 +54,11 @@
       });
     }
 
-    #labelredInputEvent() {
+    labelredInputEvent() {
       this.$form.addEventListener('input', () => {
         this.#labelred();
       })
-    }
+    }    
 
     /**
     * Метод очистки inputa кліком по label і видалення червоної розфарбовки полів форми.

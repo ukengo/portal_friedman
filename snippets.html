@@ -331,4 +331,17 @@
   }
   // кінець вставка дати вчора, п'ятниця, сьогодні
 
+  //Визначаємо видимість елемента у Как отследить изменений viewport в'юпорт
+  function isElementVisible(el) {
+    const specificElement = document.querySelector(el);
+    if (!specificElement) return false;
+
+    const { top, bottom, left, right } = specificElement.getBoundingClientRect();
+    return (
+      top < window.innerHeight && // Элемент не спрятан за нижней границей
+      bottom > 0 && // Элемент не превысил верхнюю границу
+      left < window.innerWidth && // Элемент находится в пределах видимости слева
+      right > 0 // Элемент не увеличивает границы справа
+    );
+  }
 </script>

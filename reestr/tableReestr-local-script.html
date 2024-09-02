@@ -18,7 +18,7 @@
   // кнопки вчора + п'ятниця + сьогодні онлайн
   document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
     el.addEventListener("click", function () {
-      //this.disabled = true;
+      
       formaReestr.clearRecords();
       const dataReestr = JSON.parse(localStorage.getItem('dataReestr'));
       if (!dataReestr) { alert('storage пустий'); return }

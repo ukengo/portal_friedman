@@ -10,34 +10,36 @@
     $("#sffin-datalist").empty();
     google.script.run.withSuccessHandler((arrayOfArrays) => {
       afterDropDownReturned(arrayOfArrays, 'sffin-datalist')
-    }).getDropDownArraySfFin()
+    }).getDropDownArraySfFin();
 
     $("#primfin-datalist").empty();
     google.script.run.withSuccessHandler((arrayOfArrays) => {
       afterDropDownReturned(arrayOfArrays, 'primfin-datalist')
-    }).getDropDownArrayPrimFin()
+    }).getDropDownArrayPrimFin();
 
     $("#firmafin-datalist").empty();
     google.script.run.withSuccessHandler((arrayOfArrays) => {
       afterDropDownReturned(arrayOfArrays, 'firmafin-datalist')
-    }).getDropDownArrayFirma()
+    }).getDropDownArrayFirma();
 
     $("#priznakfin-datalist").empty();
     google.script.run.withSuccessHandler((arrayOfArrays) => {
       afterDropDownReturned(arrayOfArrays, 'priznakfin-datalist')
-    }).getDropDownArrayPriznak()
+    }).getDropDownArrayPriznak();
   }
 
-  function array(ar) {
+  function array(ar) {    
     var row_number_fin = 0;
-    let naydenofin = 0
+    let naydenofin = 0;
+    let count = 0;
 
     ar.forEach(function (item) {
-      naydenofin += item[1] * 1
+      if (item[1]) count++;
+      naydenofin += item[1] * 1;
     })
-    const ro = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(naydenofin)
+    const ro = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(naydenofin);
 
-    if (naydenofin) naydenofin = `Сума: ${ro} грн.`;
+    if (count) naydenofin = `Сума: ${ro} грн.`;
     else naydenofin = "Немає фінансових рухів";
 
     var displayTable = '<form>';
@@ -108,8 +110,8 @@
       displayTable += "<input type=\"text\" id=\"up_oplataispolfin" + row_number_fin + "\" value=\"" + item[9] + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
 
-      displayTable += "<div class=\"col-md-2\">"
-      displayTable += "<div class=\"form-label\">"
+      displayTable += '<div class="col-md-2">'
+      displayTable += '<div class="form-label">'
 
       displayTable += "<input type=\"button\" id=\"update_button_fin" + row_number_fin + "\" value=\"Update\" class=\"btn btn-danger delete-fin btn-update-fin\" /></div>";
 
@@ -680,14 +682,13 @@
     if (!dateValue) {
       date.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
     } else {
-      if (targetClass === 'date-regular-plus') {
+      if (targetClass.includes('date-regular-plus')) {
         date.valueAsDate = new Date(new Date(dateValue).setDate(new Date(dateValue).getDate() + 1));
       };
-      if (targetClass === 'date-regular-minus') {
+      if (targetClass.includes('date-regular-minus')) {
         date.valueAsDate = new Date(new Date(dateValue).setDate(new Date(dateValue).getDate() - 1));
       };
     }
-    formaFin.labelred();
   }
 
   // "гот" за змовчуванням

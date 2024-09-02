@@ -1,7 +1,7 @@
 <script>
 
-/* const formDataFromTables = new FormDataFromTables('#form-aw');
-  formDataFromTables.labelred(); */
+  /* const formDataFromTables = new FormDataFromTables('#form-aw');
+    formDataFromTables.labelred(); */
   //console.log(document.querySelector('#btnArriwalwasteY').getAttribute('type'));
 
   // cрабатывание по кнопке Enter
@@ -58,7 +58,7 @@
 
   document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
 
-  
+
   // Збираємо дані з форми
   function rowDataRangeArrivalWaste() {
     const date = document.getElementById("date").value;
@@ -198,9 +198,6 @@
   function startDataWaste() {
     spinner("dataTableArriwalWaste");
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataWaste')));
-    /* google.script.run
-      .withSuccessHandler(createTableArriwalWaste)
-      .getLastTenRowsWaste(); */
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Інші витрати";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
@@ -210,9 +207,6 @@
   function startDataArriwal() {
     spinner("dataTableArriwalWaste");
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataArrival')));
-    /* google.script.run
-      .withSuccessHandler(createTableArriwalWaste)
-      .getLastTenRowsArriwal(); */
     document.getElementById("vrabotevseArriwalWaste").innerHTML =
       "Інші надходження";
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
@@ -287,16 +281,13 @@
   // рендеринг таблиці справа
   function createTableArriwalWaste(dataArray) {
     var div = document.getElementById("dataTableArriwalWaste");
-
-
     if (!dataArray) {
-      div.querySelector(".justify-content-center").remove();
+      // div.querySelector(".justify-content-center").remove();
       alert('storage пустий');
       return false
     }
     if (!dataArray.data) return
     else {
-      //localStorage.setItem('dataWaste', JSON.stringify(dataArray.data));      
       searchValueAw();
       function searchValueAw() {
         const searhValueNode = document.querySelector('#search');

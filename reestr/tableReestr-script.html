@@ -86,18 +86,17 @@
     const withoutaccountReestr = document.getElementById("withoutaccountreestr").checked;
     const stoppedReestr = document.getElementById("stoppedreestr").checked;
     const checkDateReestr = document.getElementById("checkDateReestr").value;
+    const fullPayment = document.getElementById("fullpaymentreestr").checked;
 
 
     // остановка скриипта, если не выбраны критерии поиска в инпутах
     const dataArr =
       [
-        dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr
+        dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, fullPayment
       ]
 
     if (searchStop(dataArr)) {
       alert('Не введені дані')
-      // $('#btnSearchReestr').prop("disabled", false);
-      //document.querySelector()
       return;
     }
 
@@ -105,10 +104,11 @@
     let count = 0; // счетчик для подсчета количества остановленных при выборке
     spinner('rowdatareestr', spintext);
 
-    google.script.run.withSuccessHandler(searchRecordsReestrTable).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr);
+    google.script.run.withSuccessHandler(searchRecordsReestrTable).searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr, fullPayment);
   }
 
   function searchRecordsReestrTable(ar) {
+
     var row_number_reestr = 0;
     let countStopped = 0; // счетчик для подсчета количества остановленных при выборке
     let countClose = 0; // счетчик для подсчета количества закрытых при выборке
@@ -235,6 +235,13 @@
               <input type="checkbox" id="up_stoppedreestr${row_number_reestr}" class="form-check-input"${check1(item[14])}/>
             </div>
           </div>
+          <div class="col-auto">
+            <div class="form-check">
+              <span class="check-style"></span>
+              <label class="form-check-label" for="up_fullpaymentreestr${row_number_reestr}">Повна оплата</label> 
+              <input type="checkbox" id="up_fullpaymentreestr${row_number_reestr}" class="form-check-input"${check1(item[15])}/>
+            </div>
+          </div>
         </div>
       `;
 
@@ -276,7 +283,7 @@
       displayTableReestr += `    <tr class="table-danger">
       <td colspan="3"></td>
     </tr>`;
-      
+
       row_number_reestr++;
 
       // считаем количество остановленных
@@ -327,6 +334,8 @@
         Array.from(updateButtonReestr).every(elem => {
           const interval = setInterval(() => {
             if (elem.classList.contains('btn-outline-danger')) {
+              document.querySelector('#rowdatareestr').innerHTML = '';
+              document.querySelector('#SearchFinInReestr').innerHTML = '';
               alert('готово');
               clearInterval(interval);
             }
@@ -354,17 +363,21 @@
     var issuepartReestr = document.getElementById("up_issuepartreestr" + row_number_reestr).checked;
     var withoutaccountReestr = document.getElementById("up_withoutaccountreestr" + row_number_reestr).checked;
     var stoppedReestr = document.getElementById("up_stoppedreestr" + row_number_reestr).checked;
+    var fullPaymentReestr = document.getElementById("up_fullpaymentreestr" + row_number_reestr).checked;
+
     google.script.run.withSuccessHandler(function (return_string) {
+
       btnEnable(btnDE);
-      // document.querySelector('#btnSearchReestrInfo').disabled = true;
+
       google.script.run.withSuccessHandler((data) => {
         localStorage.setItem('dataReestr', JSON.stringify(data));
-        //  document.querySelector('#btnSearchReestrInfo').disabled = false;
       }).getRecordsReestr();
+
       google.script.run.withSuccessHandler((data) => {
         localStorage.setItem('dataNevistavleno', JSON.stringify(data));
       }).startDataNevistvleno();
-    }).UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr);
+
+    }).UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, fullPaymentReestr);
 
   }
 
@@ -377,7 +390,7 @@
     let checkTest = setInterval(function () {
       if (localStorage.getItem('test')) {
         btnEnable(btnDE);
-        
+
         document.getElementById("rowdatafin1" + row_number_reestr).innerHTML = localStorage.getItem('test');
         document.getElementById("rowdatafin").innerHTML = '';
         const elements = document.querySelectorAll(`#rowdatafin1${row_number_reestr} .delete-fin`);
@@ -447,7 +460,8 @@
           { "title": "Примітки мої" },
           { "title": "Row" },
           { "title": "Row2" },
-        ]
+        ],
+        
       });
 
       //підсвітка проектів
@@ -585,8 +599,7 @@
         $('#proektreestr').val(text[4]);
         break;
     }
-    formaReestr.labelred();
-    // labelred();
+
     localStorage.setItem('proekt', text[4]);
     // вставка значения из кеша на кнопку и в поле поиска таблицы
     document.getElementById('btnSearchReestrInfo').innerHTML = event.target.innerHTML;
@@ -797,12 +810,11 @@
 
   // закриття блоку по Esc
   document.addEventListener("keydown", (e) => {
-    if (e.code == "Escape") {
+    console.log('Escape');
+    if (e.code == "Escape" & (isElementVisible('#mainTableReestr') || isElementVisible('#SearchFinInReestr'))) {
       document.querySelector('#rowdatareestr').innerHTML = '';
       document.querySelector('#SearchFinInReestr').innerHTML = '';
-      console.log('da');
     }
   });
-
 
 </script>

@@ -36,26 +36,11 @@
   // завантаженя в локал
   function onlineDownloads() {
 
-    // document.querySelector('#btnSearchReestrOf').disabled = true;
-    // document.querySelector('#btnReestrSTOf').disabled = true;
-    // document.querySelector('#btnReestrSFriOf').disabled = true;
-    // document.querySelector('#btnReestrSYOf').disabled = true;
-    //document.querySelector('#btnSearchReestrInfo').disabled = true;
-    // document.querySelector('#buttonWasteTab').disabled = true;
-    // document.querySelector('#buttonArrivalTab').disabled = true;
-    // document.querySelector('#btnTableАFinance').disabled = true;
     document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
 
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataReestr', JSON.stringify(data));
-
       document.querySelector('.bi-arrow-repeat').style.color = 'white';
-      // document.querySelector('#btnSearchReestrOf').disabled = false;
-      // document.querySelector('#btnReestrSTOf').disabled = false;
-      // document.querySelector('#btnReestrSFriOf').disabled = false;
-      // document.querySelector('#btnReestrSYOf').disabled = false;
-      // document.querySelector('#btnSearchReestrInfo').disabled = false;
-      //btnTable();
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataFin', JSON.stringify(data));
@@ -100,5 +85,6 @@
     }).stopArrivalWaste();
   }
  // onlineDownloads();
+
 
 </script>

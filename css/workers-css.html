@@ -1,22 +1,35 @@
 <style>
   .workers {
-    margin-top: 25px;
+    position: relative;
+    /* margin-top: 25px; */
     padding: 20px;
   }
 
-  .workers__title {
-    margin-bottom: 10px;
-    cursor: pointer;
+  .accordion-button--workers {
+    color: black;
+    padding: 8px;
+    border-radius: .25rem !important;
   }
 
-  .workers__list {
+/*   .workers__title {
+    margin-bottom: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s;
+  }
+
+  .workers__title:hover {
+    color: #dc3545;
+  } */
+
+/*   .workers__list {
     display: none;
     max-width: 32%;
   }
 
   .workers__list.visible {
     display: block;
-  }
+  } */
 
   .workers__items {}
 
@@ -33,7 +46,7 @@
   }
 
   .workers__item-input {
-    flex: 0 0 67%;
+    flex: 0 0 50%;
   }
 
   .workers__btn {}

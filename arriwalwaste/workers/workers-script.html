@@ -4,11 +4,11 @@
   const workersPay = () => {
 
     const workers = {
-      Dilanjan: 'Діланян ЗП',
-      Lazorenko: 'Лазоренко ЗП',
-      Radiuk: 'Радюк ЗП',
-      Zinovkina: 'Зіновкіна ЗП',
-      Zinovkina_k: 'Зіновкіна комісія',
+      dilanjan: 'Діланян ЗП',
+      lazorenko: 'Лазоренко ЗП',
+      radiuk: 'Радюк ЗП',
+      zinovkina: 'Зіновкіна ЗП',
+      zinovkina_k: 'Зіновкіна комісія',
       //Kinz: 'Кінзерський',
     }
 
@@ -22,20 +22,27 @@
       let count = 1;
       for (key in workersStorage) {
         const workersItem = document.createElement('div');
-        workersItem.classList.add('workers__item');
+        workersItem.classList.add('workers__item', 'input-group');
         const label = document.createElement('label');
         label.classList.add('workers__item-label');
         label.setAttribute('for', key);
         label.innerHTML = `${count}. ${workersStorage[key]}`;
         count++;
-        workersItem.appendChild(label);
         const input = document.createElement('input');
         input.setAttribute('name', key);
         input.classList.add('workers__item-input', 'form-control');
-        input.setAttribute('type', 'text');
         input.setAttribute('id', key);
         input.setAttribute('type', `number`);
-        label.appendChild(input);
+
+        const inputDef = document.createElement('input');
+        inputDef.setAttribute('name', `${key}-def`);
+        inputDef.classList.add('workers__item-input-def', 'form-control');
+        inputDef.setAttribute('id', `${key}-def`);
+        inputDef.setAttribute('type', `number`);
+
+        workersItem.appendChild(label);
+        workersItem.appendChild(input);
+        workersItem.appendChild(inputDef);
         workersItems.appendChild(workersItem);
       };
     };
@@ -46,7 +53,6 @@
 
     //створюємо новий об'єкт formAW із класу
     const formAW = new FormDataFromTablesWithoutRed('#form-aw');
-
 
     // згорнути/розгорнути блок
     /*     const workersList = document.querySelector('.workers__list');
@@ -75,27 +81,34 @@
       // відфільтровуємо співробітників без ЗП
       let dataWorksRealy = dataWorksAll.filter(item => item[1] !== "");
 
-      // Функція обробки і формування масиву для передачі на бек
-      function dataWorksToBackend() {
-
-        if (dataWorksRealy.length) {
-
-          // якщо заповнене хоч одне поле конкретного воркера, то передаємо workers
-          return dataWorksRealy;
-        } else if (dataFormAwArr[1]) {
-
-          // якщо НЕ заповнене хоч одне поле конкретного воркера, але заповнена сума ЗП одна для всіх, то передаємо її для кожного
-          dataWorksRealy = dataWorksAll.map(el => [el[0], dataFormAwArr[1], 'гот', '', el[4]]);
-          return dataWorksRealy;
-        }
-        else {
-          // якщо НЕ заповнене хоч одне поле конкретного воркера, і НЕ заповнена сума ЗП одна для всіх, то повертаємо false
-          return false;
-        }
-      }
-
       // передаємо на бек
-      if (!dataWorksToBackend()) {
+      sendToBackend(dataWorksToBackend(dataFormAwArr, dataWorksRealy));
+    })
+
+    /*=====================================================================*/
+    // допоміжні функції
+
+    // функція формування даних для передачі на бек
+    function dataWorksToBackend(dataAll, dataRealy) {
+      if (dataRealy.length) {
+
+        // якщо заповнене хоч одне поле конкретного воркера, то передаємо workers
+        return dataRealy;
+      } else if (dataAll[1]) {
+
+        // якщо НЕ заповнене хоч одне поле конкретного воркера, але заповнена сума ЗП одна для всіх, то передаємо її для кожного
+        dataRealy = dataWorksAll.map(el => [el[0], dataAll[1], 'гот', '', el[4]]);
+        return dataRealy;
+      }
+      else {
+        // якщо НЕ заповнене хоч одне поле конкретного воркера, і НЕ заповнена сума ЗП одна для всіх, то повертаємо false
+        return false;
+      }
+    }
+
+    //функція передачі на бек
+    function sendToBackend(data) {
+      if (!data) {
         document.querySelector('.workers__btn').disabled = false;
         alert("Не заповнено ні одного поля суми");
         return
@@ -105,15 +118,14 @@
             createTableArriwalWaste(data)
             document.querySelector('.workers__btn').disabled = false;
           })
-          .addNewRowWaste2D(dataWorksToBackend());
+          .addNewRowWaste2D(data);
         formaWorkers.clearRecords();
         /* workersList.classList.remove('visible'); */
         document.querySelector('.accordion-button--workers').classList.add('collapsed');
         document.querySelector('#flush-collapseOneWorkers').classList.remove('show');
       }
-    });
+    }
 
-    // допоміжні функції
     // переносить властивості з об'єкта obj2 в об'єкт obj1 (два об'єкти в один).
     function extendObj(obj1, obj2) {
       let res = {};

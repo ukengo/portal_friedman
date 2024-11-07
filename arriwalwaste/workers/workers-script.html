@@ -8,8 +8,6 @@
       lazorenko: 'Лазоренко ЗП',
       radiuk: 'Радюк ЗП',
       zinovkina: 'Зіновкіна ЗП',
-      zinovkina_k: 'Зіновкіна комісія',
-      //Kinz: 'Кінзерський',
     }
 
     localStorage.removeItem('workers');
@@ -34,15 +32,15 @@
         input.setAttribute('id', key);
         input.setAttribute('type', `number`);
 
-        const inputDef = document.createElement('input');
-        inputDef.setAttribute('name', `${key}-def`);
-        inputDef.classList.add('workers__item-input-def', 'form-control');
-        inputDef.setAttribute('id', `${key}-def`);
-        inputDef.setAttribute('type', `number`);
+        //  const inputDef = document.createElement('input');
+        // inputDef.setAttribute('name', `${key}-def`);
+        //inputDef.classList.add('workers__item-input-def', 'form-control');
+        //inputDef.setAttribute('id', `${key}-def`);
+        //inputDef.setAttribute('type', `number`);
 
         workersItem.appendChild(label);
         workersItem.appendChild(input);
-        workersItem.appendChild(inputDef);
+        // workersItem.appendChild(inputDef);
         workersItems.appendChild(workersItem);
       };
     };
@@ -50,9 +48,14 @@
 
     //створюємо новий об'єкт Workers із класу
     const formaWorkers = new FormDataFromTables('#workers-form');
-
+    
     //створюємо новий об'єкт formAW із класу
     const formAW = new FormDataFromTablesWithoutRed('#form-aw');
+
+    const formAW1 = new FormDataFromTables('#form-aw');
+    formAW1.clearRecordsInputByID()
+    
+    
 
     // згорнути/розгорнути блок
     /*     const workersList = document.querySelector('.workers__list');
@@ -61,8 +64,20 @@
         }); */
 
     // кнопка Workers
-    document.querySelector('.workers__btn').addEventListener('click', () => {
-      document.querySelector('.workers__btn').disabled = true;
+    const workersButton = document.querySelector('.workers__btn');
+    workersButton.addEventListener('click', () => {
+      workersButton.disabled = true;
+
+      // передаємо на бек
+      sendToBackend(dataWorksToBackend());
+      document.querySelector('#form-aw').elements.summa.value = '';
+    })
+
+    /*=====================================================================*/
+    // допоміжні функції
+
+    // функція формування даних для передачі на бек
+    function dataWorksToBackend() {
 
       // забираємо в масив дані з форми formAW
       const dataFormAwArr = Object.values(formAW.formaDataObj());
@@ -81,24 +96,17 @@
       // відфільтровуємо співробітників без ЗП
       let dataWorksRealy = dataWorksAll.filter(item => item[1] !== "");
 
-      // передаємо на бек
-      sendToBackend(dataWorksToBackend(dataFormAwArr, dataWorksRealy));
-    })
-
-    /*=====================================================================*/
-    // допоміжні функції
-
-    // функція формування даних для передачі на бек
-    function dataWorksToBackend(dataAll, dataRealy) {
-      if (dataRealy.length) {
+      if (dataWorksRealy.length) {
 
         // якщо заповнене хоч одне поле конкретного воркера, то передаємо workers
-        return dataRealy;
-      } else if (dataAll[1]) {
+        return dataWorksRealy;
+
+      } else if (dataFormAwArr[1]) {
 
         // якщо НЕ заповнене хоч одне поле конкретного воркера, але заповнена сума ЗП одна для всіх, то передаємо її для кожного
-        dataRealy = dataWorksAll.map(el => [el[0], dataAll[1], 'гот', '', el[4]]);
-        return dataRealy;
+        dataWorksRealy = dataWorksAll.map(el => [el[0], dataFormAwArr[1], 'гот', '', el[4]]);
+        return dataWorksRealy;
+
       }
       else {
         // якщо НЕ заповнене хоч одне поле конкретного воркера, і НЕ заповнена сума ЗП одна для всіх, то повертаємо false
@@ -109,14 +117,14 @@
     //функція передачі на бек
     function sendToBackend(data) {
       if (!data) {
-        document.querySelector('.workers__btn').disabled = false;
+        workersButton.disabled = false;
         alert("Не заповнено ні одного поля суми");
         return
       } else {
         google.script.run
           .withSuccessHandler((data) => {
             createTableArriwalWaste(data)
-            document.querySelector('.workers__btn').disabled = false;
+            workersButton.disabled = false;
           })
           .addNewRowWaste2D(data);
         formaWorkers.clearRecords();

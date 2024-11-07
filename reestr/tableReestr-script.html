@@ -15,7 +15,7 @@
   }
 
   function startTableReestr() {
-    startTableReestrClear()
+    startTableReestrClear();
 
     google.script.run.withSuccessHandler((arrayOfArrays) => {
       afterDropDownReturned(arrayOfArrays, 'firmareestr-datalist')
@@ -461,7 +461,7 @@
           { "title": "Row" },
           { "title": "Row2" },
         ],
-        
+
       });
 
       //підсвітка проектів

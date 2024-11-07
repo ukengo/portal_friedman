@@ -7,7 +7,6 @@ function loadArriwalWasteView() {
   return loadPartialHTML_('arriwalwaste/arriwalWaste');
 }
 
-
 function loadAddPrivateCommissionView() {
   return loadPartialHTML_('privateCommission');
 }

@@ -256,7 +256,7 @@
   /*
   arrInput - масив вхідний
   stringsInput - одноміоний масив слів для пошуку
-  gage - міра сасиву слів для пошуку: 0-одномірний, 1- двомірний, за замовчуванням - одномірний
+  gage - міра масиву слів для пошуку: 0-одномірний, 1- двомірний, за замовчуванням - одномірний
   */
   function searchingSubstringInArrayStrings(arrInput, stringsInput, gage = 0) {
     if (gage) arrInput = arrInput.flat();
@@ -292,25 +292,12 @@
     if (elem) {
       switch (btnValue.trim()) {
         case 'Y':
-          // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)); 
-          ///25280511
-          console.log(1);
-          console.log(date);
-          console.log(new Date(new Date().setDate(new Date().getDate() - 1)));
           elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
           break;
         case 'Fri':
-          ///25280511
-          console.log(2);
-          console.log(date);
-          // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)); 
           elem.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 3));
           break;
         case 'T':
-          ///25280511
-          console.log(3);
-          console.log(date);
-          // document.getElementById("date").value = formatDateYYYYtireMMtireDD(new Date(Date.now())); 
           elem.valueAsDate = new Date(new Date().setDate(new Date().getDate()));
           break;
       }

@@ -9,14 +9,13 @@
       this.setup();
     }
 
-
     setup() {
       this.#labelred();
       this.labelred = this.#labelred.bind(this);
-      //this.clearRecords = this.#clearRecords.bind(this);
+      this.clearRecords = this.#clearRecords.bind(this);
       this.labelredInputEvent();
 
-      this.$inputs = this.$form.querySelectorAll('input');
+      //this.$inputs = this.$form.querySelectorAll('input');
       this.$labels = this.$form.querySelectorAll('label');
       // this.#clearRecords();
 
@@ -24,27 +23,23 @@
 
       this.$labels.forEach(element => element.addEventListener('click', this.#clearInputClickLabel));
 
-
       document.querySelectorAll('.btn-clear-form-all').forEach(element => {
         element.addEventListener('click', this.clearRecords);
       });
+    }
+    /**
+    * Метод очистки інпута по name
+    */
+    inClearInput(name) {
+      this.$form.querySelector(`[name=${name}]`).value = '';
     }
 
     /**
     * Метод очистки полів форми. Також міняє колір лабела на чорний
     */
-    clearRecords() {
+    #clearRecords() {
       this.$form.reset();
       this.#labelred();
-    }
-
-    /**
-    * Метод очистки інпута по name.
-    */
-    clearRecordsInputByID() {
-
-
-   //      this.$inputs.reset();
     }
 
     /**
@@ -81,16 +76,6 @@
     }
 
     /**
-    * Метод очистки inputa по ID.
-    */
-    /*     clearInputByID(e) {
-          e.target.removeAttribute('style');
-          const id = e.target.getAttribute('for');
-          if (!id) return;
-          document.getElementById(id).value = '';
-        } */
-
-    /**
     * Метод збирає всі дані інпутів в об'єкт, масив даних, масив ключів.
     */
     formaDataObj() {
@@ -106,12 +91,12 @@
         }
       }
       return values
-    }
+    }    
 
     /*
     метод перевірки форми на заповненість
     повертає false, коли жодне полене заповнене
-    повертає true, коли хоть одне поле заповнене
+    повертає true, коли хоч одне поле заповнене
     */
 
     inputsIsNull() {

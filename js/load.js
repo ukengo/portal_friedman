@@ -1,3 +1,6 @@
+
+
+//===================================================//
 const URLREESTR = () => {
   return 'https://docs.google.com/spreadsheets/d/1ewk6ahWyREzSUe985l3zm_LblKpdjXs6rAHd71hXzwQ/edit#gid=627167327'
 }
@@ -12,6 +15,9 @@ const URLTERMINAL = () => {
 }
 const URLKARANTIN = () => {
   return 'https://docs.google.com/spreadsheets/d/1OWkpbCN9oDoWtUm52ZdcNGTwiXp7qNgMxBYC10PmAsY/edit#gid=797242095'
+}
+const URLCAHE = () => {
+  return 'https://docs.google.com/spreadsheets/d/1Y6ukb_iQ0JpPt2nTGvZx0HjWMJ2ACWD0iQDlV9Rjr7s/edit?gid=928954653#gid=928954653'
 }
 
 const dataInspektor = () => {
@@ -34,9 +40,9 @@ const dataFinance = () => {
   return ret
 }
 
- const dataSpiskiReestr = () => {
-    const ret = SpreadsheetApp.openByUrl(URLREESTR()).getSheetByName("Списки")
-    return ret
+const dataSpiskiReestr = () => {
+  const ret = SpreadsheetApp.openByUrl(URLREESTR()).getSheetByName("Списки")
+  return ret
 }
 
 const dataVrabote = () => {
@@ -83,7 +89,10 @@ const dataUpravlIA = () => {
   const ret = SpreadsheetApp.openByUrl(URLREESTR()).getSheetByName("Управление ИА СЧЕТА")
   return ret
 }
-
+const dataCashe = () => {
+  const ret = SpreadsheetApp.openByUrl(URLCAHE()).getSheetByName("Лист1")
+  return ret
+}
 function doGet() {
   return HtmlService.createTemplateFromFile('main-HTML').evaluate()
     //Responsive
@@ -104,12 +113,5 @@ function doGet() {
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setTitle('Portal Friedman')
 }
-
-/* function include(filename) {
-  return HtmlService.createHtmlOutputFromFile(filename)
-    .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-
-    .getContent();
-} */
 
 

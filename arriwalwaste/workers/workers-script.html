@@ -48,14 +48,9 @@
 
     //створюємо новий об'єкт Workers із класу
     const formaWorkers = new FormDataFromTables('#workers-form');
-    
+
     //створюємо новий об'єкт formAW із класу
     const formAW = new FormDataFromTablesWithoutRed('#form-aw');
-
-    const formAW1 = new FormDataFromTables('#form-aw');
-    formAW1.clearRecordsInputByID()
-    
-    
 
     // згорнути/розгорнути блок
     /*     const workersList = document.querySelector('.workers__list');
@@ -70,7 +65,7 @@
 
       // передаємо на бек
       sendToBackend(dataWorksToBackend());
-      document.querySelector('#form-aw').elements.summa.value = '';
+      formAW.inClearInput('summa')
     })
 
     /*=====================================================================*/

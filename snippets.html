@@ -60,23 +60,24 @@
   }
 
   //очистка inputa щелчком по label и удаление красной расскраски
-  /* $("label").click(function () {
-    $(this).next().val('');
-    $(this).removeAttr('style');
-  }) */
-
+  function clearInputClickLabel() {
+    $("label").click(function () {
+      $(this).next().val('');
+      $(this).removeAttr('style');
+    })
+  }
   //очистка inputa щелчком по label и удаление красной расскраски
-  clearInputClickLabel();
+  /* clearInputClickLabel();
   function clearInputClickLabel() {
     document.querySelectorAll('label').forEach(el => el.addEventListener('click', function (e) {
       e.preventDefault();
       this.removeAttribute('style');
       const id = this.getAttribute('for');
       if (!id) return;
-      document.getElementById(id).value = '';
+      const elemInput = document.getElementById(id);
+      if (!isCheckboxOrRadio(elemInput.getAttribute('type'))) elemInput.value = '';
     }));
-    //document.querySelector('#dateoplfin').addEventListener('focus', dataRegulation);
-  }
+  } */
 
   // очистка поля поиска прищелчке на крестике
   document.querySelector('body').addEventListener('input', () => {
@@ -94,7 +95,7 @@
   }
 
   // проверяем форму на наличие чекбоксов или радиокнопок
-  const isCheckboxOrRadio = type => ['checkbox', 'rsdio'].includes(type);
+  const isCheckboxOrRadio = type => ['checkbox', 'radio'].includes(type);
 
 
   // собираем данные форм в массив
@@ -157,14 +158,13 @@
 
   // пошук по таблиці де col - номер колонки, який ппропускається при пошуку
   function findInTable(arr, value, col) {
-    const result = [];
+    let result = [];
     let yi = '';
     for (var i = 0; i < arr.length; i++) {
       for (var j = 0; j < arr[i].length; j++) {
         if (j === col) continue
         if (yi !== i) {   // пропускаємо дублі  
           //replace(/\s/g,'') видаляє всі пробільні символи (пробіли)
-
           if (arr[i][j].toLowerCase().replace(/\s/g, '').includes(value.toLowerCase().replace(/\s/g, ''))) {
             result.push(arr[i]);
             yi = i;

@@ -34,3 +34,6 @@ function loadTableReestrView() {
 function loadTableJobView() {
   return loadPartialHTML_('job/job');
 }
+function loadTableCasheRom() {
+  return loadPartialHTML_('cashe-rom/cashe-rom-html');
+}

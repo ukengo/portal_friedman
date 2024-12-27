@@ -65,8 +65,8 @@ function preIndex(spredSheet, key, col) {
     }
 }
 
-// ищет номер строки указанной ячейки 
+/* // ищет номер строки указанной ячейки 
 function cellIndex(spredSheet, key) {
     const dataArr = spredSheet.getRange('A1:A').getValues();
     return dataArr.flat().indexOf(key) + 1;
-}
+} */

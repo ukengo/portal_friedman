@@ -93,6 +93,7 @@ const dataCashe = () => {
   const ret = SpreadsheetApp.openByUrl(URLCAHE()).getSheetByName("Лист1")
   return ret
 }
+
 function doGet() {
   return HtmlService.createTemplateFromFile('main-HTML').evaluate()
     //Responsive

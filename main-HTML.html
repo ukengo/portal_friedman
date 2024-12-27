@@ -54,6 +54,10 @@
               <a class="nav-link" id="nav-job-tab" data-bs-toggle="tab" data-bs-target="#nav-job" type="button"
                 role="tab" aria-controls="nav-job" aria-selected="true">job</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" id="nav-casherom-tab" data-bs-toggle="tab" data-bs-target="#nav-casherom" type="button"
+                role="tab" aria-controls="nav-casherom" aria-selected="true">CasheRom</a>
+            </li>
           </ul>
           <div class="nav-link" id="updateAll">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" color='white' fill="currentColor"
@@ -102,6 +106,9 @@
         <div class="tab-pane fade" id="nav-job" role="tabpanel" aria-labelledby="nav-job-tab">
           <?!= loadTableJobView() ?>
         </div>
+        <div class="tab-pane fade" id="nav-casherom" role="tabpanel" aria-labelledby="nav-casherom-tab">
+          <?!= loadTableCasheRom() ?>
+        </div>
       </div>
 
       <div id="app"></div>
@@ -121,7 +128,7 @@
       <?!= include("reestr/tr-modal-script")?>
       <?!= include("job/job-script")?>
       <?!= include("arriwalwaste/workers/workers-script")?>
-      <?!= include("cashe/cashe-script.htmlpt")?>
+      <?!= include("cashe-rom/cashe-rom-script")?>
 
       <script>
         "use strict";
@@ -133,6 +140,7 @@
           startTableFinance();
           startArrivalWaste();
         }
+
 
 
         // функция, которая при перезагрузке открывает последнюю просмотренную страницу

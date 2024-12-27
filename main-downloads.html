@@ -82,7 +82,10 @@
     }).getLastTenRowsArriwal();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('stopAw', JSON.stringify(data));
-    }).stopArrivalWaste();
+    }).stopArrivalWaste();    
+    google.script.run.withSuccessHandler((data) => {
+      localStorage.setItem('сasheRom', (data));
+    }).getRecordsCashe();
   }
  // onlineDownloads();
 

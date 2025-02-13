@@ -411,11 +411,13 @@
 
   // открытие полной таблицы проекта
   function btnTable() {
-    if ($('.dataTables_filter input').length) { // проверка на наличие селектора
-      const valueSearch = $('.dataTables_filter input').val(); // данные в поле поиска
-      localStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш      
-    };
-
+    /*     if ($('.dataTables_filter input').length) { // проверка на наличие селектора
+          const valueSearch = $('.dataTables_filter input').val(); // данные в поле поиска
+          //localStorage.setItem('dataTables_filter_input', valueSearch); //записываем данные поля поиска в кеш
+          localStorage.setItem('inputDtReestr', valueSearch); //записываем данные поля поиска в кеш
+          
+        };
+     */
     $('#div-data-table').remove();
     $('#btnTable').prop("disabled", true);
     $('<div id="div-data-table-spinner"></div><div id="div-data-table"><div style="overflow-x:auto;"><table id="data-table" class="table table-striped table-sm table-hover table-bordered table-datatable table-line-selection"></table></div></div>').appendTo('#div-data-table-row')
@@ -424,6 +426,7 @@
     google.script.run.withSuccessHandler(showData).getData();
     dblClickTableReestr();
     //tableLineSelection() //полосы в таблице
+
   }
 
   // открытие полной таблицы проектов при загрузке окна (автооткрытие)
@@ -439,7 +442,6 @@
         lengthMenu: [[25, 50, 100, 500, -1, 0], [25, 50, 100, 500, "Все", "Пусто"]],
         responsive: true,
         autoWidth: false,
-        responsive: true,
         order: [[11, 'desc']], // колонка 10 это номера строк, по ним сортировка
         columnDefs: [
           {
@@ -461,11 +463,9 @@
           { "title": "Row" },
           { "title": "Row2" },
         ],
-
       });
 
       //підсвітка проектів
-
       const rowColorReestrDataTable = () => {
         document.querySelectorAll('#data-table tbody tr').forEach(el => {
 
@@ -487,45 +487,13 @@
       rowColorReestrDataTable();
       //кінець підсвітки проектів
 
+      //перехват события вставки и обрезка пробелов в поле input[type="search"]
       trimmingSpaces();
+
       clickTableReestr();
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').classList.add("form-control");
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').style =
-        `border-radius: 20px;
-        width: 400px;
-        padding: 5px 14px`;
-      document.querySelector('.dataTables_wrapper .dataTables_filter input').placeholder = 'Пошук по таблиці';
 
-      // пошук при кліку на Search:
-
-      var a = document.querySelector('.dataTables_wrapper .dataTables_filter');
-      var b = document.querySelector('.dataTables_wrapper .dataTables_filter input');
-      var c = document.querySelector('.dataTables_wrapper .dataTables_filter label');
-      // var cName = document.querySelector('.dataTables_wrapper .dataTables_filter label[for="name"]');
-
-      // перезавантаження таблиці
-      var elem = document.createElement("button");
-      var elemText = document.createTextNode("Up");
-      elem.appendChild(elemText);
-      elem.classList.add('btn', 'btn-light', 'me-2', 'align-baseline', 'search-t-reestr')
-      elem.addEventListener('click', btnTable);
-      a.insertBefore(elem, c);
-
-      // считываем из кеша данные для поиска и вставляем в поле поиска
-      const valueSearch = localStorage.getItem('dataTables_filter_input');
-      const dataTablesFilterInput = document.querySelector('.dataTables_filter input');
-      dataTablesFilterInput.value = valueSearch;
-      autoSearchOnOpen('.dataTables_filter input');
-      // end
-
-      //очищення поля пошуку кліком на інпут пошуку
-      document.querySelector('.search-t-reestr ~ label').addEventListener('click', e => {
-        if (e.srcElement.innerText) {
-          dataTablesFilterInput.value = '';
-          autoSearchOnOpen('.dataTables_filter input');
-        }
-        localStorage.removeItem('dataTables_filter_input');
-      });
+      //dataTablesElem(btnTable);
+      addUpButtonDT(btnTable, 'data-table', 'inputDtReestr')
 
       /* // при поиске если введены критерии поиска, то ищется по всей таблице, если строка поиска пустая, то отображается количество строк по умолчанию
       $('#searchReestr').keyup(function() {
@@ -642,11 +610,8 @@
     }); */
 
   //кнопка маленькая средняя (finance plus без перехода)
-  $('#btnSearchFinPlus').click(function () {
-    /*    if (document.getElementById("btnSearchFinPlus").innerHTML === '-') {
-         alert('Не введені дані');
-         return
-       } */
+  $('#btnSearchFinPlus').click(btnSearchFinPlusBtn)
+  function btnSearchFinPlusBtn() {
     localStorage.removeItem('test');
 
     // document.getElementById("btnSearchFinPlus").disabled = true;
@@ -666,7 +631,7 @@
       // закриття блоку по кнопці Clear
       btnClearSearchFinance();
     }, 1);
-  })
+  }
 
   //кнопка маленькая средняя (finance minus без перехода)
   /* $('#btnSearchFinMinus').click(function () {

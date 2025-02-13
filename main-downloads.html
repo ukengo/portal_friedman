@@ -6,14 +6,14 @@
   });
 
   document.querySelector('#updateAll').addEventListener('mouseup', function () {
-    btnTable();
-    btnTableFinance();
-    onlineDownloads();
+    btnTable()
+    btnTableFinance()
+    onlineDownloads()
+    startDataTableCasherom()
   });
 
   refreshCacheLong();
   function refreshCacheLong() {
-    console.log('refreshLong');
     const minLongStart = 60;
     onlineDownloads();
     const refreshLong = setTimeout(refreshCacheLong, minLongStart * 1000 * 60);
@@ -82,10 +82,13 @@
     }).getLastTenRowsArriwal();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('stopAw', JSON.stringify(data));
-    }).stopArrivalWaste();    
+    }).stopArrivalWaste();
+    /* google.script.run.withSuccessHandler((data) => {
+      localStorage.setItem('casheRom1', (data));
+    }).getRecordsCashe1();
     google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('сasheRom', (data));
-    }).getRecordsCashe();
+      localStorage.setItem('casheRom2', (data));
+    }).getRecordsCashe2(); */
   }
  // onlineDownloads();
 

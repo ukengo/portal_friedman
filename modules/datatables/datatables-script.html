@@ -1,0 +1,56 @@
+<script>
+
+  //обробка пошукового блоку DT
+  function addUpButtonDT(fUp, idName, stor) {
+
+    //пошуковий блок
+    const searcBlockDT = document.getElementById(`${idName}_filter`)
+
+    //інпут пошукового блоку
+    const inputSearcBlockDT = searcBlockDT.querySelector('input')
+    inputSearcBlockDT.classList.add("form-control")
+    inputSearcBlockDT.style = `
+    border-radius: 20px;
+    width: 400px;
+    padding: 5px 14px;
+    font-size: inherit;
+    `
+    inputSearcBlockDT.placeholder = 'Пошук по таблиці'
+
+    //Label пошукового блоку
+    const labelSearcBlockDT = searcBlockDT.querySelector('label')
+
+    //створюємо кнопку Up
+    let btnUpDT = document.createElement("button");
+    let btnUpDTText = document.createTextNode("Up");
+    btnUpDT.appendChild(btnUpDTText);
+    btnUpDT.classList.add('btn', 'btn-light', 'me-2', 'align-baseline')
+
+    //вставляємо кнопку Up
+    searcBlockDT.insertBefore(btnUpDT, labelSearcBlockDT)
+
+    //накидаємо перезавантаження на кнопку
+    btnUpDT.addEventListener('click', e => {
+
+      //записуємо дані поля пошуку в кеш
+      localStorage.setItem(stor, inputSearcBlockDT.value)
+
+      fUp()
+    });
+
+    // отримуємо із кешу данні для пошуку і вставляємо в поле пошуку    
+    inputSearcBlockDT.value = localStorage.getItem(stor)
+    autoSearchOnOpenNew(inputSearcBlockDT)
+
+    //очищення поля пошуку кліком на інпут пошуку
+    labelSearcBlockDT.addEventListener('click', e => {
+      if (e.srcElement.innerText) {
+        inputSearcBlockDT.value = '';
+        autoSearchOnOpenNew(inputSearcBlockDT);
+      }
+      localStorage.removeItem(stor);
+    });
+  }
+
+
+</script>

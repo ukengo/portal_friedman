@@ -1,0 +1,43 @@
+<script>
+
+  // підготовка елементів для форми 
+  function createElementsFormsCasheRom(id, type, textContent, col, val = '') {
+    const casheCol = document.createElement('div')
+    casheCol.classList.add(...col)
+    const casheInput = document.createElement('input')
+    casheInput.classList.add("form-control")
+    casheInput.setAttribute('type', type)
+    casheInput.setAttribute('name', id)
+    casheInput.id = id
+    casheInput.value = val
+    const casheLabel = document.createElement('label')
+    casheLabel.setAttribute('for', id)
+    casheLabel.textContent = textContent
+    casheCol.appendChild(casheLabel)
+    casheCol.appendChild(casheInput)
+    return casheCol
+  };
+
+  // рендеринг форми
+  function renderFormsCasheRom(selectorBody, selector, value) {
+    const casheRow0 = document.createElement('div')
+    casheRow0.classList.add("row")
+    const casheRow = document.createElement('div')
+    casheRow.classList.add("row")
+    const casheRow1 = document.createElement('div')
+    casheRow1.classList.add("row")
+    casheForm = document.querySelector(selector)
+    const date = formatDateYYYYtireMMtireDD(strongToDate(value[1]))
+    casheRow0.appendChild(createElementsFormsCasheRom('numberRow', 'number', '№', ['col-2'], value[0]))
+    casheRow0.appendChild(createElementsFormsCasheRom('casheInputDate', 'date', 'Дата', ['col-2'], date))
+    casheRow.appendChild(createElementsFormsCasheRom('casheInputArticle', 'text', 'Стаття', ['col'], value[2]))
+    casheRow1.appendChild(createElementsFormsCasheRom('casheInputWaste', 'text', 'Витрата', ['col-2'], value[3]))
+    casheRow1.appendChild(createElementsFormsCasheRom('casheInputArrival', 'text', 'Прихід', ['col-2'], value[4]))
+    casheRow1.appendChild(createElementsFormsCasheRom('casheInputNotes', 'text', 'Примітки', ['col'], value[5]))
+    casheForm.appendChild(casheRow0)
+    casheForm.appendChild(casheRow)
+    casheForm.appendChild(casheRow1)
+
+  }
+
+</script>

@@ -1,0 +1,104 @@
+<script>
+
+
+  function startDataTableCasherom() {
+    btnCasheromInsert.disabled = true;
+    spinner('tableCaheRom')
+    google.script.run.withSuccessHandler(buildDataTableCasherom).getRecordsCasheAll();
+  }
+  startDataTableCasherom()
+
+  /*     google.script.run.withSuccessHandler((data) => {
+        localStorage.setItem('casheRom2', (data));
+      }).getRecordsCashe2(); */
+  function buildDataTableCasherom(casheRom) {
+    localStorage.setItem('casheRom1', casheRom.casheRom1)
+    localStorage.setItem('casheRom2', casheRom.casheRom2)
+    const casheRom1 = JSON.parse(localStorage.getItem('casheRom1'))
+    const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'))
+    document.querySelector('#tableCaheRom').innerHTML = ''
+    let table = new DataTable('#tableCaheRom', {
+      destroy: true,
+      data: casheRom1,
+      columns: [
+        { "title": "1" },
+        { "title": "Дата" },
+        { "title": "Стаття" },
+        { "title": "Витрата" },
+        { "title": "Прихід" },
+        { "title": "Примітки" },
+      ],
+      lengthMenu:
+        [[50, 100, 500, -1, 0], [50, 100, 500, "Все", "Пусто"]],
+      order:
+        [[0, 'desc']],
+      columnDefs: [
+        {
+          //   targets: [0], visible: false,
+        }
+      ],
+      select: true,
+    });
+    btnCasheromInsert.disabled = false;
+
+    //підсвітка червоним не внесені записи
+    casheRom2F = casheRom2.filter(el => el[1] != '')
+    if (casheRom2F.length > 1) {
+      document.querySelectorAll('#tableCaheRom tbody tr').forEach((el, ind) => {
+        if (ind < casheRom2F.length - 1) {
+          el.style.color = 'red';
+        }
+      })
+    }
+    addUpButtonDT(startDataTableCasherom, 'tableCaheRom', 'inputDtCashe')
+
+  }
+
+  // 
+
+
+  //обробка кліка (тапа) по таблиці
+  document.querySelector('#tableCaheRom').addEventListener('click', e => {
+    if (window.getSelection().toString()) return
+    if (event.target.tagName !== 'TD') return false
+    const dataTarget = event.target.textContent
+    const data = [...event.target.parentNode.children]
+    const arr = getDataFromTd(data)
+    const casheromFormaModal = document.querySelector('#casherom-forma-modal')
+    const modalCasheRom = new bootstrap.Modal(document.getElementById('modalCasheRom'))
+    modalCasheRom.show()
+    if (casheromFormaModal.querySelector('div:first-child')) {
+      casheromFormaModal.innerHTML = ''
+    }
+    renderFormsCasheRom('.modal-casherom__title', '#casherom-forma-modal', arr);
+    const formaCassheRom = new FormDataFromTables('#casherom-forma-modal')
+    const setCashRom = (e) => {
+      const dataModal = formaCassheRom.formaDataObj()
+      google.script.run.setRecordsCasheRom(dataModal)
+      modalCasheRom.hide()
+    }
+    document.querySelector('.modal-casherom__btn').addEventListener('click', e => {
+      setCashRom()
+    })
+    document.querySelector('.modal-casherom__btn--monovit').addEventListener('click', e => {
+      document.querySelector('#casheInputNotes').value = 'відшкодовано на МОНО ВІТ'
+    })
+
+    //зпрацювання по ентер enter
+    casheromFormaModal.addEventListener('keypress', e => {
+      if (e.keyCode == 13) {
+        setCashRom()
+      }
+    })
+  });
+
+  // "Захист" від помилки активності кнопки запуску
+  /*   document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener('hide.bs.modal', function (event) {
+        if (document.activeElement) {
+          document.activeElement.blur();
+        }
+      });
+    }); */
+
+</script>

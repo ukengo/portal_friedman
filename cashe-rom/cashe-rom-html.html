@@ -1,11 +1,42 @@
 <div class="container">
-  <h5>casherom</h5>
-  <div class="row">
+  <h4>casherom</h4>
+  <div class="row radius">
     <div class="col">
+      <button type="button" class="btn btn-danger btn-casherom__insert">Insert</button>
+    </div>
+  </div>
+  <!--   <div class="row radius mb-3">
+    <div class="col">
+      <form id="casherom-forma"></form>
+    </div>
+  </div> -->
+  <div class="row radius">
+    <div class="col tester">
       <div class="casherom-app">
-        <table id="tableCaheRom" class="stripe cell-border display compact" style="width:100%">
-        </table>></table>
+
+        <table id="tableCaheRom" class="stripe display hover compact table-datatable" style="width:100%">
+        </table>
       </div>
     </div>
   </div>
 </div>
+
+<!-- modal -->
+<div class="modal fade" id="modalCasheRom" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">casherom</h5>
+      </div>
+      <div class="modal-body modal-casherom__body">
+        <form id="casherom-forma-modal"></form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light modal-casherom__btn--monovit">МОНО ВІТ</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger modal-casherom__btn">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal end-->

@@ -46,7 +46,7 @@
     * Метод робить лабел червоним, якщо інпут заповнений і чорним, якщо ні.
     */
 
-    #labelred() {
+     #labelred() {
       this.$form.querySelectorAll('input, select, textarea').forEach(element => {
         const $labels = this.$form.querySelector(`[for="${element.id}"]`);
         if ($labels) {
@@ -91,7 +91,7 @@
         }
       }
       return values
-    }    
+    }
 
     /*
     метод перевірки форми на заповненість

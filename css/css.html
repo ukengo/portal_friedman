@@ -1,0 +1,234 @@
+<style>
+  /*прибираємо стрибок сторінки у браузері*/
+  html {
+    width: 100vw;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: #f5f5f5;
+  }
+
+  table,
+  .nav-maim-data-time,
+  .nav-maim-data-date {
+    cursor: pointer;
+  }
+
+  .modal-footer {
+    padding: .8rem 0;
+  }
+
+  .radius {
+    padding: 13px;
+    margin-bottom: 5px;
+    background-color: white;
+    border-radius: 10px;
+  }
+
+  .nav-link,
+  label {
+    cursor: pointer;
+  }
+
+  .form-font {
+    font-weight: bold;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    color: #ffffff
+  }
+
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: hls(0, 2%, 12%);
+  }
+
+  .form-control:focus {
+    /*border-color: white;*/
+    box-shadow: 0px 0px 0px 0px white;
+  }
+
+  /* .form-group, .form-check {
+    background: #FFF7F7;
+  } */
+
+  #vrabotevseArriwalWaste {
+    cursor: pointer;
+  }
+
+  .table-datatable {
+    font-size: 13px;
+  }
+
+  .table-datatable tr td {
+    line-height: 12px;
+  }
+
+  /*   .tablesotr2{
+    width: 100%;
+  }
+ */
+  .tablesotr2 .tablesotr2col0 {
+    width: 8%;
+    text-align: center;
+  }
+
+  .tablesotr2 .tablesotr2col1 {
+    width: 40%;
+  }
+
+  .tablesotr2 .tablesotr2col2 {
+    width: 20%;
+  }
+
+  .tablesotr2 .tablesotr2col3 {
+    width: 5%;
+    text-align: center;
+  }
+
+  .accordion-button {
+    color: #dc3545;
+    background-color: #ffffff;
+  }
+
+  .accordion-button:not(.collapsed) {
+    color: #dc3545;
+    background-color: #ffffff;
+  }
+
+  .accordion-button:focus {
+    box-shadow: 0 0 0 0.20rem rgb(239 168 173 / 25%);
+    border-color: rgb(239 168 173 / 50%);
+  }
+
+  .input-search {
+    border-radius: 20px;
+  }
+
+  .height-alignment {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-left {
+    top: 65px;
+    z-index: auto;
+  }
+
+  .nav-buh-active {
+    font-weight: bold;
+  }
+
+  .btn-buh:focus {
+    outline: 0 !important;
+    outline-color: transparent !important;
+    outline-width: 0 !important;
+    outline-style: none !important;
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0) !important;
+  }
+
+  .nav-buh:hover {
+    border-radius: 10px;
+    background-color: #fff7f7;
+  }
+
+  .col-sm-8.arrow {
+    flex: 0 0 auto;
+    width: 73%;
+  }
+
+  .row-buh {
+    flex-wrap: nowrap;
+  }
+
+  #free_text {
+    width: 25px;
+    height: 25px;
+  }
+
+  .form-check-input:checked {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    ;
+  }
+
+  .form-check-input:focus {
+    box-shadow: 0 0 0 0 !important;
+    border-color: #dc3545 !important;
+  }
+
+  input:focus,
+  input:active {
+    border-color: #ffa8b1 !important;
+    box-shadow: 0 0 0 0 !important;
+  }
+
+  /* удаляет фон подложки в полях поиска по таблицам */
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+
+  .arw-table {
+    height: 465px;
+    overflow: auto;
+  }
+
+  /*перефарбовуємо іконку календаря в input date*/
+  #calendar::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+
+  #calendar {
+    border: none;
+    width: 23% !important;
+    font-size: 29px;
+  }
+
+  #sendbuhcont {
+    height: 6.25rem;
+  }
+
+  .date-regular {
+    width: 30px;
+    user-select: none;
+  }
+
+  .date-regular__plus {
+    position: absolute;
+    top: 3px;
+    height: 24px;
+    font-size: 2.0rem;
+    z-index: 100;
+    cursor: pointer;
+  }
+
+  .date-regular__minus {
+    position: absolute;
+    top: 11px;
+    font-size: 3rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 14px;
+    }
+
+    .date-regular {
+      display: none;
+    }
+  }
+
+  .date-regular {
+    position: relative;
+  }
+
+  /*   .workers__regular {
+    line-height: 25px;
+  }
+   */
+</style>

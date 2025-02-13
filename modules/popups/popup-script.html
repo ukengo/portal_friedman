@@ -1,0 +1,77 @@
+
+<div id="mypopup">
+ <!--  <h3>Popup title</h3>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </p>
+  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+    sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
+</div>
+
+
+<style>
+  #mypopup {
+    width: 750px;
+    padding: 20px;
+    font-size: 8pt;
+    /* background-color: white; */
+    border-radius: 6px;
+    position: absolute;
+    display: none;
+  }
+
+  /* #mypopup::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    transform: rotate(45deg);
+    background-color: white;
+    position: absolute;
+    left: -6px;
+    top: 68px;
+  } */
+</style>
+
+<script>
+  const mypopup = document.getElementById("mypopup");
+  document.getElementById('data-table').addEventListener("mouseover", showPopup);
+  document.getElementById('data-table').addEventListener("mouseout", hidePopup);
+
+  function showPopup(e) {
+    const cell = e.target._DT_CellIndex;
+    if (cell && cell.column === +4) {
+      const iconPos = e.target.getBoundingClientRect();
+      mypopup.style.left = (iconPos.right - 40) + "px";
+      mypopup.style.display = "block";
+      mypopup.innerHTML = popupInsertText(e.target.innerHTML);
+      mypopup.querySelectorAll('input').forEach(el => {
+        el.style.fontSize = '8pt'
+      })
+      document.getElementById("rowdatafin").innerHTML = '';
+      const elements = document.querySelectorAll('.delete-fin, .delete-fin-pop');
+      elements.forEach(elem => elem.remove());
+      const height = mypopup.offsetHeight;
+      if (window.scrollY < 200) {
+        mypopup.style.top = (window.scrollY + iconPos.top - 60) + "px"
+      } else {
+        mypopup.style.top = (window.scrollY + iconPos.top - height + 40) + "px";
+      }
+    }
+  }
+
+  function hidePopup(e) {
+    mypopup.style.display = "none"
+  }
+
+  function popupInsertText(pojectNum) {
+    localStorage.removeItem('test');
+    const proektFin = pojectNum;
+    $('#proektfin').val(numEndStrong(proektFin));
+    $('#searchFinance').val(numEndStrong(proektFin));
+    SearchRecordsFinProekt1(proektFin);
+    if (localStorage.getItem('test')) {
+      return localStorage.getItem('test');
+    }
+  }
+
+</script>

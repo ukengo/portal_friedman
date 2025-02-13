@@ -27,38 +27,57 @@ function addNewRowMinusThreee(rowData) {
   return rowData
 } */
 
-function addNewRowWaste(rowData) {
-  const vasteDate = String(rowData.splice(0, 1))
-  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(vasteDate))
-  dataWaste().appendRow(rowData)
-  return true
+// отримуємо список стоп призначень і дохід витрати
+function stopArrivalWaste() {
+  const stopAw = dataSpiskiReestr().getRange('R2:R').getValues().flat();
+  return stopAw.filter(element => element !== '');
 }
+
+// добавляємо рядок витрат на сторінку "Прочие траты"
+// із фронта може передаватися або одномірний масив, який вставляється в одну строку, або двомірний, який треба розібрати по строкам
+///////////////////////////////////////////////////////////
+
+// загальна функція вставки одномірного масиву
+function addNewRowWaste(rowData) {
+  const wasteDate = String(rowData.splice(0, 1));
+  rowData.splice(0, 0, formatDateDDdotMMdotYYYY(wasteDate));
+  dataWaste().appendRow(rowData);
+  return getLastTenRowsWaste();
+}
+
+// приватна функція вставки двомірного масиву з використанням функція вставки одномірного масиву
+function addNewRowWaste2D(rowData2D) {
+  rowData2D.forEach(el => {
+    addNewRowWaste(el);
+  });
+  return getLastTenRowsWaste();
+}
+/////////////////////////////////////////////////////////////////////
+
 
 function addNewRowArrival(rowData) {
   const arrivalDate = String(rowData.splice(0, 1))
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate))
   dataArriwal().appendRow(rowData)
-  return true
+  return getLastTenRowsArriwal();
 }
 
 function addNewTableArriwalWaste(rowData, sheet) {
   const arrivalDate = String(rowData.splice(0, 1));
   rowData.splice(0, 0, formatDateDDdotMMdotYYYY(arrivalDate));
-  const arrivalSumma = rowData.splice(1, 1)
-  rowData.splice(1, 0, (new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(arrivalSumma)))
-  const lastTenRows = getLastTenRows(sheet)
-  //const lastTenRowsData = lastTenRows.data
-  const lastTenRowsData = []
-  lastTenRowsData.push(rowData)
+  const arrivalSumma = rowData.splice(1, 1);
+  rowData.splice(1, 0, (new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2 }).format(arrivalSumma)));
+  const lastTenRows = getLastTenRows(sheet, 1);
+  const lastTenRowsData = [];
+  lastTenRowsData.push(rowData);
   return lastTenRows
 }
 function addNewTableArriwal(rowData) {
-  const lastTenRows = addNewTableArriwalWaste(rowData, dataArriwal())
+  const lastTenRows = addNewTableArriwalWaste(rowData, dataArriwal());
   return lastTenRows
 }
 function addNewTableWaste(rowData) {
-  const lastTenRows = addNewTableArriwalWaste(rowData, dataWaste())
-  console.log(lastTenRows)
+  const lastTenRows = addNewTableArriwalWaste(rowData, dataWaste());
   return lastTenRows
 }
 /* function addNewTableArriwal(rowData) {
@@ -102,7 +121,8 @@ function addNewRowMinusThreee(rowData) {
   return data;
 } */
 
-function getLastTenRows(sheet) {
+// list - це позначка дії їз стовпцями. Яущо пусто, то передається вся таблиця, якщо "1", то викидаємо четвертий стовпець 
+function getLastTenRows(sheet, list) {
   const lr = sheet.getDataRange().getValues().length;
   const dataArr = sheet.getRange(2, 1, lr, 5).getDisplayValues();
   //const data = {...sheet.getRange(2, 1, lr, 5).getDisplayValues()};
@@ -114,15 +134,24 @@ function getLastTenRows(sheet) {
   //добавляємо в кінець масиву номер запису
   data.forEach((el, i) => el.push(String(i)));
 
+  let dataMap;
+
+  //видаляємо 4 стовпець
+  if (list) {
+    dataMap = data.map(x => [x[0], x[1], x[2], x[4], x[5]]);
+  } else {
+    dataMap = data;
+  }
+
   const dataObject = {
-    'data': data,
+    'data': dataMap,
     'len': lr
   };
   return dataObject
 }
 
 function getLastTenRowsWaste() {
-  return getLastTenRows(dataWaste())
+  return getLastTenRows(dataWaste(), 1)
 }
 
 function getLastTenRowsArriwal() {
@@ -130,8 +159,8 @@ function getLastTenRowsArriwal() {
 }
 
 function getLastTenRowsWasteAndArriwal() {
-  
-  return [getLastTenRowsWaste(), getLastTenRowsArriwal()] 
+
+  return [getLastTenRowsWaste(), getLastTenRowsArriwal()]
 }
 
 ////////////////////////////////////////////////
@@ -142,26 +171,9 @@ function addpRoekt() {
   return arr[arr.length - 1]
 }
 
-/* function addpRoekt() {
-  const ss = SpreadsheetApp.openByUrl(URLUPRAV)
-  const sheet = ss.getSheetByName('База')
-  var dataValues = sheet.getRange("F1:F").getValues(); //получаем массив проектов
-  var dataLength = dataValues.length;
-
-  for (var i = dataLength - 1; i >= 0; i--) {
-    if (dataValues[i][0] !== "") {
-      var lastRowInData = i + 1;
-      break;
-    }
-  }
-  var NumProekt = sheet.getRange(lastRowInData, 6).getValue();
-  return NumProekt + 1
-} */
-
 function addNewRow(rowData) {
-  // таблица Управление
-  const ss = SpreadsheetApp.openByUrl(URLUPRAV)
-  const sheet = ss.getSheetByName('База')
+  // таблица Управление  
+  const sheet = dataSheet()
   const spl0 = String(rowData.splice(0, 1))
   const spl1 = String(rowData.splice(0, 1))
   const dat1 = formatDateDDdotMMdotYYYY(spl1)
@@ -567,9 +579,8 @@ function getDateUprav(date) {
 
 ////////////////////////////////////////////////
 // financetable
-
-function searchRecordsFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin) {
-
+function searchRecordsFin(dataArr) {
+  [proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin] = dataArr;
   var returnRows = [];
   var allRecords = getRecordsFin();
 
@@ -755,7 +766,7 @@ function getDateFin(date) {
 } */
 
 function UpdateRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, sumIspolFin, oplataIspolFin, checkBox) {
-  console.log(checkBox)
+  //console.log(checkBox)
   var getLastRow = dataFinance().getDataRange().getValues().length;
   var table_values = dataFinance().getRange(100, 1, getLastRow, 15).getValues();
   const range = dataBase().getRange(1, 1, dataBase().getLastRow() + 1, dataBase().getLastColumn() + 1);
@@ -844,6 +855,7 @@ function AddRecordFinMultiple(arrFinMulti) {
       }
     }
   }
+  removalDuplicates();
 }
 
 // функция обработка вставки "частичная оплата"
@@ -975,7 +987,7 @@ function startDataSotrGs() {
 ////////////////////////////////////////////////
 //ТАБЛИЦА РЕЕСТР ОФОРМЛЕНИЙ
 
-function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr) {
+function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr, fullPayment) {
 
   var returnRows = [];
   var allRecords = getRecordsReestr();
@@ -1174,6 +1186,17 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
       evalRows.push('yes');
     }
 
+    if (fullPayment != '') {
+      if (value[16] == fullPayment) {
+        evalRows.push('yes');
+      } else {
+        evalRows.push('no');
+      }
+    }
+    else {
+      evalRows.push('yes');
+    }
+
     if (evalRows.indexOf("no") == -1) {
       returnRows.push(value);
     }
@@ -1184,18 +1207,17 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
 
 }
 
-
 function getRecordsReestr() {
   const dateRee = dataBase().getDataRange().getValues().slice(1);
   const dataMapRee = dateRee.filter(x => x[5] != '')
-    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18]]);
-  const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '').sort((a, b) => b[5] - a[5]);
-  const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '').sort((a, b) => b[5] - a[5]);
+    .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18], x[24]]);
+  const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '');
+  const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '');
   const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1);
-  return dataFilterMapReeDate
+  return dataFilterMapReeDate.reverse();
 }
 
-function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr) {
+function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, fullPaymentReestr) {
 
   var getLastRowUpr = dataSheet().getLastRow();
   var table_values_upr = dataSheet().getRange(2, 1, getLastRowUpr - 1, 9).getValues();
@@ -1213,7 +1235,7 @@ function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabot
     }
   }
   var getLastRowRee = dataBase().getLastRow();
-  var table_values_ree = dataBase().getRange(2, 1, getLastRowRee, 25).getValues();
+  var table_values_ree = dataBase().getRange(2, 1, getLastRowRee, 26).getValues();
   for (i = 0; i < table_values_ree.length; i++) {
     if (table_values_ree[i][5] == proektReestr) {
 
@@ -1224,6 +1246,7 @@ function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabot
       dataBase().getRange(i + 2, 24).setValue(issuepartReestr);
       dataBase().getRange(i + 2, 23).setValue(withoutaccountReestr);
       dataBase().getRange(i + 2, 19).setValue(stoppedReestr);
+      dataBase().getRange(i + 2, 25).setValue(fullPaymentReestr);
     }
   }
   return 'SUCCESS';
@@ -1588,7 +1611,7 @@ function getData() {
   var spreadSheetId = "1ewk6ahWyREzSUe985l3zm_LblKpdjXs6rAHd71hXzwQ"; //CHANGE
   var dataRange = "База!A2:Z"; //CHANGE
   var range = Sheets.Spreadsheets.Values.get(spreadSheetId, dataRange);
-  var values = range.values.filter(x => x[5] != '').map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25]]);
+  var values = range.values.filter(x => x[5] != '');
   return values;
 }
 

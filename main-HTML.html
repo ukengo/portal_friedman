@@ -59,7 +59,7 @@
                 role="tab" aria-controls="nav-casherom" aria-selected="true">CasheRom</a>
             </li>
           </ul>
-          <div class="nav-link" id="updateAll">
+          <div class="nav-link mx-2" id="updateAll">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" color='white' fill="currentColor"
               class="bi bi-arrow-repeat" viewBox="0 0 16 16">
               <path
@@ -68,7 +68,7 @@
                 d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
             </svg>
           </div>
-          <div class="nav-link" id="delStorageAll">
+          <div class="nav-link mx-2" id="delStorageAll">
             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" color='white' fill="currentColor"
               class="bi bi-x-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -115,6 +115,7 @@
 
       <!-- Підключаємо скрипти
       ============================================================================= -->
+      
       <?!= include("snippets")?>
       <?!= include("src/classes/FormDataFromTables-script")?>
       <?!= include("src/classes/FormDataFromTablesWithoutRed-script")?>
@@ -128,7 +129,23 @@
       <?!= include("reestr/tr-modal-script")?>
       <?!= include("job/job-script")?>
       <?!= include("arriwalwaste/workers/workers-script")?>
+      
+      <!-- modules/datatables -->
+      <?!= include("modules/datatables/datatables-script.html")?>
+      <!-- modules/popups -->
+      <?!= include("modules/popups/popup-script")?>
+      
+      <!-- cashe-rom -->
       <?!= include("cashe-rom/cashe-rom-script")?>
+      <?!= include("cashe-rom/cashe-rom-datatable-script.html")?>
+      <?!= include("cashe-rom/cashe-rom-forma.html")?>
+      
+      <!-- formafin -->
+      <?!= include("modules/formafin/formafin-template-script")?>
+      
+      
+      
+
 
       <script>
         "use strict";
@@ -166,9 +183,20 @@
         }
 
         // имитация клика на Бренд
-            document.getElementById("nav-brand-tab").addEventListener("click", () => 
-              document.getElementById("nav-buhgalter-tab").click());          
-        
+        document.getElementById("nav-brand-tab").addEventListener("click", () =>
+          document.getElementById("nav-buhgalter-tab").click());
+
+        // вставка дати на головну
+        (function addDate() {
+          document.querySelector('.nav-maim-data-date').innerText = formatDateTime(new Date(), `dd.mm.yyyy`);
+          document.querySelector('.nav-maim-data-time').innerText = formatDateTime(new Date(), `hh:mm`);
+          setTimeout(addDate, 30000);
+        })();
+
+        // Імітація кліка на календар
+        /*        document.getElementById("nav_finance_data").addEventListener("click", () =>
+                  document.getElementById("calendar").click());
+         */
 
       </script>
 

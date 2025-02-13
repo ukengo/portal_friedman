@@ -48,7 +48,7 @@
     displayTable += `<tr class="border-2">`;
     displayTable += `<th width="550" class="fw-bold text-danger">${naydenofin}</th>`;
     displayTable += `<th width="1">
-                      <button type="button" class="w-100 btn btn-outline-danger btn-sm shadow-none  btn-clear-search btn-clear-search-finance">X</button> 
+                      <button type="button" class="w-100 btn btn-outline-danger btn-sm shadow-none  btn-clear-search btn-clear-search-finance delete-fin-pop">X</button> 
                     </th>`
     displayTable += `</tr>`;
 
@@ -89,7 +89,7 @@
       displayTable += "<label for=\"up_primfin\">Примітка</label> ";
       displayTable += "<input type=\"text\"  list=\"primfin-datalist\" id=\"up_primfin" + row_number_fin + "\" value=\"" + item[5] + "\" class=\"form-control form-control-sm\" /><datalist id=\"primfin-datalist\"></datalist> </div></div> ";
 
-      displayTable += "<div class=\"col-md-1 delete-fin\">"
+      displayTable += "<div class=\"col-md-1 delete-fin \">"
       displayTable += "<div class=\"form-label\">"
       displayTable += "<label for=\"up_idfin\">ID</label> ";
       displayTable += "<input type=\"number\" id=\"up_idfin" + row_number_fin + "\" value=\"" + item[6] + "\" class=\"form-control form-control-sm\" /></div></div> ";
@@ -133,7 +133,7 @@
           </div>
         </div>
         <div class="col-md-1">
-          <button class="btn btn-outline-danger btn-sm d-inline w-100 shadow-none btn-clear-search btn-clear-search-finance" type="button">X</button>
+          <button class="btn btn-outline-danger btn-sm d-inline w-100 shadow-none btn-clear-search btn-clear-search-finance delete-fin-pop" type="button">X</button>
         </div>
       `;
 

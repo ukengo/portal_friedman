@@ -8,10 +8,9 @@
   }
   // startDataTableCasherom()
 
-  // формуємо таблицю  
-  function buildDataTableCasherom() {
-    //   localStorage.setItem('casheRom1', casheRom.casheRom1)
-    //   localStorage.setItem('casheRom2', casheRom.casheRom2)
+  function buildDataTableCasherom(casheRom) {
+    localStorage.setItem('casheRom1', casheRom.casheRom1)
+    localStorage.setItem('casheRom2', casheRom.casheRom2)
     const casheRom1 = JSON.parse(localStorage.getItem('casheRom1'))
     const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'))
     document.querySelector('#tableCaheRom').innerHTML = ''
@@ -60,16 +59,17 @@
     const dataTarget = event.target.textContent
     const data = [...event.target.parentNode.children]
     const arr = getDataFromTd(data)
-    const casheromFormaModal = document.querySelector('[data-cashe-rom-forma-container]')
+    const casheromFormaModal = document.querySelector('#casherom-forma-modal')
+    const modalCasheRom = new bootstrap.Modal(document.getElementById('modalCasheRom'))
+    modalCasheRom.show()
 
-    const formaCassheRomDialog = new PopupEditing();
-    renderFormsCasheRom('.dialog__header', '.dialog__body', arr);
-    renderContainerButtonsCasheRom()
-    renderButtonsCasheRom()
-    renderContainerFinanceCasheRom()
+    if (casheromFormaModal.querySelector('div:first-child')) {
+      casheromFormaModal.innerHTML = ''
+    }
 
-    const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]')
-
+    renderFormsCasheRom('.modal-casherom__title', '#casherom-forma-modal', arr);
+    
+    const formaCassheRom = new FormDataFromTables('#casherom-forma-modal')
     const setCashRom = (e) => {
       const dataModal = formaCassheRom.formaDataObj()
       google.script.run.setRecordsCasheRom(dataModal)
@@ -208,5 +208,15 @@
         setCashRom()
       }
     })
+  });
+
+  // подія на кнопку fin
+  document.querySelector('.modal-casherom__btn--finance').addEventListener('click', e => {
+    const selectorFinForma = '.modal-casherom__finforma'
+    const selectorTemplateFinFirma = '#finMainForma'
+    const financeForm = new FinanceFormBuilder(selectorTemplateFinFirma, selectorFinForma);
+    if (!document.querySelector(selectorFinForma).hasChildNodes()) financeForm.build()
+    else financeForm.none()
   })
+
 </script>

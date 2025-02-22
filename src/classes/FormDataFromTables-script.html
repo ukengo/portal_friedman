@@ -1,0 +1,114 @@
+<script>
+  /**
+  * Клас для маніпуляції з формами
+  */
+
+  class FormDataFromTables {
+    constructor(selector) {
+      this.$form = document.querySelector(selector);
+      this.setup();
+    }
+
+
+    setup() {
+      this.#labelred();
+      this.labelred = this.#labelred.bind(this);
+      this.clearRecords = this.#clearRecords.bind(this);
+      this.labelredInputEvent();
+      this.$labels = this.$form.querySelectorAll('label');
+      this.$labels.forEach(element => element.addEventListener('click', this.#clearInputClickLabel));
+
+      document.querySelectorAll('.btn-clear-form-all').forEach(element => {
+        element.addEventListener('click', this.clearRecords);
+      });
+    }
+    
+    /**
+    * Метод очистки інпута по name
+    */
+    inClearInput(name) {
+      this.$form.querySelector(`[name=${name}]`).value = '';
+    }
+
+    /**
+    * Метод очистки полів форми. Також міняє колір лабела на чорний
+    */
+    #clearRecords() {
+      this.$form.reset();
+      this.#labelred();
+    }
+
+    /**
+    * Метод робить лабел червоним, якщо інпут заповнений і чорним, якщо ні.
+    */
+
+     #labelred() {
+      this.$form.querySelectorAll('input, select, textarea').forEach(element => {
+        const $labels = this.$form.querySelector(`[for="${element.id}"]`);
+        if ($labels) {
+          if (element.value && element.getAttribute('type') != 'checkbox') {
+            $labels.style.color = '#dc3545';
+          } else {
+            $labels.style.color = '';
+          }
+        }
+      });
+    }
+
+    labelredInputEvent() {
+      this.$form.addEventListener('input', () => {
+        this.#labelred();
+      })
+    }
+
+    /**
+    * Метод очистки inputa кліком по label і видалення червоної розфарбовки полів форми.
+    */
+    #clearInputClickLabel(e) {
+      e.target.removeAttribute('style');
+      const id = e.target.getAttribute('for');
+      if (!id) return;
+      document.getElementById(id).value = '';
+    }
+
+    /**
+    * Метод збирає всі дані інпутів в об'єкт, масив даних, масив ключів.
+    */
+    formaDataObj() {
+      const isCheckboxOrRadio = type => ['checkbox', 'radio'].includes(type);
+      const { elements } = this.$form;
+      const values = {};
+      for (let i = 0; i < elements.length; i++) {
+        const formElement = elements[i];
+        const { name } = formElement;
+        if (name) {
+          const { value, type, checked } = formElement;
+          values[name] = isCheckboxOrRadio(type) ? checked : value;
+        }
+      }
+      return values
+    }
+
+    /*
+    метод перевірки форми на заповненість
+    повертає false, коли жодне полене заповнене
+    повертає true, коли хоч одне поле заповнене
+    */
+    inputsIsNull() {
+      const dataArr = Object.values(this.formaDataObj());
+      let evalRows = [];
+      dataArr.forEach(elem => {
+        if (elem === '' || elem === false) {
+          evalRows.push('no');
+        } else {
+          evalRows.push('yes');
+        }
+      })
+      if (evalRows.indexOf('yes') === -1) {
+        return false
+      } else {
+        return true
+      }
+    }
+  }
+</script>

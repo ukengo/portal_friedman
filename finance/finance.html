@@ -4,8 +4,8 @@
 <div class="container">
 
   <!-- вставляємо основну форму Finance -->
-  <div class="form-fin-main radius col-xl-10 px-4 py-2"></div>
-
+  <div class="form-fin-main"></div>
+  
   <div class="container">
     <div class="row radius mb-4 mt-4">
       <div id="rowdatafin" class="btn-delete"></div>
@@ -50,12 +50,19 @@
 
   <!-- Шаблон основної форми Finance -->
   <template id="finMainForma">
+<<<<<<< HEAD
     <div class="form-background-color">
+=======
+    <div class="col-xl-10 radius px-4 py-2 form-background-color">
+>>>>>>> 77becea (add FinanceFormBuilder)
 
       <!-- верхня форма -->
       <form action="" class="form-fin-start">
         <div class="row g-1 mt-1">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 77becea (add FinanceFormBuilder)
           <div class="col-md-2">
             <div class="form">
               <label for="proektfin">Проєкт</label>
@@ -88,6 +95,7 @@
             </div>
           </div>
 
+<<<<<<< HEAD
           <div class="col-md-1 date-regular" data-date-regular>
 
             <div class="date-regular__plus date-regular-plus" data-date-regular-plus>
@@ -110,6 +118,11 @@
 
             </div>
 
+=======
+          <div class="col-md-1 date-regular">
+            <div class="date-regular__plus date-regular-plus">+</div>
+            <div class="date-regular__minus date-regular-minus">-</div>
+>>>>>>> 77becea (add FinanceFormBuilder)
           </div>
 
           <div class="col-md-2">
@@ -174,11 +187,16 @@
         </div>
 
         <!-- блок кнопок -->
+<<<<<<< HEAD
         <div class="row mb-2 mt-2" fin-buttons-block>
+=======
+        <div class="row mb-2 mt-2 ">
+>>>>>>> 77becea (add FinanceFormBuilder)
 
           <div class="col">
             <div class="btn-group my-1" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnSearchFinance">Search</button>
+<<<<<<< HEAD
               <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
                 id="btnClearFinance">Clear
                 Record</button>
@@ -202,6 +220,25 @@
             <button type="button" class="btn btn-primary btn-danger shadow-none" data-js-fin-button-mod>Mod</button>
 
             <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnStartTableFinance">Up
+=======
+              <button type="button" class="btn btn-primary btn-danger shadow-none"
+                onclick="formaFin.clearRecords()">Clear
+                Record</button>
+            </div>
+            <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
+              <button type="button" class="btn btn-primary btn-danger shadow-none">Add R+</button>
+              <button type="button" class="btn btn-primary btn-danger shadow-none">Add R-</button>
+            </div>
+            <div class="btn-group my-1" role="group" aria-label="Multiple">
+              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple">+</button>
+              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple">--</button>
+              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd">Add</button>
+            </div>
+            <button type="button" id="btnModalMultiple" class="btn btn-primary btn-danger shadow-none"
+              data-bs-toggle="modal" data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple">Mod</button>
+            <!-- <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnClearSearchFinance">Clear</button> -->
+            <button type="button" class="btn btn-primary btn-danger shadow-none" onclick="startTableFinance()">Up
+>>>>>>> 77becea (add FinanceFormBuilder)
               Record</button>
             <div class="btn-group my-1" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-primary btn-danger shadow-none search-t-finance"
@@ -212,17 +249,26 @@
           </div>
         </div>
         <!-- блок кнопок END-->
+<<<<<<< HEAD
         <div class="finance-mod-container" finance-mod-container> </div>
+=======
+
+>>>>>>> 77becea (add FinanceFormBuilder)
       </form>
       <!-- верхня форма END-->
 
     </div>
+<<<<<<< HEAD
 
     <!-- https://www.youtube.com/shorts/pznMUqqotpk -->
 
   </template>
 
 
+=======
+  </template>
+
+>>>>>>> 77becea (add FinanceFormBuilder)
   <!-- Modal -->
   <div class="modal fade" id="exampleModalFinance" tabindex="-1" aria-labelledby="exampleModalLabelFinance"
     aria-hidden="true">
@@ -329,6 +375,10 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
   </div> -->
 
+=======
+  </div>
+>>>>>>> 77becea (add FinanceFormBuilder)
 </div>

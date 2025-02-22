@@ -1,0 +1,55 @@
+<script>
+
+  class FinanceFormBuilder {
+
+    constructor(templateSelector, containerSelector) {
+      this.containerSelector = containerSelector
+      this.template = document.querySelector(templateSelector);
+      this.container = document.querySelector(containerSelector);
+    }
+
+    build() {
+      if (this.template && this.container) {
+        const clone = this.template.content.cloneNode(true);
+        this.container.appendChild(clone);
+        this.aInstance = new FormDataFromTables(this.containerSelector)
+      } else {
+        console.error('Template or container not found');
+      }
+    }
+
+    none() {
+      if (this.container) {
+        this.container.innerHTML = ''
+      } else {
+        console.error('Template or container not found');
+      }
+    }
+  }
+
+  /*
+    function generateUniqueId() {
+      return 'id-' + Math.random().toString(36).substr(2, 9);
+    }
+  
+    // Функция для назначения уникальных id и for
+    function assignUniqueIds(form) {
+      const nameInput = form.querySelector('.name-input');
+      const emailInput = form.querySelector('.email-input');
+      const nameLabel = form.querySelector('.label-name');
+      const emailLabel = form.querySelector('.label-email');
+  
+      const nameId = generateUniqueId();
+      const emailId = generateUniqueId();
+  
+      nameInput.id = nameId;
+      emailInput.id = emailId;
+  
+      nameLabel.setAttribute('for', nameId);
+      emailLabel.setAttribute('for', emailId);
+    }
+  
+    // Применяем уникальные id к основной форме
+    assignUniqueIds(document.querySelector('.common-form')); */
+
+</script>

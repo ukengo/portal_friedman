@@ -1,6 +1,5 @@
 <script>
 
-  // отримуємо дані з гугл таблиці  
   function startDataTableCasherom() {
     btnCasheromInsert.disabled = true;
     spinner('tableCaheRom')
@@ -51,8 +50,7 @@
 
   }
 
-  buildDataTableCasherom()
-
+  //обробка кліка (тапа) по таблиці
   document.querySelector('#tableCaheRom').addEventListener('click', e => {
     if (window.getSelection().toString()) return
     if (event.target.tagName !== 'TD') return false
@@ -68,7 +66,7 @@
     }
 
     renderFormsCasheRom('.modal-casherom__title', '#casherom-forma-modal', arr);
-    
+
     const formaCassheRom = new FormDataFromTables('#casherom-forma-modal')
     const setCashRom = (e) => {
       const dataModal = formaCassheRom.formaDataObj()
@@ -212,11 +210,17 @@
 
   // подія на кнопку fin
   document.querySelector('.modal-casherom__btn--finance').addEventListener('click', e => {
-    const selectorFinForma = '.modal-casherom__finforma'
-    const selectorTemplateFinFirma = '#finMainForma'
-    const financeForm = new FinanceFormBuilder(selectorTemplateFinFirma, selectorFinForma);
-    if (!document.querySelector(selectorFinForma).hasChildNodes()) financeForm.build()
-    else financeForm.none()
+    const selectorFinForma = '.modal-casherom__finforma';
+    const selectorTemplateFinFirma = '#finMainForma';
+    const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);
+    if (!document.querySelector(selectorFinForma).hasChildNodes()) {
+      financeForm.build();
+    //  const formaFinCasherom = new FormDataFromTables('.form-fin-start-casherom');
+
+      // вішаємо подіїі клік на кнопки
+      /* document.querySelector('#btnClearFinance-casherom').addEventListener('click', () => formaFinCasherom.clearRecords()); */
+    }
+    else financeForm.none();
   })
 
 </script>

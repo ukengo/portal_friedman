@@ -22,7 +22,7 @@
         element.addEventListener('click', this.clearRecords);
       });
     }
-    
+
     /**
     * Метод очистки інпута по name
     */
@@ -42,7 +42,7 @@
     * Метод робить лабел червоним, якщо інпут заповнений і чорним, якщо ні.
     */
 
-     #labelred() {
+    #labelred() {
       this.$form.querySelectorAll('input, select, textarea').forEach(element => {
         const $labels = this.$form.querySelector(`[for="${element.id}"]`);
         if ($labels) {

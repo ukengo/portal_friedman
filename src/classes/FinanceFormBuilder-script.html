@@ -2,8 +2,10 @@
 
   class FinanceFormBuilder {
 
-    constructor(templateSelector, containerSelector) {
-      this.containerSelector = containerSelector
+    constructor(name, templateSelector, containerSelector) {
+      this.name = name;
+      this.templateSelector = templateSelector;
+      this.containerSelector = containerSelector;
       this.template = document.querySelector(templateSelector);
       this.container = document.querySelector(containerSelector);
     }
@@ -12,7 +14,15 @@
       if (this.template && this.container) {
         const clone = this.template.content.cloneNode(true);
         this.container.appendChild(clone);
-        this.aInstance = new FormDataFromTables(this.containerSelector)
+        if (this.name != 'finance') {
+          this.addIdToElements('input, select, datalist, button');
+        }
+        this.addClassToForm();
+        const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
+
+        // вішаємо подію на кнопку  Clear Record
+        this.buttonsClearFinanceEvents(instance);
+
       } else {
         console.error('Template or container not found');
       }
@@ -20,36 +30,63 @@
 
     none() {
       if (this.container) {
-        this.container.innerHTML = ''
+        this.container.innerHTML = '';
       } else {
         console.error('Template or container not found');
       }
     }
+
+    addIdToElements(elements) {
+      const collection = this.container.querySelectorAll(elements);
+      collection.forEach((element, index) => {
+        if (element.id) {
+          const id = `${element.id}-${this.name}`;
+          element.id = id;
+          if (element.tagName == 'INPUT' || element.tagName == 'SELECT') {
+            const label = element.previousElementSibling;
+            if (label) label.htmlFor = id;
+          }
+        }
+      });
+    }
+
+    //add ID to input and label
+    /*     addIdToInput() {
+          const inputCollection = this.container.querySelectorAll('input, select');
+          inputCollection.forEach((input, index) => {
+            const id = `${input.id}-${this.name}`;
+            input.id = id;
+            const label = input.previousElementSibling;
+            if (label) label.htmlFor = id;
+          });
+        } */
+
+    // add class to element "form"
+    addClassToForm() {
+      const elementForm = this.container.querySelector('form');
+      const elementFormClassList = elementForm.classList.toString();
+      elementForm.classList.add(`${elementFormClassList}-${this.name}`);
+    }
+
+    //add class to element "datalist"
+    /*     addIdToDatalist() {
+          const datalistCollection = this.container.querySelectorAll('datalist');
+          datalistCollection.forEach((datalist, index) => {
+            const id = `${datalist.id}-${this.name}`;
+            datalist.id = id;
+          });
+        } */
+
+    //події на кнопках
+    buttonsClearFinanceEvents(instance) {
+      let btnClearFinanceId = '#btnClearFinance'
+      if (this.name != 'finance') {
+        btnClearFinanceId = `#btnClearFinance-${this.name}`;
+      }
+      this.container.querySelector(btnClearFinanceId).addEventListener('click', () => instance.clearRecords());
+    }
+  
+    buttonsMultipleFinancePlusMinus() {}
   }
 
-  /*
-    function generateUniqueId() {
-      return 'id-' + Math.random().toString(36).substr(2, 9);
-    }
-  
-    // Функция для назначения уникальных id и for
-    function assignUniqueIds(form) {
-      const nameInput = form.querySelector('.name-input');
-      const emailInput = form.querySelector('.email-input');
-      const nameLabel = form.querySelector('.label-name');
-      const emailLabel = form.querySelector('.label-email');
-  
-      const nameId = generateUniqueId();
-      const emailId = generateUniqueId();
-  
-      nameInput.id = nameId;
-      emailInput.id = emailId;
-  
-      nameLabel.setAttribute('for', nameId);
-      emailLabel.setAttribute('for', emailId);
-    }
-  
-    // Применяем уникальные id к основной форме
-    assignUniqueIds(document.querySelector('.common-form')); */
-
-</script>
+ </script>

@@ -1,8 +1,10 @@
 <script>
-  const financeForm = new FinanceFormBuilder('#finMainForma', '.form-fin-main');
+  const financeForm = new FinanceFormBuilder('finance', '#finMainForma', '.form-fin-main');
   financeForm.build();
+  //financeForm.addIdToInput();
 
-  const formaFin = new FormDataFromTables('.form-fin-start');
+   const formaFin = new FormDataFromTables('.form-fin-start');
+  /* document.querySelector('.btn-clear-finance-main').addEventListener('click', () => formaFin.clearRecords());  */
 
   function startTableFinance() {
     $("#proektfin-datalist").empty();
@@ -570,7 +572,11 @@
     let arrFinMulti;
     let finMultiNum = 0;
     const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
+<<<<<<< HEAD
 
+=======
+   
+>>>>>>> d5756dc (before +/-)
     $('.btn-fim-multiple').click(function () {
       const this_ = this;
       const vatieButton = this_.innerText;
@@ -696,19 +702,9 @@
   } */
 
   // "гот" за змовчуванням
-/*   inputToFocus(
+  inputToFocus(
     document.querySelector('[name="summafin"]'),
     document.querySelector('[name="priznakfin"]'),
     'гот',
-    formaFin); */
-
-
-
-
-
-
-
-
-
-
+    formaFin); 
 </script>

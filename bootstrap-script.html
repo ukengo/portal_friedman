@@ -43,7 +43,7 @@
 
   function afterDropDownReturned(arrayOfArrays, datalist) {
     if (!arrayOfArrays) return false;
-    let selectorDatalist = document.querySelector(datalist);
+    let selectorDatalist = document.getElementById(datalist);
     if (selectorDatalist) {
       selectorDatalist.innerHTML = null;
       arrayOfArrays.forEach((r) => {

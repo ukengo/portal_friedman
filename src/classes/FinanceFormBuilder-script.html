@@ -2,6 +2,21 @@
 
   class FinanceFormBuilder {
 
+    selectors = {
+      blockPlusMinusAdd: '[data-js-fin-buttons-plus-minus-add]',
+      buttonPlus: '[data-js-fin-button-plus]',
+      buttonPMinus: '[data-js-fin-button-minus]',
+      buttonAdd: '[data-js-fin-button-add]',
+      /* buttonMod: '[data-js-fin-button-mod]', */
+    }
+
+    colors = {
+      borderTopColor: '#dee2e6'
+    }
+
+    static arrFinMulti = [];
+    static finMultiNum = 0;
+
     constructor(name, templateSelector, containerSelector) {
       this.name = name;
       this.templateSelector = templateSelector;
@@ -11,18 +26,21 @@
     }
 
     build() {
+
       if (this.template && this.container) {
         const clone = this.template.content.cloneNode(true);
         this.container.appendChild(clone);
-        if (this.name != 'finance') {
-          this.addIdToElements('input, select, datalist, button');
-        }
+        this.name != 'finance' && this.addIdToElements('input, select, datalist, button');
         this.addClassToForm();
         const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
 
         // вішаємо подію на кнопку  Clear Record
         this.buttonsClearFinanceEvents(instance);
 
+        // вішаємо події на кнопки +, --, Add
+        this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinusAdd);
+        this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
+        this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus, this.btnAdd);
       } else {
         console.error('Template or container not found');
       }
@@ -50,17 +68,6 @@
       });
     }
 
-    //add ID to input and label
-    /*     addIdToInput() {
-          const inputCollection = this.container.querySelectorAll('input, select');
-          inputCollection.forEach((input, index) => {
-            const id = `${input.id}-${this.name}`;
-            input.id = id;
-            const label = input.previousElementSibling;
-            if (label) label.htmlFor = id;
-          });
-        } */
-
     // add class to element "form"
     addClassToForm() {
       const elementForm = this.container.querySelector('form');
@@ -68,25 +75,44 @@
       elementForm.classList.add(`${elementFormClassList}-${this.name}`);
     }
 
-    //add class to element "datalist"
-    /*     addIdToDatalist() {
-          const datalistCollection = this.container.querySelectorAll('datalist');
-          datalistCollection.forEach((datalist, index) => {
-            const id = `${datalist.id}-${this.name}`;
-            datalist.id = id;
-          });
-        } */
-
-    //події на кнопках
+    //---події на кнопках--------------------------------/
+    // Clear Record
     buttonsClearFinanceEvents(instance) {
       let btnClearFinanceId = '#btnClearFinance'
-      if (this.name != 'finance') {
-        btnClearFinanceId = `#btnClearFinance-${this.name}`;
-      }
+      btnClearFinanceId = this.name !== 'finance' ? `#btnClearFinance-${this.name}` : `#btnClearFinance`;
       this.container.querySelector(btnClearFinanceId).addEventListener('click', () => instance.clearRecords());
     }
-  
-    buttonsMultipleFinancePlusMinus() {}
+    // +/-
+    buttonsMultipleFinancePlusMinus(instance, btnPlusMinus, btnAdd) {
+      btnPlusMinus.forEach((btn, index) => {
+        btn.addEventListener('click', e => {
+          let obj = instance.formaDataObj();
+
+          //якщо стаття витрат, то міняємо знак на мінус
+          const dataArticle = e.target.dataset.jsSign;
+          if (obj.proektfin) {
+            obj.summafin *= (e.target.hasAttribute('data-js-fin-button-minus') ? -1 : +1);
+            FinanceFormBuilder.arrFinMulti.push(obj);
+            k(FinanceFormBuilder.arrFinMulti)
+            btnAdd.innerText = 'Add (' + FinanceFormBuilder.arrFinMulti.length + ')';
+          }
+        })
+      })
+    }
+    // Add
+    buttonMultipleFinanceAdd() { }
+    // Mod
+    buttonMultipleFinanceMod() { }
+    //---події на кнопках--END---------------------------/
+
+    borderTopOn() {
+      this.container.style.borderTop = `1px solid ${this.colors.borderTopColor}`
+    }
+
+    borderTopOff() {
+      this.container.style.borderTop = `0`
+    }
+
   }
 
- </script>
+</script>

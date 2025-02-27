@@ -1,0 +1,46 @@
+<script>
+
+  class PopupEditing {
+
+    selectors = {
+
+      dialog: '[data-dialog]',
+      dialogInner: '[data-dialog-inner]',
+      dialogBody: '[data-dialog-body]',
+      buttonOpen: '[dialog-button-open]',
+      buttonClose: '[dialog-button-close]'
+    }
+    constructor() {
+      this.dialog = document.querySelector(this.selectors.dialog)
+      this.dialog.showModal()
+      this.closeDialog()
+      this.closeDialogToClick()
+    }
+
+    closeDialog() {
+      document.querySelector(this.selectors.buttonClose).addEventListener('click', () => {
+        this.dialog.close();
+      })
+    }
+
+    //закриття модалки по кліку поза нею
+    closeDialogToClick() {
+      this.dialog.addEventListener('click', e => {
+        e.target === this.dialog ? this.dialog.close() : null;
+      })
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

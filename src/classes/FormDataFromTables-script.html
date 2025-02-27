@@ -11,12 +11,12 @@
 
 
     setup() {
-      this.#labelred();
-      this.labelred = this.#labelred.bind(this);
-      this.clearRecords = this.#clearRecords.bind(this);
+      this.labelred();
+      this.labelred = this.labelred.bind(this);
+      this.clearRecords = this.clearRecords.bind(this);
       this.labelredInputEvent();
       this.$labels = this.$form.querySelectorAll('label');
-      this.$labels.forEach(element => element.addEventListener('click', this.#clearInputClickLabel));
+      this.$labels.forEach(element => element.addEventListener('click', this.clearInputClickLabel));
 
       document.querySelectorAll('.btn-clear-form-all').forEach(element => {
         element.addEventListener('click', this.clearRecords);
@@ -33,16 +33,16 @@
     /**
     * Метод очистки полів форми. Також міняє колір лабела на чорний
     */
-    #clearRecords() {
+    clearRecords() {
       this.$form.reset();
-      this.#labelred();
+      this.labelred();
     }
 
     /**
     * Метод робить лабел червоним, якщо інпут заповнений і чорним, якщо ні.
     */
 
-    #labelred() {
+    labelred() {
       this.$form.querySelectorAll('input, select, textarea').forEach(element => {
         const $labels = this.$form.querySelector(`[for="${element.id}"]`);
         if ($labels) {
@@ -57,14 +57,14 @@
 
     labelredInputEvent() {
       this.$form.addEventListener('input', () => {
-        this.#labelred();
+        this.labelred();
       })
     }
 
     /**
     * Метод очистки inputa кліком по label і видалення червоної розфарбовки полів форми.
     */
-    #clearInputClickLabel(e) {
+    clearInputClickLabel(e) {
       e.target.removeAttribute('style');
       const id = e.target.getAttribute('for');
       if (!id) return;

@@ -17,6 +17,10 @@
       this.closeDialogToClick()
     }
 
+    showDialog() {
+      this.dialog.showModal()
+    }
+
     closeDialog() {
       document.querySelector(this.selectors.buttonClose).addEventListener('click', () => {
         this.dialog.close();

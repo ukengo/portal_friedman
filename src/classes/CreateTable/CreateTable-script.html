@@ -1,0 +1,72 @@
+<script>
+  class CreateTable {
+    constructor(data, containerSelector) {
+      this.data = data
+      this.containerSelector = containerSelector
+      this.table = document.createElement("table")
+      this.thead = document.createElement("thead")
+      this.tbody = document.createElement("tbody")
+      this.headers = Object.keys(this.data[0]);
+      //this.createTableHeader()
+      //this.createTableBody()
+      document.querySelector(this.containerSelector).appendChild(this.table);
+    }
+
+    createTableHeader() {
+      this.headerRow = document.createElement("tr");
+      this.headers.forEach(header => {
+        this.th = document.createElement("th");
+        this.th.textContent = header;
+        this.headerRow.appendChild(this.th);
+      });
+      this.thead.appendChild(this.headerRow);
+      this.table.appendChild(this.thead);
+    }
+
+    createTableBody() {
+      this.data.forEach(item => {
+        this.row = document.createElement("tr");
+        this.headers.forEach(header => {
+          this.td = document.createElement("td");
+          this.td.textContent = item[header];
+          this.row.appendChild(this.td);
+        });
+        this.tbody.appendChild(this.row);
+      });
+      this.table.appendChild(this.tbody);
+    }
+  }
+
+  class CreateTableCross extends CreateTable {
+    constructor(data, containerSelector) {
+      super(data, containerSelector);
+    }
+
+    addCross(index) {
+       // Добавляємо клітинку з кнопкою хрестика для цієї строки
+       const td = document.createElement("td");
+        const crossButton = document.createElement("button");
+        crossButton.textContent = '❌';
+        crossButton.setAttribute('data-cross-button', `${index}`);
+        td.appendChild(crossButton);
+        return td
+    }
+
+    createTableBodyCross() {
+      this.data.forEach((item, index) => {
+        this.row = document.createElement("tr");
+
+        // Добавляємо клітинки з даними
+        this.headers.forEach(header => {
+          this.td = document.createElement("td");
+          this.td.textContent = item[header];
+          this.row.appendChild(this.td);
+        });
+        this.row.appendChild(this.addCross(index));
+        this.tbody.appendChild(this.row);
+      });
+      this.table.appendChild(this.tbody);
+    }
+  }
+
+</script>

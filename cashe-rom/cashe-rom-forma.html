@@ -59,33 +59,6 @@
   //рендеринг контейнера під кнопки
   function renderContainerButtonsCasheRom() {
     const casheRomFormaContainer = document.createElement('div')
-    casheRomFormaContainer.style.marginTop = '10px'
-    casheRomFormaContainer.setAttribute('data-cashe-rom-buttons-container', '')
-    const dataDialogBody = document.querySelector('[data-dialog-body]');
-    dataDialogBody.appendChild(casheRomFormaContainer)
-  }
-
-  // рендеринг кнопок
-  function renderButtonsCasheRom() {
-    const temp = document.querySelector('#buttonsCasheRomDialog');
-    const clone = temp.content.cloneNode(true);
-    const dataDialogFooter = document.querySelector('[data-cashe-rom-buttons-container]');
-    !dataDialogFooter.hasChildNodes() ? dataDialogFooter.appendChild(clone) : null;
-  }
-
-  //рендеринг контейнера під finance
-  function renderContainerFinanceCasheRom() {
-    const casheRomFormaContainer = document.createElement('div')
-    casheRomFormaContainer.setAttribute('data-cashe-rom-finance-container', '')
-    casheRomFormaContainer.style.marginTop = '50px'
-    casheRomFormaContainer.style.paddingTop = '15px'
-    const dataDialogBody = document.querySelector('[data-dialog-body]');
-    dataDialogBody.appendChild(casheRomFormaContainer)
-  }
-
-  //рендеринг контейнера під кнопки
-  function renderContainerButtonsCasheRom() {
-    const casheRomFormaContainer = document.createElement('div')
     casheRomFormaContainer.style.margin = '10px 0'
     casheRomFormaContainer.setAttribute('data-cashe-rom-buttons-container', '')
     const dataDialogBody = document.querySelector('[data-dialog-body]');
@@ -100,18 +73,14 @@
     !dataDialogFooter.hasChildNodes() ? dataDialogFooter.appendChild(clone) : null;
   }
 
-
-
-  
-
   //рендеринг контейнера під Mod
-  /*  function renderContainerModCasheRom() {
-     const casheRomModContainer = document.createElement('div')
-     casheRomModContainer.setAttribute('data-cashe-rom-mod-container', '')
-     const dataDialogBody = document.querySelector('[data-cashe-rom-finance-container]');
-     k(dataDialogBody)
-     k(casheRomModContainer)
-     dataDialogBody.appendChild(casheRomModContainer)
-   } */
+ /*  function renderContainerModCasheRom() {
+    const casheRomModContainer = document.createElement('div')
+    casheRomModContainer.setAttribute('data-cashe-rom-mod-container', '')
+    const dataDialogBody = document.querySelector('[data-cashe-rom-finance-container]');
+    k(dataDialogBody)
+    k(casheRomModContainer)
+    dataDialogBody.appendChild(casheRomModContainer)
+  } */
 
 </script>

@@ -2,12 +2,18 @@
 
   class FinanceFormBuilder {
 
+    attributes = {
+      modContainerAttribute: 'data-cashe-rom-mod-container',
+    }
+
     selectors = {
-      blockPlusMinusAdd: '[data-js-fin-buttons-plus-minus-add]',
+      blockPlusMinus: '[data-js-fin-button-plus-minus]',
+      financeContainer: '[data-cashe-rom-finance-container]',
+      modContainer: `[${this.attributes.modContainerAttribute}]`,
       buttonPlus: '[data-js-fin-button-plus]',
       buttonPMinus: '[data-js-fin-button-minus]',
       buttonAdd: '[data-js-fin-button-add]',
-      /* buttonMod: '[data-js-fin-button-mod]', */
+      buttonMod: '[data-js-fin-button-mod]',
     }
 
     colors = {
@@ -15,7 +21,6 @@
     }
 
     static arrFinMulti = [];
-    static finMultiNum = 0;
 
     constructor(name, templateSelector, containerSelector) {
       this.name = name;
@@ -34,13 +39,24 @@
         this.addClassToForm();
         const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
 
+
         // вішаємо подію на кнопку  Clear Record
         this.buttonsClearFinanceEvents(instance);
 
         // вішаємо події на кнопки +, --, Add
-        this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinusAdd);
+        this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinus);
         this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
         this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus, this.btnAdd);
+
+        // вішаємо події на кнопку Mod 
+        this.btnMod = this.container.querySelector(this.selectors.buttonMod);
+        this.buttonMultipleFinanceMod(this.btnMod)
+        this.btnAdd.innerText = 'Add (' + FinanceFormBuilder.arrFinMulti.length + ')';
+
+
+
+
+
       } else {
         console.error('Template or container not found');
       }
@@ -82,6 +98,7 @@
       btnClearFinanceId = this.name !== 'finance' ? `#btnClearFinance-${this.name}` : `#btnClearFinance`;
       this.container.querySelector(btnClearFinanceId).addEventListener('click', () => instance.clearRecords());
     }
+
     // +/-
     buttonsMultipleFinancePlusMinus(instance, btnPlusMinus, btnAdd) {
       btnPlusMinus.forEach((btn, index) => {
@@ -89,20 +106,79 @@
           let obj = instance.formaDataObj();
 
           //якщо стаття витрат, то міняємо знак на мінус
-          const dataArticle = e.target.dataset.jsSign;
           if (obj.proektfin) {
             obj.summafin *= (e.target.hasAttribute('data-js-fin-button-minus') ? -1 : +1);
             FinanceFormBuilder.arrFinMulti.push(obj);
-            k(FinanceFormBuilder.arrFinMulti)
             btnAdd.innerText = 'Add (' + FinanceFormBuilder.arrFinMulti.length + ')';
           }
         })
       })
     }
+
     // Add
     buttonMultipleFinanceAdd() { }
+
     // Mod
-    buttonMultipleFinanceMod() { }
+    buttonMultipleFinanceMod(btnAdd) {
+      btnAdd.addEventListener('click', () => {
+        // Знаходимо контейнер для фінансів
+        const financeContainer = document.querySelector(this.selectors.financeContainer);
+
+        // Шукаємо існуючий контейнер таблиці, якщо він є
+        let modContainer = financeContainer.querySelector(this.selectors.modContainer);
+
+        // Якщо масив даних порожній, показуємо попередження і виходимо
+        if (!this.constructor.arrFinMulti.length) {
+          alert('Пусто');
+          return false;
+        }
+
+        // Якщо контейнер вже існує
+        if (modContainer) {
+          // Перемикаємо видимість: якщо прихований — показуємо, якщо видимий — ховаємо
+          if (modContainer.style.display === 'none') {
+            modContainer.style.display = 'block';
+          } else {
+            modContainer.style.display = 'none';
+          }
+        } else {
+          // Якщо контейнер ще не існує, створюємо і додаємо таблицю
+          modContainer = document.createElement('div');
+          modContainer.classList.add('table', 'table-hover', 'table-danger');
+          modContainer.setAttribute(this.attributes.modContainerAttribute, '');
+          financeContainer.appendChild(modContainer);
+
+          const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer);
+          tableMod.createTableBodyCross();
+          tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+        }
+
+        // Викликаємо обробник Escape
+        this.setupEscapeHandler(modContainer)
+      });
+    }
+
+    // Налаштування обробника Escape
+    setupEscapeHandler(modContainer) {
+      const escapeHandler = (event) => {
+        if (event.key === 'Escape' || event.keyCode === 27) {
+          // Якщо таблиця відкрита, ховаємо її і блокуємо закриття діалогу
+          if (modContainer && modContainer.style.display !== 'none') {
+            event.preventDefault();
+            event.stopPropagation();
+            modContainer.style.display = 'none';
+          }
+          // Якщо таблиця закрита, нічого не робимо — стандартна поведінка закриє діалог
+        }
+      };
+
+      // Видаляємо старий обробник
+      document.removeEventListener('keydown', escapeHandler);
+
+      // Додаємо новий обробник до document
+      document.addEventListener('keydown', escapeHandler);
+    }
+
     //---події на кнопках--END---------------------------/
 
     borderTopOn() {

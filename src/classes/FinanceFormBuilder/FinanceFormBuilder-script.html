@@ -135,6 +135,7 @@
 
         // Якщо контейнер вже існує
         if (modContainer) {
+
           // Перемикаємо видимість: якщо прихований — показуємо, якщо видимий — ховаємо
           if (modContainer.style.display === 'none') {
             modContainer.style.display = 'block';
@@ -148,9 +149,22 @@
           modContainer.setAttribute(this.attributes.modContainerAttribute, '');
           financeContainer.appendChild(modContainer);
 
+          // Ствлрюємо таблицю Mod
           const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer);
           tableMod.createTableBodyCross();
           tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+
+          // Додаємо кнопку Clear
+          new Button({
+            text: 'Clear',
+            classes: ['btn', 'btn-danger'],
+            onClick: (event) => {
+              modContainer.style.display = 'none';
+              this.constructor.arrFinMulti = [];
+              this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
+            },
+            parentElement: document.querySelector(this.selectors.modContainer),
+          });
         }
 
         // Викликаємо обробник Escape

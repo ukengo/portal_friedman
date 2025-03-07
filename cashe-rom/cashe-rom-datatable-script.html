@@ -67,7 +67,6 @@
     renderContainerButtonsCasheRom()
     renderButtonsCasheRom()
     renderContainerFinanceCasheRom()
-  
 
     const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]')
 
@@ -87,11 +86,11 @@
     // подія на кнопку fin    
     document.querySelector('.modal-casherom__btn--finance').addEventListener('click', e => {
       const selectorFinForma = '[data-cashe-rom-finance-container]';
-      const selectorTemplateFinFirma = '#finMainForma';      
-      const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);      
+      const selectorTemplateFinFirma = '#finMainForma';
+      const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);
       if (!document.querySelector(selectorFinForma).hasChildNodes()) {
         financeForm.build()
-        financeForm.borderTopOn()        
+        financeForm.borderTopOn()
       }
       else {
         financeForm.none()

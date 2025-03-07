@@ -1,0 +1,62 @@
+<script>
+  class Button {
+    constructor(options = {}) {
+      // Деструктуризація параметрів з значеннями за замовчуванням
+      const {
+        text = 'Click me',
+        classes = [],
+        onClick = () => { },
+        parentElement = document.body
+      } = options;
+
+      // Створюємо елемент кнопки
+      this.button = document.createElement('button');
+
+      // Встановлюємо базові властивості
+      this.button.textContent = text;
+
+      // Додаємо класи
+      if (Array.isArray(classes) && classes.length > 0) {
+        this.button.classList.add(...classes);
+      }
+
+      // Додаємо обробник кліку
+      this.button.addEventListener('click', (event) => {
+        onClick(event);
+      });
+
+      // Додаємо кнопку до батьківського елемента
+      parentElement.appendChild(this.button);
+    }
+
+    // Метод для зміни тексту кнопки
+    setText(newText) {
+      this.button.textContent = newText;
+    }
+
+    // Метод для додавання нового класу
+    addClass(className) {
+      this.button.classList.add(className);
+    }
+
+    // Метод для видалення класу
+    removeClass(className) {
+      this.button.classList.remove(className);
+    }
+
+    // Метод для зміни обробника кліку
+    setOnClick(newOnClick) {
+      // Видаляємо попередній обробник
+      this.button.removeEventListener('click', this.button.onclick);
+      // Додаємо новий
+      this.button.addEventListener('click', (event) => {
+        newOnClick(event);
+      });
+    }
+
+    // Метод для видалення кнопки з DOM
+    remove() {
+      this.button.remove();
+    }
+  }
+</script>

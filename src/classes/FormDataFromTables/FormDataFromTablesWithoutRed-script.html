@@ -1,0 +1,28 @@
+<script>
+  /**
+  * Клас, що розширює клас для маніпуляції з формами. Прибираємо червоний лабел (будується форма без червоних лабелів). 
+  */
+
+  class FormDataFromTablesWithoutRed extends FormDataFromTables {
+    constructor(formId) {
+      super(formId)
+      this.setup()
+    }
+    setup() {
+      this.labelredInputEvent();
+    }
+
+    /**
+    * Метод перевизначає материнський метод і робить лабели ЧОРНИМИ.
+    */
+    labelredInputEvent() {
+      this.$form.querySelectorAll('input, select, textarea').forEach(element => {
+        const $labels = this.$form.querySelector(`[for="${element.id}"]`);
+        if ($labels) {
+          $labels.style.color = '';
+        }
+      });
+    }
+  }
+
+</script>

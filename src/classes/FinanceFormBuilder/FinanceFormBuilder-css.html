@@ -1,10 +1,18 @@
 <style>
   [data-cashe-rom-mod-container] {
-    text-align: center;
     position: absolute;
     top: 51px;
-    left: 0;    
-    /* background-color: #929292; */
+    left: 0;
+    margin: 15px;
+    padding: 10px;
+    width: 97%;
+    max-width: 100%;
+    /* Обмеження ширини контейнера */
+    overflow: auto;
+    /* Додає смуги прокрутки, якщо контент виходить за межі */
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 5px;
   }
 
   [data-cashe-rom-mod-container] td {
@@ -14,5 +22,42 @@
   [data-cashe-rom-mod-container]::backdrop {
     background-color: #7a7a7a;
     opacity: .8;
+  }
+
+  .cashe-fin-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  [data-cashe-rom-mod-container] table {
+    width: 100%;
+    /* Таблиця займає всю ширину контейнера */
+    max-width: 100%;
+    /* Не дозволяє таблиці вийти за межі */
+    table-layout: auto;
+    /* Дозволяє стовпцям адаптуватися до вмісту */
+    border-collapse: collapse;
+    /* Для коректного відображення меж */
+
+  }
+
+  [data-cashe-rom-mod-container] td,
+  [data-cashe-rom-mod-container] th {
+    white-space: nowrap;
+    /* Запобігає перенесенню тексту в комірках */
+    overflow: hidden;
+    /* Обрізає зайвий вміст у комірках */
+    text-overflow: ellipsis;
+    /* Додає три крапки, якщо текст обрізається */
+
+  }
+
+  /* Стилі для кнопок, якщо потрібно */
+  [data-cashe-rom-mod-container] button {
+    white-space: nowrap;
   }
 </style>

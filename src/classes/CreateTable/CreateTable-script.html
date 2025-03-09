@@ -43,13 +43,13 @@
     }
 
     addCross(index) {
-       // Добавляємо клітинку з кнопкою хрестика для цієї строки
-       const td = document.createElement("td");
-        const crossButton = document.createElement("button");
-        crossButton.textContent = '❌';
-        crossButton.setAttribute('data-cross-button', `${index}`);
-        td.appendChild(crossButton);
-        return td
+      // Добавляємо клітинку з кнопкою хрестика для цієї строки
+      const td = document.createElement("td");
+      const crossButton = document.createElement("button");
+      crossButton.textContent = '❌';
+      crossButton.setAttribute('data-cross-button', `${index}`);
+      td.appendChild(crossButton);
+      return td
     }
 
     createTableBodyCross() {

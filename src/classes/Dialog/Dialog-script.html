@@ -22,29 +22,17 @@
     }
 
     closeDialog() {
-      document.querySelector(this.selectors.buttonClose).addEventListener('click', () => {
+      document.querySelector(this.selectors.buttonClose).addEventListener('mousedown', () => {
         this.dialog.close();
       })
     }
 
     //закриття модалки по кліку поза нею
     closeDialogToClick() {
-      this.dialog.addEventListener('click', e => {
+      this.dialog.addEventListener('mousedown', e => {
         e.target === this.dialog ? this.dialog.close() : null;
       })
     }
-
   }
-
-
-
-
-
-
-
-
-
-
-
 
 </script>

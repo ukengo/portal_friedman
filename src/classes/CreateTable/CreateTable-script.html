@@ -38,25 +38,37 @@
   }
 
   class CreateTableCross extends CreateTable {
-    constructor(data, containerSelector) {
+
+    attributes = {
+      dataCrossButtonAttribute: 'data-cross-button'
+    }
+
+    selectors = {
+      dataCrossButton: `[${this.attributes.dataCrossButtonAttribute}]`,
+      dataJsFinButtonAdd: '[data-js-fin-button-add]',
+    }
+    constructor(data, containerSelector, financeFormBuilder) {
       super(data, containerSelector);
+
+      // Зберігаємо посилання на FinanceFormBuilder
+      this.financeFormBuilder = financeFormBuilder;
+
+      // Використовуємо спільний масив
+      this.data = FinanceFormBuilder.arrFinMulti;
     }
 
     addCross(index) {
-      // Добавляємо клітинку з кнопкою хрестика для цієї строки
       const td = document.createElement("td");
       const crossButton = document.createElement("button");
       crossButton.textContent = '❌';
-      crossButton.setAttribute('data-cross-button', `${index}`);
+      crossButton.setAttribute(this.attributes.dataCrossButtonAttribute, `${index}`);
       td.appendChild(crossButton);
-      return td
+      return td;
     }
 
     createTableBodyCross() {
       this.data.forEach((item, index) => {
         this.row = document.createElement("tr");
-
-        // Добавляємо клітинки з даними
         this.headers.forEach(header => {
           this.td = document.createElement("td");
           this.td.textContent = item[header];
@@ -66,7 +78,48 @@
         this.tbody.appendChild(this.row);
       });
       this.table.appendChild(this.tbody);
+
+       // Оновлюємо текст кнопки
+      this.updateAddButtonText();
+    }
+
+    eventButtonsCross() {      
+      const crossButtons = document.querySelectorAll(this.selectors.dataCrossButton);
+
+      crossButtons.forEach(button => {
+        button.removeEventListener('click', this.handleCrossClick);
+        button.addEventListener('click', this.handleCrossClick.bind(this));
+      });
+    }
+
+    handleCrossClick(e) {
+      const index = parseInt(e.target.getAttribute(this.attributes.dataCrossButtonAttribute));
+
+      // Видаляємо елемент із спільного масиву
+      FinanceFormBuilder.arrFinMulti.splice(index, 1);
+
+      // Видаляємо рядок із DOM
+      e.target.closest('tr').remove();
+
+      // Оновлюємо індекси для всіх кнопок
+      const remainingButtons = document.querySelectorAll(this.selectors.dataCrossButton);
+      remainingButtons.forEach((button, idx) => {
+        button.setAttribute(this.attributes.dataCrossButtonAttribute, idx);
+      });
+
+      // Оновлюємо текст кнопки через FinanceFormBuilder
+      this.updateAddButtonText();
+    }
+
+    updateAddButtonText() {
+      const addButtons = document.querySelectorAll(this.selectors.dataJsFinButtonAdd);
+      if (addButtons) {
+        addButtons.forEach(addButton => {
+          addButton.textContent = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
+        })
+      } else {
+        console.warn(`Buttons with ${this.selectors.dataJsFinButtonAdd} not found in DOM`);
+      }
     }
   }
-
 </script>

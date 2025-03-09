@@ -90,6 +90,7 @@
     }
 
     //---події на кнопках--------------------------------/
+
     // Clear Record
     buttonsClearFinanceEvents(instance) {
       let btnClearFinanceId = '#btnClearFinance'
@@ -118,68 +119,61 @@
 
     // Mod
     buttonMultipleFinanceMod(btnAdd) {
-      btnAdd.addEventListener('click', () => {
-        // Знаходимо контейнер для фінансів
+    btnAdd.addEventListener('click', () => {
         const financeContainer = document.querySelector(this.selectors.financeContainer);
-
-        // Шукаємо існуючий контейнер таблиці, якщо він є
         let modContainer = financeContainer.querySelector(this.selectors.modContainer);
 
-        // Якщо масив даних порожній, показуємо попередження і виходимо
         if (!this.constructor.arrFinMulti.length) {
-          alert('Пусто');
-          return false;
+            alert('Пусто');
+            return false;
         }
 
-        // Якщо контейнер вже існує
         if (modContainer) {
-          // Перемикаємо видимість: якщо прихований — показуємо, якщо видимий — ховаємо
-          if (modContainer.style.display === 'none') {
-            modContainer.style.display = 'block';
-          } else {
-            modContainer.style.display = 'none';
-          }
+            if (modContainer.style.display === 'none') {
+                modContainer.style.display = 'block';
+            } else {
+                modContainer.style.display = 'none';
+            }
         } else {
-          // Якщо контейнер ще не існує, створюємо і додаємо таблицю
-          modContainer = document.createElement('div');
-          //modContainer.classList.add('table', 'table-hover', 'table-danger');
-          modContainer.setAttribute(this.attributes.modContainerAttribute, '');
-          this.renderOverlay(modContainer, financeContainer);
-          financeContainer.appendChild(modContainer);
+            modContainer = document.createElement('div');
+            modContainer.setAttribute(this.attributes.modContainerAttribute, '');
+            this.renderOverlay(modContainer, financeContainer);
+            financeContainer.appendChild(modContainer);
 
-          // Створюємо таблицю Mod
-          const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer);
-          tableMod.createTableBodyCross();
-          tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+            // Передаємо посилання на FinanceFormBuilder у CreateTableCross
+            const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer, this);
+            //tableMod.createTableHeader(); // Додаємо заголовки
+            tableMod.createTableBodyCross();
+            
+            // Ініціалізуємо події
+            tableMod.eventButtonsCross(); 
+            tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
 
-          const casheFinOverlay = document.querySelector(this.selectors.casheFinOverlay);
+            const casheFinOverlay = document.querySelector(this.selectors.casheFinOverlay);
 
-          // Додаємо кнопку Clear
-          new Button({
-            text: 'Clear',
-            classes: ['btn', 'btn-danger'],
-            onClick: (event) => {
-              this.constructor.arrFinMulti.length = 0;
-              modContainer.remove();
-              this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
-              if (casheFinOverlay) casheFinOverlay.remove();
-            },
-            parentElement: document.querySelector(this.selectors.modContainer),
-          });
+            new Button({
+                text: 'Clear',
+                classes: ['btn', 'btn-danger'],
+                onClick: (event) => {
+                    this.constructor.arrFinMulti.length = 0;
+                    modContainer.remove();
+                    this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
+                    if (casheFinOverlay) casheFinOverlay.remove();
+                },
+                parentElement: document.querySelector(this.selectors.modContainer),
+            });
         }
 
-
-        // Викликаємо обробник Escape
-        this.setupEscapeHandler(modContainer)
-      });
-    }
+        this.setupEscapeHandler(modContainer);
+    });
+}
 
     // Створюємо оверлей, якщо його ще немає
     renderOverlay(modContainer, financeContainer) {
       const overlay = document.createElement('div');
       overlay.classList.add('cashe-fin-overlay');
       overlay.setAttribute(this.attributes.casheFinOverlayAttribute, '');
-      overlay.addEventListener('click', () => {
+      overlay.addEventListener('mousedown', () => {
         overlay.remove();
         modContainer.remove();
       });
@@ -194,7 +188,7 @@
           if (modContainer && modContainer.style.display !== 'none') {
             event.preventDefault();
             event.stopPropagation();
-            modContainer.style.display = 'none';            
+            modContainer.style.display = 'none';
             document.querySelector(this.selectors.casheFinOverlay).remove();
           }
           // Якщо таблиця закрита, нічого не робимо — стандартна поведінка закриє діалог

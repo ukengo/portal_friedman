@@ -16,6 +16,9 @@
       buttonAdd: '[data-js-fin-button-add]',
       buttonMod: '[data-js-fin-button-mod]',
       casheFinOverlay: `[${this.attributes.casheFinOverlayAttribute}]`,
+      nameSummafin: '[name="summafin"]',
+      namePriznakfin: '[name="priznakfin"]',
+      nameDateoplfin: '[name="dateoplfin"]',
     }
 
     colors = {
@@ -41,6 +44,11 @@
         this.addClassToForm();
         const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
 
+        // При фокусі на сумі автовставлення ознаки
+        instance.inputToFocus(this.selectors.nameSummafin, this.selectors.namePriznakfin, 'гот');
+
+        // При фокусі на даті вставляємо вчорашню
+        instance.todayDate(this.selectors.nameDateoplfin)
 
         // вішаємо подію на кнопку  Clear Record
         this.buttonsClearFinanceEvents(instance);
@@ -54,7 +62,7 @@
         this.btnMod = this.container.querySelector(this.selectors.buttonMod);
         this.buttonMultipleFinanceMod(this.btnMod)
         this.btnAdd.innerText = 'Add (' + FinanceFormBuilder.arrFinMulti.length + ')';
-
+        this.buttonMultipleFinanceAdd();
       } else {
         console.error('Template or container not found');
       }
@@ -115,58 +123,77 @@
     }
 
     // Add
-    buttonMultipleFinanceAdd() { }
+    buttonMultipleFinanceAdd() {
+      this.btnAdd.addEventListener('click', () => {
+        if (this.constructor.arrFinMulti && this.constructor.arrFinMulti.length) {
+          this.btnAdd.disabled = true;
+          this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
+          google.script.run.withSuccessHandler(() => {
+            google.script.run.withSuccessHandler((data) => {
+              localStorage.setItem('dataFin', JSON.stringify(data));
+            }).getRecordsFin();
+            this.constructor.arrFinMulti = [];
+            this.btnAdd.innerText = 'Add';
+            this.btnAdd.disabled = false;
+            btnTableFinance();
+          }).AddRecordFinMultiple(this.constructor.arrFinMulti);
+        } else {
+          this.btnAdd.innerText = 'Add';
+          this.btnAdd.disabled = false;
+        }
+      })
+    }
 
     // Mod
     buttonMultipleFinanceMod(btnAdd) {
-    btnAdd.addEventListener('click', () => {
+      btnAdd.addEventListener('click', () => {
         const financeContainer = document.querySelector(this.selectors.financeContainer);
         let modContainer = financeContainer.querySelector(this.selectors.modContainer);
 
         if (!this.constructor.arrFinMulti.length) {
-            alert('Пусто');
-            return false;
+          alert('Пусто');
+          return false;
         }
 
         if (modContainer) {
-            if (modContainer.style.display === 'none') {
-                modContainer.style.display = 'block';
-            } else {
-                modContainer.style.display = 'none';
-            }
+          if (modContainer.style.display === 'none') {
+            modContainer.style.display = 'block';
+          } else {
+            modContainer.style.display = 'none';
+          }
         } else {
-            modContainer = document.createElement('div');
-            modContainer.setAttribute(this.attributes.modContainerAttribute, '');
-            this.renderOverlay(modContainer, financeContainer);
-            financeContainer.appendChild(modContainer);
+          modContainer = document.createElement('div');
+          modContainer.setAttribute(this.attributes.modContainerAttribute, '');
+          this.renderOverlay(modContainer, financeContainer);
+          financeContainer.appendChild(modContainer);
 
-            // Передаємо посилання на FinanceFormBuilder у CreateTableCross
-            const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer, this);
-            //tableMod.createTableHeader(); // Додаємо заголовки
-            tableMod.createTableBodyCross();
-            
-            // Ініціалізуємо події
-            tableMod.eventButtonsCross(); 
-            tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+          // Передаємо посилання на FinanceFormBuilder у CreateTableCross
+          const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer, this);
+          //tableMod.createTableHeader(); // Додаємо заголовки
+          tableMod.createTableBodyCross();
 
-            const casheFinOverlay = document.querySelector(this.selectors.casheFinOverlay);
+          // Ініціалізуємо події
+          tableMod.eventButtonsCross();
+          tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
 
-            new Button({
-                text: 'Clear',
-                classes: ['btn', 'btn-danger'],
-                onClick: (event) => {
-                    this.constructor.arrFinMulti.length = 0;
-                    modContainer.remove();
-                    this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
-                    if (casheFinOverlay) casheFinOverlay.remove();
-                },
-                parentElement: document.querySelector(this.selectors.modContainer),
-            });
+          const casheFinOverlay = document.querySelector(this.selectors.casheFinOverlay);
+
+          new Button({
+            text: 'Clear',
+            classes: ['btn', 'btn-danger'],
+            onClick: (event) => {
+              this.constructor.arrFinMulti.length = 0;
+              modContainer.remove();
+              this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
+              if (casheFinOverlay) casheFinOverlay.remove();
+            },
+            parentElement: document.querySelector(this.selectors.modContainer),
+          });
         }
 
         this.setupEscapeHandler(modContainer);
-    });
-}
+      });
+    }
 
     // Створюємо оверлей, якщо його ще немає
     renderOverlay(modContainer, financeContainer) {

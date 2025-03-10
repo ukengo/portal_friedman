@@ -110,5 +110,29 @@
         return true
       }
     }
+
+    /*
+    метод вставки значення в інпут при фокусі на іншому імпуті
+    */
+    inputToFocus(selectorInput, selectorOutput, string) {
+      const inputInput = this.$form.querySelector(selectorInput);
+      const inputOutput = this.$form.querySelector(selectorOutput);
+      inputInput.addEventListener('focus', e => {
+        if (!inputInput.value) {
+          inputOutput.value = string;
+          this.labelred();
+        }
+      });
+    }
+
+    // метод вставки вчорашньої дати при фокусі на цому імпуті
+    todayDate(selectorDate) {
+      const inputDate = this.$form.querySelector(selectorDate);
+      inputDate.addEventListener('focus', e => {
+        if (!inputDate.value) {
+          inputDate.valueAsDate = new Date(new Date().setDate(new Date().getDate() - 1));
+        }
+      });
+    }
   }
 </script>

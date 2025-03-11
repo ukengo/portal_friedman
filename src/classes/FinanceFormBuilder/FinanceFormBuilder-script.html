@@ -19,6 +19,9 @@
       nameSummafin: '[name="summafin"]',
       namePriznakfin: '[name="priznakfin"]',
       nameDateoplfin: '[name="dateoplfin"]',
+      dateRegular: '[data-date-regular]',
+      dateRegularPlus: '[data-date-regular-plus]',
+      dateRegularMinus: '[data-date-regular-minus]',
     }
 
     colors = {
@@ -48,7 +51,10 @@
         instance.inputToFocus(this.selectors.nameSummafin, this.selectors.namePriznakfin, 'гот');
 
         // При фокусі на даті вставляємо вчорашню
-        instance.todayDate(this.selectors.nameDateoplfin)
+        instance.todayDate(this.selectors.nameDateoplfin);
+
+        // регулювання дати у вікні пошуку
+        instance.datePlusMinusDays(this.selectors.nameDateoplfin, this.selectors.dateRegular, this.selectors.dateRegularPlus, this.selectors.dateRegularMinus);
 
         // вішаємо подію на кнопку  Clear Record
         this.buttonsClearFinanceEvents(instance);

@@ -134,5 +134,51 @@
         }
       });
     }
+
+    // метод регулюання дати у вікні пошуку
+    datePlusMinusDays(selectorDate, selectorRegular, selectorRegularPlus, selectorRegularMinus) {
+      const inputDate = this.$form.querySelector(selectorDate);
+      const dataRegular = this.$form.querySelector(selectorRegular);
+      const dataRegularPlus = this.$form.querySelector(selectorRegularPlus);
+      const dataRegularMinus = this.$form.querySelector(selectorRegularMinus);
+
+      // Функція для встановлення вчорашньої дати
+      const setYesterday = () => {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        inputDate.valueAsDate = yesterday;
+      };
+
+      // Функція для зміни дати
+      const adjustDate = (daysToAdd) => {
+        let dateValue = inputDate.valueAsDate;
+
+        // Якщо поле порожнє, встановлюємо вчорашню дату
+        if (!dateValue) {
+          setYesterday();
+        } else {
+          // Якщо поле не порожнє, додаємо або віднімаємо день
+          const newDate = new Date(dateValue);
+          newDate.setDate(newDate.getDate() + daysToAdd);
+          inputDate.valueAsDate = newDate;
+        }
+      };
+
+      // Додаємо обробник кліків для dataRegular
+      dataRegular.addEventListener('click', (e) => {
+        // Перевіряємо, чи клікнули на елемент або його дочірній SVG з атрибутом data-regular-plus
+        const plusTarget = e.target.closest('[data-regular-plus]');
+        if (plusTarget || e.target === dataRegularPlus || e.target.closest('svg')?.parentElement === dataRegularPlus) {
+          adjustDate(1); // Додаємо один день     
+        }
+
+        // Перевіряємо, чи клікнули на елемент або його дочірній SVG з атрибутом data-regular-minus
+        const minusTarget = e.target.closest('[data-regular-minus]');
+        if (minusTarget || e.target === dataRegularMinus || e.target.closest('svg')?.parentElement === dataRegularMinus) {
+          adjustDate(-1); // Віднімаємо один день
+        }
+      });
+    }
+
   }
 </script>

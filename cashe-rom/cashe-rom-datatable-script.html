@@ -84,7 +84,7 @@
     })
 
     // подія на кнопку fin    
-    document.querySelector('.modal-casherom__btn--finance').addEventListener('click', e => {
+    /* document.querySelector('.modal-casherom__btn--finance').addEventListener('click', e => {
       const selectorFinForma = '[data-cashe-rom-finance-container]';
       const selectorTemplateFinFirma = '#finMainForma';
       const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);
@@ -96,7 +96,125 @@
         financeForm.none()
         financeForm.borderTopOff()
       }
-    })
+    }) */
+
+    // подія на кнопку fin
+
+    // подія на кнопку fin
+    // подія на кнопку fin
+// Подія на кнопку fin
+const financeButton = document.querySelector('.modal-casherom__btn--finance');
+if (financeButton) {
+    financeButton.addEventListener('click', () => {
+        const selectorFinForma = '[data-cashe-rom-finance-container]';
+        const selectorTemplateFinFirma = '#finMainForma';
+        const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);
+
+        // Функція для витягнення цифр після "пр", "пр.", "пр " тощо
+        const extractProjectNumber = (text) => {
+            const match = text.match(/пр\.?\s*(\d+)/i);
+            return match ? match[1] : null;
+        };
+
+        // Функція для обробки ключових слів у casheInputArticle і вставки відповідних значень у primfin-casherom
+        const setPrimValueBasedOnKeywords = (articleValue, primInput, ispoluCheckbox, keywordsConfig) => {
+            let keywordFound = false;
+            for (const [keyword, config] of Object.entries(keywordsConfig)) {
+                if (articleValue.includes(keyword)) {
+                    primInput.value = config.value;
+                    primInput.setAttribute('value', config.value);
+                    primInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    primInput.dispatchEvent(new Event('change', { bubbles: true }));
+                    ispoluCheckbox.checked = config.activateIspolu || false;
+                    keywordFound = true;
+                    break; // Виходимо після першого збігу (можна змінити, якщо потрібні інші правила)
+                }
+            }
+            return keywordFound;
+        };
+
+        // Функція для оновлення полів
+        const updateFields = () => {
+            const articleInput = document.querySelector('#casheInputArticle');
+            const projectInput = document.querySelector('#proektfin-casherom');
+            const primInput = document.querySelector('#primfin-casherom');
+            const ispoluCheckbox = document.querySelector('#ispolufinance-casherom');
+            const wasteInput = document.querySelector('#casheInputWaste');
+            const arrivalInput = document.querySelector('#casheInputArrival');
+            const summaInput = document.querySelector('#summafin-casherom');
+            const dateInput = document.querySelector('#casheInputDate');
+            const dateOplInput = document.querySelector('#dateoplfin-casherom');
+
+            // Перевірка наявності всіх елементів
+            if (!articleInput || !projectInput || !primInput || !ispoluCheckbox || !wasteInput || !arrivalInput || !summaInput || !dateInput || !dateOplInput) return;
+
+            const articleValue = articleInput.value.trim().toLowerCase();
+            const projectNumber = extractProjectNumber(articleValue);
+
+            // Очищаємо поля перед заповненням
+            projectInput.value = '';
+            primInput.value = '';
+            summaInput.value = '';
+            dateOplInput.value = '';
+            ispoluCheckbox.checked = false;
+
+            // Логіка для вставки номера проєкту
+            if (projectNumber) {
+                projectInput.value = projectNumber;
+                projectInput.setAttribute('value', projectNumber);
+                projectInput.dispatchEvent(new Event('input', { bubbles: true }));
+                projectInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            // Об’єкт налаштувань для ключових слів та їхніх значень
+            const keywordsConfig = {
+                'торопова': { value: 'викон Торопова', activateIspolu: true },
+                'опер': { value: 'викон', activateIspolu: true },
+                'досм': { value: 'викон термінал', activateIspolu: false },
+                'грузчики': { value: 'вантажники термінал', activateIspolu: false }
+                // Додавайте нові ключові слова тут
+                // 'нове_слово': { value: 'нове_значення', activateIspolu: false }
+            };
+
+            // Виклик функції для обробки ключових слів
+            setPrimValueBasedOnKeywords(articleValue, primInput, ispoluCheckbox, keywordsConfig);
+
+            // Логіка для суми з casheInputWaste або casheInputArrival
+            const wasteValue = parseFloat(wasteInput.value.trim());
+            const arrivalValue = parseFloat(arrivalInput.value.trim());
+            if (!isNaN(wasteValue) && wasteValue > 0) {
+                summaInput.value = wasteValue;
+                summaInput.setAttribute('value', wasteValue);
+                summaInput.dispatchEvent(new Event('input', { bubbles: true }));
+                summaInput.dispatchEvent(new Event('change', { bubbles: true }));
+            } else if (!isNaN(arrivalValue) && arrivalValue > 0) {
+                summaInput.value = arrivalValue;
+                summaInput.setAttribute('value', arrivalValue);
+                summaInput.dispatchEvent(new Event('input', { bubbles: true }));
+                summaInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            // Вставка дати з casheInputDate
+            const inputDate = dateInput.value;
+            if (inputDate) {
+                dateOplInput.value = inputDate;
+                dateOplInput.setAttribute('value', inputDate);
+                dateOplInput.dispatchEvent(new Event('input', { bubbles: true }));
+                dateOplInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        };
+
+        // Виконуємо логіку форми
+        if (!document.querySelector(selectorFinForma).hasChildNodes()) {
+            financeForm.build();
+            financeForm.borderTopOn();
+            setTimeout(updateFields, 500);
+        } else {
+            financeForm.none();
+            financeForm.borderTopOff();
+        }
+    });
+}
 
 
     // подія на кнопку fin

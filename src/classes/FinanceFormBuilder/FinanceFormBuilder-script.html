@@ -154,96 +154,108 @@
     // Mod
     // Обробник події для кнопки "Mod" — відкриває/закриває модальне вікно з таблицею
     buttonMultipleFinanceMod(btnAdd) {
-      // Додаємо слухач подій до кнопки btnAdd для обробки кліку
-      btnAdd.addEventListener('click', (event) => {
-        // Отримуємо найближчий батьківський елемент із атрибутом [fin-buttons-block]
-        const parentElement = event.currentTarget.closest('[fin-buttons-block]');
-        // Знаходимо наступний сусідній елемент, який є контейнером для фінансових даних
-        const financeContainer = parentElement.nextElementSibling;
+  // Додаємо слухач події 'click' до кнопки btnAdd
+  btnAdd.addEventListener('click', (event) => {
 
-        // Перевіряємо, чи існує financeContainer, якщо ні — виводимо помилку в консоль і завершуємо виконання
-        if (!financeContainer) {
-          console.error('Найближчий financeContainer не знайдено');
-          return;
-        }
+    // Знаходимо найближчий батьківський елемент з атрибутом або класом [fin-buttons-block]
+    const parentElement = event.currentTarget.closest('[fin-buttons-block]');
 
-        // Шукаємо контейнер для модифікацій (modContainer) всередині financeContainer за допомогою селектора
-        let modContainer = financeContainer.querySelector(this.selectors.modContainer);
+    // Отримуємо наступний сусідній елемент після parentElement, який є контейнером для фінансових даних
+    const financeContainer = parentElement.nextElementSibling;
 
-        // Перевіряємо, чи масив arrFinMulti порожній; якщо так — показуємо alert і повертаємо false
-        if (!this.constructor.arrFinMulti.length) {
-          alert('Пусто');
-          return false;
-        }
-
-        // Якщо modContainer вже існує
-        if (modContainer) {
-          // Перемикаємо видимість modContainer: з 'none' на 'block' або навпаки
-          modContainer.style.display = modContainer.style.display === 'none' ? 'block' : 'none';
-          // Шукаємо існуючий оверлей у financeContainer
-          const existingOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
-
-          // Якщо modContainer видимий і оверлей ще не створено, викликаємо рендеринг оверлею
-          if (modContainer.style.display === 'block' && !existingOverlay) {
-            this.renderOverlay(modContainer, financeContainer);
-          }
-          // Якщо modContainer прихований і оверлей існує, видаляємо оверлей
-          else if (modContainer.style.display === 'none' && existingOverlay) {
-            existingOverlay.remove();
-          }
-        }
-        // Якщо modContainer ще не існує, створюємо його
-        else {
-          // Створюємо новий div-елемент для modContainer
-          modContainer = document.createElement('div');
-          // Встановлюємо атрибут modContainerAttribute для ідентифікації
-          modContainer.setAttribute(this.attributes.modContainerAttribute, '');
-          // Робимо контейнер видимим за замовчуванням
-          modContainer.style.display = 'block';
-          // Викликаємо рендеринг оверлею для нового контейнера
-          this.renderOverlay(modContainer, financeContainer);
-          // Додаємо modContainer до financeContainer
-          financeContainer.appendChild(modContainer);
-
-          // Створюємо нову таблицю типу CreateTableCross з даними з arrFinMulti
-          const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer, this);
-          // Створюємо тіло таблиці
-          tableMod.createTableBodyCross();
-          // Додаємо обробники подій для кнопок у таблиці
-          tableMod.eventButtonsCross();
-          // Додаємо класи для стилізації таблиці (Bootstrap класи + власний)
-          tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
-
-          // Знаходимо оверлей у financeContainer для подальшого використання
-          const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
-
-          // Створюємо нову кнопку "Clear" за допомогою класу Button
-          new Button({
-            text: 'Clear', // Текст кнопки
-            classes: ['btn', 'btn-danger'], // Класи для стилізації (Bootstrap)
-            onClick: (event) => { // Обробник кліку по кнопці
-              // Очищаємо масив arrFinMulti
-              this.constructor.arrFinMulti.length = 0;
-              // Видаляємо modContainer із DOM
-              modContainer.remove();
-              // Оновлюємо текст кнопки btnAdd, додаючи кількість елементів у масиві (0)
-              this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
-
-              // Перевіряємо, чи існує оверлей, і видаляємо його, якщо є
-              const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
-              if (overlayToRemove) {
-                overlayToRemove.remove();
-              }
-            },
-            // Вказуємо, куди додати кнопку — у modContainer
-            parentElement: financeContainer.querySelector(this.selectors.modContainer),
-          });
-        }
-
-        // Налаштовуємо обробник для клавіші Escape, щоб закривати modContainer
-        this.setupEscapeHandler(modContainer);
-      });
+    // Перевіряємо, чи існує financeContainer. Якщо ні, виводимо помилку в консоль і завершуємо виконання
+    if (!financeContainer) {
+      console.error('Найближчий financeContainer не знайдено');
+      return;
     }
+
+    // Шукаємо елемент modContainer всередині financeContainer за допомогою селектора, визначеного в this.selectors
+    let modContainer = financeContainer.querySelector(this.selectors.modContainer);
+
+    // Перевіряємо, чи масив arrFinMulti порожній. Якщо так, показуємо alert і завершуємо виконання
+    if (!this.constructor.arrFinMulti.length) {
+      alert('Пусто');
+      return false;
+    }
+
+    // Якщо modContainer вже існує, очищаємо його вміст і робимо видимим
+    if (modContainer) {
+      modContainer.innerHTML = ''; // Очищаємо вміст контейнера (видаляємо всі дочірні елементи)
+      modContainer.style.display = 'block'; // Встановлюємо стиль display як block, щоб контейнер став видимим
+
+      // Шукаємо елемент оверлею (casheFinOverlay) у financeContainer
+      const existingOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+
+      // Якщо оверлею ще немає, викликаємо метод для його створення
+      if (!existingOverlay) {
+        this.renderOverlay(modContainer, financeContainer);
+      }
+    } else {
+
+      // Якщо modContainer ще не існує, створюємо новий елемент div
+      modContainer = document.createElement('div');
+
+      // Встановлюємо атрибут для modContainer, який визначений у this.attributes.modContainerAttribute
+      modContainer.setAttribute(this.attributes.modContainerAttribute, '');
+
+      // Робимо контейнер видимим, встановлюючи display: block
+      modContainer.style.display = 'block';
+
+      // Викликаємо метод для створення оверлею
+      this.renderOverlay(modContainer, financeContainer);
+
+      // Додаємо новостворений modContainer до financeContainer
+      financeContainer.appendChild(modContainer);
+    }
+
+    // Створюємо нову таблицю з даними з масиву arrFinMulti, використовуючи клас CreateTableCross
+    const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer, this);
+
+    // Виводимо об'єкт tableMod у консоль для дебагінгу
+    console.log(tableMod);
+
+    // Викликаємо методи для створення тіла таблиці та додавання обробників подій для кнопок у таблиці
+    tableMod.createTableBodyCross();
+    tableMod.eventButtonsCross();
+
+    // Додаємо класи до таблиці для стилізації (Bootstrap класи та кастомний клас)
+    tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+
+    // Знаходимо елемент оверлею (casheFinOverlay) у financeContainer
+    const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+
+    // Створюємо нову кнопку "Clear" за допомогою класу Button
+    new Button({
+      text: 'Clear', // Текст кнопки
+      classes: ['btn', 'btn-danger'], // Класи для стилізації кнопки (Bootstrap)
+      onClick: (event) => { // Обробник події кліку по кнопці
+
+        // Очищаємо масив arrFinMulti, встановлюючи його довжину в 0
+        this.constructor.arrFinMulti.length = 0;
+
+        // Видаляємо modContainer з DOM
+        modContainer.remove();
+
+        // Оновлюємо текст кнопки btnAdd, додаючи кількість елементів у масиві (0)
+        this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
+
+        // Знаходимо оверлей у financeContainer
+        const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
+
+        // Якщо оверлей існує, видаляємо його
+        if (overlayToRemove) {
+          overlayToRemove.remove();
+        }
+      },
+
+      // Вказуємо, що кнопка буде додана до modContainer
+      parentElement: financeContainer.querySelector(this.selectors.modContainer),
+    });
+
+    // Налаштовуємо обробник для закриття модального вікна при натисканні клавіші Escape
+    this.setupEscapeHandler(modContainer);
+  });
+}
 
     // Метод для створення оверлею, який закриває модальне вікно при кліку поза ним
     renderOverlay(modContainer, financeContainer) {

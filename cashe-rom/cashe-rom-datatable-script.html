@@ -83,20 +83,6 @@
       formaCassheRom.labelred()
     })
 
-    // подія на кнопку fin    
-    /* document.querySelector('.modal-casherom__btn--finance').addEventListener('click', e => {
-      const selectorFinForma = '[data-cashe-rom-finance-container]';
-      const selectorTemplateFinFirma = '#finMainForma';
-      const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);
-      if (!document.querySelector(selectorFinForma).hasChildNodes()) {
-        financeForm.build()
-        financeForm.borderTopOn()
-      }
-      else {
-        financeForm.none()
-        financeForm.borderTopOff()
-      }
-    }) */
 
     // подія на кнопку fin
     const financeButton = document.querySelector('.modal-casherom__btn--finance');
@@ -215,7 +201,6 @@
         }
       });
     }
-
 
     //зпрацювання по ентер enter
     document.querySelector('[data-cashe-rom-forma-container]').addEventListener('keypress', e => {

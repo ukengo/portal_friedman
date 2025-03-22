@@ -153,95 +153,118 @@
     // Mod
     // Обробник події для кнопки "Mod" — відкриває/закриває модальне вікно з таблицею
     buttonMultipleFinanceMod(btnAdd) {
-  btnAdd.addEventListener('click', (event) => {
-    const parentElement = event.currentTarget.closest('[fin-buttons-block]');
-    const financeContainer = parentElement.nextElementSibling;
+      btnAdd.addEventListener('click', (event) => {
+        const parentElement = event.currentTarget.closest('[fin-buttons-block]');
+        const financeContainer = parentElement.nextElementSibling;
 
-    if (!financeContainer) {
-      console.error('Найближчий financeContainer не знайдено');
-      return;
-    }
-
-    let modContainer = financeContainer.querySelector(this.selectors.modContainer);
-
-    if (!this.constructor.arrFinMulti.length) {
-      alert('Пусто');
-      return false;
-    }
-
-    // Якщо modContainer вже є, видаляємо його, щоб завжди створювати заново
-    if (modContainer) {
-      modContainer.remove();
-    }
-
-    // Створюємо новий modContainer
-    modContainer = document.createElement('div');
-    modContainer.setAttribute(this.attributes.modContainerAttribute, '');
-    modContainer.style.display = 'block';
-
-    this.renderOverlay(modContainer, financeContainer);
-    financeContainer.appendChild(modContainer);
-
-    const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer, this);
-    tableMod.createTableBodyCross();
-    tableMod.eventButtonsCross();
-    tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
-
-    const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
-
-    new Button({
-      text: 'Clear',
-      classes: ['btn', 'btn-danger'],
-      onClick: (event) => {
-        this.constructor.arrFinMulti.length = 0;
-        modContainer.remove();
-        this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
-        const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
-        if (overlayToRemove) {
-          overlayToRemove.remove();
+        if (!financeContainer) {
+          console.error('Найближчий financeContainer не знайдено');
+          return;
         }
-      },
-      parentElement: financeContainer.querySelector(this.selectors.modContainer),
-    });
 
-    this.setupEscapeHandler(modContainer);
-  });
-}
+        let modContainer = financeContainer.querySelector(this.selectors.modContainer);
+
+        if (!this.constructor.arrFinMulti.length) {
+          alert('Пусто');
+          return false;
+        }
+
+        // Якщо modContainer вже є, видаляємо його, щоб завжди створювати заново
+        if (modContainer) {
+          modContainer.remove();
+        }
+
+        // Створюємо новий modContainer
+        modContainer = document.createElement('div');
+        modContainer.setAttribute(this.attributes.modContainerAttribute, '');
+        modContainer.style.display = 'block';
+
+        this.renderOverlay(modContainer, financeContainer);
+        financeContainer.appendChild(modContainer);
+
+        const tableMod = new CreateTableCross(this.constructor.arrFinMulti, this.selectors.modContainer, this);
+        tableMod.createTableBodyCross();
+        tableMod.eventButtonsCross();
+        tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+
+        const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+
+        new Button({
+          text: 'Clear',
+          classes: ['btn', 'btn-danger'],
+          onClick: (event) => {
+            this.constructor.arrFinMulti.length = 0;
+            modContainer.remove();
+            this.btnAdd.innerText = 'Add (' + this.constructor.arrFinMulti.length + ')';
+            const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
+            if (overlayToRemove) {
+              overlayToRemove.remove();
+            }
+          },
+          parentElement: financeContainer.querySelector(this.selectors.modContainer),
+        });
+
+        this.setupEscapeHandler(modContainer);
+      });
+    }
 
     // Метод для створення оверлею, який закриває модальне вікно при кліку поза ним
     renderOverlay(modContainer, financeContainer) {
-  let overlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.classList.add('cashe-fin-overlay');
-    overlay.setAttribute(this.attributes.casheFinOverlayAttribute, '');
+      let overlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.classList.add('cashe-fin-overlay');
+        overlay.setAttribute(this.attributes.casheFinOverlayAttribute, '');
 
-    overlay.addEventListener('mousedown', () => {
-      overlay.remove(); // Видаляємо оверлей
-      modContainer.remove(); // Видаляємо modContainer, а не просто ховаємо
-    });
+        overlay.addEventListener('mousedown', () => {
+          overlay.remove(); // Видаляємо оверлей
+          modContainer.remove(); // Видаляємо modContainer, а не просто ховаємо
+        });
 
-    financeContainer.appendChild(overlay);
-  }
-}
-
-    // Налаштування обробника клавіші Escape для закриття модального вікна
-    setupEscapeHandler(modContainer) {
-  const escapeHandler = (event) => {
-    if (event.key === 'Escape' || event.keyCode === 27) {
-      if (modContainer && modContainer.style.display !== 'none') {
-        event.preventDefault();
-        event.stopPropagation();
-        modContainer.remove(); // Видаляємо modContainer
-        const overlay = document.querySelector(this.selectors.casheFinOverlay);
-        if (overlay) overlay.remove(); // Видаляємо оверлей
+        financeContainer.appendChild(overlay);
       }
     }
-  };
 
-  document.removeEventListener('keydown', escapeHandler);
-  document.addEventListener('keydown', escapeHandler);
-}
+    // Налаштування обробника клавіші Escape для закриття модального вікна
+    // У вашому класі FinanceFormBuilder
+    setupEscapeHandler(modContainer) {
+      // Визначаємо обробник події один раз
+      const escapeHandler = (event) => {
+        if (event.key === 'Escape' || event.keyCode === 27) {
+          if (modContainer && modContainer.style.display !== 'none') {
+            event.preventDefault();
+            event.stopPropagation();
+            modContainer.remove(); // Видаляємо modContainer
+            const overlay = document.querySelector(this.selectors.casheFinOverlay);
+            if (overlay) overlay.remove(); // Видаляємо оверлей
+            // Видаляємо обробник події після закриття
+            document.removeEventListener('keydown', escapeHandler);
+          }
+          // Якщо modContainer відсутній, нічого не робимо, дозволяючи стандартній поведінці (наприклад, для <dialog>) працювати
+        }
+      };
+
+      // Видаляємо будь-який існуючий обробник, щоб уникнути дублювання
+      document.removeEventListener('keydown', escapeHandler);
+      // Додаємо новий обробник
+      document.addEventListener('keydown', escapeHandler);
+
+      // Забезпечуємо очищення, коли modContainer видаляється іншими способами (наприклад, клік по оверлею або кнопка Clear)
+      const cleanup = () => {
+        document.removeEventListener('keydown', escapeHandler);
+      };
+
+      // Прив’язуємо очищення до існуючої логіки видалення
+      const overlay = document.querySelector(this.selectors.casheFinOverlay);
+      if (overlay) {
+        overlay.addEventListener('mousedown', cleanup, { once: true });
+      }
+
+      const clearButton = modContainer.querySelector('.btn-danger'); // Припускаємо, що це ваша кнопка Clear
+      if (clearButton) {
+        clearButton.addEventListener('click', cleanup, { once: true });
+      }
+    }
     //---події на кнопках--END---------------------------/
 
     borderTopOn() {

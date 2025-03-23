@@ -1,230 +1,194 @@
 <script>
+function startDataTableCasherom() {
+  btnCasheromInsert.disabled = true;
+  spinner('tableCaheRom');
+  google.script.run.withSuccessHandler(buildDataTableCasherom).getRecordsCasheAll();
+}
 
-  // отримуємо дані з гугл таблиці  
-  function startDataTableCasherom() {
-    btnCasheromInsert.disabled = true;
-    spinner('tableCaheRom')
-    google.script.run.withSuccessHandler(buildDataTableCasherom).getRecordsCasheAll();
-  }
-  // startDataTableCasherom()
+function buildDataTableCasherom() {
+  const casheRom1 = JSON.parse(localStorage.getItem('casheRom1'));
+  const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'));
+  document.querySelector('#tableCaheRom').innerHTML = '';
+  const table = new DataTable('#tableCaheRom', {
+    destroy: true,
+    data: casheRom1,
+    columns: [
+      { title: "1" },
+      { title: "Дата" },
+      { title: "Стаття" },
+      { title: "Витрата" },
+      { title: "Прихід" },
+      { title: "Примітки" },
+    ],
+    lengthMenu: [[50, 100, 500, -1, 0], [50, 100, 500, "Все", "Пусто"]],
+    order: [[0, 'desc']],
+    select: true,
+  });
+  btnCasheromInsert.disabled = false;
 
-  // формуємо таблицю  
-  function buildDataTableCasherom() {
-    //   localStorage.setItem('casheRom1', casheRom.casheRom1)
-    //   localStorage.setItem('casheRom2', casheRom.casheRom2)
-    const casheRom1 = JSON.parse(localStorage.getItem('casheRom1'))
-    const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'))
-    document.querySelector('#tableCaheRom').innerHTML = ''
-    let table = new DataTable('#tableCaheRom', {
-      destroy: true,
-      data: casheRom1,
-      columns: [
-        { "title": "1" },
-        { "title": "Дата" },
-        { "title": "Стаття" },
-        { "title": "Витрата" },
-        { "title": "Прихід" },
-        { "title": "Примітки" },
-      ],
-      lengthMenu:
-        [[50, 100, 500, -1, 0], [50, 100, 500, "Все", "Пусто"]],
-      order:
-        [[0, 'desc']],
-      columnDefs: [
-        {
-          //   targets: [0], visible: false,
-        }
-      ],
-      select: true,
+  const casheRom2F = casheRom2.filter(el => el[1] != '');
+  if (casheRom2F.length > 1) {
+    document.querySelectorAll('#tableCaheRom tbody tr').forEach((el, ind) => {
+      if (ind < casheRom2F.length - 1) el.style.color = 'red';
     });
-    btnCasheromInsert.disabled = false;
+  }
+  addUpButtonDT(startDataTableCasherom, 'tableCaheRom', 'inputDtCashe');
+}
 
-    //підсвітка червоним не внесені записи
-    casheRom2F = casheRom2.filter(el => el[1] != '')
-    if (casheRom2F.length > 1) {
-      document.querySelectorAll('#tableCaheRom tbody tr').forEach((el, ind) => {
-        if (ind < casheRom2F.length - 1) {
-          el.style.color = 'red';
-        }
-      })
-    }
-    addUpButtonDT(startDataTableCasherom, 'tableCaheRom', 'inputDtCashe')
+buildDataTableCasherom();
 
+document.querySelector('#tableCaheRom').addEventListener('click', e => {
+  if (window.getSelection().toString() || event.target.tagName !== 'TD') return;
+  const data = [...event.target.parentNode.children];
+  const arr = getDataFromTd(data);
+
+  const formaCassheRomDialog = new PopupEditing();
+  renderFormsCasheRom('.dialog__header', '.dialog__body', arr);
+  renderContainerButtonsCasheRom();
+  renderButtonsCasheRom();
+  renderContainerFinanceCasheRom();
+  renderContainerAwCasheRom();
+
+  const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]');
+
+  const setCashRom = () => {
+    const dataModal = formaCassheRom.formaDataObj();
+    google.script.run.setRecordsCasheRom(dataModal);
+    formaCassheRomDialog.close();
+  };
+
+  document.querySelector('.modal-casherom__btn').addEventListener('click', setCashRom);
+  document.querySelector('.modal-casherom__btn--monovit').addEventListener('click', () => {
+    document.querySelector('#casheInputNotes').value = 'відшкодовано на МОНО ВІТ';
+    formaCassheRom.labelred();
+  });
+
+  const awButton = document.querySelector('.modal-casherom__btn--arriwalwaste');
+  if (awButton) {
+    awButton.addEventListener('click', () => {
+      const awFormCashe = new AWFormBuilder('casherom', '#AwMainForma', '[data-cashe-rom-aw-container]');
+      document.querySelector('[data-cashe-rom-aw-container]').hasChildNodes() ? awFormCashe.none() : awFormCashe.render();
+    });
   }
 
-  buildDataTableCasherom()
+  const financeButton = document.querySelector('.modal-casherom__btn--finance');
+  if (financeButton) {
+    financeButton.addEventListener('click', () => {
+      const financeForm = new FinanceFormBuilder('casherom', '#finMainForma', '[data-cashe-rom-finance-container]');
+      const selectorFinForma = '[data-cashe-rom-finance-container]';
 
-  document.querySelector('#tableCaheRom').addEventListener('click', e => {
-    if (window.getSelection().toString()) return
-    if (event.target.tagName !== 'TD') return false
-    const dataTarget = event.target.textContent
-    const data = [...event.target.parentNode.children]
-    const arr = getDataFromTd(data)
-    const casheromFormaModal = document.querySelector('[data-cashe-rom-forma-container]')
-
-    const formaCassheRomDialog = new PopupEditing();
-    renderFormsCasheRom('.dialog__header', '.dialog__body', arr);
-    renderContainerButtonsCasheRom()
-    renderButtonsCasheRom()
-    renderContainerFinanceCasheRom()
-    renderContainerAwCasheRom()
-
-    const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]')
-
-    const setCashRom = (e) => {
-      const dataModal = formaCassheRom.formaDataObj()
-      google.script.run.setRecordsCasheRom(dataModal)
-      formaCassheRomDialog.close()
-    }
-    document.querySelector('.modal-casherom__btn').addEventListener('click', e => {
-      setCashRom()
-    })
-    document.querySelector('.modal-casherom__btn--monovit').addEventListener('click', e => {
-      document.querySelector('#casheInputNotes').value = 'відшкодовано на МОНО ВІТ'
-      formaCassheRom.labelred()
-    })
-
-    // подія на кнопку arriwalwaste
-    const awButton = document.querySelector('.modal-casherom__btn--arriwalwaste');
-    if (awButton) {
-      awButton.addEventListener('click', () => {
-        const selectorAwForma = '[data-cashe-rom-aw-container]';
-        const selectorTemplateAwForma = '#AwMainForma';
-        const awFormCashe = new AWFormBuilder('aw', selectorTemplateAwForma, selectorAwForma);
-        if (!document.querySelector(selectorAwForma).hasChildNodes()) {
-          awFormCashe.render();
-        } else {
-          awFormCashe.none();
+      const extractProjectNumber = text => text.match(/пр\.?\s*(\d+)/i)?.[1] || null;
+      const extractInspectors = data => {
+        if (!data) return [];
+        try {
+          return JSON.parse(data).map(item => item[0].split(' ')[0].toLowerCase());
+        } catch {
+          return [];
         }
-      })
-    }
+      };
 
-    // подія на кнопку fin
-    const financeButton = document.querySelector('.modal-casherom__btn--finance');
-    if (financeButton) {
-      financeButton.addEventListener('click', () => {
-        const selectorFinForma = '[data-cashe-rom-finance-container]';
-        const selectorTemplateFinFirma = '#finMainForma';
-        const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);
-
-        const extractProjectNumber = text => text.match(/пр\.?\s*(\d+)/i)?.[1] || null;
-
-        const extractInspectors = data => {
-          if (!data) return [];
-          try {
-            return JSON.parse(data).map(item => item[0].split(' ')[0].toLowerCase());
-          } catch {
-            return [];
+      const setPrimValueBasedOnKeywords = (articleValue, primInput, ispoluCheckbox, keywordsConfig, inspectors) => {
+        for (const [keyword, config] of Object.entries(keywordsConfig)) {
+          if (articleValue.includes(keyword)) {
+            primInput.value = config.value;
+            primInput.setAttribute('value', config.value);
+            primInput.dispatchEvent(new Event('input', { bubbles: true }));
+            primInput.dispatchEvent(new Event('change', { bubbles: true }));
+            ispoluCheckbox.checked = config.activateIspolu || false;
+            return;
           }
-        };
-
-        const setPrimValueBasedOnKeywords = (articleValue, primInput, ispoluCheckbox, keywordsConfig, inspectors) => {
-          for (const [keyword, config] of Object.entries(keywordsConfig)) {
-            if (articleValue.includes(keyword)) {
-              primInput.value = config.value;
-              primInput.setAttribute('value', config.value);
+        }
+        if (inspectors.length) {
+          for (const inspector of inspectors) {
+            if (articleValue.includes(inspector)) {
+              primInput.value = 'викон';
+              primInput.setAttribute('value', 'викон');
               primInput.dispatchEvent(new Event('input', { bubbles: true }));
               primInput.dispatchEvent(new Event('change', { bubbles: true }));
-              ispoluCheckbox.checked = config.activateIspolu || false;
+              ispoluCheckbox.checked = true;
               return;
             }
           }
-          if (inspectors.length) {
-            for (const inspector of inspectors) {
-              if (articleValue.includes(inspector)) {
-                primInput.value = 'викон';
-                primInput.setAttribute('value', 'викон');
-                primInput.dispatchEvent(new Event('input', { bubbles: true }));
-                primInput.dispatchEvent(new Event('change', { bubbles: true }));
-                ispoluCheckbox.checked = true;
-                return;
-              }
-            }
-          }
-        };
-
-        const updateFields = () => {
-          const articleInput = document.querySelector('#casheInputArticle');
-          const projectInput = document.querySelector('#proektfin-casherom');
-          const primInput = document.querySelector('#primfin-casherom');
-          const ispoluCheckbox = document.querySelector('#ispolufinance-casherom');
-          const wasteInput = document.querySelector('#casheInputWaste');
-          const arrivalInput = document.querySelector('#casheInputArrival');
-          const summaInput = document.querySelector('#summafin-casherom');
-          const dateInput = document.querySelector('#casheInputDate');
-          const dateOplInput = document.querySelector('#dateoplfin-casherom');
-
-          if (!articleInput || !projectInput || !primInput || !ispoluCheckbox || !wasteInput || !arrivalInput || !summaInput || !dateInput || !dateOplInput) return;
-
-          const articleValue = articleInput.value.trim().toLowerCase();
-          const projectNumber = extractProjectNumber(articleValue);
-
-          projectInput.value = projectNumber || '';
-          if (projectNumber) {
-            projectInput.setAttribute('value', projectNumber);
-            projectInput.dispatchEvent(new Event('input', { bubbles: true }));
-            projectInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-          primInput.value = '';
-          summaInput.value = '';
-          dateOplInput.value = '';
-          ispoluCheckbox.checked = false;
-
-          const inspectors = extractInspectors(localStorage.getItem('dataInspektor'));
-          const keywordsConfig = {
-            'торопова': { value: 'викон Торопова', activateIspolu: true },
-            'третьяк': { value: 'викон', activateIspolu: true },
-            'токарев': { value: 'викон', activateIspolu: true },
-            'шалыга': { value: 'викон', activateIspolu: true },
-            'опер': { value: 'викон', activateIspolu: false },
-            'досм': { value: 'викон термінал', activateIspolu: false },
-            'грузчики': { value: 'вантажники термінал', activateIspolu: false }
-          };
-
-          setPrimValueBasedOnKeywords(articleValue, primInput, ispoluCheckbox, keywordsConfig, inspectors);
-
-          const wasteValue = parseFloat(wasteInput.value.trim());
-          const arrivalValue = parseFloat(arrivalInput.value.trim());
-          if (!isNaN(wasteValue) && wasteValue > 0) {
-            summaInput.value = wasteValue;
-            summaInput.setAttribute('value', wasteValue);
-            summaInput.dispatchEvent(new Event('input', { bubbles: true }));
-            summaInput.dispatchEvent(new Event('change', { bubbles: true }));
-          } else if (!isNaN(arrivalValue) && arrivalValue > 0) {
-            summaInput.value = arrivalValue;
-            summaInput.setAttribute('value', arrivalValue);
-            summaInput.dispatchEvent(new Event('input', { bubbles: true }));
-            summaInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-
-          const inputDate = dateInput.value;
-          if (inputDate) {
-            dateOplInput.value = inputDate;
-            dateOplInput.setAttribute('value', inputDate);
-            dateOplInput.dispatchEvent(new Event('input', { bubbles: true }));
-            dateOplInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        };
-
-        if (!document.querySelector(selectorFinForma).hasChildNodes()) {
-          financeForm.build();
-          financeForm.borderTopOn();
-          setTimeout(updateFields, 500);
-        } else {
-          financeForm.none();
-          financeForm.borderTopOff();
         }
-      });
-    }
+      };
 
-    //зпрацювання по ентер enter
-    document.querySelector('[data-cashe-rom-forma-container]').addEventListener('keypress', e => {
-      if (e.keyCode == 13) {
-        setCashRom()
+      const updateFields = () => {
+        const articleInput = document.querySelector('#casheInputArticle');
+        const projectInput = document.querySelector('#proektfin-casherom');
+        const primInput = document.querySelector('#primfin-casherom');
+        const ispoluCheckbox = document.querySelector('#ispolufinance-casherom');
+        const wasteInput = document.querySelector('#casheInputWaste');
+        const arrivalInput = document.querySelector('#casheInputArrival');
+        const summaInput = document.querySelector('#summafin-casherom');
+        const dateInput = document.querySelector('#casheInputDate');
+        const dateOplInput = document.querySelector('#dateoplfin-casherom');
+
+        if (!articleInput || !projectInput || !primInput || !ispoluCheckbox || !wasteInput || !arrivalInput || !summaInput || !dateInput || !dateOplInput) return;
+
+        const articleValue = articleInput.value.trim().toLowerCase().replace(/\s+/g, ' ');
+        const projectNumber = extractProjectNumber(articleValue);
+        projectInput.value = projectNumber || '';
+        if (projectNumber) {
+          projectInput.setAttribute('value', projectNumber);
+          projectInput.dispatchEvent(new Event('input', { bubbles: true }));
+          projectInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        primInput.value = '';
+        summaInput.value = '';
+        dateOplInput.value = '';
+        ispoluCheckbox.checked = false;
+
+        const inspectors = extractInspectors(localStorage.getItem('dataInspektor'));
+        const keywordsConfig = {
+          'торопова': { value: 'викон Торопова', activateIspolu: true },
+          'третьяк': { value: 'викон', activateIspolu: true },
+          'токарев': { value: 'викон', activateIspolu: true },
+          'шалыга': { value: 'викон', activateIspolu: true },
+          'опер': { value: 'викон', activateIspolu: true },
+          'досм': { value: 'викон термінал', activateIspolu: false },
+          'грузчики': { value: 'вантажники термінал', activateIspolu: false },
+          'чечеткин': { value: 'викон', activateIspolu: true } // Додано нове ключове слово
+        };
+
+        setPrimValueBasedOnKeywords(articleValue, primInput, ispoluCheckbox, keywordsConfig, inspectors);
+
+        const wasteValue = parseFloat(wasteInput.value.trim());
+        const arrivalValue = parseFloat(arrivalInput.value.trim());
+        if (!isNaN(wasteValue) && wasteValue > 0) {
+          summaInput.value = wasteValue;
+          summaInput.setAttribute('value', wasteValue);
+          summaInput.dispatchEvent(new Event('input', { bubbles: true }));
+          summaInput.dispatchEvent(new Event('change', { bubbles: true }));
+        } else if (!isNaN(arrivalValue) && arrivalValue > 0) {
+          summaInput.value = arrivalValue;
+          summaInput.setAttribute('value', arrivalValue);
+          summaInput.dispatchEvent(new Event('input', { bubbles: true }));
+          summaInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        const inputDate = dateInput.value;
+        if (inputDate) {
+          dateOplInput.value = inputDate;
+          dateOplInput.setAttribute('value', inputDate);
+          dateOplInput.dispatchEvent(new Event('input', { bubbles: true }));
+          dateOplInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      };
+
+      if (!document.querySelector(selectorFinForma).hasChildNodes()) {
+        financeForm.build();
+        financeForm.borderTopOn();
+        updateFields();
+      } else {
+        financeForm.none();
+        financeForm.borderTopOff();
       }
-    })
-  })
+    });
+  }
 
-
-
+  document.querySelector('[data-cashe-rom-forma-container]').addEventListener('keypress', e => {
+    if (e.keyCode == 13) setCashRom();
+  });
+});
 </script>

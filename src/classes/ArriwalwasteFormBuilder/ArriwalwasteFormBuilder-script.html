@@ -25,11 +25,33 @@
       if (this.template && this.container) {
         const clone = this.template.content.cloneNode(true);
         this.container.appendChild(clone);
-        
+        this.name !== 'aw' && this.addIdToElements('input, select, datalist, button');
+
       } else {
         console.error('Template or container not found');
       }
 
+    }
+    none() {
+      if (this.container) {
+        this.container.innerHTML = '';
+      } else {
+        console.error('Template or container not found');
+      }
+    }
+
+    addIdToElements(elements) {
+      const collection = this.container.querySelectorAll(elements);
+      collection.forEach((element, index) => {
+        if (element.id) {
+          const id = `${element.id}-${this.name}`;
+          element.id = id;
+          if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
+            const label = element.previousElementSibling;
+            if (label) label.htmlFor = id;
+          }
+        }
+      });
     }
   }
 

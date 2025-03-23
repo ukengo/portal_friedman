@@ -124,7 +124,9 @@
     }
 
     startArrivalWaste(); // формуємо datalist
-    if (this.id === "buttonWaste") {
+    console.log(this);
+    
+    if (this.hasAttribute('data-button-waste')) {
       spinner("dataTableArriwalWaste");
       if (!rowDataTermKar()[4]) {
         google.script.run
@@ -140,7 +142,7 @@
       vrabotevseArriwalWaste.innerHTML = "Інші витрати";
       buttonClickOchistkaAW();
     }
-    if (this.id === "buttonArrival") {
+    if (this.hasAttribute('data-button-arrival')) {
       /*       if (rowDataRangeArrivalWaste()[4] === "Приват комісія") {
               alert(
                 'Запонене поле "Приват комісія", не корректна операція приходу'

@@ -67,6 +67,7 @@
     renderContainerButtonsCasheRom()
     renderButtonsCasheRom()
     renderContainerFinanceCasheRom()
+    renderContainerAwCasheRom()
 
     const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]')
 
@@ -83,6 +84,20 @@
       formaCassheRom.labelred()
     })
 
+    // подія на кнопку arriwalwaste
+    const awButton = document.querySelector('.modal-casherom__btn--arriwalwaste');
+    if (awButton) {
+      awButton.addEventListener('click', () => {
+        const selectorAwForma = '[data-cashe-rom-aw-container]';
+        const selectorTemplateAwForma = '#AwMainForma';
+        const awFormCashe = new AWFormBuilder('aw', selectorTemplateAwForma, selectorAwForma);
+        if (!document.querySelector(selectorAwForma).hasChildNodes()) {
+          awFormCashe.render();
+        } else {
+          awFormCashe.none();
+        }
+      })
+    }
 
     // подія на кнопку fin
     const financeButton = document.querySelector('.modal-casherom__btn--finance');
@@ -209,4 +224,7 @@
       }
     })
   })
+
+
+
 </script>

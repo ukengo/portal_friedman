@@ -56,6 +56,16 @@
     dataDialogBody.appendChild(casheRomFormaContainer)
   }
 
+  //рендеринг контейнера під aw
+  function renderContainerAwCasheRom() {
+    const casheRomFormaContainer = document.createElement('div')
+    casheRomFormaContainer.setAttribute('data-cashe-rom-aw-container', '')
+    casheRomFormaContainer.style.marginTop = '50px'
+    casheRomFormaContainer.style.paddingTop = '15px'
+    const dataDialogBody = document.querySelector('[data-dialog-body]');
+    dataDialogBody.appendChild(casheRomFormaContainer)
+  }
+
   //рендеринг контейнера під кнопки
   function renderContainerButtonsCasheRom() {
     const casheRomFormaContainer = document.createElement('div')
@@ -73,18 +83,5 @@
     !dataDialogFooter.hasChildNodes() ? dataDialogFooter.appendChild(clone) : null;
   }
 
-
-
-  
-
-  //рендеринг контейнера під Mod
-  /*  function renderContainerModCasheRom() {
-     const casheRomModContainer = document.createElement('div')
-     casheRomModContainer.setAttribute('data-cashe-rom-mod-container', '')
-     const dataDialogBody = document.querySelector('[data-cashe-rom-finance-container]');
-     k(dataDialogBody)
-     k(casheRomModContainer)
-     dataDialogBody.appendChild(casheRomModContainer)
-   } */
 
 </script>

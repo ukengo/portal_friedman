@@ -5,88 +5,10 @@
   <div class="row">
 
     <div class="col-xl-5">
-      <form action="#" id="form-aw">
-        <div class="radius p-3">
-          <div class="form mb-1 col-6">
-            <label for="date">Дата</label>
-            <div class="btn-group" role="group" aria-label="">
-              <input type="date" class="form-control" id="date" name="date" />
-              <input type="button" id="btnArriwalwasteY" value=" Y " class="btn btn-danger btn-sm ms-1 btn-yft">
-              <input type="button" id="btnArriwalwasteFri" value="Fri" class="btn btn-danger btn-sm ms-1 btn-yft">
-              <input type="button" id="btnArriwalwasteT" value=" T " class="btn btn-danger btn-sm ms-1 btn-yft">
-            </div>
-          </div>
-
-          <div class="form mb-1 mt-1">
-            <div class="row">
-              <div class="col">
-                <label for="summa">Сума</label>
-                <input type="number" class="form-control num-plus" id="summa" name="summa" />
-              </div>
-              <div class="col">
-                <div class="row">
-                  <div class="input-group">
-                    <div class="col-8 g-0">
-                      <label for="summaPrivat" class="text-nowrap">К-сть Прив</label>
-                      <input type="number" class="form-control num-plus" id="summaPrivat" name="summaPrivat"
-                        onkeypress="clickPressAwPrivat(event)" />
-                    </div>
-                    <div class="col-4 g-0">
-                      <label for="costPrivat" class="text-nowrap">Ціна Прив</label>
-                      <input type="number" class="form-control num-plus" id="costPrivat" name="costPrivat"
-                        onkeypress="clickPressAwPrivat(event)" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form mb-1 mt-1">
-            <label for="forma">Форма власності</label>
-            <select class="form-control" id="forma" name="forma">
-              <option>гот</option>
-              <option>тов</option>
-              <option>товАксон</option>
-              <option>фоп</option>
-            </select>
-          </div>
-
-          <div class="form mb-1 mt-1">
-            <label for="firmaArrivalWaste">Фірма</label>
-            <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWaste"
-              name="firmaArrivalWaste" />
-            <datalist id="firmaArrivalWaste-datalist"></datalist>
-          </div>
-
-          <div class="form mb-1 mt-1">
-            <label for="waste">Стаття витрат</label>
-            <input type="text" class="form-control" list="waste-datalist" id="waste" name="waste" />
-            <datalist id="waste-datalist"></datalist>
-          </div>
-
-          <div class="form-group mt-1">
-            <label for="termkar">Термінал-Карантин</label>
-            <select class="form-control" id="termkar" name="termkar">
-              <option></option>
-              <option>термінал</option>
-              <option>карантин</option>
-            </select>
-          </div>
-
-          <div class="form mt-1">
-            <label for="sftermkar">Рф Термінал-Карантин</label>
-            <input class="form-control" id="sftermkar" name="sftermkar">
-          </div>
-        </div>
-      </form>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWaste">Витарта</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrival">Прихід</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWasteTab">Трати</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrivalTab">Надходження</button>
+      <div data-form-fin-main></div>
 
     </div>
-    <div class="col-xl radius mouse-aw height_height" style="height: 490px;">
+    <div class="col-xl radius mouse-aw height_height" style="height: 646x;">
       <div id="vrabotevseArriwalWaste" class="h4 mb-4 text-center"></div>
       <div class="row">
         <div class="form my-2">
@@ -101,8 +23,6 @@
   </div>
   <div id='arriwalwasteatrong'></div>
 </div>
-
-<?!= include("arriwalwaste/workers/workers")?>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -170,3 +90,88 @@
     </div>
   </div>
 </div>
+
+
+<!-- Шаблон основної форми ArrivalWaste -->
+<template id="AwMainForma">
+  <div class="radius p-3">
+    <form action="#" id="form-aw">
+      <div class="form mb-1 col-6">
+        <label for="date">Дата</label>
+        <div class="btn-group" role="group" aria-label="">
+          <input type="date" class="form-control" id="date" name="date" />
+          <input type="button" id="btnArriwalwasteY" value=" Y " class="btn btn-danger btn-sm ms-1 btn-yft">
+          <input type="button" id="btnArriwalwasteFri" value="Fri" class="btn btn-danger btn-sm ms-1 btn-yft">
+          <input type="button" id="btnArriwalwasteT" value=" T " class="btn btn-danger btn-sm ms-1 btn-yft">
+        </div>
+      </div>
+
+      <div class="form mb-1 mt-1">
+        <div class="row">
+          <div class="col">
+            <label for="summa">Сума</label>
+            <input type="number" class="form-control num-plus" id="summa" name="summa" />
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="input-group">
+                <div class="col-8 g-0">
+                  <label for="summaPrivat" class="text-nowrap">К-сть Прив</label>
+                  <input type="number" class="form-control num-plus" id="summaPrivat" name="summaPrivat"
+                    onkeypress="clickPressAwPrivat(event)" />
+                </div>
+                <div class="col-4 g-0">
+                  <label for="costPrivat" class="text-nowrap">Ціна Прив</label>
+                  <input type="number" class="form-control num-plus" id="costPrivat" name="costPrivat"
+                    onkeypress="clickPressAwPrivat(event)" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form mb-1 mt-1">
+        <label for="forma">Форма власності</label>
+        <select class="form-control" id="forma" name="forma">
+          <option>гот</option>
+          <option>тов</option>
+          <option>товАксон</option>
+          <option>фоп</option>
+        </select>
+      </div>
+
+      <div class="form mb-1 mt-1">
+        <label for="firmaArrivalWaste">Фірма</label>
+        <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWaste"
+          name="firmaArrivalWaste" />
+        <datalist id="firmaArrivalWaste-datalist"></datalist>
+      </div>
+
+      <div class="form mb-1 mt-1">
+        <label for="waste">Стаття витрат</label>
+        <input type="text" class="form-control" list="waste-datalist" id="waste" name="waste" />
+        <datalist id="waste-datalist"></datalist>
+      </div>
+
+      <div class="form-group mt-1">
+        <label for="termkar">Термінал-Карантин</label>
+        <select class="form-control" id="termkar" name="termkar">
+          <option></option>
+          <option>термінал</option>
+          <option>карантин</option>
+        </select>
+      </div>
+
+      <div class="form mt-1">
+        <label for="sftermkar">Рф Термінал-Карантин</label>
+        <input class="form-control" id="sftermkar" name="sftermkar">
+      </div>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWaste">Витарта</button>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrival">Прихід</button>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWasteTab">Трати</button>
+      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrivalTab">Надходження</button>
+    </form>
+  </div>
+  <?!= include("arriwalwaste/workers/workers")?>
+</template>

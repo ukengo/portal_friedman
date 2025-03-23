@@ -1,0 +1,37 @@
+<script>
+
+  class AWFormBuilder {
+    attributes = {
+      //modContainerAttribute: 'data-cashe-rom-mod-container',
+
+    };
+
+    selectors = {
+      //blockPlusMinus: '[data-js-fin-button-plus-minus]',
+      //modContainer: `[${this.attributes.modContainerAttribute}]`,
+
+    };
+
+    constructor(name, templateSelector, containerSelector) {
+      this.name = name;
+      this.templateSelector = templateSelector;
+      this.containerSelector = containerSelector;
+      this.template = document.querySelector(templateSelector);
+      this.container = document.querySelector(containerSelector);
+      //AWFormBuilder.instances.push(this); // Додаємо екземпляр до масиву
+    }
+
+    render() {
+      if (this.template && this.container) {
+        const clone = this.template.content.cloneNode(true);
+        this.container.appendChild(clone);
+        
+      } else {
+        console.error('Template or container not found');
+      }
+
+    }
+  }
+
+
+</script>

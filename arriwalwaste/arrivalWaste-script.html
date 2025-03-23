@@ -1,9 +1,9 @@
 <script>
+  const aWForm = new AWFormBuilder('aw', '#AwMainForma', '[data-form-fin-main]');
+  aWForm.render();
 
-  /* const formDataFromTables = new FormDataFromTables('#form-aw');
-    formDataFromTables.labelred(); */
-  //console.log(document.querySelector('#btnArriwalwasteY').getAttribute('type'));
-
+  new FormDataFromTables('#form-aw');
+  
   // cрабатывание по кнопке Enter
   function clickPressAW(event) {
     if (event.keyCode == 13) {
@@ -32,10 +32,11 @@
     const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
     const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
     const stopAw = JSON.parse(localStorage.getItem('stopAw'));
+    
     /*
    arrInput - масив вхідний
-   stringsInput - одноміоний масив слів для пошуку
-   gage - міра сасиву: 0-одномірний, 1- двомірний, за замовчуванням - одномірний
+   stringsInput - одномірний масив слів для пошуку
+   gage - міра масиву: 0-одномірний, 1- двомірний, за замовчуванням - одномірний
    */
     return searchingSubstringInArrayStrings(dohodRashod, stopAw, gage = 0);
   }
@@ -432,7 +433,7 @@
   }
 
   // жрачка підстановка "нал"
-  function startova() {
+/*   function startova() {
     google.script.run
       .withSuccessHandler((dataArray) => {
 
@@ -450,7 +451,7 @@
         }
       }).getLastTenRowsWasteAndArriwal();
   }
-  startova();
+  startova(); */
 
   // вставка суми доходу/витрат при фільтрації
   const mutationObserverAw = () => {
@@ -475,11 +476,11 @@
   mutationObserverAw();
 
   // очищення даних по кліку на заголовку
-  vrabotevseArriwalWaste.addEventListener('click', () => {
+/*   vrabotevseArriwalWaste.addEventListener('click', () => {
     document.querySelector('#dataTableArriwalWaste').innerHTML = '';
     document.querySelector('#vrabotevseArriwalWaste').innerHTML = '';
     document.querySelector('#divDataTableArriwalWaste').style.height = "10%";
-  })
+  }) */
 
   // розфарбовка поля вартості комісії приват в червоний при відсутності даних
   const costPrivatColor = () => {

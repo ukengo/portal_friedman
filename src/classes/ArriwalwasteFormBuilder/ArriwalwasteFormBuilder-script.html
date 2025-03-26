@@ -9,7 +9,10 @@
     selectors = {
       //blockPlusMinus: '[data-js-fin-button-plus-minus]',
       //modContainer: `[${this.attributes.modContainerAttribute}]`,
+    };
 
+    colors = {
+      borderTopColor: '#dee2e6',
     };
 
     constructor(name, templateSelector, containerSelector) {
@@ -53,7 +56,18 @@
         }
       });
     }
+
+    borderTopOn() {
+      this.container.style.borderTop = `1px solid ${this.colors.borderTopColor}`;
+    }
+
+    borderTopOff() {
+      this.container.style.borderTop = '0';
+    }
+
   }
+
+
 
 
 </script>

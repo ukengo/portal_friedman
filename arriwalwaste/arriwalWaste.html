@@ -131,46 +131,52 @@
         </div>
       </div>
 
-      <div class="form mb-1 mt-1">
-        <label for="forma">Форма власності</label>
-        <select class="form-control" id="forma" name="forma">
-          <option>гот</option>
-          <option>тов</option>
-          <option>товАксон</option>
-          <option>фоп</option>
-        </select>
-      </div>
+      <div class="aw-body">
+        <div class="form mb-1 mt-1">
+          <label for="forma">Форма власності</label>
+          <select class="form-control" id="forma" name="forma">
+            <option>гот</option>
+            <option>тов</option>
+            <option>товАксон</option>
+            <option>фоп</option>
+          </select>
+        </div>
 
-      <div class="form mb-1 mt-1">
-        <label for="firmaArrivalWaste">Фірма</label>
-        <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWaste"
-          name="firmaArrivalWaste" />
-        <datalist id="firmaArrivalWaste-datalist"></datalist>
-      </div>
+        <div class="form mb-1 mt-1">
+          <label for="firmaArrivalWaste">Фірма</label>
+          <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWaste"
+            name="firmaArrivalWaste" />
+          <datalist id="firmaArrivalWaste-datalist"></datalist>
+        </div>
 
-      <div class="form mb-1 mt-1">
-        <label for="waste">Стаття витрат</label>
-        <input type="text" class="form-control" list="waste-datalist" id="waste" name="waste" />
-        <datalist id="waste-datalist"></datalist>
-      </div>
+        <div class="form mb-1 mt-1">
+          <label for="waste">Стаття витрат</label>
+          <input type="text" class="form-control" list="waste-datalist" id="waste" name="waste" />
+          <datalist id="waste-datalist"></datalist>
+        </div>
 
-      <div class="form-group mt-1">
-        <label for="termkar">Термінал-Карантин</label>
-        <select class="form-control" id="termkar" name="termkar">
-          <option></option>
-          <option>термінал</option>
-          <option>карантин</option>
-        </select>
-      </div>
+        <div class="form-group mt-1">
+          <label for="termkar">Термінал-Карантин</label>
+          <select class="form-control" id="termkar" name="termkar">
+            <option></option>
+            <option>термінал</option>
+            <option>карантин</option>
+          </select>
+        </div>
 
-      <div class="form mt-1">
-        <label for="sftermkar">Рф Термінал-Карантин</label>
-        <input class="form-control" id="sftermkar" name="sftermkar">
+        <div class="form mt-1">
+          <label for="sftermkar">Рф Термінал-Карантин</label>
+          <input class="form-control" id="sftermkar" name="sftermkar">
+        </div>
+        <div class="aw-buttons-container">
+
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWaste" data-button-waste>Витарта</button>
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrival" data-button-arrival>Прихід</button>
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWasteTab" data-button-wastetab>Трати</button>
+          <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrivalTab"
+            data-button-arrivaltab>Надходження</button>
+        </div>
       </div>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWaste" data-button-waste>Витарта</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrival" data-button-arrival>Прихід</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonWasteTab" data-button-wastetab>Трати</button>
-      <button type="button" class="btn btn-danger mb-2 mt-2" id="buttonArrivalTab" data-button-arrivaltab>Надходження</button>
     </form>
   </div>
   <?!= include("arriwalwaste/workers/workers")?>

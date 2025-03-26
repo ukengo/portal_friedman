@@ -1,38 +1,56 @@
 <script>
 
-  class PopupEditing {
+class PopupEditing {
+  selectors = {
+    dialog: '[data-dialog]',
+    dialogInner: '[data-dialog-inner]',
+    dialogBody: '[data-dialog-body]',
+    buttonOpen: '[dialog-button-open]',
+    buttonClose: '[dialog-button-close]'
+  }
 
-    selectors = {
-
-      dialog: '[data-dialog]',
-      dialogInner: '[data-dialog-inner]',
-      dialogBody: '[data-dialog-body]',
-      buttonOpen: '[dialog-button-open]',
-      buttonClose: '[dialog-button-close]'
-    }
-    constructor() {
-      this.dialog = document.querySelector(this.selectors.dialog)
-      this.dialog.showModal()
-      this.closeDialog()
-      this.closeDialogToClick()
-    }
-
-    showDialog() {
-      this.dialog.showModal()
-    }
-
-    closeDialog() {
-      document.querySelector(this.selectors.buttonClose).addEventListener('mousedown', () => {
-        this.dialog.close();
-      })
-    }
-
-    //закриття модалки по кліку поза нею
-    closeDialogToClick() {
-      this.dialog.addEventListener('mousedown', e => {
-        e.target === this.dialog ? this.dialog.close() : null;
-      })
+  constructor() {
+    this.dialog = document.querySelector(this.selectors.dialog);
+    if (this.dialog) {
+      this.dialog.showModal();
+      this.closeDialog();
+      this.closeDialogToClick();
+    } else {
+      console.error('Елемент діалогу з селектором [data-dialog] не знайдено');
     }
   }
 
+  showDialog() {
+    if (this.dialog) {
+      this.dialog.showModal();
+    }
+  }
+
+  // Додаємо метод close для прямого закриття діалогу
+  close() {
+    if (this.dialog) {
+      this.dialog.close();
+    }
+  }
+
+  closeDialog() {
+    const closeButton = document.querySelector(this.selectors.buttonClose);
+    if (closeButton) {
+      closeButton.addEventListener('mousedown', () => {
+        this.dialog.close();
+      });
+    }
+  }
+
+  // Закриття модалки по кліку поза нею
+  closeDialogToClick() {
+    if (this.dialog) {
+      this.dialog.addEventListener('mousedown', e => {
+        if (e.target === this.dialog) {
+          this.dialog.close();
+        }
+      });
+    }
+  }
+}
 </script>

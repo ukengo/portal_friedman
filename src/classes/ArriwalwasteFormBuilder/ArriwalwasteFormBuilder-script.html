@@ -1,71 +1,90 @@
 <script>
 
-  class AWFormBuilder {
-    attributes = {
-      //modContainerAttribute: 'data-cashe-rom-mod-container',
+class AWFormBuilder {
+  attributes = {
+    //modContainerAttribute: 'data-cashe-rom-mod-container',
+  };
 
-    };
+  selectors = {
+    awBody: '.aw-body',
+    awButtonsContainer: '.aw-buttons-container',
+    //blockPlusMinus: '[data-js-fin-button-plus-minus]',
+    //modContainer: `[${this.attributes.modContainerAttribute}]`,
+  };
 
-    selectors = {
-      //blockPlusMinus: '[data-js-fin-button-plus-minus]',
-      //modContainer: `[${this.attributes.modContainerAttribute}]`,
-    };
+  colors = {
+    borderTopColor: '#dee2e6',
+  };
 
-    colors = {
-      borderTopColor: '#dee2e6',
-    };
+  constructor(name, templateSelector, containerSelector) {
+    this.name = name;
+    this.templateSelector = templateSelector;
+    this.containerSelector = containerSelector;
+    this.template = document.querySelector(templateSelector);
+    this.container = document.querySelector(containerSelector);
+  }
 
-    constructor(name, templateSelector, containerSelector) {
-      this.name = name;
-      this.templateSelector = templateSelector;
-      this.containerSelector = containerSelector;
-      this.template = document.querySelector(templateSelector);
-      this.container = document.querySelector(containerSelector);
-      //AWFormBuilder.instances.push(this); // Додаємо екземпляр до масиву
+  render(customStyles = {}) {
+    if (this.template && this.container) {
+      const clone = this.template.content.cloneNode(true);
+      this.container.appendChild(clone);
+      this.name !== 'aw' && this.addIdToElements('input, select, datalist, button');
+      this.applyCustomStyles(customStyles); // Застосовуємо стилі після рендерингу
+    } else {
+      console.error('Template or container not found');
     }
+  }
 
-    render() {
-      if (this.template && this.container) {
-        const clone = this.template.content.cloneNode(true);
-        this.container.appendChild(clone);
-        this.name !== 'aw' && this.addIdToElements('input, select, datalist, button');
-
-      } else {
-        console.error('Template or container not found');
-      }
-
+  none() {
+    if (this.container) {
+      this.container.innerHTML = '';
+    } else {
+      console.error('Template or container not found');
     }
-    none() {
-      if (this.container) {
-        this.container.innerHTML = '';
-      } else {
-        console.error('Template or container not found');
-      }
-    }
+  }
 
-    addIdToElements(elements) {
-      const collection = this.container.querySelectorAll(elements);
-      collection.forEach((element, index) => {
-        if (element.id) {
-          const id = `${element.id}-${this.name}`;
-          element.id = id;
-          if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
-            const label = element.previousElementSibling;
-            if (label) label.htmlFor = id;
-          }
+  addIdToElements(elements) {
+    const collection = this.container.querySelectorAll(elements);
+    collection.forEach((element, index) => {
+      if (element.id) {
+        const id = `${element.id}-${this.name}`;
+        element.id = id;
+        if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
+          const label = element.previousElementSibling;
+          if (label) label.htmlFor = id;
         }
+      }
+    });
+  }
+
+  borderTopOn() {
+    this.container.style.borderTop = `1px solid ${this.colors.borderTopColor}`;
+  }
+
+  borderTopOff() {
+    this.container.style.borderTop = '0';
+  }
+
+  // Метод для застосування кастомних стилів до .aw-body та .aw-buttons-container
+  applyCustomStyles(customStyles) {
+    const awBody = this.container.querySelector(this.selectors.awBody);
+    const awButtonsContainer = this.container.querySelector(this.selectors.awButtonsContainer);
+
+    // Якщо передані стилі для .aw-body
+    if (awBody && customStyles.awBody && Object.keys(customStyles.awBody).length > 0) {
+      Object.entries(customStyles.awBody).forEach(([property, value]) => {
+        awBody.style[property] = value;
       });
     }
 
-    borderTopOn() {
-      this.container.style.borderTop = `1px solid ${this.colors.borderTopColor}`;
+    // Якщо передані стилі для .aw-buttons-container
+    if (awButtonsContainer && customStyles.awButtonsContainer && Object.keys(customStyles.awButtonsContainer).length > 0) {
+      Object.entries(customStyles.awButtonsContainer).forEach(([property, value]) => {
+        awButtonsContainer.style[property] = value;
+      });
     }
-
-    borderTopOff() {
-      this.container.style.borderTop = '0';
-    }
-
   }
+}
 
 
 

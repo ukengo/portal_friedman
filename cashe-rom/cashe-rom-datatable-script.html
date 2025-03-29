@@ -1,20 +1,19 @@
 <script>
-
   // Ініціалізація DataTable для відображення даних
   function startDataTableCasherom() {
-    btnCasheromInsert.disabled = true; // Вимикаємо кнопку вставки під час завантаження
-    spinner('tableCaheRom'); // Показуємо спінер
-    google.script.run.withSuccessHandler(buildDataTableCasherom).getRecordsCasheAll(); // Отримуємо дані з Google Apps Script
+    btnCasheromInsert.disabled = true;
+    spinner('tableCaheRom');
+    google.script.run.withSuccessHandler(buildDataTableCasherom).getRecordsCasheAll();
   }
 
   // Побудова DataTable з отриманими даними
   function buildDataTableCasherom() {
-    const casheRom1 = JSON.parse(localStorage.getItem('casheRom1')); // Дані для таблиці
-    const casheRom2 = JSON.parse(localStorage.getItem('casheRom2')); // Додаткові дані для форматування
-    document.querySelector('#tableCaheRom').innerHTML = ''; // Очищаємо контейнер таблиці
+    const casheRom1 = JSON.parse(localStorage.getItem('casheRom1'));
+    const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'));
+    document.querySelector('#tableCaheRom').innerHTML = '';
 
     const table = new DataTable('#tableCaheRom', {
-      destroy: true, // Очищаємо попередню таблицю
+      destroy: true,
       data: casheRom1,
       columns: [
         { title: "1" },
@@ -24,33 +23,31 @@
         { title: "Прихід" },
         { title: "Примітки" },
       ],
-      lengthMenu: [[50, 100, 500, -1, 0], [50, 100, 500, "Все", "Пусто"]], // Налаштування кількості рядків
-      order: [[0, 'desc']], // Сортування за першим стовпцем (спадання)
-      select: true, // Дозволяємо вибір рядків
+      lengthMenu: [[50, 100, 500, -1, 0], [50, 100, 500, "Все", "Пусто"]],
+      order: [[0, 'desc']],
+      select: true,
     });
 
-    btnCasheromInsert.disabled = false; // Активуємо кнопку після завантаження
+    btnCasheromInsert.disabled = false;
 
-    const casheRom2F = casheRom2.filter(el => el[1] != ''); // Фільтруємо дані для підсвічування
+    const casheRom2F = casheRom2.filter(el => el[1] != '');
     if (casheRom2F.length > 1) {
       document.querySelectorAll('#tableCaheRom tbody tr').forEach((el, ind) => {
-        if (ind < casheRom2F.length - 1) el.style.color = 'red'; // Підсвічуємо рядки червоним
+        if (ind < casheRom2F.length - 1) el.style.color = 'red';
       });
     }
 
-    addUpButtonDT(startDataTableCasherom, 'tableCaheRom', 'inputDtCashe'); // Додаємо кнопку оновлення
+    addUpButtonDT(startDataTableCasherom, 'tableCaheRom', 'inputDtCashe');
   }
 
-  buildDataTableCasherom(); // Запускаємо побудову таблиці при завантаженні
+  buildDataTableCasherom();
 
   // Утилітні функції
   function extractProjectNumberCasherom(text) {
-    // Витягуємо номер проекту з тексту (наприклад, "пр16739" → "16739")
     return text.match(/пр\.?\s*(\d+)/i)?.[1] || null;
   }
 
   function extractInspectorsCasherom(data) {
-    // Парсимо список інспекторів із JSON у localStorage
     if (!data) return [];
     try {
       return JSON.parse(data).map(item => item[0].split(' ')[0].toLowerCase());
@@ -60,11 +57,9 @@
   }
 
   function extractDataFromTdCasherom(cells) {
-    // Отримуємо дані з комірок рядка таблиці
     return Array.from(cells).map(cell => cell.textContent);
   }
 
-  // Функція для перемикання видимості контейнерів
   function toggleContainersCasherom(financeContainer, awContainer, showFinance, showAw) {
     if (financeContainer) {
       financeContainer.style.display = showFinance ? 'block' : 'none';
@@ -78,12 +73,10 @@
     }
   }
 
-  // Очищення вмісту контейнера
   function clearContainer(container) {
-    if (container) container.innerHTML = ''; // Видаляємо всі дочірні елементи
+    if (container) container.innerHTML = '';
   }
 
-  // Оновлення полів форми Finance
   function updateFinanceFieldsCasherom() {
     const articleInput = document.querySelector('#casheInputArticle');
     const projectInput = document.querySelector('#proektfin-casherom');
@@ -96,7 +89,7 @@
     const dateOplInput = document.querySelector('#dateoplfin-casherom');
 
     if (!articleInput || !projectInput || !primInput || !ispoluCheckbox || !wasteInput || !arrivalInput || !summaInput || !dateInput || !dateOplInput) {
-      return; // Виходимо, якщо потрібні елементи не знайдені
+      return;
     }
 
     const articleValue = articleInput.value.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -129,7 +122,6 @@
       'болик': { value: 'контр', activateIspolu: false },
     };
 
-    // Заповнюємо примітки на основі ключових слів
     for (const [keyword, config] of Object.entries(keywordsConfig)) {
       if (articleValue.includes(keyword)) {
         primInput.value = config.value;
@@ -141,7 +133,6 @@
       }
     }
 
-    // Якщо ключового слова немає, перевіряємо інспекторів
     if (!primInput.value && inspectors.length) {
       for (const inspector of inspectors) {
         if (articleValue.includes(inspector)) {
@@ -155,7 +146,6 @@
       }
     }
 
-    // Заповнюємо суму на основі витрат або приходу
     const wasteValue = parseFloat(wasteInput.value.trim());
     const arrivalValue = parseFloat(arrivalInput.value.trim());
     if (!isNaN(wasteValue) && wasteValue > 0) {
@@ -170,7 +160,6 @@
       summaInput.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    // Копіюємо дату
     const inputDate = dateInput.value;
     if (inputDate) {
       dateOplInput.value = inputDate;
@@ -180,33 +169,30 @@
     }
   }
 
-  // Об’єкт для відстеження стану видимості форм
   const formState = {
     isFinanceVisible: false,
     isAwVisible: false
   };
 
-  // Глобальне делегування подій
+  // Делегування подій
   document.addEventListener('click', e => {
+    const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
+    const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
+
     if (e.target.matches('#tableCaheRom td')) {
-      if (window.getSelection().toString()) return; // Ігноруємо, якщо виділено текст
+      if (window.getSelection().toString()) return;
 
       const data = extractDataFromTdCasherom(e.target.parentNode.children);
-
-      const formaCassheRomDialog = new PopupEditing(); // Відкриваємо модальне вікно
-      renderFormsCasheRom('.dialog__header', '.dialog__body', data); // Рендеримо форми
-      renderContainerButtonsCasheRom(); // Рендеримо контейнер кнопок
-      renderButtonsCasheRom(); // Рендеримо кнопки
-      renderContainerFinanceCasheRom(); // Рендеримо контейнер Finance
-      renderContainerAwCasheRom(); // Рендеримо контейнер AW
-
-      const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
-      const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
+      const formaCassheRomDialog = new PopupEditing();
+      renderFormsCasheRom('.dialog__header', '.dialog__body', data);
+      renderContainerButtonsCasheRom();
+      renderButtonsCasheRom();
+      renderContainerFinanceCasheRom();
+      renderContainerAwCasheRom();
 
       const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]');
       const articleValue = data[2]?.toLowerCase() || '';
 
-      // Автоматично показуємо Finance, якщо є номер проекту
       if (extractProjectNumberCasherom(articleValue)) {
         const financeForm = new FinanceFormBuilder('casherom', '#finMainForma', '[data-cashe-rom-finance-container]');
         clearContainer(financeContainer);
@@ -218,11 +204,10 @@
         formState.isAwVisible = false;
       }
 
-      // Збереження даних
       const setCashRom = () => {
         const dataModal = formaCassheRom.formaDataObj();
-        google.script.run.setRecordsCasheRom(dataModal); // Відправляємо дані на сервер
-        formaCassheRomDialog.close(); // Закриваємо діалог
+        google.script.run.setRecordsCasheRom(dataModal);
+        formaCassheRomDialog.close();
       };
 
       const saveButton = document.querySelector('.modal-casherom__btn');
@@ -232,20 +217,17 @@
       if (monovitButton) {
         monovitButton.addEventListener('click', () => {
           document.querySelector('#casheInputNotes').value = 'відшкодовано на МОНО ВІТ';
-          formaCassheRom.labelred(); // Підсвічуємо поле
+          formaCassheRom.labelred();
         });
       }
 
       const formaContainer = document.querySelector('[data-cashe-rom-forma-container]');
       if (formaContainer) {
         formaContainer.addEventListener('keypress', e => {
-          if (e.keyCode === 13) setCashRom(); // Збереження при натисканні Enter
+          if (e.keyCode === 13) setCashRom();
         });
       }
     }
-
-    const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
-    const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
 
     // Обробка кліку на кнопку Finance
     if (e.target.matches('.modal-casherom__btn--finance')) {
@@ -270,7 +252,13 @@
 
     // Обробка кліку на кнопку AW
     if (e.target.matches('.modal-casherom__btn--arriwalwaste')) {
-      const awFormCashe = new AWFormBuilder('casherom', '#AwMainForma', '[data-cashe-rom-aw-container]');
+      const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
+      if (!awContainer) {
+        console.error('AW container not found');
+        return;
+      }
+
+      const awFormCashe = new AWFormBuilder('casherom-aw', '#AwMainForma', '[data-cashe-rom-aw-container]');
       const customStyles = {
         awBody: {
           display: 'grid',
@@ -283,6 +271,7 @@
           marginBottom: '-7px'
         }
       };
+
       if (!formState.isAwVisible) {
         clearContainer(awContainer);
         awFormCashe.render(customStyles);

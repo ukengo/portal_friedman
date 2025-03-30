@@ -1,4 +1,6 @@
 <script>
+
+
   // Ініціалізація DataTable для відображення даних
   function startDataTableCasherom() {
     btnCasheromInsert.disabled = true;
@@ -77,6 +79,7 @@
     if (container) container.innerHTML = '';
   }
 
+  // Оновлення полів для finance-контейнера
   function updateFinanceFieldsCasherom() {
     const articleInput = document.querySelector('#casheInputArticle');
     const projectInput = document.querySelector('#proektfin-casherom');
@@ -169,6 +172,22 @@
     }
   }
 
+  // Оновлення полів для AW-контейнера
+  function updateAwFieldsCasherom() {
+    const wasteInput = document.querySelector('#casheInputWaste');
+    const summaAwInput = document.querySelector('#summa-casherom-aw');
+
+    if (wasteInput && summaAwInput) {
+      const wasteValue = parseFloat(wasteInput.value.trim());
+      if (!isNaN(wasteValue) && wasteValue > 0) {
+        summaAwInput.value = wasteValue;
+        summaAwInput.setAttribute('value', wasteValue);
+        summaAwInput.dispatchEvent(new Event('input', { bubbles: true }));
+        summaAwInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+  }
+
   const formState = {
     isFinanceVisible: false,
     isAwVisible: false
@@ -179,6 +198,7 @@
     const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
     const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
 
+    // Обробка кліку на клітинку таблиці
     if (e.target.matches('#tableCaheRom td')) {
       if (window.getSelection().toString()) return;
 
@@ -193,7 +213,9 @@
       const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]');
       const articleValue = data[2]?.toLowerCase() || '';
 
+      // Перевірка умов для finance або AW
       if (extractProjectNumberCasherom(articleValue)) {
+        // Відкриття finance-контейнера
         const financeForm = new FinanceFormBuilder('casherom', '#finMainForma', '[data-cashe-rom-finance-container]');
         clearContainer(financeContainer);
         financeForm.build();
@@ -202,6 +224,21 @@
         toggleContainersCasherom(financeContainer, awContainer, true, false);
         formState.isFinanceVisible = true;
         formState.isAwVisible = false;
+      } else {
+        // Автоматичне відкриття AW-контейнера
+        const awFormCashe = new AWFormBuilder('casherom-aw', '#AwMainForma', '[data-cashe-rom-aw-container]');
+        const customStyles = {
+          awBody: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' },
+          awButtonsContainer: { gridColumn: 'span 3', alignSelf: 'end', marginBottom: '-7px' }
+        };
+
+        clearContainer(awContainer);
+        awFormCashe.render(customStyles);
+        awFormCashe.borderTopOn();
+        updateAwFieldsCasherom(); // Автоматична вставка значень для AW
+        toggleContainersCasherom(financeContainer, awContainer, false, true);
+        formState.isAwVisible = true;
+        formState.isFinanceVisible = false;
       }
 
       const setCashRom = () => {
@@ -252,7 +289,6 @@
 
     // Обробка кліку на кнопку AW
     if (e.target.matches('.modal-casherom__btn--arriwalwaste')) {
-      const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
       if (!awContainer) {
         console.error('AW container not found');
         return;
@@ -260,22 +296,15 @@
 
       const awFormCashe = new AWFormBuilder('casherom-aw', '#AwMainForma', '[data-cashe-rom-aw-container]');
       const customStyles = {
-        awBody: {
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '5px'
-        },
-        awButtonsContainer: {
-          gridColumn: 'span 3',
-          alignSelf: 'end',
-          marginBottom: '-7px'
-        }
+        awBody: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' },
+        awButtonsContainer: { gridColumn: 'span 3', alignSelf: 'end', marginBottom: '-7px' }
       };
 
       if (!formState.isAwVisible) {
         clearContainer(awContainer);
         awFormCashe.render(customStyles);
         awFormCashe.borderTopOn();
+        updateAwFieldsCasherom(); // Вставка значень при ручному відкритті
         toggleContainersCasherom(financeContainer, awContainer, false, true);
         formState.isAwVisible = true;
         formState.isFinanceVisible = false;
@@ -289,3 +318,4 @@
     }
   });
 </script>
+

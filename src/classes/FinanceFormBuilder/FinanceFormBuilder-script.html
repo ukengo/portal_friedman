@@ -11,6 +11,7 @@ class FinanceFormBuilder {
   };
 
   selectors = {
+    form: '[data-form-finance]',
     blockPlusMinus: '[data-js-fin-button-plus-minus]',
     financeContainer: '[data-cashe-rom-finance-container]',
     modContainer: `[${this.attributes.modContainerAttribute}]`,
@@ -48,6 +49,7 @@ class FinanceFormBuilder {
       this.name !== 'finance' && this.addIdToElements('input, select, datalist, button');
       this.addClassToForm();
       const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
+   
 
       instance.inputToFocus(this.selectors.nameSummafin, this.selectors.namePriznakfin, 'гот');
       instance.todayDate(this.selectors.nameDateoplfin);

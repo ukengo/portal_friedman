@@ -9,17 +9,18 @@
       fridayButton: 'btnArriwalwasteFri-casherom-aw',
       todayButton: 'btnArriwalwasteT-casherom-aw'
     };
-  
+
     selectors = {
+      form: '[data-form-aw]',
       awBody: '.aw-body',
       awButtonsContainer: '.aw-buttons-container',
       dateInput: '#date-casherom-aw'
     };
-  
+
     colors = {
       borderTopColor: '#dee2e6',
     };
-  
+
     constructor(name, templateSelector, containerSelector) {
       this.name = name;
       this.templateSelector = templateSelector;
@@ -28,12 +29,24 @@
       this.container = document.querySelector(containerSelector);
       this.eventHandlers = {};
     }
-  
+
     render(customStyles = {}) {
       if (this.template && this.container) {
         const clone = this.template.content.cloneNode(true);
         this.container.appendChild(clone);
         this.name !== 'aw' && this.addIdToElements('input, select, datalist, button');
+
+        // Знаходимо всі форми
+        const forms = this.container.querySelectorAll(this.selectors.form);
+        this.formInstances = Array.from(forms).map((form, index) => {
+          // Додаємо унікальний ідентифікатор до форми, якщо його немає
+          if (!form.id) {
+            form.id = `${this.name}-form-${index}`;
+          }
+          // Передаємо селектор форми, а не сам елемент
+          return new FormDataFromTables(`#${form.id}`);
+        });
+
         this.applyCustomStyles(customStyles);
         this.initEventListeners();
         this.setDefaultDate();
@@ -41,7 +54,6 @@
         console.error('Template or container not found');
       }
     }
-  
     none() {
       if (this.container) {
         this.container.innerHTML = '';
@@ -49,7 +61,7 @@
         console.error('Template or container not found');
       }
     }
-  
+
     addIdToElements(elements) {
       const collection = this.container.querySelectorAll(elements);
       collection.forEach((element, index) => {
@@ -63,32 +75,32 @@
         }
       });
     }
-  
+
     borderTopOn() {
       this.container.style.borderTop = `1px solid ${this.colors.borderTopColor}`;
     }
-  
+
     borderTopOff() {
       this.container.style.borderTop = '0';
     }
-  
+
     applyCustomStyles(customStyles) {
       const awBody = this.container.querySelector(this.selectors.awBody);
       const awButtonsContainer = this.container.querySelector(this.selectors.awButtonsContainer);
-  
+
       if (awBody && customStyles.awBody && Object.keys(customStyles.awBody).length > 0) {
         Object.entries(customStyles.awBody).forEach(([property, value]) => {
           awBody.style[property] = value;
         });
       }
-  
+
       if (awButtonsContainer && customStyles.awButtonsContainer && Object.keys(customStyles.awButtonsContainer).length > 0) {
         Object.entries(customStyles.awButtonsContainer).forEach(([property, value]) => {
           awButtonsContainer.style[property] = value;
         });
       }
     }
-  
+
     initEventListeners() {
       const wasteButton = this.container.querySelector(`[${this.attributes.wasteButton}]`);
       const arrivalButton = this.container.querySelector(`[${this.attributes.arrivalButton}]`);
@@ -97,7 +109,7 @@
       const yesterdayButton = this.container.querySelector(`#${this.attributes.yesterdayButton}`);
       const fridayButton = this.container.querySelector(`#${this.attributes.fridayButton}`);
       const todayButton = this.container.querySelector(`#${this.attributes.todayButton}`);
-  
+
       if (wasteButton) {
         wasteButton.addEventListener('click', this.handleWasteButtonClick.bind(this));
       }
@@ -120,14 +132,14 @@
         todayButton.addEventListener('click', this.handleTodayButtonClick.bind(this));
       }
     }
-  
+
     setDefaultDate() {
       const dateInput = this.container.querySelector(this.selectors.dateInput);
       if (dateInput) {
         dateInput.valueAsDate = new Date();
       }
     }
-  
+
     handleYesterdayButtonClick(event) {
       const dateInput = this.container.querySelector(this.selectors.dateInput);
       if (dateInput) {
@@ -137,7 +149,7 @@
         this.eventHandlers.yesterdayButton(event);
       }
     }
-  
+
     handleFridayButtonClick(event) {
       const dateInput = this.container.querySelector(this.selectors.dateInput);
       if (dateInput) {
@@ -147,7 +159,7 @@
         this.eventHandlers.fridayButton(event);
       }
     }
-  
+
     handleTodayButtonClick(event) {
       const dateInput = this.container.querySelector(this.selectors.dateInput);
       if (dateInput) {
@@ -157,35 +169,32 @@
         this.eventHandlers.todayButton(event);
       }
     }
-  
-    // Допоміжний метод для відключення/увімкнення кнопок
+
     toggleButtons(disabled) {
       const wasteButton = this.container.querySelector(`[${this.attributes.wasteButton}]`);
       const arrivalButton = this.container.querySelector(`[${this.attributes.arrivalButton}]`);
       if (wasteButton) wasteButton.disabled = disabled;
       if (arrivalButton) arrivalButton.disabled = disabled;
     }
-  
+
     handleWasteButtonClick(event) {
       const rowData = this.getRowData();
       const termkarVal = document.getElementById("termkar-casherom-aw")?.value;
-  
+
       if (!rowData[4] && !termkarVal) {
         alert('Не заповнена стаття витрат');
         return;
       }
-  
+
       if (this.validateRowData(rowData)) return;
-  
-      // Відключаємо кнопки
+
       this.toggleButtons(true);
-  
+
       spinner("dataTableArriwalWaste");
       if (!this.getTermKarData()[4]) {
         google.script.run
           .withSuccessHandler((result) => {
             createTableArriwalWaste(result);
-            // Увімкнення кнопок після завершення
             this.toggleButtons(false);
             document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
             this.clearForm();
@@ -198,7 +207,6 @@
         google.script.run
           .withSuccessHandler((result) => {
             startDataWaste(result);
-            // Увімкнення кнопок після завершення
             this.toggleButtons(false);
             document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
             this.clearForm();
@@ -206,20 +214,19 @@
           })
           .vReestrTerminalKarantin(termKarData);
       }
-  
+
       if (this.eventHandlers.wasteButton) {
         this.eventHandlers.wasteButton(event);
       }
     }
-  
+
     handleArrivalButtonClick(event) {
       const rowData = this.getRowData();
-  
+
       if (this.validateRowData(rowData)) return;
-  
-      // Відключаємо кнопки
+
       this.toggleButtons(true);
-  
+
       spinner("dataTableArriwalWaste");
       google.script.run
         .withSuccessHandler((result) => {
@@ -227,48 +234,45 @@
           document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
           this.clearForm();
           document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-          // Увімкнення кнопок після завершення першого запиту
           this.toggleButtons(false);
         })
         .addNewRowArrival(rowData);
-      
+
       google.script.run
         .withSuccessHandler((result) => {
           createTableArriwalWaste(result);
-          // Увімкнення кнопок після завершення другого запиту (якщо потрібно)
-          // this.toggleButtons(false); // Закоментовано, щоб уникнути дублювання
         })
         .addNewTableArriwal(rowData);
-  
+
       if (this.eventHandlers.arrivalButton) {
         this.eventHandlers.arrivalButton(event);
       }
     }
-  
+
     handleWasteTabButtonClick(event) {
       spinner("dataTableArriwalWaste");
       document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
       createTableArriwalWaste(JSON.parse(localStorage.getItem('dataWaste')));
       document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
       startArrivalWaste();
-  
+
       if (this.eventHandlers.wasteTabButton) {
         this.eventHandlers.wasteTabButton(event);
       }
     }
-  
+
     handleArrivalTabButtonClick(event) {
       spinner("dataTableArriwalWaste");
       document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
       createTableArriwalWaste(JSON.parse(localStorage.getItem('dataArrival')));
       document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
       startArrivalWaste();
-  
+
       if (this.eventHandlers.arrivalTabButton) {
         this.eventHandlers.arrivalTabButton(event);
       }
     }
-  
+
     getRowData() {
       const date = document.getElementById("date-casherom-aw")?.value;
       let summa = +document.getElementById("summa-casherom-aw")?.value || 0;
@@ -277,7 +281,7 @@
       let forma = document.getElementById("forma-casherom-aw")?.value;
       let firmaArrivalWaste = document.getElementById("firmaArrivalWaste-casherom-aw")?.value;
       let waste = document.getElementById("waste-casherom-aw")?.value;
-  
+
       if (!summaPrivat && !summa) {
         summa = "";
         waste = "Не заповнено ні одного поля суми";
@@ -293,10 +297,10 @@
           firmaArrivalWaste = "";
         }
       }
-  
+
       return [date, +summa, forma, firmaArrivalWaste, waste];
     }
-  
+
     getTermKarData() {
       const date = document.getElementById("date-casherom-aw")?.value;
       const summa = document.getElementById("summa-casherom-aw")?.value;
@@ -304,10 +308,10 @@
       const waste = document.getElementById("waste-casherom-aw")?.value;
       const termkar = document.getElementById("termkar-casherom-aw")?.value;
       const sftermkar = document.getElementById("sftermkar-casherom-aw")?.value;
-  
+
       return [date, summa * 1, forma, waste, termkar, sftermkar];
     }
-  
+
     validateRowData(rowData) {
       if (rowData[4] === "Не заповнено ні одного поля суми") {
         alert("Не заповнено ні одного поля суми");
@@ -327,7 +331,7 @@
       }
       return false;
     }
-  
+
     clearForm() {
       document.getElementById("summa-casherom-aw").value = "";
       document.getElementById("summaPrivat-casherom-aw").value = "";
@@ -336,9 +340,9 @@
       document.getElementById("termkar-casherom-aw").value = "";
       document.getElementById("sftermkar-casherom-aw").value = "";
     }
-  
+
     on(eventName, callback) {
       this.eventHandlers[eventName] = callback;
     }
   }
-  </script>
+</script>

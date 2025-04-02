@@ -1,6 +1,6 @@
+
+
 <script>
-
-
   // Ініціалізація DataTable для відображення даних
   function startDataTableCasherom() {
     btnCasheromInsert.disabled = true;
@@ -174,19 +174,31 @@
 
   // Оновлення полів для AW-контейнера
   function updateAwFieldsCasherom() {
-    const wasteInput = document.querySelector('#casheInputWaste');
-    const summaAwInput = document.querySelector('#summa-casherom-aw');
+  const wasteInput = document.querySelector('#casheInputWaste');
+  const dateInput = document.querySelector('#casheInputDate'); // Додаємо отримання дати
+  const summaAwInput = document.querySelector('#summa-casherom-aw');
+  const dateAwInput = document.querySelector('#date-casherom-aw'); // Поле дати в AW-контейнері
 
-    if (wasteInput && summaAwInput) {
-      const wasteValue = parseFloat(wasteInput.value.trim());
-      if (!isNaN(wasteValue) && wasteValue > 0) {
-        summaAwInput.value = wasteValue;
-        summaAwInput.setAttribute('value', wasteValue);
-        summaAwInput.dispatchEvent(new Event('input', { bubbles: true }));
-        summaAwInput.dispatchEvent(new Event('change', { bubbles: true }));
-      }
+  if (wasteInput && summaAwInput) {
+    const wasteValue = parseFloat(wasteInput.value.trim());
+    if (!isNaN(wasteValue) && wasteValue > 0) {
+      summaAwInput.value = wasteValue;
+      summaAwInput.setAttribute('value', wasteValue);
+      summaAwInput.dispatchEvent(new Event('input', { bubbles: true }));
+      summaAwInput.dispatchEvent(new Event('change', { bubbles: true }));
     }
   }
+
+  if (dateInput && dateAwInput) { // Додаємо логіку для дати
+    const dateValue = dateInput.value;
+    if (dateValue) {
+      dateAwInput.value = dateValue;
+      dateAwInput.setAttribute('value', dateValue);
+      dateAwInput.dispatchEvent(new Event('input', { bubbles: true }));
+      dateAwInput.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+}
 
   const formState = {
     isFinanceVisible: false,
@@ -195,10 +207,6 @@
 
   // Делегування подій
   document.addEventListener('click', e => {
-    const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
-    const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
-
-    // Обробка кліку на клітинку таблиці
     if (e.target.matches('#tableCaheRom td')) {
       if (window.getSelection().toString()) return;
 
@@ -207,8 +215,14 @@
       renderFormsCasheRom('.dialog__header', '.dialog__body', data);
       renderContainerButtonsCasheRom();
       renderButtonsCasheRom();
-      renderContainerFinanceCasheRom();
-      renderContainerAwCasheRom();
+
+      // Спочатку створюємо контейнери в DOM
+      renderContainerFinanceCasheRom(); // Рендеримо finance-контейнер
+      renderContainerAwCasheRom();     // Рендеримо AW-контейнер
+
+      // Отримуємо контейнери після їх створення
+      const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
+      const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
 
       const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]');
       const articleValue = data[2]?.toLowerCase() || '';
@@ -221,7 +235,7 @@
         financeForm.build();
         financeForm.borderTopOn();
         updateFinanceFieldsCasherom();
-        toggleContainersCasherom(financeContainer, awContainer, true, false);
+        toggleContainersCasherom(financeContainer, awContainer, true, false); // Виклик після створення елементів
         formState.isFinanceVisible = true;
         formState.isAwVisible = false;
       } else {
@@ -235,8 +249,8 @@
         clearContainer(awContainer);
         awFormCashe.render(customStyles);
         awFormCashe.borderTopOn();
-        updateAwFieldsCasherom(); // Автоматична вставка значень для AW
-        toggleContainersCasherom(financeContainer, awContainer, false, true);
+        updateAwFieldsCasherom();
+        toggleContainersCasherom(financeContainer, awContainer, false, true); // Виклик після створення елементів
         formState.isAwVisible = true;
         formState.isFinanceVisible = false;
       }
@@ -268,6 +282,8 @@
 
     // Обробка кліку на кнопку Finance
     if (e.target.matches('.modal-casherom__btn--finance')) {
+      const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
+      const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
       const financeForm = new FinanceFormBuilder('casherom', '#finMainForma', '[data-cashe-rom-finance-container]');
 
       if (!formState.isFinanceVisible) {
@@ -289,11 +305,8 @@
 
     // Обробка кліку на кнопку AW
     if (e.target.matches('.modal-casherom__btn--arriwalwaste')) {
-      if (!awContainer) {
-        console.error('AW container not found');
-        return;
-      }
-
+      const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
+      const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
       const awFormCashe = new AWFormBuilder('casherom-aw', '#AwMainForma', '[data-cashe-rom-aw-container]');
       const customStyles = {
         awBody: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' },
@@ -304,7 +317,7 @@
         clearContainer(awContainer);
         awFormCashe.render(customStyles);
         awFormCashe.borderTopOn();
-        updateAwFieldsCasherom(); // Вставка значень при ручному відкритті
+        updateAwFieldsCasherom();
         toggleContainersCasherom(financeContainer, awContainer, false, true);
         formState.isAwVisible = true;
         formState.isFinanceVisible = false;
@@ -317,5 +330,6 @@
       }
     }
   });
+
 </script>
 

@@ -1,4 +1,11 @@
 <script>
+  // Визначення customStyles у глобальній області видимості
+  const customStyles = {
+    awBody: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' },
+    awButtonsContainer: { gridColumn: 'span 2', alignSelf: 'end', marginBottom: '-7px' },
+    wasteField: { gridColumn: 'span 2' }
+  };
+
   // Ініціалізація DataTable для відображення даних
   function startDataTableCasherom() {
     btnCasheromInsert.disabled = true;
@@ -189,29 +196,25 @@
     const articleInput = document.querySelector('#casheInputArticle');
     const wasteAwInput = document.querySelector('#waste-casherom-aw');
 
-    // Конфігураційний об'єкт із ключами в нижньому регістрі
     const phoneConfig = {
       '0674021578': 'Київстар 0674021578',
       '0675042079': 'Київстар 0675042079',
       'zadarma': 'Задарма Zadarma'
-      // Додайте інші номери та значення за потреби
     };
 
-    // Перевірка входження ключів із нечутливістю до регістру
     if (articleInput && wasteAwInput) {
-      const articleValue = articleInput.value.trim().toLowerCase(); // Приводимо введення до нижнього регістру
+      const articleValue = articleInput.value.trim().toLowerCase();
       for (const [key, value] of Object.entries(phoneConfig)) {
-        if (articleValue.includes(key.toLowerCase())) { // Порівняння в нижньому регістрі
+        if (articleValue.includes(key.toLowerCase())) {
           wasteAwInput.value = value;
           wasteAwInput.setAttribute('value', value);
           wasteAwInput.dispatchEvent(new Event('input', { bubbles: true }));
           wasteAwInput.dispatchEvent(new Event('change', { bubbles: true }));
-          break; // Зупиняємо цикл після першого збігу
+          break;
         }
       }
     }
 
-    // Логіка для суми
     if (wasteInput && summaAwInput) {
       const wasteValue = parseFloat(wasteInput.value.trim());
       if (!isNaN(wasteValue) && wasteValue > 0) {
@@ -222,7 +225,6 @@
       }
     }
 
-    // Логіка для дати
     if (dateInput && dateAwInput) {
       const dateValue = dateInput.value;
       if (dateValue) {
@@ -270,18 +272,19 @@
         formState.isAwVisible = false;
       } else {
         const awFormCashe = new AWFormBuilder('casherom-aw', '#AwMainForma', '[data-cashe-rom-aw-container]');
-        const customStyles = {
-          awBody: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' },
-          awButtonsContainer: { gridColumn: 'span 3', alignSelf: 'end', marginBottom: '-7px' }
-        };
-
         clearContainer(awContainer);
-        awFormCashe.render(customStyles);
+        awFormCashe.render(customStyles); // Використовуємо глобальний customStyles
         awFormCashe.borderTopOn();
         updateAwFieldsCasherom();
         toggleContainersCasherom(financeContainer, awContainer, false, true);
         formState.isAwVisible = true;
         formState.isFinanceVisible = false;
+
+        // Явне застосування стилю до поля "Стаття витрат"
+        const wasteField = document.querySelector('#waste-casherom-aw').parentElement;
+        if (wasteField) {
+          wasteField.style.gridColumn = 'span 2';
+        }
       }
 
       const setCashRom = () => {
@@ -335,19 +338,21 @@
       const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
       const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
       const awFormCashe = new AWFormBuilder('casherom-aw', '#AwMainForma', '[data-cashe-rom-aw-container]');
-      const customStyles = {
-        awBody: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' },
-        awButtonsContainer: { gridColumn: 'span 3', alignSelf: 'end', marginBottom: '-7px' }
-      };
 
       if (!formState.isAwVisible) {
         clearContainer(awContainer);
-        awFormCashe.render(customStyles);
+        awFormCashe.render(customStyles); // Використовуємо глобальний customStyles
         awFormCashe.borderTopOn();
         updateAwFieldsCasherom();
         toggleContainersCasherom(financeContainer, awContainer, false, true);
         formState.isAwVisible = true;
         formState.isFinanceVisible = false;
+
+        // Явне застосування стилю до поля "Стаття витрат"
+        const wasteField = document.querySelector('#waste-casherom-aw').parentElement;
+        if (wasteField) {
+          wasteField.style.gridColumn = 'span 2';
+        }
       } else {
         awFormCashe.none();
         awFormCashe.borderTopOff();

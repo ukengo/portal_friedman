@@ -88,9 +88,8 @@
     const summaInput = document.querySelector('#summafin-casherom');
     const dateInput = document.querySelector('#casheInputDate');
     const dateOplInput = document.querySelector('#dateoplfin-casherom');
-    const oznakaInput = document.querySelector('#priznakfin-casherom'); // Змінено на правильний селектор
+    const oznakaInput = document.querySelector('#priznakfin-casherom');
 
-    // Перевірка тільки обов’язкових елементів
     if (!articleInput || !projectInput || !primInput || !ispoluCheckbox || !wasteInput || !arrivalInput || !summaInput || !dateInput || !dateOplInput) {
       console.error('Один або кілька обов’язкових елементів не знайдені!');
       return;
@@ -109,7 +108,7 @@
     summaInput.value = '';
     dateOplInput.value = '';
     ispoluCheckbox.checked = false;
-    if (oznakaInput) oznakaInput.value = ''; // Очищаємо, якщо елемент є
+    if (oznakaInput) oznakaInput.value = '';
 
     const inspectors = extractInspectorsCasherom(localStorage.getItem('dataInspektorZU'));
     const keywordsConfig = {
@@ -151,7 +150,6 @@
       }
     }
 
-    // Завжди вставляємо "гот", якщо поле існує
     if (oznakaInput) {
       oznakaInput.value = 'гот';
       oznakaInput.setAttribute('value', 'гот');
@@ -182,13 +180,38 @@
     }
   }
 
-  // Оновлення полів для AW-контейнера
+  // Оновлення полів для AW-контейнера з нечутливістю до регістру
   function updateAwFieldsCasherom() {
     const wasteInput = document.querySelector('#casheInputWaste');
     const dateInput = document.querySelector('#casheInputDate');
     const summaAwInput = document.querySelector('#summa-casherom-aw');
     const dateAwInput = document.querySelector('#date-casherom-aw');
+    const articleInput = document.querySelector('#casheInputArticle');
+    const wasteAwInput = document.querySelector('#waste-casherom-aw');
 
+    // Конфігураційний об'єкт із ключами в нижньому регістрі
+    const phoneConfig = {
+      '0674021578': 'Київстар 0674021578',
+      '0675042079': 'Київстар 0675042079',
+      'zadarma': 'Задарма Zadarma'
+      // Додайте інші номери та значення за потреби
+    };
+
+    // Перевірка входження ключів із нечутливістю до регістру
+    if (articleInput && wasteAwInput) {
+      const articleValue = articleInput.value.trim().toLowerCase(); // Приводимо введення до нижнього регістру
+      for (const [key, value] of Object.entries(phoneConfig)) {
+        if (articleValue.includes(key.toLowerCase())) { // Порівняння в нижньому регістрі
+          wasteAwInput.value = value;
+          wasteAwInput.setAttribute('value', value);
+          wasteAwInput.dispatchEvent(new Event('input', { bubbles: true }));
+          wasteAwInput.dispatchEvent(new Event('change', { bubbles: true }));
+          break; // Зупиняємо цикл після першого збігу
+        }
+      }
+    }
+
+    // Логіка для суми
     if (wasteInput && summaAwInput) {
       const wasteValue = parseFloat(wasteInput.value.trim());
       if (!isNaN(wasteValue) && wasteValue > 0) {
@@ -199,6 +222,7 @@
       }
     }
 
+    // Логіка для дати
     if (dateInput && dateAwInput) {
       const dateValue = dateInput.value;
       if (dateValue) {

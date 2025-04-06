@@ -1,5 +1,3 @@
-
-
 <script>
   // Ініціалізація DataTable для відображення даних
   function startDataTableCasherom() {
@@ -90,8 +88,11 @@
     const summaInput = document.querySelector('#summafin-casherom');
     const dateInput = document.querySelector('#casheInputDate');
     const dateOplInput = document.querySelector('#dateoplfin-casherom');
+    const oznakaInput = document.querySelector('#priznakfin-casherom'); // Змінено на правильний селектор
 
+    // Перевірка тільки обов’язкових елементів
     if (!articleInput || !projectInput || !primInput || !ispoluCheckbox || !wasteInput || !arrivalInput || !summaInput || !dateInput || !dateOplInput) {
+      console.error('Один або кілька обов’язкових елементів не знайдені!');
       return;
     }
 
@@ -108,6 +109,7 @@
     summaInput.value = '';
     dateOplInput.value = '';
     ispoluCheckbox.checked = false;
+    if (oznakaInput) oznakaInput.value = ''; // Очищаємо, якщо елемент є
 
     const inspectors = extractInspectorsCasherom(localStorage.getItem('dataInspektorZU'));
     const keywordsConfig = {
@@ -149,6 +151,14 @@
       }
     }
 
+    // Завжди вставляємо "гот", якщо поле існує
+    if (oznakaInput) {
+      oznakaInput.value = 'гот';
+      oznakaInput.setAttribute('value', 'гот');
+      oznakaInput.dispatchEvent(new Event('input', { bubbles: true }));
+      oznakaInput.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
     const wasteValue = parseFloat(wasteInput.value.trim());
     const arrivalValue = parseFloat(arrivalInput.value.trim());
     if (!isNaN(wasteValue) && wasteValue > 0) {
@@ -174,31 +184,31 @@
 
   // Оновлення полів для AW-контейнера
   function updateAwFieldsCasherom() {
-  const wasteInput = document.querySelector('#casheInputWaste');
-  const dateInput = document.querySelector('#casheInputDate'); // Додаємо отримання дати
-  const summaAwInput = document.querySelector('#summa-casherom-aw');
-  const dateAwInput = document.querySelector('#date-casherom-aw'); // Поле дати в AW-контейнері
+    const wasteInput = document.querySelector('#casheInputWaste');
+    const dateInput = document.querySelector('#casheInputDate');
+    const summaAwInput = document.querySelector('#summa-casherom-aw');
+    const dateAwInput = document.querySelector('#date-casherom-aw');
 
-  if (wasteInput && summaAwInput) {
-    const wasteValue = parseFloat(wasteInput.value.trim());
-    if (!isNaN(wasteValue) && wasteValue > 0) {
-      summaAwInput.value = wasteValue;
-      summaAwInput.setAttribute('value', wasteValue);
-      summaAwInput.dispatchEvent(new Event('input', { bubbles: true }));
-      summaAwInput.dispatchEvent(new Event('change', { bubbles: true }));
+    if (wasteInput && summaAwInput) {
+      const wasteValue = parseFloat(wasteInput.value.trim());
+      if (!isNaN(wasteValue) && wasteValue > 0) {
+        summaAwInput.value = wasteValue;
+        summaAwInput.setAttribute('value', wasteValue);
+        summaAwInput.dispatchEvent(new Event('input', { bubbles: true }));
+        summaAwInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+
+    if (dateInput && dateAwInput) {
+      const dateValue = dateInput.value;
+      if (dateValue) {
+        dateAwInput.value = dateValue;
+        dateAwInput.setAttribute('value', dateValue);
+        dateAwInput.dispatchEvent(new Event('input', { bubbles: true }));
+        dateAwInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     }
   }
-
-  if (dateInput && dateAwInput) { // Додаємо логіку для дати
-    const dateValue = dateInput.value;
-    if (dateValue) {
-      dateAwInput.value = dateValue;
-      dateAwInput.setAttribute('value', dateValue);
-      dateAwInput.dispatchEvent(new Event('input', { bubbles: true }));
-      dateAwInput.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-  }
-}
 
   const formState = {
     isFinanceVisible: false,
@@ -216,30 +226,25 @@
       renderContainerButtonsCasheRom();
       renderButtonsCasheRom();
 
-      // Спочатку створюємо контейнери в DOM
-      renderContainerFinanceCasheRom(); // Рендеримо finance-контейнер
-      renderContainerAwCasheRom();     // Рендеримо AW-контейнер
+      renderContainerFinanceCasheRom();
+      renderContainerAwCasheRom();
 
-      // Отримуємо контейнери після їх створення
       const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
       const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
 
       const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]');
       const articleValue = data[2]?.toLowerCase() || '';
 
-      // Перевірка умов для finance або AW
       if (extractProjectNumberCasherom(articleValue)) {
-        // Відкриття finance-контейнера
         const financeForm = new FinanceFormBuilder('casherom', '#finMainForma', '[data-cashe-rom-finance-container]');
         clearContainer(financeContainer);
         financeForm.build();
         financeForm.borderTopOn();
         updateFinanceFieldsCasherom();
-        toggleContainersCasherom(financeContainer, awContainer, true, false); // Виклик після створення елементів
+        toggleContainersCasherom(financeContainer, awContainer, true, false);
         formState.isFinanceVisible = true;
         formState.isAwVisible = false;
       } else {
-        // Автоматичне відкриття AW-контейнера
         const awFormCashe = new AWFormBuilder('casherom-aw', '#AwMainForma', '[data-cashe-rom-aw-container]');
         const customStyles = {
           awBody: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '5px' },
@@ -250,7 +255,7 @@
         awFormCashe.render(customStyles);
         awFormCashe.borderTopOn();
         updateAwFieldsCasherom();
-        toggleContainersCasherom(financeContainer, awContainer, false, true); // Виклик після створення елементів
+        toggleContainersCasherom(financeContainer, awContainer, false, true);
         formState.isAwVisible = true;
         formState.isFinanceVisible = false;
       }
@@ -280,7 +285,6 @@
       }
     }
 
-    // Обробка кліку на кнопку Finance
     if (e.target.matches('.modal-casherom__btn--finance')) {
       const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
       const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
@@ -303,7 +307,6 @@
       }
     }
 
-    // Обробка кліку на кнопку AW
     if (e.target.matches('.modal-casherom__btn--arriwalwaste')) {
       const financeContainer = document.querySelector('[data-cashe-rom-finance-container]');
       const awContainer = document.querySelector('[data-cashe-rom-aw-container]');
@@ -330,6 +333,4 @@
       }
     }
   });
-
 </script>
-

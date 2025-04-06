@@ -1,7 +1,6 @@
 <script>
   // Базовий клас з загальними функціями
-class FormBuilderBase {
-  // Конструктор базового класу
+  class FormBuilderBase {
   constructor(name, templateSelector, containerSelector) {
     this.name = name;
     this.templateSelector = templateSelector;
@@ -11,21 +10,22 @@ class FormBuilderBase {
     this.colors = {
       borderTopColor: '#dee2e6',
     };
+    this.eventHandlers = {};
   }
 
-  // Метод для очищення контейнера
+  // Очищення контейнера
   none() {
     if (this.container) {
       this.container.innerHTML = '';
     } else {
-      console.error('Контейнер не знайдено');
+      console.error('Template or container not found');
     }
   }
 
   // Додавання ідентифікаторів до елементів
   addIdToElements(elements) {
     const collection = this.container.querySelectorAll(elements);
-    collection.forEach((element, index) => {
+    collection.forEach((element) => {
       if (element.id) {
         const id = `${element.id}-${this.name}`;
         element.id = id;
@@ -50,10 +50,32 @@ class FormBuilderBase {
   // Перевірка наявності шаблону та контейнера
   checkTemplateAndContainer() {
     if (!this.template || !this.container) {
-      console.error('Шаблон або контейнер не знайдено');
+      console.error('Template or container not found');
       return false;
     }
     return true;
+  }
+
+  // Рендеринг шаблону
+  renderTemplate(customStyles = {}) {
+    if (this.checkTemplateAndContainer()) {
+      const clone = this.template.content.cloneNode(true);
+      this.container.appendChild(clone);
+      if (this.name !== this.defaultName) {
+        this.addIdToElements('input, select, datalist, button');
+      }
+      this.applyCustomStyles(customStyles);
+    }
+  }
+
+  // Застосування користувацьких стилів (загальний метод, який можна перевизначити)
+  applyCustomStyles(customStyles) {
+    // Базова реалізація порожня, дочірні класи можуть перевизначити
+  }
+
+  // Реєстрація обробників подій
+  on(eventName, callback) {
+    this.eventHandlers[eventName] = callback;
   }
 }
 </script>

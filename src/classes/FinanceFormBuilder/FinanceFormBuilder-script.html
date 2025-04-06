@@ -1,259 +1,211 @@
 <script>
-  class FinanceFormBuilder {
-    static arrFinMulti = [];
-    static instances = []; // Масив для зберігання всіх екземплярів
+  class FinanceFormBuilder extends FormBuilderBase {
+  static arrFinMulti = [];
+  static instances = [];
 
-    attributes = {
-      modContainerAttribute: 'data-cashe-rom-mod-container',
-      casheFinOverlayAttribute: 'cashe-fin-overlay',
-      buttonPMinusAttribute: 'data-js-fin-button-minus',
-      casheFinOverlay: 'cashe-fin-overlay',
-    };
+  defaultName = 'finance';
 
-    selectors = {
-      form: '[data-form-finance]',
-      blockPlusMinus: '[data-js-fin-button-plus-minus]',
-      financeContainer: '[data-cashe-rom-finance-container]',
-      modContainer: `[${this.attributes.modContainerAttribute}]`,
-      buttonPlus: '[data-js-fin-button-plus]',
-      buttonPMinus: `[${this.attributes.buttonPMinusAttribute}]`,
-      buttonAdd: '[data-js-fin-button-add]',
-      buttonMod: '[data-js-fin-button-mod]',
-      casheFinOverlay: `[${this.attributes.casheFinOverlayAttribute}]`,
-      nameSummafin: '[name="summafin"]',
-      namePriznakfin: '[name="priznakfin"]',
-      nameDateoplfin: '[name="dateoplfin"]',
-      dateRegular: '[data-date-regular]',
-      dateRegularPlus: '[data-date-regular-plus]',
-      dateRegularMinus: '[data-date-regular-minus]',
-      finButtonsBlock: '[fin-buttons-block]',
-    };
+  attributes = {
+    modContainerAttribute: 'data-cashe-rom-mod-container',
+    casheFinOverlayAttribute: 'cashe-fin-overlay',
+    buttonPMinusAttribute: 'data-js-fin-button-minus',
+    casheFinOverlay: 'cashe-fin-overlay',
+  };
 
-    colors = {
-      borderTopColor: '#dee2e6',
-    };
+  selectors = {
+    form: '[data-form-finance]',
+    blockPlusMinus: '[data-js-fin-button-plus-minus]',
+    financeContainer: '[data-cashe-rom-finance-container]',
+    modContainer: `[${this.attributes.modContainerAttribute}]`,
+    buttonPlus: '[data-js-fin-button-plus]',
+    buttonPMinus: `[${this.attributes.buttonPMinusAttribute}]`,
+    buttonAdd: '[data-js-fin-button-add]',
+    buttonMod: '[data-js-fin-button-mod]',
+    casheFinOverlay: `[${this.attributes.casheFinOverlayAttribute}]`,
+    nameSummafin: '[name="summafin"]',
+    namePriznakfin: '[name="priznakfin"]',
+    nameDateoplfin: '[name="dateoplfin"]',
+    dateRegular: '[data-date-regular]',
+    dateRegularPlus: '[data-date-regular-plus]',
+    dateRegularMinus: '[data-date-regular-minus]',
+    finButtonsBlock: '[fin-buttons-block]',
+  };
 
-    constructor(name, templateSelector, containerSelector) {
-      this.name = name;
-      this.templateSelector = templateSelector;
-      this.containerSelector = containerSelector;
-      this.template = document.querySelector(templateSelector);
-      this.container = document.querySelector(containerSelector);
-      FinanceFormBuilder.instances.push(this); // Додаємо екземпляр до масиву
-    }
+  constructor(name, templateSelector, containerSelector) {
+    super(name, templateSelector, containerSelector);
+    FinanceFormBuilder.instances.push(this);
+  }
 
-    build() {
-      if (this.template && this.container) {
-        const clone = this.template.content.cloneNode(true);
-        this.container.appendChild(clone);
-        this.name !== 'finance' && this.addIdToElements('input, select, datalist, button');
-        this.addClassToForm();
-        const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
+  build() {
+    if (this.checkTemplateAndContainer()) {
+      const clone = this.template.content.cloneNode(true);
+      this.container.appendChild(clone);
+      if (this.name !== this.defaultName) this.addIdToElements('input, select, datalist, button');
+      this.addClassToForm();
 
+      const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
+      instance.inputToFocus(this.selectors.nameSummafin, this.selectors.namePriznakfin, 'гот');
+      instance.todayDate(this.selectors.nameDateoplfin);
+      instance.datePlusMinusDays(this.selectors.nameDateoplfin, this.selectors.dateRegular, this.selectors.dateRegularPlus, this.selectors.dateRegularMinus);
+      this.buttonsClearFinanceEvents(instance);
 
-        instance.inputToFocus(this.selectors.nameSummafin, this.selectors.namePriznakfin, 'гот');
-        instance.todayDate(this.selectors.nameDateoplfin);
-        instance.datePlusMinusDays(this.selectors.nameDateoplfin, this.selectors.dateRegular, this.selectors.dateRegularPlus, this.selectors.dateRegularMinus);
-        this.buttonsClearFinanceEvents(instance);
+      this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinus);
+      this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
+      this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus, this.btnAdd);
 
-        this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinus);
-        this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
-        this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus, this.btnAdd);
-
-        this.btnMod = this.container.querySelector(this.selectors.buttonMod);
-        this.buttonMultipleFinanceMod(this.btnMod);
-        this.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`; // Ініціалізація кнопки
-        this.buttonMultipleFinanceAdd();
-      } else {
-        console.error('Template or container not found');
-      }
-    }
-
-    none() {
-      if (this.container) {
-        this.container.innerHTML = '';
-      } else {
-        console.error('Template or container not found');
-      }
-    }
-
-    addIdToElements(elements) {
-      const collection = this.container.querySelectorAll(elements);
-      collection.forEach((element, index) => {
-        if (element.id) {
-          const id = `${element.id}-${this.name}`;
-          element.id = id;
-          if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
-            const label = element.previousElementSibling;
-            if (label) label.htmlFor = id;
-          }
-        }
-      });
-    }
-
-    addClassToForm() {
-      const elementForm = this.container.querySelector('form');
-      const elementFormClassList = elementForm.classList.toString();
-      elementForm.classList.add(`${elementFormClassList}-${this.name}`);
-    }
-
-    // Метод для оновлення тексту кнопки "Add" у всіх екземплярах
-    static updateAllAddButtons() {
-      FinanceFormBuilder.instances.forEach(instance => {
-        if (instance.btnAdd) {
-          instance.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
-        }
-      });
-    }
-
-    // Події на кнопках
-    buttonsClearFinanceEvents(instance) {
-      let btnClearFinanceId = '#btnClearFinance';
-      btnClearFinanceId = this.name !== 'finance' ? `#btnClearFinance-${this.name}` : `#btnClearFinance`;
-      this.container.querySelector(btnClearFinanceId).addEventListener('click', () => instance.clearRecords());
-    }
-
-    buttonsMultipleFinancePlusMinus(instance, btnPlusMinus, btnAdd) {
-      btnPlusMinus.forEach((btn) => {
-        btn.addEventListener('click', e => {
-          let obj = instance.formaDataObj();
-          if (obj.proektfin) {
-            obj.summafin *= (e.target.hasAttribute(this.attributes.buttonPMinusAttribute) ? -1 : +1);
-            FinanceFormBuilder.arrFinMulti.push(obj);
-            FinanceFormBuilder.updateAllAddButtons(); // Оновлюємо всі кнопки "Add"
-          }
-        });
-      });
-    }
-
-    buttonMultipleFinanceAdd() {
-      this.btnAdd.addEventListener('click', () => {
-        if (FinanceFormBuilder.arrFinMulti && FinanceFormBuilder.arrFinMulti.length) {
-          this.btnAdd.disabled = true;
-          this.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
-          google.script.run.withSuccessHandler(() => {
-            google.script.run.withSuccessHandler((data) => {
-              localStorage.setItem('dataFin', JSON.stringify(data));
-            }).getRecordsFin();
-            FinanceFormBuilder.arrFinMulti = [];
-            FinanceFormBuilder.updateAllAddButtons(); // Оновлюємо після очищення
-            this.btnAdd.disabled = false;
-            btnTableFinance();
-          }).AddRecordFinMultiple(FinanceFormBuilder.arrFinMulti);
-        } else {
-          this.btnAdd.innerText = 'Add';
-          this.btnAdd.disabled = false;
-        }
-      });
-    }
-
-    buttonMultipleFinanceMod(btnAdd) {
-      btnAdd.addEventListener('click', (event) => {
-        const parentElement = event.currentTarget.closest(this.selectors.finButtonsBlock);
-        const financeContainer = parentElement.nextElementSibling;
-
-        if (!financeContainer) {
-          console.error('Найближчий financeContainer не знайдено');
-          return;
-        }
-
-        let modContainer = financeContainer.querySelector(this.selectors.modContainer);
-
-        if (!FinanceFormBuilder.arrFinMulti.length) {
-          alert('Пусто');
-          return false;
-        }
-
-        if (modContainer) {
-          modContainer.remove();
-        }
-
-        modContainer = document.createElement('div');
-        modContainer.setAttribute(this.attributes.modContainerAttribute, '');
-        modContainer.style.display = 'block';
-
-        this.renderOverlay(modContainer, financeContainer);
-        financeContainer.appendChild(modContainer);
-
-        const tableMod = new CreateTableCross(FinanceFormBuilder.arrFinMulti, this.selectors.modContainer, this);
-        tableMod.createTableBodyCross();
-        tableMod.eventButtonsCross();
-        tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
-
-        const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
-
-        new Button({
-          text: 'Clear',
-          classes: ['btn', 'btn-danger'],
-          onClick: () => {
-            FinanceFormBuilder.arrFinMulti.length = 0;
-            modContainer.remove();
-            FinanceFormBuilder.updateAllAddButtons(); // Оновлюємо всі кнопки після очищення
-            const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
-            if (overlayToRemove) overlayToRemove.remove();
-          },
-          parentElement: financeContainer.querySelector(this.selectors.modContainer),
-        });
-
-        this.setupEscapeHandler(modContainer);
-      });
-    }
-
-    renderOverlay(modContainer, financeContainer) {
-      let overlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
-      if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.classList.add(this.attributes.casheFinOverlay);
-        overlay.setAttribute(this.attributes.casheFinOverlayAttribute, '');
-
-        overlay.addEventListener('mousedown', () => {
-          overlay.remove();
-          modContainer.remove();
-        });
-
-        financeContainer.appendChild(overlay);
-      }
-    }
-
-    setupEscapeHandler(modContainer) {
-      const escapeHandler = (event) => {
-        if (event.key === 'Escape' || event.keyCode === 27) {
-          if (modContainer && modContainer.style.display !== 'none') {
-            event.preventDefault();
-            event.stopPropagation();
-            modContainer.remove();
-            const overlay = document.querySelector(this.selectors.casheFinOverlay);
-            if (overlay) overlay.remove();
-            document.removeEventListener('keydown', escapeHandler);
-          }
-        }
-      };
-
-      document.removeEventListener('keydown', escapeHandler);
-      document.addEventListener('keydown', escapeHandler);
-
-      const cleanup = () => {
-        document.removeEventListener('keydown', escapeHandler);
-      };
-
-      const overlay = document.querySelector(this.selectors.casheFinOverlay);
-      if (overlay) {
-        overlay.addEventListener('mousedown', cleanup, { once: true });
-      }
-
-      const clearButton = modContainer.querySelector('.btn-danger');
-      if (clearButton) {
-        clearButton.addEventListener('click', cleanup, { once: true });
-      }
-    }
-
-    borderTopOn() {
-      this.container.style.borderTop = `1px solid ${this.colors.borderTopColor}`;
-    }
-
-    borderTopOff() {
-      this.container.style.borderTop = '0';
+      this.btnMod = this.container.querySelector(this.selectors.buttonMod);
+      this.buttonMultipleFinanceMod(this.btnMod);
+      this.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
+      this.buttonMultipleFinanceAdd();
     }
   }
 
+  addClassToForm() {
+    const elementForm = this.container.querySelector('form');
+    const elementFormClassList = elementForm.classList.toString();
+    elementForm.classList.add(`${elementFormClassList}-${this.name}`);
+  }
+
+  static updateAllAddButtons() {
+    FinanceFormBuilder.instances.forEach(instance => {
+      if (instance.btnAdd) {
+        instance.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
+      }
+    });
+  }
+
+  buttonsClearFinanceEvents(instance) {
+    let btnClearFinanceId = '#btnClearFinance';
+    btnClearFinanceId = this.name !== this.defaultName ? `#btnClearFinance-${this.name}` : `#btnClearFinance`;
+    this.container.querySelector(btnClearFinanceId).addEventListener('click', () => instance.clearRecords());
+  }
+
+  buttonsMultipleFinancePlusMinus(instance, btnPlusMinus, btnAdd) {
+    btnPlusMinus.forEach((btn) => {
+      btn.addEventListener('click', e => {
+        let obj = instance.formaDataObj();
+        if (obj.proektfin) {
+          obj.summafin *= (e.target.hasAttribute(this.attributes.buttonPMinusAttribute) ? -1 : +1);
+          FinanceFormBuilder.arrFinMulti.push(obj);
+          FinanceFormBuilder.updateAllAddButtons();
+        }
+      });
+    });
+  }
+
+  buttonMultipleFinanceAdd() {
+    this.btnAdd.addEventListener('click', () => {
+      if (FinanceFormBuilder.arrFinMulti && FinanceFormBuilder.arrFinMulti.length) {
+        this.btnAdd.disabled = true;
+        this.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
+        google.script.run.withSuccessHandler(() => {
+          google.script.run.withSuccessHandler((data) => {
+            localStorage.setItem('dataFin', JSON.stringify(data));
+          }).getRecordsFin();
+          FinanceFormBuilder.arrFinMulti = [];
+          FinanceFormBuilder.updateAllAddButtons();
+          this.btnAdd.disabled = false;
+          btnTableFinance();
+        }).AddRecordFinMultiple(FinanceFormBuilder.arrFinMulti);
+      } else {
+        this.btnAdd.innerText = 'Add';
+        this.btnAdd.disabled = false;
+      }
+    });
+  }
+
+  buttonMultipleFinanceMod(btnAdd) {
+    btnAdd.addEventListener('click', (event) => {
+      const parentElement = event.currentTarget.closest(this.selectors.finButtonsBlock);
+      const financeContainer = parentElement.nextElementSibling;
+
+      if (!financeContainer) {
+        console.error('Найближчий financeContainer не знайдено');
+        return;
+      }
+
+      let modContainer = financeContainer.querySelector(this.selectors.modContainer);
+
+      if (!FinanceFormBuilder.arrFinMulti.length) {
+        alert('Пусто');
+        return false;
+      }
+
+      if (modContainer) modContainer.remove();
+
+      modContainer = document.createElement('div');
+      modContainer.setAttribute(this.attributes.modContainerAttribute, '');
+      modContainer.style.display = 'block';
+
+      this.renderOverlay(modContainer, financeContainer);
+      financeContainer.appendChild(modContainer);
+
+      const tableMod = new CreateTableCross(FinanceFormBuilder.arrFinMulti, this.selectors.modContainer, this);
+      tableMod.createTableBodyCross();
+      tableMod.eventButtonsCross();
+      tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+
+      const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+
+      new Button({
+        text: 'Clear',
+        classes: ['btn', 'btn-danger'],
+        onClick: () => {
+          FinanceFormBuilder.arrFinMulti.length = 0;
+          modContainer.remove();
+          FinanceFormBuilder.updateAllAddButtons();
+          const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
+          if (overlayToRemove) overlayToRemove.remove();
+        },
+        parentElement: financeContainer.querySelector(this.selectors.modContainer),
+      });
+
+      this.setupEscapeHandler(modContainer);
+    });
+  }
+
+  renderOverlay(modContainer, financeContainer) {
+    let overlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.classList.add(this.attributes.casheFinOverlay);
+      overlay.setAttribute(this.attributes.casheFinOverlayAttribute, '');
+
+      overlay.addEventListener('mousedown', () => {
+        overlay.remove();
+        modContainer.remove();
+      });
+
+      financeContainer.appendChild(overlay);
+    }
+  }
+
+  setupEscapeHandler(modContainer) {
+    const escapeHandler = (event) => {
+      if (event.key === 'Escape' || event.keyCode === 27) {
+        if (modContainer && modContainer.style.display !== 'none') {
+          event.preventDefault();
+          event.stopPropagation();
+          modContainer.remove();
+          const overlay = document.querySelector(this.selectors.casheFinOverlay);
+          if (overlay) overlay.remove();
+          document.removeEventListener('keydown', escapeHandler);
+        }
+      }
+    };
+
+    document.removeEventListener('keydown', escapeHandler);
+    document.addEventListener('keydown', escapeHandler);
+
+    const cleanup = () => {
+      document.removeEventListener('keydown', escapeHandler);
+    };
+
+    const overlay = document.querySelector(this.selectors.casheFinOverlay);
+    if (overlay) overlay.addEventListener('mousedown', cleanup, { once: true });
+
+    const clearButton = modContainer.querySelector('.btn-danger');
+    if (clearButton) clearButton.addEventListener('click', cleanup, { once: true });
+  }
+}
 </script>

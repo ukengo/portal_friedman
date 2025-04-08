@@ -1,19 +1,19 @@
 <script>
-
-  // обробка кнопки insert
-  const btnCasheromInsert = document.querySelector('.btn-casherom__insert')
+  // Глобальна змінна для кнопки вставки
+  const btnCasheromInsert = document.querySelector('.btn-casherom__insert');
+  
+  // Обробник кнопки вставки рядка
   btnCasheromInsert.addEventListener('click', () => {
     btnCasheromInsert.disabled = true;
-    const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'))
-    let emptyBelow = 0
-    for (i = casheRom2.length - 1; i > 0; i--) {
-      if (!casheRom2[i][1]) emptyBelow++
-      else break
+    const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'));
+    let emptyBelow = 0;
+    for (let i = casheRom2.length - 1; i > 0; i--) { // Додано 'let' для 'i'
+      if (!casheRom2[i][1]) emptyBelow++;
+      else break;
     }
     google.script.run.withSuccessHandler(() => {
       btnCasheromInsert.disabled = false;
-      startDataTableCasherom()
-    }).insertRowCasheRom((casheRom2.length - 2) - (emptyBelow))
-  })
-  
-</script>
+      startDataTableCasherom(); // Оновлення таблиці після вставки
+    }).insertRowCasheRom((casheRom2.length - 2) - emptyBelow);
+  });
+  </script>

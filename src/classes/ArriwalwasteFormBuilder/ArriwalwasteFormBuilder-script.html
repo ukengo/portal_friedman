@@ -1,4 +1,5 @@
 <script>
+
 class AWFormBuilder extends FormBuilderBase {
   defaultName = 'aw';
 
@@ -14,8 +15,6 @@ class AWFormBuilder extends FormBuilderBase {
 
   selectors = {
     form: '[data-form-aw]',
-    awBody: '.aw-body',
-    awButtonsContainer: '.aw-buttons-container',
     dateInput: '#date-casherom-aw'
   };
 
@@ -23,52 +22,32 @@ class AWFormBuilder extends FormBuilderBase {
     super(name, templateSelector, containerSelector);
   }
 
-  render(customStyles = {}) {
-    super.renderTemplate(customStyles);
-    const forms = this.container.querySelectorAll(this.selectors.form);
-    this.formInstances = Array.from(forms).map((form, index) => {
-      if (!form.id) {
-        form.id = `${this.name}-form-${index}`;
-      }
-      return new FormDataFromTables(`#${form.id}`);
-    });
+  render() {
+    super.renderTemplate();
+    this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form))
+      .map((form, index) => {
+        form.id = form.id || `${this.name}-form-${index}`;
+        return new FormDataFromTables(`#${form.id}`);
+      });
     this.initEventListeners();
     this.setDefaultDate();
   }
 
-  applyCustomStyles(customStyles) {
-    const awBody = this.container.querySelector(this.selectors.awBody);
-    const awButtonsContainer = this.container.querySelector(this.selectors.awButtonsContainer);
-
-    if (awBody && customStyles.awBody && Object.keys(customStyles.awBody).length > 0) {
-      Object.entries(customStyles.awBody).forEach(([property, value]) => {
-        awBody.style[property] = value;
-      });
-    }
-
-    if (awButtonsContainer && customStyles.awButtonsContainer && Object.keys(customStyles.awButtonsContainer).length > 0) {
-      Object.entries(customStyles.awButtonsContainer).forEach(([property, value]) => {
-        awButtonsContainer.style[property] = value;
-      });
-    }
-  }
-
   initEventListeners() {
-    const wasteButton = this.container.querySelector(`[${this.attributes.wasteButton}]`);
-    const arrivalButton = this.container.querySelector(`[${this.attributes.arrivalButton}]`);
-    const wasteTabButton = this.container.querySelector(`[${this.attributes.wasteTabButton}]`);
-    const arrivalTabButton = this.container.querySelector(`[${this.attributes.arrivalTabButton}]`);
-    const yesterdayButton = this.container.querySelector(`#${this.attributes.yesterdayButton}`);
-    const fridayButton = this.container.querySelector(`#${this.attributes.fridayButton}`);
-    const todayButton = this.container.querySelector(`#${this.attributes.todayButton}`);
+    const events = [
+      [`[${this.attributes.wasteButton}]`, this.handleWasteButtonClick],
+      [`[${this.attributes.arrivalButton}]`, this.handleArrivalButtonClick],
+      [`[${this.attributes.wasteTabButton}]`, this.handleWasteTabButtonClick],
+      [`[${this.attributes.arrivalTabButton}]`, this.handleArrivalTabButtonClick],
+      [`#${this.attributes.yesterdayButton}`, this.handleYesterdayButtonClick],
+      [`#${this.attributes.fridayButton}`, this.handleFridayButtonClick],
+      [`#${this.attributes.todayButton}`, this.handleTodayButtonClick]
+    ];
 
-    if (wasteButton) wasteButton.addEventListener('click', this.handleWasteButtonClick.bind(this));
-    if (arrivalButton) arrivalButton.addEventListener('click', this.handleArrivalButtonClick.bind(this));
-    if (wasteTabButton) wasteTabButton.addEventListener('click', this.handleWasteTabButtonClick.bind(this));
-    if (arrivalTabButton) arrivalTabButton.addEventListener('click', this.handleArrivalTabButtonClick.bind(this));
-    if (yesterdayButton) yesterdayButton.addEventListener('click', this.handleYesterdayButtonClick.bind(this));
-    if (fridayButton) fridayButton.addEventListener('click', this.handleFridayButtonClick.bind(this));
-    if (todayButton) todayButton.addEventListener('click', this.handleTodayButtonClick.bind(this));
+    events.forEach(([selector, handler]) => {
+      const element = this.container.querySelector(selector);
+      if (element) element.addEventListener('click', handler.bind(this));
+    });
   }
 
   setDefaultDate() {
@@ -77,69 +56,63 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   handleYesterdayButtonClick(event) {
-    const dateInput = this.container.querySelector(this.selectors.dateInput);
-    if (dateInput) yesterdayFridayToday1(' Y ', dateInput);
-    if (this.eventHandlers.yesterdayButton) this.eventHandlers.yesterdayButton(event);
+    this.setDate(' Y ');
+    this.eventHandlers.yesterdayButton?.(event);
   }
 
   handleFridayButtonClick(event) {
-    const dateInput = this.container.querySelector(this.selectors.dateInput);
-    if (dateInput) yesterdayFridayToday1('Fri', dateInput);
-    if (this.eventHandlers.fridayButton) this.eventHandlers.fridayButton(event);
+    this.setDate('Fri');
+    this.eventHandlers.fridayButton?.(event);
   }
 
   handleTodayButtonClick(event) {
+    this.setDate(' T ');
+    this.eventHandlers.todayButton?.(event);
+  }
+
+  setDate(type) {
     const dateInput = this.container.querySelector(this.selectors.dateInput);
-    if (dateInput) yesterdayFridayToday1(' T ', dateInput);
-    if (this.eventHandlers.todayButton) this.eventHandlers.todayButton(event);
+    if (dateInput) yesterdayFridayToday1(type, dateInput);
   }
 
   toggleButtons(disabled) {
-    const wasteButton = this.container.querySelector(`[${this.attributes.wasteButton}]`);
-    const arrivalButton = this.container.querySelector(`[${this.attributes.arrivalButton}]`);
-    if (wasteButton) wasteButton.disabled = disabled;
-    if (arrivalButton) arrivalButton.disabled = disabled;
+    const buttons = [
+      `[${this.attributes.wasteButton}]`,
+      `[${this.attributes.arrivalButton}]`
+    ];
+    buttons.forEach(selector => {
+      const button = this.container.querySelector(selector);
+      if (button) button.disabled = disabled;
+    });
   }
 
   handleWasteButtonClick(event) {
     const rowData = this.getRowData();
     const termkarVal = document.getElementById("termkar-casherom-aw")?.value;
 
-    if (!rowData[4] && !termkarVal) {
-      alert('Не заповнена стаття витрат');
-      return;
-    }
-
+    if (!rowData[4] && !termkarVal) return alert('Не заповнена стаття витрат');
     if (this.validateRowData(rowData)) return;
 
     this.toggleButtons(true);
     spinner("dataTableArriwalWaste");
 
-    if (!this.getTermKarData()[4]) {
-      google.script.run
-        .withSuccessHandler((result) => {
-          createTableArriwalWaste(result);
-          this.toggleButtons(false);
-          document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
-          this.clearForm();
-          document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-        })
-        .addNewRowWaste(rowData);
-    } else {
-      const termKarData = this.getTermKarData();
-      google.script.run.insertTermKar(termKarData);
-      google.script.run
-        .withSuccessHandler((result) => {
-          startDataWaste(result);
-          this.toggleButtons(false);
-          document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
-          this.clearForm();
-          document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-        })
-        .vReestrTerminalKarantin(termKarData);
-    }
+    const termKarData = this.getTermKarData();
+    const action = !termKarData[4]
+      ? google.script.run.addNewRowWaste(rowData)
+      : Promise.all([
+          google.script.run.insertTermKar(termKarData),
+          google.script.run.vReestrTerminalKarantin(termKarData)
+        ]).then(() => startDataWaste);
 
-    if (this.eventHandlers.wasteButton) this.eventHandlers.wasteButton(event);
+    action.withSuccessHandler(result => {
+      createTableArriwalWaste(result);
+      this.toggleButtons(false);
+      document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
+      this.clearForm();
+      document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
+    });
+
+    this.eventHandlers.wasteButton?.(event);
   }
 
   handleArrivalButtonClick(event) {
@@ -150,7 +123,7 @@ class AWFormBuilder extends FormBuilderBase {
     spinner("dataTableArriwalWaste");
 
     google.script.run
-      .withSuccessHandler((result) => {
+      .withSuccessHandler(result => {
         createTableArriwalWaste(result);
         document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
         this.clearForm();
@@ -160,12 +133,10 @@ class AWFormBuilder extends FormBuilderBase {
       .addNewRowArrival(rowData);
 
     google.script.run
-      .withSuccessHandler((result) => {
-        createTableArriwalWaste(result);
-      })
+      .withSuccessHandler(createTableArriwalWaste)
       .addNewTableArriwal(rowData);
 
-    if (this.eventHandlers.arrivalButton) this.eventHandlers.arrivalButton(event);
+    this.eventHandlers.arrivalButton?.(event);
   }
 
   handleWasteTabButtonClick(event) {
@@ -174,7 +145,7 @@ class AWFormBuilder extends FormBuilderBase {
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataWaste')));
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
-    if (this.eventHandlers.wasteTabButton) this.eventHandlers.wasteTabButton(event);
+    this.eventHandlers.wasteTabButton?.(event);
   }
 
   handleArrivalTabButtonClick(event) {
@@ -183,17 +154,28 @@ class AWFormBuilder extends FormBuilderBase {
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataArrival')));
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
-    if (this.eventHandlers.arrivalTabButton) this.eventHandlers.arrivalTabButton(event);
+    this.eventHandlers.arrivalTabButton?.(event);
   }
 
   getRowData() {
-    const date = document.getElementById("date-casherom-aw")?.value;
-    let summa = +document.getElementById("summa-casherom-aw")?.value || 0;
-    const summaPrivat = +document.getElementById("summaPrivat-casherom-aw")?.value || 0;
-    const costPrivat = +document.getElementById("costPrivat-casherom-aw")?.value || 0;
-    let forma = document.getElementById("forma-casherom-aw")?.value;
-    let firmaArrivalWaste = document.getElementById("firmaArrivalWaste-casherom-aw")?.value;
-    let waste = document.getElementById("waste-casherom-aw")?.value;
+    const fields = {
+      date: "date-casherom-aw",
+      summa: "summa-casherom-aw",
+      summaPrivat: "summaPrivat-casherom-aw",
+      costPrivat: "costPrivat-casherom-aw",
+      forma: "forma-casherom-aw",
+      firmaArrivalWaste: "firmaArrivalWaste-casherom-aw",
+      waste: "waste-casherom-aw"
+    };
+
+    const values = Object.fromEntries(
+      Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
+    );
+
+    let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
+    summa = +summa || 0;
+    summaPrivat = +summaPrivat || 0;
+    costPrivat = +costPrivat || 0;
 
     if (!summaPrivat && !summa) {
       summa = "";
@@ -215,43 +197,58 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   getTermKarData() {
-    const date = document.getElementById("date-casherom-aw")?.value;
-    const summa = document.getElementById("summa-casherom-aw")?.value;
-    const forma = document.getElementById("forma-casherom-aw")?.value;
-    const waste = document.getElementById("waste-casherom-aw")?.value;
-    const termkar = document.getElementById("termkar-casherom-aw")?.value;
-    const sftermkar = document.getElementById("sftermkar-casherom-aw")?.value;
+    const fields = {
+      date: "date-casherom-aw",
+      summa: "summa-casherom-aw",
+      forma: "forma-casherom-aw",
+      waste: "waste-casherom-aw",
+      termkar: "termkar-casherom-aw",
+      sftermkar: "sftermkar-casherom-aw"
+    };
 
-    return [date, summa * 1, forma, waste, termkar, sftermkar];
+    const values = Object.fromEntries(
+      Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
+    );
+
+    return [
+      values.date,
+      values.summa * 1,
+      values.forma,
+      values.waste,
+      values.termkar,
+      values.sftermkar
+    ];
   }
 
   validateRowData(rowData) {
-    if (rowData[4] === "Не заповнено ні одного поля суми") {
-      alert("Не заповнено ні одного поля суми");
-      return true;
-    }
-    if (rowData[4] === "Заповнені обидва поля суми") {
-      alert("Заповнені обидва поля суми");
-      return true;
-    }
-    if (rowData[4] === "Не заповнено вартості комісії приват") {
-      alert("Не заповнено вартості комісії приват");
-      return true;
-    }
-    if (rowData[4] === "Не заповнена ціна привату") {
-      alert("Не заповнена ціна привату");
+    const messages = {
+      "Не заповнено ні одного поля суми": "Не заповнено ні одного поля суми",
+      "Заповнені обидва поля суми": "Заповнені обидва поля суми",
+      "Не заповнено вартості комісії приват": "Не заповнено вартості комісії приват",
+      "Не заповнена ціна привату": "Не заповнена ціна привату"
+    };
+
+    if (messages[rowData[4]]) {
+      alert(messages[rowData[4]]);
       return true;
     }
     return false;
   }
 
   clearForm() {
-    document.getElementById("summa-casherom-aw").value = "";
-    document.getElementById("summaPrivat-casherom-aw").value = "";
-    document.getElementById("firmaArrivalWaste-casherom-aw").value = "";
-    document.getElementById("waste-casherom-aw").value = "";
-    document.getElementById("termkar-casherom-aw").value = "";
-    document.getElementById("sftermkar-casherom-aw").value = "";
+    const ids = [
+      "summa-casherom-aw",
+      "summaPrivat-casherom-aw",
+      "firmaArrivalWaste-casherom-aw",
+      "waste-casherom-aw",
+      "termkar-casherom-aw",
+      "sftermkar-casherom-aw"
+    ];
+    ids.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) element.value = "";
+    });
   }
 }
+
 </script>

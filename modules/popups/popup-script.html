@@ -1,77 +1,93 @@
-
-<div id="mypopup">
- <!--  <h3>Popup title</h3>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </p>
-  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-    sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
-</div>
-
+<div id="mypopup"></div>
 
 <style>
   #mypopup {
     width: 750px;
     padding: 20px;
     font-size: 8pt;
-    /* background-color: white; */
     border-radius: 6px;
     position: absolute;
     display: none;
+    background-color: rgba(255, 255, 255, 0.8); /* Білий фон із 80% непрозорістю */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Додаємо тінь для кращого вигляду */
   }
-
-  /* #mypopup::before {
-    content: "";
-    width: 12px;
-    height: 12px;
-    transform: rotate(45deg);
-    background-color: white;
-    position: absolute;
-    left: -6px;
-    top: 68px;
-  } */
 </style>
 
 <script>
   const mypopup = document.getElementById("mypopup");
-  document.getElementById('data-table').addEventListener("mouseover", showPopup);
-  document.getElementById('data-table').addEventListener("mouseout", hidePopup);
+  const dataTable = document.getElementById("data-table");
+  const rowdatafin = document.getElementById("rowdatafin");
+
+  // Додаємо слухачів подій один раз
+  dataTable.addEventListener("mouseover", showPopup);
+  dataTable.addEventListener("mouseout", () => {
+    mypopup.style.display = "none";
+  });
 
   function showPopup(e) {
     const cell = e.target._DT_CellIndex;
-    if (cell && cell.column === +4) {
-      const iconPos = e.target.getBoundingClientRect();
-      mypopup.style.left = (iconPos.right - 40) + "px";
-      mypopup.style.display = "block";
-      mypopup.innerHTML = popupInsertText(e.target.innerHTML);
-      mypopup.querySelectorAll('input').forEach(el => {
-        el.style.fontSize = '8pt'
-      })
-      document.getElementById("rowdatafin").innerHTML = '';
-      const elements = document.querySelectorAll('.delete-fin, .delete-fin-pop');
-      elements.forEach(elem => elem.remove());
-      const height = mypopup.offsetHeight;
-      if (window.scrollY < 200) {
-        mypopup.style.top = (window.scrollY + iconPos.top - 60) + "px"
-      } else {
-        mypopup.style.top = (window.scrollY + iconPos.top - height + 40) + "px";
-      }
-    }
+    if (!cell || cell.column !== 0) return;
+
+    const projectNum = getProjectNumberFromRow(e.target);
+    if (!projectNum) return;
+
+    // Позиціонування попапу
+    const { right, top } = e.target.getBoundingClientRect();
+    mypopup.style.left = `${right - 20}px`;
+    mypopup.style.display = "block";
+
+    // Вставка вмісту
+    mypopup.innerHTML = popupInsertText(projectNum);
+    mypopup.querySelectorAll("input").forEach((el) => {
+      el.style.fontSize = "8pt";
+    });
+
+    // Очищення інших елементів
+    rowdatafin.innerHTML = "";
+    document.querySelectorAll(".delete-fin, .delete-fin-pop").forEach((elem) => {
+      elem.remove();
+    });
+
+    // Визначення позиції по Y
+    const height = mypopup.offsetHeight;
+    mypopup.style.top =
+      window.scrollY < 200
+        ? `${window.scrollY + top - 60}px`
+        : `${window.scrollY + top - height + 40}px`;
   }
 
-  function hidePopup(e) {
-    mypopup.style.display = "none"
-  }
+  function popupInsertText(projectNum) {
+    localStorage.removeItem("test");
 
-  function popupInsertText(pojectNum) {
-    localStorage.removeItem('test');
-    const proektFin = pojectNum;
-    $('#proektfin').val(numEndStrong(proektFin));
-    $('#searchFinance').val(numEndStrong(proektFin));
+    // Форматування номера проєкту
+    const proektFin = projectNum || "";
+    const formattedProektFin = numEndStrong(proektFin) || proektFin;
+
+    // Оновлення полів вводу
+    updateInputValue("proektfin", formattedProektFin);
+    updateInputValue("searchFinance", formattedProektFin);
+
+    // Виклик пошуку
     SearchRecordsFinProekt1(proektFin);
-    if (localStorage.getItem('test')) {
-      return localStorage.getItem('test');
-    }
+
+    // Повернення результату
+    return localStorage.getItem("test") || "";
   }
 
+  function getProjectNumberFromRow(cell) {
+    // Отримуємо номер проєкту з 5-ї колонки ("Проєкт", індекс 4)
+    const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
+    return projectCell?.innerHTML || "";
+  }
+
+  function updateInputValue(id, value) {
+    // Універсальна функція для оновлення значення input
+    const input = document.getElementById(id);
+    if (input) input.value = value;
+  }
+
+  function numEndStrong(string) {
+    // Оптимізована версія: повертає очищений рядок або порожній
+    return typeof string === "string" && string.trim() || "";
+  }
 </script>

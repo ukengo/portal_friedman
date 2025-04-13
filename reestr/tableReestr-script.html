@@ -444,8 +444,9 @@
         order: [[11, 'desc']], // колонка 10 это номера строк, по ним сортировка
         columnDefs: [
           {
-            targets: [11], visible: false,
-          }, // скрываем колонку номеров сттрок
+            targets: [11, 12], // Приховуємо колонки 11 і 12
+            visible: false,
+          },
         ],
         columns: [
           { "title": "Дата кінець" },
@@ -467,21 +468,25 @@
       //підсвітка проектів
       const rowColorReestrDataTable = () => {
         document.querySelectorAll('#data-table tbody tr').forEach(el => {
+          const firstTd = el.querySelector('td:first-child').innerHTML;
 
-          //підсвітка червоним зупинені проекти
+          // Підсвітка червоним для зупинених проєктів
           if (el.innerHTML.includes('TRUE')) {
-            el.style.color = 'red';
+            el.querySelectorAll('td').forEach(td => {
+              td.style.setProperty('color', 'red', 'important');
+            });
           }
 
-          //підсвітка зеленим не закриті проекти
-          if (el.querySelector('td').innerHTML === '') {
-            el.style.color = 'green';
+          // Підсвітка зеленим для незакритих проєктів
+          if (firstTd === '') {
+            el.querySelectorAll('td').forEach(td => {
+              td.style.setProperty('color', 'green', 'important');
+            });
           }
-        })
-        //remove the nth column
-        $('#data-table tr').find('td:eq(11),th:eq(11)').remove();
-      }
+        });
+      };
 
+      // Застосовуємо стилі після кожної перерисовки та ініціалізації
       $('#data-table').on('draw.dt', rowColorReestrDataTable);
       rowColorReestrDataTable();
       //кінець підсвітки проектів

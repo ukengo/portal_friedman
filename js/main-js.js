@@ -813,48 +813,66 @@ function AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFi
 }
 
 function AddRecordFinMultiple(arrFinMulti) {
+  console.log(arrFinMulti);
   const rows = arrFinMulti.length;
   dataFinance().insertRowsAfter(99, rows);
 
-  //формируем id
+  //формуємо id
   const idFinId = new Date().getTime();
 
   // обробляємо інпути
   let data = [];
-  for (i = 0; i < rows; i++) {
-    data.push([arrFinMulti[i][0], arrFinMulti[i][1] * 1, arrFinMulti[i][2], arrFinMulti[i][3], arrFinMulti[i][4], arrFinMulti[i][6], idFinId * getRandom()]);
-  };
+  for (let i = 0; i < rows; i++) {
+    const item = arrFinMulti[i];
+    data.push([
+      item.proektfin,
+      item.summafin * 1,
+      item.priznakfin,
+      item.dateoplfin,
+      item.sffin,
+      item.primfin,
+      idFinId * getRandom()
+    ]);
+  }
+
   dataFinance().getRange('A100:G' + Number(rows + 99)).setValues(data);
 
   // обробляємо чекбокси
   let check = [];
-  for (i = 0; i < rows; i++) {
-    check.push([arrFinMulti[i][0], arrFinMulti[i][1], arrFinMulti[i][8], arrFinMulti[i][10]]);
-  };
+  for (let i = 0; i < rows; i++) {
+    const item = arrFinMulti[i];
+    check.push([
+      item.proektfin,
+      item.summafin,
+      item.issuepartfinance,
+      item.ispolufinance
+    ]);
+  }
 
   const getLastRowReestr = dataBase().getLastRow();
   const tableValuesReestr = dataBase().getRange(2, 1, getLastRowReestr - 1, 24).getValues();
-  for (i = 0; i < check.length; i++) {
-
+  
+  for (let i = 0; i < check.length; i++) {
     // виставлено частково
     if (check[i][0] && check[i][2] === true) {
-      for (y = 0; y < tableValuesReestr.length; y++) {
-        if (+tableValuesReestr[y][5] == +check[i][0]) {
-          dataBase.getRange(y + 2, 24).setValue(check[i][2]);
+      for (let y = 0; y < tableValuesReestr.length; y++) {
+        if (+tableValuesReestr[y][5] === +check[i][0]) {
+          dataBase().getRange(y + 2, 24).setValue(check[i][2]);
         }
       }
     }
 
-    // викону
+    // виконано
     if (check[i][0] && check[i][3] === true) {
       if (check[i][1] < 0) check[i][1] = -check[i][1];
-      for (y = 0; y < tableValuesReestr.length; y++) {
-        if (+tableValuesReestr[y][5] == +check[i][0]) {
+      for (let y = 0; y < tableValuesReestr.length; y++) {
+        if (+tableValuesReestr[y][5] === +check[i][0]) {
           dataBase().getRange(y + 2, 18).setValue(check[i][1]);
         }
       }
     }
   }
+  
   removalDuplicates();
 }
 

@@ -20,6 +20,10 @@
 
   // рендеринг форми
   function renderFormsCasheRom(selectorBody, selector, value) {
+    // створюємо контейнер для розміщення форми
+    const casheRomFormaContainer = document.createElement('form')
+    casheRomFormaContainer.setAttribute('data-cashe-rom-forma-container', '')
+
     const casheRow0 = document.createElement('div')
     casheRow0.classList.add("row")
     const casheRow = document.createElement('div')
@@ -27,6 +31,7 @@
     const casheRow1 = document.createElement('div')
     casheRow1.classList.add("row")
     casheForm = document.querySelector(selector)
+    casheForm.innerHTML = null
     const date = formatDateYYYYtireMMtireDD(strongToDate(value[1]))
     casheRow0.appendChild(createElementsFormsCasheRom('numberRow', 'number', '№', ['col-2'], value[0]))
     casheRow0.appendChild(createElementsFormsCasheRom('casheInputDate', 'date', 'Дата', ['col-2'], date))
@@ -34,10 +39,52 @@
     casheRow1.appendChild(createElementsFormsCasheRom('casheInputWaste', 'text', 'Витрата', ['col-2'], value[3]))
     casheRow1.appendChild(createElementsFormsCasheRom('casheInputArrival', 'text', 'Прихід', ['col-2'], value[4]))
     casheRow1.appendChild(createElementsFormsCasheRom('casheInputNotes', 'text', 'Примітки', ['col'], value[5]))
-    casheForm.appendChild(casheRow0)
-    casheForm.appendChild(casheRow)
-    casheForm.appendChild(casheRow1)
 
+    casheRomFormaContainer.appendChild(casheRow0)
+    casheRomFormaContainer.appendChild(casheRow)
+    casheRomFormaContainer.appendChild(casheRow1)
+    casheForm.appendChild(casheRomFormaContainer)
   }
+
+  //рендеринг контейнера під finance
+  function renderContainerFinanceCasheRom() {
+    const casheRomFormaContainer = document.createElement('div')
+    casheRomFormaContainer.setAttribute('data-cashe-rom-finance-container', '')
+    casheRomFormaContainer.style.marginTop = '50px'
+    casheRomFormaContainer.style.paddingTop = '15px'
+    const dataDialogBody = document.querySelector('[data-dialog-body]');
+    dataDialogBody.appendChild(casheRomFormaContainer)
+  }
+
+  //рендеринг контейнера під кнопки
+  function renderContainerButtonsCasheRom() {
+    const casheRomFormaContainer = document.createElement('div')
+    casheRomFormaContainer.style.margin = '10px 0'
+    casheRomFormaContainer.setAttribute('data-cashe-rom-buttons-container', '')
+    const dataDialogBody = document.querySelector('[data-dialog-body]');
+    dataDialogBody.appendChild(casheRomFormaContainer)
+  }
+
+  // рендеринг кнопок
+  function renderButtonsCasheRom() {
+    const temp = document.querySelector('#buttonsCasheRomDialog');
+    const clone = temp.content.cloneNode(true);
+    const dataDialogFooter = document.querySelector('[data-cashe-rom-buttons-container]');
+    !dataDialogFooter.hasChildNodes() ? dataDialogFooter.appendChild(clone) : null;
+  }
+
+
+
+  
+
+  //рендеринг контейнера під Mod
+  /*  function renderContainerModCasheRom() {
+     const casheRomModContainer = document.createElement('div')
+     casheRomModContainer.setAttribute('data-cashe-rom-mod-container', '')
+     const dataDialogBody = document.querySelector('[data-cashe-rom-finance-container]');
+     k(dataDialogBody)
+     k(casheRomModContainer)
+     dataDialogBody.appendChild(casheRomModContainer)
+   } */
 
 </script>

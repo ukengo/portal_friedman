@@ -114,9 +114,9 @@
   }
 
   // собираем данные форм в массив v2
-  function serializeFormV2(formId) {
+  function serializeFormV2(selector) {
     let array = [];
-    Array.from(document.getElementById(formId).elements)
+    Array.from(document.querySelector(selector).elements)
       .forEach((element) => {
         const value = element.type === 'checkbox' ? element.checked : element.value;
         array.push(value);

@@ -1,19 +1,17 @@
 <script>
 
-
+  // отримуємо дані з гугл таблиці  
   function startDataTableCasherom() {
     btnCasheromInsert.disabled = true;
     spinner('tableCaheRom')
     google.script.run.withSuccessHandler(buildDataTableCasherom).getRecordsCasheAll();
   }
-  startDataTableCasherom()
+  // startDataTableCasherom()
 
-  /*     google.script.run.withSuccessHandler((data) => {
-        localStorage.setItem('casheRom2', (data));
-      }).getRecordsCashe2(); */
-  function buildDataTableCasherom(casheRom) {
-    localStorage.setItem('casheRom1', casheRom.casheRom1)
-    localStorage.setItem('casheRom2', casheRom.casheRom2)
+  // формуємо таблицю  
+  function buildDataTableCasherom() {
+    //   localStorage.setItem('casheRom1', casheRom.casheRom1)
+    //   localStorage.setItem('casheRom2', casheRom.casheRom2)
     const casheRom1 = JSON.parse(localStorage.getItem('casheRom1'))
     const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'))
     document.querySelector('#tableCaheRom').innerHTML = ''
@@ -54,51 +52,161 @@
 
   }
 
-  // 
+  buildDataTableCasherom()
 
-
-  //обробка кліка (тапа) по таблиці
   document.querySelector('#tableCaheRom').addEventListener('click', e => {
     if (window.getSelection().toString()) return
     if (event.target.tagName !== 'TD') return false
     const dataTarget = event.target.textContent
     const data = [...event.target.parentNode.children]
     const arr = getDataFromTd(data)
-    const casheromFormaModal = document.querySelector('#casherom-forma-modal')
-    const modalCasheRom = new bootstrap.Modal(document.getElementById('modalCasheRom'))
-    modalCasheRom.show()
-    if (casheromFormaModal.querySelector('div:first-child')) {
-      casheromFormaModal.innerHTML = ''
-    }
-    renderFormsCasheRom('.modal-casherom__title', '#casherom-forma-modal', arr);
-    const formaCassheRom = new FormDataFromTables('#casherom-forma-modal')
+    const casheromFormaModal = document.querySelector('[data-cashe-rom-forma-container]')
+
+    const formaCassheRomDialog = new PopupEditing();
+    renderFormsCasheRom('.dialog__header', '.dialog__body', arr);
+    renderContainerButtonsCasheRom()
+    renderButtonsCasheRom()
+    renderContainerFinanceCasheRom()
+
+    const formaCassheRom = new FormDataFromTables('[data-cashe-rom-forma-container]')
+
     const setCashRom = (e) => {
       const dataModal = formaCassheRom.formaDataObj()
       google.script.run.setRecordsCasheRom(dataModal)
-      modalCasheRom.hide()
+      formaCassheRomDialog.close()
     }
     document.querySelector('.modal-casherom__btn').addEventListener('click', e => {
       setCashRom()
     })
     document.querySelector('.modal-casherom__btn--monovit').addEventListener('click', e => {
       document.querySelector('#casheInputNotes').value = 'відшкодовано на МОНО ВІТ'
+      formaCassheRom.labelred()
     })
 
+
+    // подія на кнопку fin
+    const financeButton = document.querySelector('.modal-casherom__btn--finance');
+    if (financeButton) {
+      financeButton.addEventListener('click', () => {
+        const selectorFinForma = '[data-cashe-rom-finance-container]';
+        const selectorTemplateFinFirma = '#finMainForma';
+        const financeForm = new FinanceFormBuilder('casherom', selectorTemplateFinFirma, selectorFinForma);
+
+        const extractProjectNumber = text => text.match(/пр\.?\s*(\d+)/i)?.[1] || null;
+
+        const extractInspectors = data => {
+          if (!data) return [];
+          try {
+            return JSON.parse(data).map(item => item[0].split(' ')[0].toLowerCase());
+          } catch {
+            return [];
+          }
+        };
+
+        const setPrimValueBasedOnKeywords = (articleValue, primInput, ispoluCheckbox, keywordsConfig, inspectors) => {
+          for (const [keyword, config] of Object.entries(keywordsConfig)) {
+            if (articleValue.includes(keyword)) {
+              primInput.value = config.value;
+              primInput.setAttribute('value', config.value);
+              primInput.dispatchEvent(new Event('input', { bubbles: true }));
+              primInput.dispatchEvent(new Event('change', { bubbles: true }));
+              ispoluCheckbox.checked = config.activateIspolu || false;
+              return;
+            }
+          }
+          if (inspectors.length) {
+            for (const inspector of inspectors) {
+              if (articleValue.includes(inspector)) {
+                primInput.value = 'викон';
+                primInput.setAttribute('value', 'викон');
+                primInput.dispatchEvent(new Event('input', { bubbles: true }));
+                primInput.dispatchEvent(new Event('change', { bubbles: true }));
+                ispoluCheckbox.checked = true;
+                return;
+              }
+            }
+          }
+        };
+
+        const updateFields = () => {
+          const articleInput = document.querySelector('#casheInputArticle');
+          const projectInput = document.querySelector('#proektfin-casherom');
+          const primInput = document.querySelector('#primfin-casherom');
+          const ispoluCheckbox = document.querySelector('#ispolufinance-casherom');
+          const wasteInput = document.querySelector('#casheInputWaste');
+          const arrivalInput = document.querySelector('#casheInputArrival');
+          const summaInput = document.querySelector('#summafin-casherom');
+          const dateInput = document.querySelector('#casheInputDate');
+          const dateOplInput = document.querySelector('#dateoplfin-casherom');
+
+          if (!articleInput || !projectInput || !primInput || !ispoluCheckbox || !wasteInput || !arrivalInput || !summaInput || !dateInput || !dateOplInput) return;
+
+          const articleValue = articleInput.value.trim().toLowerCase();
+          const projectNumber = extractProjectNumber(articleValue);
+
+          projectInput.value = projectNumber || '';
+          if (projectNumber) {
+            projectInput.setAttribute('value', projectNumber);
+            projectInput.dispatchEvent(new Event('input', { bubbles: true }));
+            projectInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          primInput.value = '';
+          summaInput.value = '';
+          dateOplInput.value = '';
+          ispoluCheckbox.checked = false;
+
+          const inspectors = extractInspectors(localStorage.getItem('dataInspektor'));
+          const keywordsConfig = {
+            'торопова': { value: 'викон Торопова', activateIspolu: true },
+            'третьяк': { value: 'викон', activateIspolu: true },
+            'токарев': { value: 'викон', activateIspolu: true },
+            'шалыга': { value: 'викон', activateIspolu: true },
+            'опер': { value: 'викон', activateIspolu: false },
+            'досм': { value: 'викон термінал', activateIspolu: false },
+            'грузчики': { value: 'вантажники термінал', activateIspolu: false }
+          };
+
+          setPrimValueBasedOnKeywords(articleValue, primInput, ispoluCheckbox, keywordsConfig, inspectors);
+
+          const wasteValue = parseFloat(wasteInput.value.trim());
+          const arrivalValue = parseFloat(arrivalInput.value.trim());
+          if (!isNaN(wasteValue) && wasteValue > 0) {
+            summaInput.value = wasteValue;
+            summaInput.setAttribute('value', wasteValue);
+            summaInput.dispatchEvent(new Event('input', { bubbles: true }));
+            summaInput.dispatchEvent(new Event('change', { bubbles: true }));
+          } else if (!isNaN(arrivalValue) && arrivalValue > 0) {
+            summaInput.value = arrivalValue;
+            summaInput.setAttribute('value', arrivalValue);
+            summaInput.dispatchEvent(new Event('input', { bubbles: true }));
+            summaInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+
+          const inputDate = dateInput.value;
+          if (inputDate) {
+            dateOplInput.value = inputDate;
+            dateOplInput.setAttribute('value', inputDate);
+            dateOplInput.dispatchEvent(new Event('input', { bubbles: true }));
+            dateOplInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        };
+
+        if (!document.querySelector(selectorFinForma).hasChildNodes()) {
+          financeForm.build();
+          financeForm.borderTopOn();
+          setTimeout(updateFields, 500);
+        } else {
+          financeForm.none();
+          financeForm.borderTopOff();
+        }
+      });
+    }
+
     //зпрацювання по ентер enter
-    casheromFormaModal.addEventListener('keypress', e => {
+    document.querySelector('[data-cashe-rom-forma-container]').addEventListener('keypress', e => {
       if (e.keyCode == 13) {
         setCashRom()
       }
     })
-  });
-
-  // "Захист" від помилки активності кнопки запуску
-  /*   document.addEventListener("DOMContentLoaded", function () {
-      document.addEventListener('hide.bs.modal', function (event) {
-        if (document.activeElement) {
-          document.activeElement.blur();
-        }
-      });
-    }); */
-
+  })
 </script>

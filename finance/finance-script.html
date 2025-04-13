@@ -1,5 +1,11 @@
 <script>
-  const formaFin = new FormDataFromTables('#formFinStart');
+  const financeForm = new FinanceFormBuilder('finance', '#finMainForma', '.form-fin-main');
+  financeForm.build();
+
+  //financeForm.addIdToInput();
+
+  const formaFin = new FormDataFromTables('.form-fin-start');
+  /* document.querySelector('.btn-clear-finance-main').addEventListener('click', () => formaFin.clearRecords());  */
 
   function startTableFinance() {
     $("#proektfin-datalist").empty();
@@ -28,7 +34,7 @@
     }).getDropDownArrayPriznak();
   }
 
-  function array(ar) {    
+  function array(ar) {
     var row_number_fin = 0;
     let naydenofin = 0;
     let count = 0;
@@ -161,7 +167,7 @@
     }
   })
 
-  document.getElementById('formFinStart').addEventListener('keydown', event => {
+  document.querySelector('.form-fin-start').addEventListener('keydown', event => {
     if (event.keyCode == 13) {
       SearchRecordsFin();
     }
@@ -266,7 +272,7 @@
       const dataArrayProcessed = dataArray.map(x => [x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]]);
       const dataArrayProcessedFiltered = findInTable(dataArrayProcessed, value, 6);
       // const dataArrayAttr = dataArray.map(x => [x[6]]);
-      var result = `<table id='table-finance-search' class='table mt-3 table-bordered table-hover table-line-selection' style='font-size:0.9em'>`
+      var result = `<table id='table-finance-search' class='table mt-3 table-bordered table-hover table-line-selection' style='font-size:0.9em; text-align: center;'>`
       for (var i = 0; i < findInTable(dataArrayProcessedFiltered, value).length; i++) {
 
         result += "<tr>";
@@ -503,14 +509,14 @@
     const this_ = this
     const vatieButton = this_.innerText;
     this.disabled = true;
-    const proektFin = document.getElementById("proektfin").value;
-    let summaFin = document.getElementById("summafin").value;
-    const priznakFin = document.getElementById("priznakfin").value;
-    const dateoplFin = document.getElementById("dateoplfin").value;
-    const sfFin = document.getElementById("sffin").value;
-    const primFin = document.getElementById("primfin").value;
-    const idFin = document.getElementById("idfin").value;
-    const firmaFin = document.getElementById("firmafin").value;
+    const proektFin = document.querySelector('[name="proektfin"]').value;
+    let summaFin = document.querySelector('[name="summafin"]').value;
+    const priznakFin = document.querySelector('[name="priznakfin"]').value;
+    const dateoplFin = document.querySelector('[name="dateoplfin"]').value;
+    const sfFin = document.querySelector('[name="sffin"]').value;
+    const primFin = document.querySelector('[name="primfin"]').value;
+    const idFin = document.querySelector('[name="idfin"]').value;
+    const firmaFin = document.querySelector('[name="firmafin"]').value;
     if (!proektFin) {
       this_.disabled = false;
       return
@@ -528,7 +534,6 @@
       this_.disabled = false;
     }).AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, checkBox);
   });
-
 
   // кнопка Update (обработка кнопок)
   function updateRecordFinButton() {
@@ -563,47 +568,49 @@
     }
   }
 
-  (function MultipleFinance() {
+  /* (function MultipleFinance() {
     // кнопки + и - (обработка кнопок)
     let arrFinMulti;
     let finMultiNum = 0;
     const btnFimMultipleAdd = document.querySelector('#btnFimMultipleAdd');
+
     $('.btn-fim-multiple').click(function () {
       const this_ = this;
       const vatieButton = this_.innerText;
       this.disabled = true;
       if (arrFinMulti === undefined) arrFinMulti = [];
-      let array = serializeFormV2('formFinStart');
+      let array = serializeFormV2('.form-fin-start');
       if (array[0]) {
         array.push(finMultiNum);
         finMultiNum++;
         if (vatieButton === '--') array[1] = -array[1];
-        arrFinMulti.push(array);
+        arrFinMulti.push(array);        
+        
         btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
       }
       this_.disabled = false;
     })
 
     // кнопка Mod (обработка кнопок)
-    $('#btnModalMultiple').click(() => {
+    $('[data-js-fin-button-mod]').click(() => {
       if (!arrFinMulti) return
       if (arrFinMulti !== undefined) {
         let result = `<table id='tableArrFinMulti' class='table mt-3 table-bordered table-hover table-line-selection'>`
         // будуємо таблицю
-        let = rowNumberFinMulti = 0;
+        let rowNumberFinMulti = 0;
         //result += `<tr><td></td></tr>`;
         for (let i = 0; i < arrFinMulti.length; i++) {
           result += `<tr>`;
           for (let j = 0; j < arrFinMulti[i].length; j++) {
             if (arrFinMulti[i][j] === true) {
-              result += `<td style="color: red;">${arrFinMulti[i][j]}</td>`;
+              result += `<td style="color: #c6303e;">${arrFinMulti[i][j]}</td>`;
             } else {
               result += `<td>${arrFinMulti[i][j]}</td>`;
             }
           }
           result += `
           <td class="bi-x-lg-fin-multi" rownumberfinmulti="${arrFinMulti[i][11]}">
-            <svg xmlns="http://www.w3.org/2000/svg" color="red" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" color="#c6303e" width="16" height="16" fill="#c6303e" class="bi bi-x-lg" viewBox="0 0 16 16">
             <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
             </svg>            
           </td>`;
@@ -651,7 +658,7 @@
 
     // кнопка Add (10) (обработка кнопок)
     $('#btnFimMultipleAdd').click(function () {
-      const this_ = this;
+       const this_ = this;
       if (arrFinMulti && arrFinMulti.length) {
         this_.disabled = true;
         btnFimMultipleAdd.innerText = 'Add (' + arrFinMulti.length + ')';
@@ -667,15 +674,15 @@
       } else {
         btnFimMultipleAdd.innerText = 'Add';
         this_.disabled = false;
-      }
+      } 
     })
-  }());
+  }()); */
 
   // регулюання дати у вікні пошуку
-  document.querySelector('.date-regular').addEventListener('click', dataRegulation);
+ /*  document.querySelector('.date-regular').addEventListener('click', dataRegulation);
   document.querySelector('#dateoplfin').addEventListener('focus', dataRegulation);
 
-  function dataRegulation(e) {
+    function dataRegulation(e) {
     const targetClass = e.target.className;
     const date = document.querySelector('#dateoplfin');
     let dateValue = formaFin.formaDataObj().dateoplfin;
@@ -689,13 +696,13 @@
         date.valueAsDate = new Date(new Date(dateValue).setDate(new Date(dateValue).getDate() - 1));
       };
     }
-  }
+  } */
 
   // "гот" за змовчуванням
-  inputToFocus(
-    document.querySelector('#summafin'),
-    document.querySelector('#priznakfin'),
+/*   inputToFocus(
+    document.querySelector('[name="summafin"]'),
+    document.querySelector('[name="priznakfin"]'),
     'гот',
-    formaFin);
+    formaFin); */
 
 </script>

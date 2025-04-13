@@ -10,17 +10,17 @@
   <?!= include("bootstrap-script") ?>
 
   <!-- CSS -->
+  <?!= include("css/css") ?>  
   <?!= include("css/reset-css") ?>
-  <?!= include("css/css") ?>
   <?!= include("css/workers-css") ?>
-
-
 
 </head>
 
 <body>
+
   <header id="header">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-danger bg-danger sticky-top user-select-none" role="navigation">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-danger bg-danger sticky-top user-select-none"
+      role="navigation">
       <div class="container-fluid">
         <a href="#" class="navbar-brand" id="nav-brand-tab">FRIEDMAN</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"
@@ -55,8 +55,8 @@
                 role="tab" aria-controls="nav-job" aria-selected="true">job</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="nav-casherom-tab" data-bs-toggle="tab" data-bs-target="#nav-casherom" type="button"
-                role="tab" aria-controls="nav-casherom" aria-selected="true">CasheRom</a>
+              <a class="nav-link" id="nav-casherom-tab" data-bs-toggle="tab" data-bs-target="#nav-casherom"
+                type="button" role="tab" aria-controls="nav-casherom" aria-selected="true">CasheRom</a>
             </li>
           </ul>
           <div class="nav-link mx-2" id="updateAll">
@@ -115,10 +115,33 @@
 
       <!-- Підключаємо скрипти
       ============================================================================= -->
+
       
       <?!= include("snippets")?>
-      <?!= include("src/classes/FormDataFromTables-script")?>
-      <?!= include("src/classes/FormDataFromTablesWithoutRed-script")?>
+      
+      
+      
+      
+      <!-- classes ---------------------------------------------->
+      <?!= include("src/classes/FormDataFromTables/FormDataFromTables-script")?>
+      <?!= include("src/classes/FormDataFromTables/FormDataFromTablesWithoutRed-script")?>
+      <?!= include("src/classes/FinanceFormBuilder/FinanceFormBuilder-script")?>
+      <?!= include("src/classes/FinanceFormBuilder/FinanceFormBuilder-css")?>
+      <?!= include("src/classes/CreateTable/CreateTable-script")?>
+      <?!= include("src/classes/CreateTable/CreateTable-css")?>
+      <?!= include("src/classes/Button/Button.html")?>
+      <?!= include("src/classes/Button/Button-script")?>
+      <?!= include("src/classes/Button/Button-css.html")?>
+      
+
+      <!-- Dialog -->
+      <?!= include("src/classes/Dialog/Dialog")?>
+      <?!= include("src/classes/Dialog/Dialog-css")?>      
+      <?!= include("src/classes/Dialog/Dialog-script")?>
+      <!-- classes --END-------------------------------------------->
+      
+
+      
       <?!= include("main-downloads")?>
       <?!= include("arriwalwaste/arrivalWaste-script")?>
       <?!= include("newproekt/newProekt-script")?>
@@ -129,22 +152,18 @@
       <?!= include("reestr/tr-modal-script")?>
       <?!= include("job/job-script")?>
       <?!= include("arriwalwaste/workers/workers-script")?>
-      
+
+
       <!-- modules/datatables -->
       <?!= include("modules/datatables/datatables-script.html")?>
       <!-- modules/popups -->
       <?!= include("modules/popups/popup-script")?>
-      
+
       <!-- cashe-rom -->
       <?!= include("cashe-rom/cashe-rom-script")?>
       <?!= include("cashe-rom/cashe-rom-datatable-script.html")?>
       <?!= include("cashe-rom/cashe-rom-forma.html")?>
-      
-      <!-- formafin -->
-      <?!= include("modules/formafin/formafin-template-script")?>
-      
-      
-      
+      <?!= include("cashe-rom/cashe-rom-css.html")?>
 
 
       <script>

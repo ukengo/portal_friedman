@@ -1,5 +1,4 @@
 <script>
-
   // Утилітні функції
   const utils = {
     setInputValue: (element, value) => {
@@ -48,8 +47,13 @@
   }
 
   // Побудова таблиці
-  function buildDataTableCasherom() {
-    const [casheRom1, casheRom2] = ['casheRom1', 'casheRom2'].map(key => JSON.parse(localStorage.getItem(key)));
+  function buildDataTableCasherom(data) {
+    // Оновлюємо localStorage з отриманими даними
+    localStorage.setItem('casheRom1', JSON.stringify(data.casheRom1));
+    localStorage.setItem('casheRom2', JSON.stringify(data.casheRom2));
+
+    const casheRom1 = JSON.parse(data.casheRom1);
+    const casheRom2 = JSON.parse(data.casheRom2);
     utils.clearContainer(document.querySelector('#tableCaheRom'));
 
     const table = new DataTable('#tableCaheRom', {
@@ -99,6 +103,7 @@
       });
     }
 
+    // Оновлюємо обробник кнопки "Up"
     addUpButtonDT(startDataTableCasherom, 'tableCaheRom', 'inputDtCashe');
   }
 
@@ -314,9 +319,13 @@
     if (e.target.matches('.modal-casherom__btn--arriwalwaste')) {
       toggleForm('arriwalwaste', AWFormBuilder, formUpdater.aw, 'isAwVisible', 'isFinanceVisible');
     }
+
+    // Обробник кнопки "Up"
+    if (e.target.matches('.btn.btn-light.me-2.align-baseline')) {
+      startDataTableCasherom();
+    }
   });
 
   // Ініціалізація таблиці
-  buildDataTableCasherom();
-
+  buildDataTableCasherom({ casheRom1: localStorage.getItem('casheRom1') || '[]', casheRom2: localStorage.getItem('casheRom2') || '[]' });
 </script>

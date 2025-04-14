@@ -61,7 +61,7 @@
 
     // Форматування номера проєкту
     const proektFin = projectNum || "";
-    const formattedProektFin = numEndStrong(proektFin) || proektFin;
+    const formattedProektFin = trimStrong(proektFin) || proektFin;
 
     // Оновлення полів вводу
     updateInputValue("proektfin", formattedProektFin);
@@ -86,7 +86,7 @@
     if (input) input.value = value;
   }
 
-  function numEndStrong(string) {
+  function trimStrong(string) {
     // Оптимізована версія: повертає очищений рядок або порожній
     return typeof string === "string" && string.trim() || "";
   }

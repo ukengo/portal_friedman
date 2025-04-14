@@ -465,31 +465,43 @@
         ],
       });
 
-      //підсвітка проектів
+      // Функція для фарбування рядків таблиці DataTable залежно від статусу проєктів
       const rowColorReestrDataTable = () => {
-        document.querySelectorAll('#data-table tbody tr').forEach(el => {
-          const firstTd = el.querySelector('td:first-child').innerHTML;
 
-          // Підсвітка червоним для зупинених проєктів
-          if (el.innerHTML.includes('TRUE')) {
-            el.querySelectorAll('td').forEach(td => {
-              td.style.setProperty('color', 'red', 'important');
-            });
+        // Ітеруємо по всіх рядках таблиці через API DataTable для оптимальної роботи з даними
+        $('#data-table').DataTable().rows().every(function () {
+          // Отримуємо DOM-елемент рядка для маніпуляцій із класами
+          const row = $(this.node());
+          // Отримуємо дані рядка, включаючи приховані колонки
+          const rowData = this.data();
+
+          // Видаляємо попередні класи стилізації, щоб уникнути накладання
+          row.removeClass('row-stopped row-unclosed');
+
+          // Перевіряємо статус зупинки проєкту в 13-тій колонці (індекс 12, x[18], item[14])
+          // Враховуємо можливі формати значення для зупинених проєктів
+          if (rowData[12] === 'TRUE' || rowData[12] === true || rowData[12] === '1' || rowData[12] === 'Зупинено') {
+            // Додаємо клас для червоного кольору зупиненим проєктам
+            row.addClass('row-stopped');
           }
-
-          // Підсвітка зеленим для незакритих проєктів
-          if (firstTd === '') {
-            el.querySelectorAll('td').forEach(td => {
-              td.style.setProperty('color', 'green', 'important');
-            });
+          // Перевіряємо першу колонку (індекс 0, "Дата кінець") для незакритих проєктів
+          // Порожнє значення або пробіли вказують на незакритий проєкт
+          else if (!rowData[0] || rowData[0].trim() === '') {
+            // Додаємо клас для зеленого кольору незакритим проєктам
+            row.addClass('row-unclosed');
           }
         });
       };
 
-      // Застосовуємо стилі після кожної перерисовки та ініціалізації
+      // Прив’язуємо функцію до події draw.dt, щоб стилі застосовувалися після кожного рендерингу таблиці
+      // Це забезпечує коректне фарбування при пагінації, сортуванні чи фільтрації
       $('#data-table').on('draw.dt', rowColorReestrDataTable);
-      rowColorReestrDataTable();
-      //кінець підсвітки проектів
+
+      // Викликаємо функцію одразу після завантаження сторінки для початкової стилізації
+      $(document).ready(function () {
+        rowColorReestrDataTable();
+      });
+      // Кінець Функція для фарбування рядків таблиці DataTable залежно від статусу проєктів
 
       //перехват события вставки и обрезка пробелов в поле input[type="search"]
       trimmingSpaces();

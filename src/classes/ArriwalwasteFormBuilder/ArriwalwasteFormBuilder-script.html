@@ -57,14 +57,10 @@ class AWFormBuilder extends FormBuilderBase {
     ];
 
     // Прив’язка обробників до елементів
-    events.forEach(([selector, handler, debugLabel]) => {
+    events.forEach(([selector, handler]) => {
       const elements = this.container.querySelectorAll(selector);
-      if (elements.length === 0) {
-        console.warn(`Елементи для селектора "${selector}" (${debugLabel}) не знайдено в контейнері`);
-      }
       elements.forEach(element => {
         element.addEventListener('click', (event) => {
-          console.log(`Клік по ${debugLabel}:`, element);
           handler.call(this, event);
         });
       });
@@ -74,15 +70,11 @@ class AWFormBuilder extends FormBuilderBase {
   // Встановлення дати за замовчуванням (поточна дата)
   setDefaultDate() {
     const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
-    if (dateInputs.length === 0) {
-      console.warn(`Поле дати "${this.selectors.dateInput}" не знайдено в контейнері`);
-      return;
-    }
+    if (dateInputs.length === 0) return;
     dateInputs.forEach(dateInput => {
       if (dateInput) {
         const today = new Date();
         dateInput.value = today.toISOString().split('T')[0]; // Формат YYYY-MM-DD
-        console.log(`Встановлено дату за замовчуванням для ${this.selectors.dateInput}: ${dateInput.value}`);
       }
     });
   }
@@ -91,30 +83,24 @@ class AWFormBuilder extends FormBuilderBase {
   handleYesterdayButtonClick(event) {
     this.setDate('yesterday');
     this.eventHandlers.yesterdayButton?.(event);
-    console.log('Оброблено клік по кнопці "Вчора"');
   }
 
   // Обробник кнопки "П'ятниця"
   handleFridayButtonClick(event) {
     this.setDate('friday');
     this.eventHandlers.fridayButton?.(event);
-    console.log('Оброблено клік по кнопці "П\'ятниця"');
   }
 
   // Обробник кнопки "Сьогодні"
   handleTodayButtonClick(event) {
     this.setDate('today');
     this.eventHandlers.todayButton?.(event);
-    console.log('Оброблено клік по кнопці "Сьогодні"');
   }
 
   // Встановлення дати в залежності від типу
   setDate(type) {
     const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
-    if (dateInputs.length === 0) {
-      console.warn(`Поле дати "${this.selectors.dateInput}" не знайдено для типу "${type}"`);
-      return;
-    }
+    if (dateInputs.length === 0) return;
     dateInputs.forEach(dateInput => {
       if (dateInput) {
         let targetDate = new Date();
@@ -126,7 +112,6 @@ class AWFormBuilder extends FormBuilderBase {
           }
         }
         dateInput.value = targetDate.toISOString().split('T')[0]; // Формат YYYY-MM-DD
-        console.log(`Встановлено дату для ${type}: ${dateInput.value}`);
       }
     });
   }
@@ -141,7 +126,6 @@ class AWFormBuilder extends FormBuilderBase {
       const button = this.container.querySelector(selector);
       if (button) {
         button.disabled = disabled;
-        console.log(`Кнопка "${selector}" ${disabled ? 'деактивована' : 'активована'}`);
       }
     });
   }
@@ -161,21 +145,38 @@ class AWFormBuilder extends FormBuilderBase {
     spinner("dataTableArriwalWaste");
 
     const termKarData = this.getTermKarData();
-    const action = !termKarData[4]
-      ? google.script.run.addNewRowWaste(rowData)
-      : Promise.all([
-          google.script.run.insertTermKar(termKarData),
-          google.script.run.vReestrTerminalKarantin(termKarData)
-        ]).then(() => startDataWaste);
-
-    action.withSuccessHandler(result => {
+    const successCallback = (result) => {
       createTableArriwalWaste(result);
       this.toggleButtons(false);
       document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
       this.clearForm();
       document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-      console.log('Витрату успішно додано');
-    });
+    };
+    const failureCallback = (error) => {
+      this.toggleButtons(false);
+    };
+
+    if (!termKarData[4]) {
+      // Якщо termKarData[4] порожнє, викликаємо addNewRowWaste
+      google.script.run
+        .withSuccessHandler(successCallback)
+        .withFailureHandler(failureCallback)
+        .addNewRowWaste(rowData);
+    } else {
+      // Якщо termKarData[4] заповнене, викликаємо insertTermKar, а потім vReestrTerminalKarantin
+      google.script.run
+        .withSuccessHandler(() => {
+          google.script.run
+            .withSuccessHandler(() => {
+              startDataWaste();
+              successCallback(null); // Викликаємо successCallback після завершення
+            })
+            .withFailureHandler(failureCallback)
+            .vReestrTerminalKarantin(termKarData);
+        })
+        .withFailureHandler(failureCallback)
+        .insertTermKar(termKarData);
+    }
 
     this.eventHandlers.wasteButton?.(event);
   }
@@ -195,7 +196,6 @@ class AWFormBuilder extends FormBuilderBase {
         this.clearForm();
         document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
         this.toggleButtons(false);
-        console.log('Прихід успішно додано');
       })
       .addNewRowArrival(rowData);
 
@@ -214,7 +214,6 @@ class AWFormBuilder extends FormBuilderBase {
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
     this.eventHandlers.wasteTabButton?.(event);
-    console.log('Відкрито вкладку "Витрати"');
   }
 
   // Обробник вкладки "Надходження"
@@ -225,7 +224,6 @@ class AWFormBuilder extends FormBuilderBase {
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     startArrivalWaste();
     this.eventHandlers.arrivalTabButton?.(event);
-    console.log('Відкрито вкладку "Надходження"');
   }
 
   // Отримання даних рядка форми
@@ -344,7 +342,6 @@ class AWFormBuilder extends FormBuilderBase {
       const element = document.getElementById(id);
       if (element) {
         element.value = "";
-        console.log(`Очищено поле ${id}`);
       }
     });
   }

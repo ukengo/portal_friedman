@@ -1,6 +1,7 @@
 <script>
 
 // Клас AWFormBuilder для створення та управління формами фінансових операцій
+// Клас AWFormBuilder для створення та управління формами фінансових операцій
 class AWFormBuilder extends FormBuilderBase {
   // Назва за замовчуванням для форми
   defaultName = 'aw';
@@ -142,7 +143,6 @@ class AWFormBuilder extends FormBuilderBase {
     if (this.validateRowData(rowData)) return;
 
     this.toggleButtons(true);
-    spinner("dataTableArriwalWaste");
 
     const termKarData = this.getTermKarData();
     const successCallback = (result) => {
@@ -187,7 +187,6 @@ class AWFormBuilder extends FormBuilderBase {
     if (this.validateRowData(rowData)) return;
 
     this.toggleButtons(true);
-    spinner("dataTableArriwalWaste");
 
     google.script.run
       .withSuccessHandler(result => {
@@ -208,7 +207,6 @@ class AWFormBuilder extends FormBuilderBase {
 
   // Обробник вкладки "Витрати"
   handleWasteTabButtonClick(event) {
-    spinner("dataTableArriwalWaste");
     document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataWaste')));
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
@@ -218,7 +216,6 @@ class AWFormBuilder extends FormBuilderBase {
 
   // Обробник вкладки "Надходження"
   handleArrivalTabButtonClick(event) {
-    spinner("dataTableArriwalWaste");
     document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataArrival')));
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
@@ -228,63 +225,58 @@ class AWFormBuilder extends FormBuilderBase {
 
   // Отримання даних рядка форми
   getRowData() {
-  const fields = {
-    date: this.name === 'aw' ? 'date' : `date-${this.name}`,
-    summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
-    summaPrivat: this.name === 'aw' ? 'summaPrivat' : `summaPrivat-${this.name}`,
-    costPrivat: this.name === 'aw' ? 'costPrivat' : `costPrivat-${this.name}`,
-    forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
-    firmaArrivalWaste: this.name === 'aw' ? 'firmaArrivalWaste' : `firmaArrivalWaste-${this.name}`,
-    waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`
-  };
+    const fields = {
+      date: this.name === 'aw' ? 'date' : `date-${this.name}`,
+      summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
+      summaPrivat: this.name === 'aw' ? 'summaPrivat' : `summaPrivat-${this.name}`,
+      costPrivat: this.name === 'aw' ? 'costPrivat' : `costPrivat-${this.name}`,
+      forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
+      firmaArrivalWaste: this.name === 'aw' ? 'firmaArrivalWaste' : `firmaArrivalWaste-${this.name}`,
+      waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`
+    };
 
-  const values = Object.fromEntries(
-    Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
-  );
+    const values = Object.fromEntries(
+      Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
+    );
 
-  let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
+    let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
 
-  // Перевірка, чи заповнені поля, без автоматичного обнулення
-  summa = summa ? +summa : undefined;
-  summaPrivat = summaPrivat ? +summaPrivat : undefined;
-  costPrivat = costPrivat ? +costPrivat : undefined;
+    // Перевірка, чи заповнені поля, без автоматичного обнулення
+    summa = summa ? +summa : undefined;
+    summaPrivat = summaPrivat ? +summaPrivat : undefined;
+    costPrivat = costPrivat ? +costPrivat : undefined;
 
-  if (!summaPrivat && !summa) {
-    summa = "";
-    waste = "Не заповнено ні одного поля суми";
-    firmaArrivalWaste = "";
-  } else if (summaPrivat && !summa) {
-    if (!costPrivat) {
-      waste = "Не заповнено вартості комісії приват";
-    } else {
-      localStorage.setItem('costPrivat', costPrivat);
-      summa = summaPrivat * costPrivat;
-      waste = "Приват комісія";
-      forma = "тов";
+    if (!summaPrivat && !summa) {
+      summa = "";
+      waste = "Не заповнено ні одного поля суми";
       firmaArrivalWaste = "";
+    } else if (summaPrivat && !summa) {
+      if (!costPrivat) {
+        waste = "Не заповнено вартості комісії приват";
+      } else {
+        localStorage.setItem('costPrivat', costPrivat);
+        summa = summaPrivat * costPrivat;
+        waste = "Приват комісія";
+        forma = "тов";
+        firmaArrivalWaste = "";
+      }
+    } else if (summa && summaPrivat) {
+      waste = "Заповнені обидва поля суми";
     }
-  } else if (summa && summaPrivat) {
-    waste = "Заповнені обидва поля суми";
-  }
 
-  return [date, summa || 0, forma, firmaArrivalWaste, waste];
-}
+    return [date, summa || 0, forma, firmaArrivalWaste, waste];
+  }
 
   // Отримання даних для терміналу-карантину
   getTermKarData() {
     const fields = {
-      date: `date-${this.name}`,
-      summa: `summa-${this.name}`,
-      forma: `forma-${this.name}`,
-      waste: `waste-${this.name}`,
-      termkar: `termkar-${this.name}`,
-      sftermkar: `sftermkar-${this.name}`
+      date: this.name === 'aw' ? 'date' : `date-${this.name}`,
+      summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
+      forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
+      waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`,
+      termkar: this.name === 'aw' ? 'termkar' : `termkar-${this.name}`,
+      sftermkar: this.name === 'aw' ? 'sftermkar' : `sftermkar-${this.name}`
     };
-
-    // Для форми aw поле date має ідентифікатор просто "date"
-    if (this.name === 'aw') {
-      fields.date = 'date';
-    }
 
     const values = Object.fromEntries(
       Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])

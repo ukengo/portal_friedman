@@ -1,280 +1,342 @@
 <script>
-  const aWForm = new AWFormBuilder('aw', '#AwMainForma', '[data-form-fin-main]');
-  aWForm.render();
 
-  //new FormDataFromTables('[data-form-aw]');
-  
-  // cрабатывание по кнопке Enter
-  function clickPressAW(event) {
-    if (event.keyCode == 13) {
-      btnSaveModalAW();
-    }
+const aWForm = new AWFormBuilder('aw', '#AwMainForma', '[data-form-fin-main]');
+aWForm.render();
+
+// Функція для управління спінером
+function spinner(containerId, show = true) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  if (show) {
+    container.innerHTML = `
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-danger mb-4 mt-2" role="status">
+          <span class="visually-hidden"></span>
+        </div>
+        Іде пошук...
+      </div>`;
+  } else {
+    container.innerHTML = '';
   }
+}
 
-  // cрабатывание по кнопке Enter для ввода данных по тратам Приват при заполненном поле "Приват"
-  function clickPressAwPrivat(event) {
-    if (event.keyCode == 13) {
-      buttonClickWaste();
-    }
+// cрабатывание по кнопке Enter
+function clickPressAW(event) {
+  if (event.keyCode == 13) {
+    btnSaveModalAW();
   }
+}
 
-  function startArrivalWasteClear() {
-    $("#firmaArrivalWaste-datalist").empty();
-    $("#waste-datalist").empty();
+// cрабатывание по кнопке Enter для ввода данных по тратам Приват при заполненном поле "Приват"
+function clickPressAwPrivat(event) {
+  if (event.keyCode == 13) {
+    buttonClickWaste();
   }
+}
 
-  //таблица Реестр оформлений - Статьи из Прочие поступления и Прочие траты
-  function getDropDownArrayStatyaArrivalWaste() {
-    const storageDataArrival = localStorage.getItem('dataArrival');
-    const storageDataAWaste = localStorage.getItem('dataWaste');
-    if (!storageDataArrival || !storageDataAWaste) return false;
-    const dohod = (JSON.parse(storageDataArrival).data).map(x => [x[4]]);
-    const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
-    const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
-    const stopAw = JSON.parse(localStorage.getItem('stopAw'));
-    
-    return searchingSubstringInArrayStrings(dohodRashod, stopAw, gage = 0);
+function startArrivalWasteClear() {
+  $("#firmaArrivalWaste-datalist").empty();
+  $("#waste-datalist").empty();
+}
+
+//таблица Реестр оформлений - Статьи из Прочие поступления и Прочие траты
+function getDropDownArrayStatyaArrivalWaste() {
+  const storageDataArrival = localStorage.getItem('dataArrival');
+  const storageDataAWaste = localStorage.getItem('dataWaste');
+  if (!storageDataArrival || !storageDataAWaste) return false;
+  const dohod = (JSON.parse(storageDataArrival).data).map(x => [x[4]]);
+  const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
+  const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
+  const stopAw = JSON.parse(localStorage.getItem('stopAw'));
+
+  return searchingSubstringInArrayStrings(dohodRashod, stopAw, gage = 0);
+}
+
+function startArrivalWaste() {
+  startArrivalWasteClear();
+  afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
+  afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
+}
+
+document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
+
+//функція побудови таблиці
+const buildTableAw = dataArray => {
+  if (!dataArray || !dataArray.length) {
+    console.warn('No data to build table');
+    return '<p>Немає даних для відображення</p>';
   }
+  let result = `<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>`;
+  const dataArrayData = dataArray;
 
-  function startArrivalWaste() {
-    startArrivalWasteClear();
-    afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
-    afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
-  }
-
-  document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
-
-  //функція побудови таблиці
-  const buildTableAw = dataArray => {
-    if (dataArray) {
-      let result =
-        `<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>`;
-      const dataArrayData = dataArray;
-
-      if (dataArrayData[0]) {
-        const numId = +dataArrayData[0].length - 1
-
-        for (var i = dataArrayData.length - 1; i >= 0; i--) {
-          result += "<tr>";
-          for (var j = 0; j < dataArrayData[i].length; j++) {
-            if (j === numId) continue
-            result += "<td>" + dataArrayData[i][j] + "</td>";
-          }
-          result +=
-            `<td>
-          <button type="button" id="buttonModalFinance${dataArrayData[i][numId]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal"/>Edit
-          </button>
-        </td>`;
-        }
-        result += `</tr>`;
-        result += `</table>`;
-        clickTables('#table-aw', () => {
-          if (event.target.tagName !== 'TD') return false;
-          const dataTarget = event.target.textContent;
-          document.querySelector('#search').value = dataTarget;
-        })
+  if (dataArrayData[0]) {
+    const numId = +dataArrayData[0].length - 1;
+    for (let i = dataArrayData.length - 1; i >= 0; i--) {
+      result += "<tr>";
+      for (let j = 0; j < dataArrayData[i].length; j++) {
+        if (j === numId) continue;
+        result += "<td>" + (dataArrayData[i][j] || '') + "</td>";
       }
-      return result
+      result += `<td><button type="button" id="buttonModalFinance${dataArrayData[i][numId]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal"/>Edit</button></td>`;
+      result += "</tr>";
     }
-  }
-
-  // відкриття модалки по кліку на кнопку запису
-  function btnOpenModal(arr, id) {
-    const row = Number(id.match(/\d+/));
-    const allModal = arr.filter(el => Number(el[+arr[0].length - 1]) === Number(row)).flat();
-    const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0]));
-    const summaModal = strongToNumber(allModal[1]);
-    let fIrmaModal = '';
-    let wasteModal = '';
-    if (arr[0].length == 6) {
-      fIrmaModal = allModal[3];
-      wasteModal = allModal[4];
-    } else {
-      wasteModal = allModal[3];
-    }
-    const formaModal = allModal[2];
-    $("#exampleModal").on("shown.bs.modal", () => {
-      $("#dateModal").val(dateModal);
-      $("#summaModal").val(summaModal);
-      $("#formaModal").val(formaModal);
-      if (fIrmaModal)
-        $("#firmaArrivalWasteModal").val(fIrmaModal);
-      else
-        $("#firmaArrivalWasteModal").val('');
-      $("#wasteModal").val(wasteModal);
-      $("#awModalLabel").text(row + 2);
-    })
-  }
-
-  // рендеринг таблиці справа
-  function createTableArriwalWaste(dataArray) {
-    var div = document.getElementById("dataTableArriwalWaste");
-    if (!dataArray) {
-      alert('storage пустий');
-      return false
-    }
-    if (!dataArray.data) return
-    else {
-      const searhValueNode = document.querySelector('#search');
-      searchValueAw();
-      searhValueNode.addEventListener('click', searchValueAw);
-      searhValueNode.addEventListener('keyup', searchValueAw);
-      searhValueNode.addEventListener('input', searchValueAw);
-      function searchValueAw() {
-        if (!$("#vrabotevseArriwalWaste").text()) return
-        const dataSearchValue = searhValueNode.value;
-        if (dataSearchValue) {
-          const dataSearchResult = findInTable(dataArray.data, dataSearchValue);
-          div.innerHTML = buildTableAw(dataSearchResult);
-          $(".btnbtn").click(function () {
-            id = this.id
-            btnOpenModal(dataSearchResult, id)
-          })
-        } else {
-          div.innerHTML = buildTableAw(dataArray.data);
-          $(".btnbtn").click(function () {
-            id = this.id
-            btnOpenModal(dataArray.data, id)
-          })
-        }
-        clickTables('#table-aw', searchToClick);
-      }
-    }
-    autoSearchOnOpen(".input-search");
-
-    google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('dataWaste', JSON.stringify(data));
-      document.querySelector('#buttonWasteTab').disabled = false;
-    }).getLastTenRowsWaste();
-    google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('dataCashe', JSON.stringify(data));
-    }).getDropDownArrayCashe();
-
-    function searchToClick() {
+    result += `</table>`;
+    clickTables('#table-aw', () => {
       if (event.target.tagName !== 'TD') return false;
       const dataTarget = event.target.textContent;
       document.querySelector('#search').value = dataTarget;
-    }
-    clickTables('#table-aw', searchToClick)
+    });
+  } else {
+    result = '<p>Немає даних для відображення</p>';
   }
+  return result;
+}
 
-  function updateR() {
-    document
-      .getElementById("buttonModal")
-      .addEventListener("click", function () { });
+// відкриття модалки по кліку на кнопку запису
+function btnOpenModal(arr, id) {
+  const row = Number(id.match(/\d+/));
+  const allModal = arr.filter(el => Number(el[+arr[0].length - 1]) === Number(row)).flat();
+  const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0]));
+  const summaModal = strongToNumber(allModal[1]);
+  let fIrmaModal = '';
+  let wasteModal = '';
+  if (arr[0].length == 6) {
+    fIrmaModal = allModal[3];
+    wasteModal = allModal[4];
+  } else {
+    wasteModal = allModal[3];
   }
-
-  //Термінал-карантин
-  function rowDataTermKar() {
-    const date = document.getElementById("date");
-    const summa = document.getElementById("summa");
-    const forma = document.getElementById("forma");
-    const waste = document.getElementById("waste");
-    const termkar = document.getElementById("termkar");
-    const sftermkar = document.getElementById("sftermkar");
-
-    return (rowData = [
-      date.value,
-      summa.value * 1,
-      forma.value,
-      waste.value,
-      termkar.value,
-      sftermkar.value,
-    ]);
-  }
-
-  //кнопка удаления в модальном окне
-  $("#btnDeleteModalAW").on("click", () => {
-    if (!window.confirm("Удалить запись?")) {
-      return;
-    }
-    const id = $("#awModalLabel").text();
-    if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
-      google.script.run
-        .withSuccessHandler(() => {
-          startDataArriwal();
-        })
-        .deleteRowArriwalModal(id);
-    } else if ($("#vrabotevseArriwalWaste").text() === "Інші витрати") {
-      google.script.run
-        .withSuccessHandler(() => {
-          startDataWaste();
-        })
-        .deleteRowWasteModal(id);
-    } else {
-      alert('Перевірь function btnSaveModalAW()');
-      return
-    }
+  const formaModal = allModal[2];
+  $("#exampleModal").on("shown.bs.modal", () => {
+    $("#dateModal").val(dateModal);
+    $("#summaModal").val(summaModal);
+    $("#formaModal").val(formaModal);
+    if (fIrmaModal)
+      $("#firmaArrivalWasteModal").val(fIrmaModal);
+    else
+      $("#firmaArrivalWasteModal").val('');
+    $("#wasteModal").val(wasteModal);
+    $("#awModalLabel").text(row + 2);
   });
+}
 
-  //кнопка сохранения в модальном окне
-  $("#btnSaveModalAW").on("click", btnSaveModalAW);
-  function btnSaveModalAW() {
-    const id = $("#awModalLabel").text();
-    const data = [
-      [
-        $("#dateModal").val(),
-        $("#summaModal").val() * 1,
-        $("#formaModal").val(),
-        $("#firmaArrivalWasteModal").val(),
-        $("#wasteModal").val(),
-      ],
-    ];
+// рендеринг таблиці справа
+function createTableArriwalWaste(dataArray) {
+  const div = document.getElementById("dataTableArriwalWaste");
+  spinner("dataTableArriwalWaste", false); // Прибрати спінер перед рендерингом
+  if (!dataArray) {
+    alert('storage пустий');
+    return false;
+  }
+  if (!dataArray.data) {
+    console.warn('dataArray.data is empty');
+    return;
+  }
+  console.log('Rendering table with data:', dataArray);
 
-    $("#exampleModal").modal("hide");
-    if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
-      google.script.run
-        .withSuccessHandler(() => {
-          google.script.run.withSuccessHandler((data) => {
+  const searhValueNode = document.querySelector('#search');
+  function searchValueAw() {
+    if (!$("#vrabotevseArriwalWaste").text()) return;
+    const dataSearchValue = searhValueNode.value;
+    if (dataSearchValue) {
+      const dataSearchResult = findInTable(dataArray.data, dataSearchValue);
+      div.innerHTML = buildTableAw(dataSearchResult);
+      $(".btnbtn").click(function() {
+        id = this.id;
+        btnOpenModal(dataSearchResult, id);
+      });
+    } else {
+      div.innerHTML = buildTableAw(dataArray.data);
+      $(".btnbtn").click(function() {
+        id = this.id;
+        btnOpenModal(dataArray.data, id);
+      });
+    }
+    clickTables('#table-aw', searchToClick);
+  }
+  searchValueAw();
+  searhValueNode.addEventListener('click', searchValueAw);
+  searhValueNode.addEventListener('keyup', searchValueAw);
+  searhValueNode.addEventListener('input', searchValueAw);
+
+  autoSearchOnOpen(".input-search");
+
+  google.script.run.withSuccessHandler((data) => {
+    localStorage.setItem('dataWaste', JSON.stringify(data));
+    document.querySelector('#buttonWasteTab').disabled = false;
+  }).getLastTenRowsWaste();
+  google.script.run.withSuccessHandler((data) => {
+    localStorage.setItem('dataCashe', JSON.stringify(data));
+  }).getDropDownArrayCashe();
+
+  function searchToClick() {
+    if (event.target.tagName !== 'TD') return false;
+    const dataTarget = event.target.textContent;
+    document.querySelector('#search').value = dataTarget;
+  }
+  clickTables('#table-aw', searchToClick);
+}
+
+function updateR() {
+  document
+    .getElementById("buttonModal")
+    .addEventListener("click", function() {});
+}
+
+//Термінал-карантин
+function rowDataTermKar() {
+  const date = document.getElementById("date");
+  const summa = document.getElementById("summa");
+  const forma = document.getElementById("forma");
+  const waste = document.getElementById("waste");
+  const termkar = document.getElementById("termkar");
+  const sftermkar = document.getElementById("sftermkar");
+
+  return [
+    date.value,
+    summa.value * 1,
+    forma.value,
+    waste.value,
+    termkar.value,
+    sftermkar.value,
+  ];
+}
+
+//кнопка удаления в модальном окне
+$("#btnDeleteModalAW").on("click", () => {
+  if (!window.confirm("Удалить запись?")) {
+    return;
+  }
+  const id = $("#awModalLabel").text();
+  spinner("dataTableArriwalWaste");
+  if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
+    google.script.run
+      .withSuccessHandler(() => {
+        spinner("dataTableArriwalWaste", false);
+        startDataArriwal();
+      })
+      .withFailureHandler((error) => {
+        spinner("dataTableArriwalWaste", false);
+        console.error('Delete error:', error);
+        alert('Помилка видалення: ' + error);
+      })
+      .deleteRowArriwalModal(id);
+  } else if ($("#vrabotevseArriwalWaste").text() === "Інші витрати") {
+    google.script.run
+      .withSuccessHandler(() => {
+        spinner("dataTableArriwalWaste", false);
+        startDataWaste();
+      })
+      .withFailureHandler((error) => {
+        spinner("dataTableArriwalWaste", false);
+        console.error('Delete error:', error);
+        alert('Помилка видалення: ' + error);
+      })
+      .deleteRowWasteModal(id);
+  } else {
+    spinner("dataTableArriwalWaste", false);
+    alert('Перевір function btnSaveModalAW()');
+    return;
+  }
+});
+
+//кнопка сохранения в модальном окне
+$("#btnSaveModalAW").on("click", btnSaveModalAW);
+function btnSaveModalAW() {
+  const id = $("#awModalLabel").text();
+  const data = [
+    [
+      $("#dateModal").val(),
+      $("#summaModal").val() * 1,
+      $("#formaModal").val(),
+      $("#firmaArrivalWasteModal").val(),
+      $("#wasteModal").val(),
+    ],
+  ];
+
+  $("#exampleModal").modal("hide");
+  spinner("dataTableArriwalWaste");
+  if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
+    google.script.run
+      .withSuccessHandler(() => {
+        google.script.run
+          .withSuccessHandler((data) => {
+            spinner("dataTableArriwalWaste", false);
             localStorage.setItem('dataArrival', JSON.stringify(data));
             startDataArriwal();
-          }).getLastTenRowsArriwal();
-        })
-        .changesRowArriwalModal(id, data);
-    } else if ($("#vrabotevseArriwalWaste").text() === "Інші витрати") {
-      google.script.run
-        .withSuccessHandler(() => {
-          google.script.run.withSuccessHandler((data) => {
+          })
+          .withFailureHandler((error) => {
+            spinner("dataTableArriwalWaste", false);
+            console.error('Error fetching arrival data:', error);
+            alert('Помилка отримання даних: ' + error);
+          })
+          .getLastTenRowsArriwal();
+      })
+      .withFailureHandler((error) => {
+        spinner("dataTableArriwalWaste", false);
+        console.error('Save error:', error);
+        alert('Помилка збереження: ' + error);
+      })
+      .changesRowArriwalModal(id, data);
+  } else if ($("#vrabotevseArriwalWaste").text() === "Інші витрати") {
+    google.script.run
+      .withSuccessHandler(() => {
+        google.script.run
+          .withSuccessHandler((data) => {
+            spinner("dataTableArriwalWaste", false);
             localStorage.setItem('dataWaste', JSON.stringify(data));
             startDataWaste();
-          }).getLastTenRowsWaste();
-        })
-        .changesRowWasteModal(id, data);
-    } else {
-      alert('Перевірь function btnSaveModalAW()');
-      return
-    }
+          })
+          .withFailureHandler((error) => {
+            spinner("dataTableArriwalWaste", false);
+            console.error('Error fetching waste data:', error);
+            alert('Помилка отримання даних: ' + error);
+          })
+          .getLastTenRowsWaste();
+      })
+      .withFailureHandler((error) => {
+        spinner("dataTableArriwalWaste", false);
+        console.error('Save error:', error);
+        alert('Помилка збереження: ' + error);
+      })
+      .changesRowWasteModal(id, data);
+  } else {
+    spinner("dataTableArriwalWaste", false);
+    alert('Перевір function btnSaveModalAW()');
+    return;
   }
+}
 
-  // вставка суми доходу/витрат при фільтрації
-  const mutationObserverAw = () => {
-    let observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        const searsh = document.querySelector('#search');
-        const summa = document.querySelector('#vrabotevse-arriwalwaste-summa');
-        summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');
-        if (!searsh.value || !document.getElementById('dataTableArriwalWaste').hasChildNodes() || summa.innerHTML === 'Разом: 0.00 грн') {
-          summa.innerHTML = '';
-        }
-      });
+// вставка суми доходу/витрат при фільтрації
+const mutationObserverAw = () => {
+  let observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      const searsh = document.querySelector('#search');
+      const summa = document.querySelector('#vrabotevse-arriwalwaste-summa');
+      summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');
+      if (!searsh.value || !document.getElementById('dataTableArriwalWaste').hasChildNodes() || summa.innerHTML === 'Разом: 0.00 грн') {
+        summa.innerHTML = '';
+      }
     });
-    observer.observe(document.getElementById('dataTableArriwalWaste'), {
-      attributes: true,
-      childList: true,
-      subtree: true
-    });
-  }
-  mutationObserverAw();
+  });
+  observer.observe(document.getElementById('dataTableArriwalWaste'), {
+    attributes: true,
+    childList: true,
+    subtree: true
+  });
+}
+mutationObserverAw();
 
-  // розфарбовка поля вартості комісії приват в червоний при відсутності даних
-  const costPrivatColor = () => {
-    const costpriv = document.querySelector('#costPrivat');
-    if (!+costpriv.value) {
-      costpriv.style.backgroundColor = '#dc35457a';
-    } else {
-      costpriv.style.removeProperty('background-color');
-    }
-    costpriv.addEventListener('input', costPrivatColor);
+// розфарбовка поля вартості комісії приват в червоний при відсутності даних
+const costPrivatColor = () => {
+  const costpriv = document.querySelector('#costPrivat');
+  if (!+costpriv.value) {
+    costpriv.style.backgroundColor = '#dc35457a';
+  } else {
+    costpriv.style.removeProperty('background-color');
   }
-  costPrivatColor();
+  costpriv.addEventListener('input', costPrivatColor);
+}
+costPrivatColor();
+
 </script>

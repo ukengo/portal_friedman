@@ -228,48 +228,47 @@ class AWFormBuilder extends FormBuilderBase {
 
   // Отримання даних рядка форми
   getRowData() {
-    const fields = {
-      date: `date-${this.name}`,
-      summa: `summa-${this.name}`,
-      summaPrivat: `summaPrivat-${this.name}`,
-      costPrivat: `costPrivat-${this.name}`,
-      forma: `forma-${this.name}`,
-      firmaArrivalWaste: `firmaArrivalWaste-${this.name}`,
-      waste: `waste-${this.name}`
-    };
+  const fields = {
+    date: this.name === 'aw' ? 'date' : `date-${this.name}`,
+    summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
+    summaPrivat: this.name === 'aw' ? 'summaPrivat' : `summaPrivat-${this.name}`,
+    costPrivat: this.name === 'aw' ? 'costPrivat' : `costPrivat-${this.name}`,
+    forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
+    firmaArrivalWaste: this.name === 'aw' ? 'firmaArrivalWaste' : `firmaArrivalWaste-${this.name}`,
+    waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`
+  };
 
-    // Для форми aw поле date має ідентифікатор просто "date"
-    if (this.name === 'aw') {
-      fields.date = 'date';
-    }
+  const values = Object.fromEntries(
+    Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
+  );
 
-    const values = Object.fromEntries(
-      Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
-    );
+  let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
 
-    let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
-    summa = +summa || 0;
-    summaPrivat = +summaPrivat || 0;
-    costPrivat = +costPrivat || 0;
+  // Перевірка, чи заповнені поля, без автоматичного обнулення
+  summa = summa ? +summa : undefined;
+  summaPrivat = summaPrivat ? +summaPrivat : undefined;
+  costPrivat = costPrivat ? +costPrivat : undefined;
 
-    if (!summaPrivat && !summa) {
-      summa = "";
-      waste = "Не заповнено ні одного поля суми";
+  if (!summaPrivat && !summa) {
+    summa = "";
+    waste = "Не заповнено ні одного поля суми";
+    firmaArrivalWaste = "";
+  } else if (summaPrivat && !summa) {
+    if (!costPrivat) {
+      waste = "Не заповнено вартості комісії приват";
+    } else {
+      localStorage.setItem('costPrivat', costPrivat);
+      summa = summaPrivat * costPrivat;
+      waste = "Приват комісія";
+      forma = "тов";
       firmaArrivalWaste = "";
-    } else if (summaPrivat && !summa) {
-      if (!costPrivat) {
-        waste = "Не заповнено вартості комісії приват";
-      } else {
-        localStorage.setItem('costPrivat', costPrivat);
-        summa = summaPrivat * costPrivat;
-        waste = "Приват комісія";
-        forma = "тов";
-        firmaArrivalWaste = "";
-      }
     }
-
-    return [date, +summa, forma, firmaArrivalWaste, waste];
+  } else if (summa && summaPrivat) {
+    waste = "Заповнені обидва поля суми";
   }
+
+  return [date, summa || 0, forma, firmaArrivalWaste, waste];
+}
 
   // Отримання даних для терміналу-карантину
   getTermKarData() {

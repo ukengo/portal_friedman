@@ -1,129 +1,154 @@
 <script>
 
-// Клас AWFormBuilder для створення та управління формами фінансових операцій
-// Клас AWFormBuilder для створення та управління формами фінансових операцій
 class AWFormBuilder extends FormBuilderBase {
-  // Назва за замовчуванням для форми
   defaultName = 'aw';
 
-  // Атрибути для елементів форми
   attributes = {
     wasteButton: 'data-button-waste',
     arrivalButton: 'data-button-arrival',
     wasteTabButton: 'data-button-wastetab',
-    arrivalTabButton: 'data-button-arrivaltab'
+    arrivalTabButton: 'data-button-arrivaltab',
   };
 
-  // Селектори для елементів форми
   selectors = {
     form: '[data-form-aw]',
-    dateInput: null, // Буде встановлено в конструкторі
-    dateButtonGroup: '.btn-group', // Група кнопок дати
+    dateInput: null,
+    dateButtonGroup: '.btn-group',
     yesterdayButton: '.btn-yft[value=" Y "]',
     fridayButton: '.btn-yft[value="Fri"]',
-    todayButton: '.btn-yft[value=" T "]'
+    todayButton: '.btn-yft[value=" T "]',
   };
 
-  // Конструктор класу
   constructor(name, templateSelector, containerSelector) {
     super(name, templateSelector, containerSelector);
-    // Встановлення селектора для поля дати залежно від імені форми
     this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`;
+    console.log(`AWFormBuilder initialized for container: ${containerSelector}`);
   }
 
-  // Рендеринг форми
+  getFormFields() {
+    return {
+      date: this.name === 'aw' ? 'date' : `date-${this.name}`,
+      summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
+      summaPrivat: this.name === 'aw' ? 'summaPrivat' : `summaPrivat-${this.name}`,
+      costPrivat: this.name === 'aw' ? 'costPrivat' : `costPrivat-${this.name}`,
+      forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
+      firmaArrivalWaste: this.name === 'aw' ? 'firmaArrivalWaste' : `firmaArrivalWaste-${this.name}`,
+      waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`,
+      termkar: this.name === 'aw' ? 'termkar' : `termkar-${this.name}`,
+      sftermkar: this.name === 'aw' ? 'sftermkar' : `sftermkar-${this.name}`,
+    };
+  }
+
   render() {
+    console.log('Rendering AWFormBuilder');
     if (!this.checkTemplateAndContainer()) return;
     super.renderTemplate();
-    // Ініціалізація екземплярів форм
-    this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form))
-      .map((form, index) => {
+    this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form)).map(
+      (form, index) => {
         form.id = form.id || `${this.name}-form-${index}`;
         return new FormDataFromTables(`#${form.id}`);
-      });
+      }
+    );
     this.initEventListeners();
     this.setDefaultDate();
+    this.resetLabelColors(this.getFormFields());
   }
 
-  // Ініціалізація обробників подій
   initEventListeners() {
     const events = [
       [`[${this.attributes.wasteButton}]`, this.handleWasteButtonClick, 'Кнопка Витрата'],
       [`[${this.attributes.arrivalButton}]`, this.handleArrivalButtonClick, 'Кнопка Прихід'],
-      [`[${this.attributes.wasteTabButton}]`, this.handleWasteTabButtonClick, 'Кнопка Вкладка Витрати'],
-      [`[${this.attributes.arrivalTabButton}]`, this.handleArrivalTabButtonClick, 'Кнопка Вкладка Надходження'],
       [this.selectors.yesterdayButton, this.handleYesterdayButtonClick, 'Кнопка Вчора'],
       [this.selectors.fridayButton, this.handleFridayButtonClick, 'Кнопка П\'ятниця'],
-      [this.selectors.todayButton, this.handleTodayButtonClick, 'Кнопка Сьогодні']
+      [this.selectors.todayButton, this.handleTodayButtonClick, 'Кнопка Сьогодні'],
     ];
-
-    // Прив’язка обробників до елементів
-    events.forEach(([selector, handler]) => {
+    events.forEach(([selector, handler, description]) => {
       const elements = this.container.querySelectorAll(selector);
-      elements.forEach(element => {
+      console.log(`Binding events for ${description}: found ${elements.length} elements`);
+      elements.forEach((element) => {
         element.addEventListener('click', (event) => {
+          console.log(`Event triggered: ${description}`);
           handler.call(this, event);
         });
       });
     });
   }
 
-  // Встановлення дати за замовчуванням (поточна дата)
   setDefaultDate() {
     const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
-    if (dateInputs.length === 0) return;
-    dateInputs.forEach(dateInput => {
-      if (dateInput) {
-        const today = new Date();
-        dateInput.value = today.toISOString().split('T')[0]; // Формат YYYY-MM-DD
-      }
+    if (dateInputs.length === 0) {
+      console.warn(`No date inputs found for selector: ${this.selectors.dateInput}`);
+      return;
+    }
+    dateInputs.forEach((dateInput) => {
+      const today = new Date();
+      dateInput.value = today.toISOString().split('T')[0];
+      console.log(`Set default date: ${dateInput.value}`);
     });
+    this.updateLabelColors(this.getFormFields());
   }
 
-  // Обробник кнопки "Вчора"
   handleYesterdayButtonClick(event) {
     this.setDate('yesterday');
+    this.updateLabelColors(this.getFormFields());
     this.eventHandlers.yesterdayButton?.(event);
   }
 
-  // Обробник кнопки "П'ятниця"
   handleFridayButtonClick(event) {
     this.setDate('friday');
+    this.updateLabelColors(this.getFormFields());
     this.eventHandlers.fridayButton?.(event);
   }
 
-  // Обробник кнопки "Сьогодні"
   handleTodayButtonClick(event) {
     this.setDate('today');
+    this.updateLabelColors(this.getFormFields());
     this.eventHandlers.todayButton?.(event);
   }
 
-  // Встановлення дати в залежності від типу
   setDate(type) {
     const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
     if (dateInputs.length === 0) return;
-    dateInputs.forEach(dateInput => {
-      if (dateInput) {
-        let targetDate = new Date();
-        if (type === 'yesterday') {
+    dateInputs.forEach((dateInput) => {
+      let targetDate = new Date();
+      if (type === 'yesterday') {
+        targetDate.setDate(targetDate.getDate() - 1);
+      } else if (type === 'friday') {
+        while (targetDate.getDay() !== 5) {
           targetDate.setDate(targetDate.getDate() - 1);
-        } else if (type === 'friday') {
-          while (targetDate.getDay() !== 5) {
-            targetDate.setDate(targetDate.getDate() - 1);
-          }
         }
-        dateInput.value = targetDate.toISOString().split('T')[0]; // Формат YYYY-MM-DD
+      }
+      dateInput.value = targetDate.toISOString().split('T')[0];
+      console.log(`Set date (${type}): ${dateInput.value}`);
+    });
+  }
+
+  updateLabelColors(fields) {
+    Object.entries(fields).forEach(([key, id]) => {
+      const input = this.container.querySelector(`#${id}`);
+      const label = this.container.querySelector(`label[for="${id}"]`);
+      if (!input || !label) {
+        console.warn(`Input or label not found for id: ${id}`);
+        return;
+      }
+      if (['date', 'costPrivat', 'forma'].includes(key)) {
+        label.style.color = this.colors.errorColor;
+      } else {
+        label.style.removeProperty('color');
       }
     });
   }
 
-  // Перемикання стану кнопок (активовано/деактивовано)
+  resetLabelColors(fields) {
+    this.updateLabelColors(fields);
+  }
+
   toggleButtons(disabled) {
     const buttons = [
-      `[${this.attributes.wasteButton}]`,
-      `[${this.attributes.arrivalButton}]`
+      `[${this.attributes.wasteTabButton}]`,
+      `[${this.attributes.arrivalTabButton}]`,
     ];
-    buttons.forEach(selector => {
+    buttons.forEach((selector) => {
       const button = this.container.querySelector(selector);
       if (button) {
         button.disabled = disabled;
@@ -131,10 +156,9 @@ class AWFormBuilder extends FormBuilderBase {
     });
   }
 
-  // Обробник кнопки "Витрата"
   handleWasteButtonClick(event) {
     const rowData = this.getRowData();
-    const termkarVal = document.getElementById(`termkar-${this.name}`)?.value;
+    const termkarVal = this.container.querySelector(`#termkar`)?.value;
 
     if (!rowData[4] && !termkarVal) {
       alert('Не заповнена стаття витрат');
@@ -142,34 +166,39 @@ class AWFormBuilder extends FormBuilderBase {
     }
     if (this.validateRowData(rowData)) return;
 
-    this.toggleButtons(true);
+    this.clearForm();
+    this.updateLabelColors(this.getFormFields());
 
     const termKarData = this.getTermKarData();
     const successCallback = (result) => {
+      console.log('Waste success:', result);
       createTableArriwalWaste(result);
-      this.toggleButtons(false);
-      document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
-      this.clearForm();
-      document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
+      const header = this.container.querySelector('#vrabotevseArriwalWaste');
+      if (header) header.innerHTML = 'Інші витрати';
+      const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
+      if (tableDiv) {
+        tableDiv.style.height = 'auto';
+        tableDiv.style.display = 'block';
+        tableDiv.style.visibility = 'visible';
+      }
     };
     const failureCallback = (error) => {
-      this.toggleButtons(false);
+      console.error('Waste operation failed:', error);
+      alert('Помилка збереження витрат: ' + error);
     };
 
     if (!termKarData[4]) {
-      // Якщо termKarData[4] порожнє, викликаємо addNewRowWaste
       google.script.run
         .withSuccessHandler(successCallback)
         .withFailureHandler(failureCallback)
         .addNewRowWaste(rowData);
     } else {
-      // Якщо termKarData[4] заповнене, викликаємо insertTermKar, а потім vReestrTerminalKarantin
       google.script.run
         .withSuccessHandler(() => {
           google.script.run
             .withSuccessHandler(() => {
               startDataWaste();
-              successCallback(null); // Викликаємо successCallback після завершення
+              successCallback(null);
             })
             .withFailureHandler(failureCallback)
             .vReestrTerminalKarantin(termKarData);
@@ -181,20 +210,29 @@ class AWFormBuilder extends FormBuilderBase {
     this.eventHandlers.wasteButton?.(event);
   }
 
-  // Обробник кнопки "Прихід"
   handleArrivalButtonClick(event) {
     const rowData = this.getRowData();
     if (this.validateRowData(rowData)) return;
 
-    this.toggleButtons(true);
+    this.clearForm();
+    this.updateLabelColors(this.getFormFields());
 
     google.script.run
-      .withSuccessHandler(result => {
+      .withSuccessHandler((result) => {
+        console.log('Arrival success:', result);
         createTableArriwalWaste(result);
-        document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
-        this.clearForm();
-        document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-        this.toggleButtons(false);
+        const header = this.container.querySelector('#vrabotevseArriwalWaste');
+        if (header) header.innerHTML = 'Інші надходження';
+        const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
+        if (tableDiv) {
+          tableDiv.style.height = 'auto';
+          tableDiv.style.display = 'block';
+          tableDiv.style.visibility = 'visible';
+        }
+      })
+      .withFailureHandler((error) => {
+        console.error('Arrival operation failed:', error);
+        alert('Помилка збереження надходжень: ' + error);
       })
       .addNewRowArrival(rowData);
 
@@ -205,81 +243,49 @@ class AWFormBuilder extends FormBuilderBase {
     this.eventHandlers.arrivalButton?.(event);
   }
 
-  // Обробник вкладки "Витрати"
-  handleWasteTabButtonClick(event) {
-    document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
-    createTableArriwalWaste(JSON.parse(localStorage.getItem('dataWaste')));
-    document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-    startArrivalWaste();
-    this.eventHandlers.wasteTabButton?.(event);
-  }
-
-  // Обробник вкладки "Надходження"
-  handleArrivalTabButtonClick(event) {
-    document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
-    createTableArriwalWaste(JSON.parse(localStorage.getItem('dataArrival')));
-    document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-    startArrivalWaste();
-    this.eventHandlers.arrivalTabButton?.(event);
-  }
-
-  // Отримання даних рядка форми
   getRowData() {
-    const fields = {
-      date: this.name === 'aw' ? 'date' : `date-${this.name}`,
-      summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
-      summaPrivat: this.name === 'aw' ? 'summaPrivat' : `summaPrivat-${this.name}`,
-      costPrivat: this.name === 'aw' ? 'costPrivat' : `costPrivat-${this.name}`,
-      forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
-      firmaArrivalWaste: this.name === 'aw' ? 'firmaArrivalWaste' : `firmaArrivalWaste-${this.name}`,
-      waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`
-    };
-
+    const fields = this.getFormFields();
     const values = Object.fromEntries(
-      Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
+      Object.entries(fields).map(([key, id]) => [
+        key,
+        this.container.querySelector(`#${id}`)?.value,
+      ])
     );
 
     let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
 
-    // Перевірка, чи заповнені поля, без автоматичного обнулення
     summa = summa ? +summa : undefined;
     summaPrivat = summaPrivat ? +summaPrivat : undefined;
     costPrivat = costPrivat ? +costPrivat : undefined;
 
     if (!summaPrivat && !summa) {
-      summa = "";
-      waste = "Не заповнено ні одного поля суми";
-      firmaArrivalWaste = "";
+      summa = '';
+      waste = 'Не заповнено ні одного поля суми';
+      firmaArrivalWaste = '';
     } else if (summaPrivat && !summa) {
       if (!costPrivat) {
-        waste = "Не заповнено вартості комісії приват";
+        waste = 'Не заповнено вартості комісії приват';
       } else {
         localStorage.setItem('costPrivat', costPrivat);
         summa = summaPrivat * costPrivat;
-        waste = "Приват комісія";
-        forma = "тов";
-        firmaArrivalWaste = "";
+        waste = 'Приват комісія';
+        forma = 'тов';
+        firmaArrivalWaste = '';
       }
     } else if (summa && summaPrivat) {
-      waste = "Заповнені обидва поля суми";
+      waste = 'Заповнені обидва поля суми';
     }
 
     return [date, summa || 0, forma, firmaArrivalWaste, waste];
   }
 
-  // Отримання даних для терміналу-карантину
   getTermKarData() {
-    const fields = {
-      date: this.name === 'aw' ? 'date' : `date-${this.name}`,
-      summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
-      forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
-      waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`,
-      termkar: this.name === 'aw' ? 'termkar' : `termkar-${this.name}`,
-      sftermkar: this.name === 'aw' ? 'sftermkar' : `sftermkar-${this.name}`
-    };
-
+    const fields = this.getFormFields();
     const values = Object.fromEntries(
-      Object.entries(fields).map(([key, id]) => [key, document.getElementById(id)?.value])
+      Object.entries(fields).map(([key, id]) => [
+        key,
+        this.container.querySelector(`#${id}`)?.value,
+      ])
     );
 
     return [
@@ -288,17 +294,16 @@ class AWFormBuilder extends FormBuilderBase {
       values.forma,
       values.waste,
       values.termkar,
-      values.sftermkar
+      values.sftermkar,
     ];
   }
 
-  // Валідація даних рядка
   validateRowData(rowData) {
     const messages = {
-      "Не заповнено ні одного поля суми": "Не заповнено ні одного поля суми",
-      "Заповнені обидва поля суми": "Заповнені обидва поля суми",
-      "Не заповнено вартості комісії приват": "Не заповнено вартості комісії приват",
-      "Не заповнена ціна привату": "Не заповнена ціна привату"
+      'Не заповнено ні одного поля суми': 'Не заповнено ні одного поля суми',
+      'Заповнені обидва поля суми': 'Заповнені обидва поля суми',
+      'Не заповнено вартості комісії приват': 'Не заповнено вартості комісії приват',
+      'Не заповнена ціна привату': 'Не заповнена ціна привату',
     };
 
     if (messages[rowData[4]]) {
@@ -308,34 +313,28 @@ class AWFormBuilder extends FormBuilderBase {
     return false;
   }
 
-  // Очищення форми
   clearForm() {
-    const ids = [
-      `summa-${this.name}`,
-      `summaPrivat-${this.name}`,
-      `firmaArrivalWaste-${this.name}`,
-      `waste-${this.name}`,
-      `termkar-${this.name}`,
-      `sftermkar-${this.name}`
+    const fields = this.getFormFields();
+    const fieldsToClear = [
+      fields.summa,
+      fields.summaPrivat,
+      fields.firmaArrivalWaste,
+      fields.waste,
+      fields.termkar,
+      fields.sftermkar,
     ];
 
-    // Для форми aw додаємо специфічні ідентифікатори
-    if (this.name === 'aw') {
-      ids[0] = 'summa';
-      ids[1] = 'summaPrivat';
-      ids[2] = 'firmaArrivalWaste';
-      ids[3] = 'waste';
-      ids[4] = 'termkar';
-      ids[5] = 'sftermkar';
-    }
-
-    ids.forEach(id => {
-      const element = document.getElementById(id);
+    fieldsToClear.forEach((id) => {
+      const element = this.container.querySelector(`#${id}`);
       if (element) {
-        element.value = "";
+        element.value = '';
+      } else {
+        console.warn(`Field not found: ${id}`);
       }
     });
+
+    this.updateLabelColors(this.getFormFields());
   }
 }
 
-</script>
+</script>/

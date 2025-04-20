@@ -1,8 +1,10 @@
 <script>
 
+// Ініціалізація форми
 const aWForm = new AWFormBuilder('aw', '#AwMainForma', '.container [data-form-fin-main]');
 aWForm.render();
 
+// Відображення спінера
 function spinner(containerId, show = true) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -19,20 +21,24 @@ function spinner(containerId, show = true) {
   }
 }
 
+// Обробка натискання Enter для збереження
 function clickPressAW(event) {
   if (event.keyCode == 13) {
     btnSaveModalAW();
   }
 }
 
+// Обробка натискання Enter для витрат
 function clickPressAwPrivat(event) {
   if (event.keyCode == 13) {
     buttonClickWaste();
   }
 }
 
+// Флаг для запобігання повторного запуску
 let isStartArrivalWasteRunning = false;
 
+// Очищення списків вибору
 function startArrivalWasteClear() {
   const firmaList = document.querySelector('#firmaArrivalWaste-datalist');
   const wasteList = document.querySelector('#waste-datalist');
@@ -40,17 +46,19 @@ function startArrivalWasteClear() {
   if (wasteList) wasteList.innerHTML = '';
 }
 
+// Отримання унікальних статей надходжень/витрат
 function getDropDownArrayStatyaArrivalWaste() {
   const storageDataArrival = localStorage.getItem('dataArrival');
   const storageDataWaste = localStorage.getItem('dataWaste');
   if (!storageDataArrival || !storageDataWaste) return [];
-  const dohod = JSON.parse(storageDataArrival).data.map((x) => [x[4]]);
-  const rashod = JSON.parse(storageDataWaste).data.map((x) => [x[3]]);
+  const dohod = JSON.parse(storageDataArrival).data?.map(x => [x[4]]) || [];
+  const rashod = JSON.parse(storageDataWaste).data?.map(x => [x[3]]) || [];
   const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
   const stopAw = JSON.parse(localStorage.getItem('stopAw')) || [];
   return searchingSubstringInArrayStrings(dohodRashod, stopAw, 0) || [];
 }
 
+// Заповнення списку вибору
 function afterDropDownReturned(data, datalistId) {
   const datalist = document.getElementById(datalistId);
   if (datalist) {
@@ -58,11 +66,13 @@ function afterDropDownReturned(data, datalistId) {
   }
 }
 
+// Отримання унікальних значень із localStorage
 function getDropDownArrayOnline(key, index) {
   const data = JSON.parse(localStorage.getItem(key))?.data?.map(x => x[index]) || [];
   return [...new Set(data.filter(String))];
 }
 
+// Ініціалізація списків вибору
 function startArrivalWaste() {
   if (isStartArrivalWasteRunning) return;
   isStartArrivalWasteRunning = true;
@@ -72,27 +82,27 @@ function startArrivalWaste() {
   isStartArrivalWasteRunning = false;
 }
 
+// Ініціалізація поля витрат
 const costPrivatInput = document.querySelector('#costPrivat');
 if (costPrivatInput) {
   costPrivatInput.value = +localStorage.getItem('costPrivat') || '';
 }
 
-const buildTableAw = (dataArray) => {
-  if (!dataArray || !dataArray.length) {
+// Генерація HTML таблиці
+function buildTableAw(dataArray) {
+  if (!dataArray || !Array.isArray(dataArray) || !dataArray.length) {
     return '<p>Немає даних для відображення</p>';
   }
   let result = `<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto; width: 100%; border: 1px solid #dee2e6;'>`;
-  const dataArrayData = dataArray;
-
-  if (dataArrayData.length > 0 && dataArrayData[0]) {
-    const numId = +dataArrayData[0].length - 1;
-    for (let i = dataArrayData.length - 1; i >= 0; i--) {
+  if (dataArray[0]) {
+    const numId = dataArray[0].length - 1;
+    for (let i = dataArray.length - 1; i >= 0; i--) {
       result += '<tr>';
-      for (let j = 0; j < dataArrayData[i].length; j++) {
+      for (let j = 0; j < dataArray[i].length; j++) {
         if (j === numId) continue;
-        result += `<td style="padding: 8px;">${dataArrayData[i][j] || ''}</td>`;
+        result += `<td style="padding: 8px;">${dataArray[i][j] || ''}</td>`;
       }
-      result += `<td style="padding: 8px;"><button type="button" id="buttonModalFinance${dataArrayData[i][numId]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>`;
+      result += `<td style="padding: 8px;"><button type="button" id="buttonModalFinance${dataArray[i][numId]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>`;
       result += '</tr>';
     }
     result += '</table>';
@@ -100,95 +110,180 @@ const buildTableAw = (dataArray) => {
     result = '<p>Немає даних для відображення</p>';
   }
   return result;
-};
-
-function btnOpenModal(arr, id) {
-  const rowId = Number(id.match(/\d+/));
-  const rowData = arr.find((el) => Number(el[el.length - 1]) === rowId);
-  
-  if (!rowData) return;
-
-  const dateModal = formatDateYYYYtireMMtireDD(strongToDate(rowData[0]));
-  const summaModal = strongToNumber(rowData[1]);
-  const formaModal = rowData[2] || '';
-  const firmaModal = rowData.length === 6 ? rowData[3] || '' : '';
-  const wasteModal = rowData.length === 6 ? rowData[4] || '' : rowData[3] || '';
-  const termkarModal = rowData.length === 6 ? rowData[5] || '' : rowData[4] || '';
-  const sftermkarModal = rowData.length === 6 ? rowData[6] || '' : rowData[5] || '';
-
-  $('#dateModal').val(dateModal);
-  $('#summaModal').val(summaModal);
-  $('#formaModal').val(formaModal);
-  $('#firmaArrivalWasteModal').val(firmaModal);
-  $('#wasteModal').val(wasteModal);
-  $('#termkarModal').val(termkarModal);
-  $('#sftermkarModal').val(sftermkarModal);
-  $('#awModalLabel').text(rowId + 2);
 }
 
-function createTableArriwalWaste(dataArray) {
-  const div = document.getElementById('dataTableArriwalWaste');
-  if (!div) return;
-  div.style.display = 'block';
-  div.style.visibility = 'visible';
-  spinner('dataTableArriwalWaste', false);
-  if (!dataArray || !dataArray.data || !dataArray.data.length) {
-    div.innerHTML = '<p>Немає даних для відображення</p>';
-    return;
+// Відкриття модального вікна
+function btnOpenModal(arr, id) {
+  // Перевірка параметрів
+  if (!arr || !Array.isArray(arr) || !id || typeof id !== 'string') return;
+
+  // Витягнення ID рядка
+  const rowIdMatch = id.match(/\d+/);
+  if (!rowIdMatch) return;
+  const rowId = Number(rowIdMatch[0]);
+
+  // Пошук даних рядка
+  const rowData = arr.find(el => Number(el[el.length - 1]) === rowId);
+  if (!rowData) return;
+
+  // Перевірка залежних функцій
+  if (!window.formatDateYYYYtireMMtireDD || !window.strongToDate || !window.strongToNumber) return;
+
+  // Форматування значень
+  let dateModal = '';
+  let summaModal = '';
+  let formaModal = rowData[2] || '';
+  let firmaModal = '';
+  let wasteModal = '';
+  let termkarModal = '';
+  let sftermkarModal = '';
+  try {
+    dateModal = formatDateYYYYtireMMtireDD(strongToDate(rowData[0]));
+  } catch (e) {}
+  try {
+    summaModal = strongToNumber(rowData[1]);
+  } catch (e) {}
+
+  // Визначення полів залежно від довжини масиву
+  if (rowData.length === 6) {
+    firmaModal = rowData[3] || '';
+    wasteModal = rowData[4] || '';
+    termkarModal = rowData[5] || '';
+  } else if (rowData.length >= 7) {
+    firmaModal = rowData[3] || '';
+    wasteModal = rowData[4] || '';
+    termkarModal = rowData[5] || '';
+    sftermkarModal = rowData[6] || '';
+  } else {
+    wasteModal = rowData[3] || '';
+    termkarModal = rowData[4] || '';
+    sftermkarModal = rowData[5] || '';
   }
 
-  if (!div.querySelector('#table-aw')) {
-    div.innerHTML = buildTableAw(dataArray.data);
-  }
-
-  const searchInput = document.querySelector('#search');
-  function searchValueAw() {
-    const headerText = $('#vrabotevseArriwalWaste').text();
-    if (!headerText) return;
-    const dataSearchValue = searchInput?.value || '';
-    const tableExists = div.querySelector('#table-aw');
-    if (!tableExists) return;
-    if (dataSearchValue) {
-      const dataSearchResult = findInTable(dataArray.data, dataSearchValue);
-      div.innerHTML = buildTableAw(dataSearchResult);
-      $('.btnbtn').off('click').on('click', function () {
-        btnOpenModal(dataSearchResult, this.id);
-      });
+  // Заповнення полів модального вікна
+  const fields = [
+    { id: '#dateModal', value: dateModal },
+    { id: '#summaModal', value: summaModal },
+    { id: '#formaModal', value: formaModal },
+    { id: '#firmaArrivalWasteModal', value: firmaModal },
+    { id: '#wasteModal', value: wasteModal },
+    { id: '#termkarModal', value: termkarModal },
+    { id: '#sftermkarModal', value: sftermkarModal },
+    { id: '#awModalLabel', value: rowId + 2, isText: true },
+  ];
+  fields.forEach(field => {
+    const element = $(field.id);
+    if (!element.length) return;
+    if (field.isText) {
+      element.text(field.value);
     } else {
-      div.innerHTML = buildTableAw(dataArray.data);
-      $('.btnbtn').off('click').on('click', function () {
-        btnOpenModal(dataArray.data, this.id);
-      });
+      element.val(field.value);
     }
-  }
-
-  if (searchInput) {
-    searchInput.removeEventListener('click', searchValueAw);
-    searchInput.removeEventListener('keyup', searchValueAw);
-    searchInput.removeEventListener('input', searchValueAw);
-    searchInput.addEventListener('input', debounce(searchValueAw, 300));
-  }
-
-  clickTables('#table-aw', () => {
-    if (event.target.tagName !== 'TD') return false;
-    const dataTarget = event.target.textContent;
-    if (searchInput) searchInput.value = dataTarget;
-    searchValueAw();
   });
 }
 
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
+// Рендеринг таблиці
+function createTableArriwalWaste(dataArray) {
+  // Перевірка контейнера
+  const tableContainer = document.getElementById('dataTableArriwalWaste');
+  if (!tableContainer) return;
+
+  // Перевірка даних
+  if (!dataArray || !dataArray.data || !Array.isArray(dataArray.data)) {
+    alert('Дані відсутні або некоректні');
+    tableContainer.innerHTML = '<p>Немає даних для відображення</p>';
+    return;
+  }
+
+  // Перевірка поля пошуку
+  const searchInput = document.querySelector('#search');
+  if (!searchInput) return;
+
+  // Перевірка заголовка
+  const header = document.querySelector('#vrabotevseArriwalWaste');
+  if (!header) return;
+
+  // Рендеринг таблиці
+  function renderTable(data) {
+    try {
+      tableContainer.innerHTML = buildTableAw(data);
+      const buttons = document.querySelectorAll('.btnbtn');
+      buttons.forEach(button => {
+        button.removeEventListener('click', handleEditClick);
+        button.addEventListener('click', handleEditClick);
+        function handleEditClick() {
+          const id = button.id;
+          const modal = $('#exampleModal');
+          if (!modal.length) return;
+          modal.modal('show');
+          modal.one('shown.bs.modal', () => {
+            btnOpenModal(data, id);
+          });
+        }
+      });
+      if (typeof clickTables === 'function') {
+        clickTables('#table-aw', () => {
+          if (event.target.tagName !== 'TD') return;
+          searchInput.value = event.target.textContent;
+          renderTable(dataArray.data);
+        });
+      }
+    } catch (e) {
+      tableContainer.innerHTML = '<p>Помилка відображення даних</p>';
+    }
+  }
+
+  // Обробка пошуку
+  function handleSearch() {
+    const query = searchInput.value.trim();
+    if (!header.textContent) return;
+    let dataToRender = dataArray.data;
+    if (query && typeof findInTable === 'function') {
+      dataToRender = findInTable(dataArray.data, query);
+    }
+    renderTable(dataToRender);
+  }
+
+  // Ініціалізація таблиці
+  renderTable(dataArray.data);
+
+  // Налаштування обробників пошуку
+  searchInput.removeEventListener('input', handleSearch);
+  searchInput.removeEventListener('click', handleSearch);
+  searchInput.removeEventListener('keyup', handleSearch);
+  searchInput.addEventListener('input', handleSearch);
+  searchInput.addEventListener('click', handleSearch);
+  searchInput.addEventListener('keyup', handleSearch);
+
+  // Автопошук
+  if (typeof autoSearchOnOpen === 'function') {
+    autoSearchOnOpen('.input-search');
+  }
+
+  // Оновлення localStorage
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(data => {
+        localStorage.setItem('dataWaste', JSON.stringify(data));
+        const wasteTabButton = document.querySelector('#buttonWasteTab');
+        if (wasteTabButton) wasteTabButton.disabled = false;
+      })
+      .withFailureHandler(error => {
+        alert('Помилка отримання даних витрат: ' + error);
+      })
+      .getLastTenRowsWaste();
+    google.script.run
+      .withSuccessHandler(data => {
+        localStorage.setItem('dataCashe', JSON.stringify(data));
+      })
+      .withFailureHandler(error => {
+        alert('Помилка отримання даних кешу: ' + error);
+      })
+      .getDropDownArrayCashe();
+  }
 }
 
+// Оновлення кнопки модального вікна
 function updateR() {
   const buttonModal = document.getElementById('buttonModal');
   if (buttonModal) {
@@ -196,14 +291,16 @@ function updateR() {
   }
 }
 
+// Отримання даних із полів
 function rowDataTermKar() {
   const fields = ['date', 'summa', 'forma', 'waste', 'termkar', 'sftermkar'];
-  return fields.map((id) => {
+  return fields.map(id => {
     const element = document.getElementById(id);
     return element ? (id === 'summa' ? +element.value : element.value) : '';
   });
 }
 
+// Видалення запису
 $('#btnDeleteModalAW').on('click', () => {
   if (!window.confirm('Удалить запись?')) return;
   const id = $('#awModalLabel').text();
@@ -214,7 +311,7 @@ $('#btnDeleteModalAW').on('click', () => {
         spinner('dataTableArriwalWaste', false);
         startDataArriwal();
       })
-      .withFailureHandler((error) => {
+      .withFailureHandler(error => {
         spinner('dataTableArriwalWaste', false);
         alert('Помилка видалення: ' + error);
       })
@@ -225,7 +322,7 @@ $('#btnDeleteModalAW').on('click', () => {
         spinner('dataTableArriwalWaste', false);
         startDataWaste();
       })
-      .withFailureHandler((error) => {
+      .withFailureHandler(error => {
         spinner('dataTableArriwalWaste', false);
         alert('Помилка видалення: ' + error);
       })
@@ -236,39 +333,37 @@ $('#btnDeleteModalAW').on('click', () => {
   }
 });
 
+// Збереження даних із модального вікна
 $('#btnSaveModalAW').on('click', btnSaveModalAW);
 function btnSaveModalAW() {
   const id = $('#awModalLabel').text();
-  const data = [
-    [
-      $('#dateModal').val(),
-      $('#summaModal').val() * 1,
-      $('#formaModal').val(),
-      $('#firmaArrivalWasteModal').val(),
-      $('#wasteModal').val(),
-      $('#termkarModal').val(),
-      $('#sftermkarModal').val(),
-    ],
-  ];
-
+  const data = [[
+    $('#dateModal').val(),
+    $('#summaModal').val() * 1,
+    $('#formaModal').val(),
+    $('#firmaArrivalWasteModal').val(),
+    $('#wasteModal').val(),
+    $('#termkarModal').val(),
+    $('#sftermkarModal').val(),
+  ]];
   $('#exampleModal').modal('hide');
   spinner('dataTableArriwalWaste', true);
   if ($('#vrabotevseArriwalWaste').text() === 'Інші надходження') {
     google.script.run
       .withSuccessHandler(() => {
         google.script.run
-          .withSuccessHandler((data) => {
+          .withSuccessHandler(data => {
             spinner('dataTableArriwalWaste', false);
             localStorage.setItem('dataArrival', JSON.stringify(data));
             createTableArriwalWaste(data);
           })
-          .withFailureHandler((error) => {
+          .withFailureHandler(error => {
             spinner('dataTableArriwalWaste', false);
             alert('Помилка отримання даних: ' + error);
           })
           .getLastTenRowsArriwal();
       })
-      .withFailureHandler((error) => {
+      .withFailureHandler(error => {
         spinner('dataTableArriwalWaste', false);
         alert('Помилка збереження: ' + error);
       })
@@ -277,18 +372,18 @@ function btnSaveModalAW() {
     google.script.run
       .withSuccessHandler(() => {
         google.script.run
-          .withSuccessHandler((data) => {
+          .withSuccessHandler(data => {
             spinner('dataTableArriwalWaste', false);
             localStorage.setItem('dataWaste', JSON.stringify(data));
             createTableArriwalWaste(data);
           })
-          .withFailureHandler((error) => {
+          .withFailureHandler(error => {
             spinner('dataTableArriwalWaste', false);
             alert('Помилка отримання даних: ' + error);
           })
           .getLastTenRowsWaste();
       })
-      .withFailureHandler((error) => {
+      .withFailureHandler(error => {
         spinner('dataTableArriwalWaste', false);
         alert('Помилка збереження: ' + error);
       })
@@ -299,8 +394,9 @@ function btnSaveModalAW() {
   }
 }
 
-const mutationObserverAw = () => {
-  let observer = new MutationObserver((mutations) => {
+// Спостереження за змінами в таблиці
+function mutationObserverAw() {
+  let observer = new MutationObserver(mutations => {
     mutations.forEach(() => {
       const search = document.querySelector('#search');
       const summa = document.querySelector('#vrabotevse-arriwalwaste-summa');
@@ -315,22 +411,16 @@ const mutationObserverAw = () => {
   });
   const tableContainer = document.getElementById('dataTableArriwalWaste');
   if (tableContainer) {
-    observer.observe(tableContainer, {
-      attributes: true,
-      childList: true,
-      subtree: true,
-    });
+    observer.observe(tableContainer, { attributes: true, childList: true, subtree: true });
   }
-};
+}
 mutationObserverAw();
 
-const costPrivatColor = () => {
+// Колір фону для поля витрат
+function costPrivatColor() {
   const costpriv = document.querySelector('#costPrivat');
   const costPrivatLabel = document.querySelector('label[for="costPrivat"]');
-
-  // Функція для перевірки та розфарбовки
   const updateBackgroundColor = () => {
-    console.log(costpriv.value);
     if (costpriv) {
       if (!+costpriv.value) {
         costpriv.style.backgroundColor = '#dc35457a';
@@ -339,55 +429,47 @@ const costPrivatColor = () => {
       }
     }
   };
-
-  // Виклик функції для початкової перевірки
   updateBackgroundColor();
-
-  // Додавання обробника події для input
-  if (costpriv) {
-    costpriv.addEventListener('input', updateBackgroundColor);
-  }
-
-  // Додавання обробника події для кліку на label
-  if (costPrivatLabel) {
-    costPrivatLabel.addEventListener('click', updateBackgroundColor);
-  }
-};
-
-// Виклик функції
+  if (costpriv) costpriv.addEventListener('input', updateBackgroundColor);
+  if (costPrivatLabel) costPrivatLabel.addEventListener('click', updateBackgroundColor);
+}
 costPrivatColor();
 
+// Завантаження даних витрат
 function startDataWaste() {
   spinner('dataTableArriwalWaste', true);
   google.script.run
-    .withSuccessHandler((data) => {
+    .withSuccessHandler(data => {
       localStorage.setItem('dataWaste', JSON.stringify(data));
       createTableArriwalWaste(data);
       spinner('dataTableArriwalWaste', false);
     })
-    .withFailureHandler((error) => {
+    .withFailureHandler(error => {
       spinner('dataTableArriwalWaste', false);
       alert('Помилка отримання даних витрат: ' + error);
     })
     .getLastTenRowsWaste();
 }
 
+// Завантаження даних надходжень
 function startDataArriwal() {
   spinner('dataTableArriwalWaste', true);
   google.script.run
-    .withSuccessHandler((data) => {
+    .withSuccessHandler(data => {
       localStorage.setItem('dataArrival', JSON.stringify(data));
       createTableArriwalWaste(data);
       spinner('dataTableArriwalWaste', false);
     })
-    .withFailureHandler((error) => {
+    .withFailureHandler(error => {
       spinner('dataTableArriwalWaste', false);
       alert('Помилка отримання даних надходжень: ' + error);
     })
     .getLastTenRowsArriwal();
 }
 
+// Ініціалізація сторінки
 $(document).ready(function () {
+  // Очищення модального вікна
   $('#exampleModal').on('shown.bs.modal', function () {
     $('#dateModal').val('');
     $('#summaModal').val('');
@@ -399,19 +481,19 @@ $(document).ready(function () {
     $('#awModalLabel').text('');
   });
 
+  // Обробка кліків по вкладках
   const buttonWasteTab = document.querySelector('#buttonWasteTab');
   const buttonArrivalTab = document.querySelector('#buttonArrivalTab');
-
   if (buttonWasteTab) {
     buttonWasteTab.removeEventListener('click', handleWasteTabClick);
     buttonWasteTab.addEventListener('click', handleWasteTabClick);
   }
-
   if (buttonArrivalTab) {
     buttonArrivalTab.removeEventListener('click', handleArrivalTabClick);
     buttonArrivalTab.addEventListener('click', handleArrivalTabClick);
   }
 
+  // Обробка вкладки витрат
   function handleWasteTabClick() {
     const header = document.querySelector('#vrabotevseArriwalWaste');
     const tableDiv = document.querySelector('#divDataTableArriwalWaste');
@@ -433,9 +515,9 @@ $(document).ready(function () {
       createTableArriwalWaste(dataWaste);
     }
     spinner('dataTableArriwalWaste', false);
-    // startArrivalWaste(); // Закоментовано для стабільності
   }
 
+  // Обробка вкладки надходжень
   function handleArrivalTabClick() {
     const header = document.querySelector('#vrabotevseArriwalWaste');
     const tableDiv = document.querySelector('#divDataTableArriwalWaste');
@@ -457,8 +539,7 @@ $(document).ready(function () {
       createTableArriwalWaste(dataArrival);
     }
     spinner('dataTableArriwalWaste', false);
-    // startArrivalWaste(); // Закоментовано для стабільності
   }
 });
-  
+
 </script>

@@ -1,7 +1,8 @@
 <script>
- 
- class FormBuilderBase {
+  
+class FormBuilderBase {
   constructor(name, templateSelector, containerSelector) {
+    // Ініціалізація основних властивостей
     this.name = name;
     this.templateSelector = templateSelector;
     this.containerSelector = containerSelector;
@@ -12,28 +13,17 @@
       errorColor: 'rgb(220, 53, 69)',
     };
     this.eventHandlers = {};
-
-    console.log(`FormBuilderBase initialized: name=${name}, container=${containerSelector}`);
-    if (!this.container) {
-      console.error(`Container not found for selector: ${containerSelector}`);
-    }
-    if (!this.template) {
-      console.error(`Template not found for selector: ${templateSelector}`);
-    }
-    if (document.querySelectorAll(containerSelector).length > 1) {
-      console.warn(`Multiple containers found for selector: ${containerSelector}`);
-    }
   }
 
   none() {
+    // Очищення контейнера
     if (this.container) {
       this.container.innerHTML = '';
-    } else {
-      console.error('Cannot clear container: container not found');
     }
   }
 
   addIdToElements(elements) {
+    // Додавання унікальних ID до елементів
     const collection = this.container.querySelectorAll(elements);
     collection.forEach((element) => {
       if (element.id) {
@@ -48,26 +38,26 @@
   }
 
   borderTopOn() {
+    // Встановлення верхньої межі
     if (this.container) {
       this.container.style.borderTop = `15px solid ${this.colors.borderTopColor}`;
     }
   }
 
   borderTopOff() {
+    // Видалення верхньої межі
     if (this.container) {
       this.container.style.borderTop = '0';
     }
   }
 
   checkTemplateAndContainer() {
-    if (!this.template || !this.container) {
-      console.error('Template or container not found');
-      return false;
-    }
-    return true;
+    // Перевірка наявності шаблону та контейнера
+    return !!(this.template && this.container);
   }
 
   renderTemplate(customStyles = {}) {
+    // Рендеринг шаблону
     if (this.checkTemplateAndContainer()) {
       const clone = this.template.content.cloneNode(true);
       this.container.appendChild(clone);
@@ -78,11 +68,14 @@
     }
   }
 
-  applyCustomStyles(customStyles) {}
+  applyCustomStyles(customStyles) {
+    // Застосування власних стилів (порожній метод)
+  }
 
   on(eventName, callback) {
+    // Реєстрація обробника подій
     this.eventHandlers[eventName] = callback;
   }
 }
- 
+
 </script>

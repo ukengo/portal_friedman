@@ -1,13 +1,13 @@
 <script>
   // Глобальна змінна для кнопки вставки
   const btnCasheromInsert = document.querySelector('.btn-casherom__insert');
-  
+
   // Обробник кнопки вставки рядка
   btnCasheromInsert.addEventListener('click', () => {
     btnCasheromInsert.disabled = true;
     const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'));
     let emptyBelow = 0;
-    for (let i = casheRom2.length - 1; i > 0; i--) { // Додано 'let' для 'i'
+    for (let i = casheRom2.length - 1; i > 0; i--) {
       if (!casheRom2[i][1]) emptyBelow++;
       else break;
     }
@@ -16,4 +16,137 @@
       startDataTableCasherom(); // Оновлення таблиці після вставки
     }).insertRowCasheRom((casheRom2.length - 2) - emptyBelow);
   });
-  </script>
+
+  // Збираємо дані з форми
+  function rowDataRangeArrivalWaste() {
+    const date = document.getElementById("date").value;
+    let summa = +document.getElementById("summa").value;
+    const summaPrivat = +document.getElementById("summaPrivat").value;
+    const costPrivat = +document.getElementById("costPrivat").value;
+    let forma = document.getElementById("forma").value;
+    let firmaArrivalWaste = document.getElementById("firmaArrivalWaste").value;
+    let waste = document.getElementById("waste").value;
+
+    if (!summaPrivat && !summa) {
+      summa = "";
+      waste = "Не заповнено ні одного поля суми";
+      firmaArrivalWaste = "";
+    }
+
+    if (summaPrivat && !summa) {
+      if (!costPrivat) {
+        waste = "Не заповнено вартості комісії приват";
+      } else {
+        localStorage.setItem('costPrivat', costPrivat);
+        summa = +summaPrivat * +costPrivat;
+        waste = "Приват комісія";
+        forma = "тов";
+        firmaArrivalWaste = "";
+      }
+    }
+
+    const rowData = [date, +summa, forma, firmaArrivalWaste, waste];
+    return rowData;
+  }
+
+  function buttonClickWasteAndArival() {
+    const termkarVal = document.getElementById("termkar").value;
+    if (!rowDataRangeArrivalWaste()[4] && !termkarVal) {
+      alert('Не заповнена стаття витрат');
+      return;
+    }
+
+    if (rowDataRangeArrivalWaste()[4] === "Не заповнено ні одного поля суми") {
+      alert("Не заповнено ні одного поля суми");
+      return false;
+    }
+    if (rowDataRangeArrivalWaste()[4] === "Заповнені обидва поля суми") {
+      alert("Заповнені обидва поля суми");
+      return false;
+    }
+    if (rowDataRangeArrivalWaste()[4] === "Не заповнено вартості комісії приват") {
+      alert("Не заповнено вартості комісії приват");
+      return false;
+    }
+
+    if (rowDataRangeArrivalWaste()[4] === "Не заповнена ціна привату") {
+      alert("Не заповнена ціна привату");
+      return false;
+    }
+
+    startArrivalWaste(); // формуємо datalist
+    if (this.id === "buttonWaste") {
+      spinner("dataTableArriwalWaste");
+      if (!rowDataTermKar()[4]) {
+        google.script.run
+          .withSuccessHandler(createTableArriwalWaste)
+          .addNewRowWaste(rowDataRangeArrivalWaste());
+      } else {
+        google.script.run.insertTermKar(rowDataTermKar());
+        google.script.run
+          .withSuccessHandler(startDataWaste)
+          .vReestrTerminalKarantin(rowDataTermKar());
+      }
+      vrabotevseArriwalWaste.innerHTML = "Інші витрати";
+      buttonClickOchistkaAW();
+    }
+    if (this.id === "buttonArrival") {
+      spinner("dataTableArriwalWaste");
+      google.script.run
+        .withSuccessHandler(createTableArriwalWaste)
+        .addNewRowArrival(rowDataRangeArrivalWaste());
+      vrabotevseArriwalWaste.innerHTML = "Інші надходження";
+
+      google.script.run
+        .withSuccessHandler(createTableArriwalWaste)
+        .addNewTableArriwal(rowDataRangeArrivalWaste());
+      buttonClickOchistkaAW();
+    }
+    document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
+  }
+
+  function buttonClickOchistkaAW() {
+    document.getElementById("summa").value = "";
+    document.getElementById("summaPrivat").value = "";
+    document.getElementById("firmaArrivalWaste").value = "";
+    document.getElementById("waste").value = "";
+    document.getElementById("termkar").value = "";
+    document.getElementById("sftermkar").value = "";
+  }
+
+  // кнопки вчора + п'ятниця + сьогодні
+  document.querySelectorAll(".btn-yft").forEach(elem => {
+    const date = document.querySelector("#date");
+    elem.addEventListener('click', e => {
+      yesterdayFridayToday1(e.target.value, date);
+    });
+  });
+
+  // Додавання обробників подій для кнопок
+  document.getElementById("buttonWaste").addEventListener("click", buttonClickWasteAndArival);
+  document.getElementById("buttonArrival").addEventListener("click", buttonClickWasteAndArival);
+  document.getElementById("buttonWasteTab").addEventListener("click", startDataWaste);
+  document.getElementById("buttonArrivalTab").addEventListener("click", startDataArriwal);
+
+  // Встановлення поточної дати
+  document.getElementById("date").valueAsDate = new Date();
+
+  // жрачка підстановка "нал"
+  function startova() {
+    google.script.run
+      .withSuccessHandler((dataArray) => {
+        const arrWaste = dataArray[0].data.map(x => [x[3], x[2]]);
+        const arrArrival = dataArray[1].data.map(x => [x[4], x[2]]);
+        const arr = [...arrWaste, ...arrArrival];
+        const elemWaste = document.querySelector('#waste');
+        elemWaste.oninput = () => {
+          arr.forEach(el => {
+            if (elemWaste.value == el[0]) {
+              document.querySelector('#forma').value = el[1];
+            }
+          });
+        };
+      }).getLastTenRowsWasteAndArriwal();
+  }
+  startova();
+</script>

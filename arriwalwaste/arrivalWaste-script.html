@@ -326,15 +326,35 @@ mutationObserverAw();
 
 const costPrivatColor = () => {
   const costpriv = document.querySelector('#costPrivat');
-  if (costpriv) {
-    if (!+costpriv.value) {
-      costpriv.style.backgroundColor = '#dc35457a';
-    } else {
-      costpriv.style.removeProperty('background-color');
+  const costPrivatLabel = document.querySelector('label[for="costPrivat"]');
+
+  // Функція для перевірки та розфарбовки
+  const updateBackgroundColor = () => {
+    console.log(costpriv.value);
+    if (costpriv) {
+      if (!+costpriv.value) {
+        costpriv.style.backgroundColor = '#dc35457a';
+      } else {
+        costpriv.style.removeProperty('background-color');
+      }
     }
-    costpriv.addEventListener('input', costPrivatColor);
+  };
+
+  // Виклик функції для початкової перевірки
+  updateBackgroundColor();
+
+  // Додавання обробника події для input
+  if (costpriv) {
+    costpriv.addEventListener('input', updateBackgroundColor);
+  }
+
+  // Додавання обробника події для кліку на label
+  if (costPrivatLabel) {
+    costPrivatLabel.addEventListener('click', updateBackgroundColor);
   }
 };
+
+// Виклик функції
 costPrivatColor();
 
 function startDataWaste() {

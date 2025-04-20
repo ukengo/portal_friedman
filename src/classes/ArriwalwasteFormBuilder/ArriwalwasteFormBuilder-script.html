@@ -6,13 +6,13 @@ class AWFormBuilder extends FormBuilderBase {
   attributes = {
     wasteButton: 'data-button-waste', // Кнопка витрат
     arrivalButton: 'data-button-arrival', // Кнопка надходжень
-    wasteTabButton: 'data-button-wastetab', // Кнопка вкладки витрат
-    arrivalTabButton: 'data-button-arrivaltab', // Кнопка вкладки надходжень
+    wasteTabButton: 'data-button-wastetab', // Вкладка витрат
+    arrivalTabButton: 'data-button-arrivaltab', // Вкладка надходжень
   };
 
   selectors = {
     form: '[data-form-aw]', // Селектор форми
-    dateInput: null, // Селектор поля дати
+    dateInput: null, // Поле дати
     dateButtonGroup: '.btn-group', // Група кнопок дати
     yesterdayButton: '.btn-yft[value=" Y "]', // Кнопка "Вчора"
     fridayButton: '.btn-yft[value="Fri"]', // Кнопка "П'ятниця"
@@ -21,12 +21,11 @@ class AWFormBuilder extends FormBuilderBase {
 
   constructor(name, templateSelector, containerSelector) {
     super(name, templateSelector, containerSelector);
-    // Встановлення селектора поля дати
-    this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`;
+    this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`; // Встановлення селектора дати
   }
 
   getFormFields() {
-    // Отримання ID полів форми
+    // Повертає ID полів форми
     return {
       date: this.name === 'aw' ? 'date' : `date-${this.name}`,
       summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
@@ -56,13 +55,13 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   initEventListeners() {
-    // Ініціалізація обробників подій
+    // Обробники подій
     const events = [
-      [`[${this.attributes.wasteButton}]`, this.handleWasteButtonClick, 'Кнопка Витрата'],
-      [`[${this.attributes.arrivalButton}]`, this.handleArrivalButtonClick, 'Кнопка Прихід'],
-      [this.selectors.yesterdayButton, this.handleYesterdayButtonClick, 'Кнопка Вчора'],
-      [this.selectors.fridayButton, this.handleFridayButtonClick, 'Кнопка П\'ятниця'],
-      [this.selectors.todayButton, this.handleTodayButtonClick, 'Кнопка Сьогодні'],
+      [`[${this.attributes.wasteButton}]`, this.handleWasteButtonClick],
+      [`[${this.attributes.arrivalButton}]`, this.handleArrivalButtonClick],
+      [this.selectors.yesterdayButton, this.handleYesterdayButtonClick],
+      [this.selectors.fridayButton, this.handleFridayButtonClick],
+      [this.selectors.todayButton, this.handleTodayButtonClick],
     ];
     events.forEach(([selector, handler]) => {
       const elements = this.container.querySelectorAll(selector);
@@ -83,28 +82,28 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   handleYesterdayButtonClick(event) {
-    // Обробка кліку по кнопці "Вчора"
+    // Обробка кнопки "Вчора"
     this.setDate('yesterday');
     this.updateLabelColors(this.getFormFields());
     this.eventHandlers.yesterdayButton?.(event);
   }
 
   handleFridayButtonClick(event) {
-    // Обробка кліку по кнопці "П'ятниця"
+    // Обробка кнопки "П'ятниця"
     this.setDate('friday');
     this.updateLabelColors(this.getFormFields());
     this.eventHandlers.fridayButton?.(event);
   }
 
   handleTodayButtonClick(event) {
-    // Обробка кліку по кнопці "Сьогодні"
+    // Обробка кнопки "Сьогодні"
     this.setDate('today');
     this.updateLabelColors(this.getFormFields());
     this.eventHandlers.todayButton?.(event);
   }
 
   setDate(type) {
-    // Встановлення дати залежно від типу
+    // Встановлення дати
     const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
     dateInputs.forEach((dateInput) => {
       let targetDate = new Date();
@@ -151,21 +150,29 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   handleWasteButtonClick(event) {
-    // Обробка кліку по кнопці витрат
-    const rowData = this.getRowData();
-    const termkarVal = this.container.querySelector(`#termkar`)?.value;
+    // Обробка кнопки "Витрата"
+    const wasteButton = event.target;
+    if (wasteButton.disabled) return;
+    wasteButton.disabled = true;
 
-    if (!rowData[4] && !termkarVal) {
+    const rowData = this.getRowData();
+    const termkarVal = this.container.querySelector(`#termkar`)?.value || '';
+    const wasteVal = this.container.querySelector(`#waste`)?.value || '';
+
+    if (!rowData[1] && !wasteVal && !termkarVal) {
       alert('Не заповнена стаття витрат');
+      wasteButton.disabled = false;
       return;
     }
-    if (this.validateRowData(rowData)) return;
 
-    this.clearForm();
-    this.updateLabelColors(this.getFormFields());
+    if (this.validateRowData(rowData)) {
+      wasteButton.disabled = false;
+      return;
+    }
 
     const termKarData = this.getTermKarData();
     const successCallback = (result) => {
+      this.clearForm();
       createTableArriwalWaste(result);
       const header = this.container.querySelector('#vrabotevseArriwalWaste');
       if (header) header.innerHTML = 'Інші витрати';
@@ -175,9 +182,12 @@ class AWFormBuilder extends FormBuilderBase {
         tableDiv.style.display = 'block';
         tableDiv.style.visibility = 'visible';
       }
+      wasteButton.disabled = false;
     };
+
     const failureCallback = (error) => {
-      alert('Помилка збереження витрат: ' + error);
+      alert('Помилка збереження витрат: ' + error.message);
+      wasteButton.disabled = false;
     };
 
     if (!termKarData[4]) {
@@ -204,7 +214,7 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   handleArrivalButtonClick(event) {
-    // Обробка кліку по кнопці надходжень
+    // Обробка кнопки "Прихід"
     const rowData = this.getRowData();
     if (this.validateRowData(rowData)) return;
 
@@ -236,20 +246,22 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   getRowData() {
-    // Отримання даних з полів форми
+    // Отримання даних форми
     const fields = this.getFormFields();
     const values = Object.fromEntries(
       Object.entries(fields).map(([key, id]) => [
         key,
-        this.container.querySelector(`#${id}`)?.value,
+        this.container.querySelector(`#${id}`)?.value || '',
       ])
     );
 
     let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
 
-    summa = summa ? +summa : undefined;
-    summaPrivat = summaPrivat ? +summaPrivat : undefined;
-    costPrivat = costPrivat ? +costPrivat : undefined;
+    summa = summa && summa !== '' ? +summa : undefined;
+    summaPrivat = summaPrivat && summaPrivat !== '' ? +summaPrivat : undefined;
+    costPrivat = costPrivat && costPrivat !== '' ? +costPrivat : undefined;
+
+    waste = '';
 
     if (!summaPrivat && !summa) {
       summa = '';
@@ -273,7 +285,7 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   getTermKarData() {
-    // Отримання даних для карантину
+    // Дані для карантину
     const fields = this.getFormFields();
     const values = Object.fromEntries(
       Object.entries(fields).map(([key, id]) => [
@@ -293,7 +305,7 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   validateRowData(rowData) {
-    // Валідація даних рядка
+    // Валідація даних
     const messages = {
       'Не заповнено ні одного поля суми': 'Не заповнено ні одного поля суми',
       'Заповнені обидва поля суми': 'Заповнені обидва поля суми',

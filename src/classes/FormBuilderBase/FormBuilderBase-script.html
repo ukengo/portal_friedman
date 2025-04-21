@@ -1,8 +1,7 @@
 <script>
   
-class FormBuilderBase {
+  class FormBuilderBase {
   constructor(name, templateSelector, containerSelector) {
-    // Ініціалізація основних властивостей
     this.name = name;
     this.templateSelector = templateSelector;
     this.containerSelector = containerSelector;
@@ -16,14 +15,12 @@ class FormBuilderBase {
   }
 
   none() {
-    // Очищення контейнера
     if (this.container) {
       this.container.innerHTML = '';
     }
   }
 
   addIdToElements(elements) {
-    // Додавання унікальних ID до елементів
     const collection = this.container.querySelectorAll(elements);
     collection.forEach((element) => {
       if (element.id) {
@@ -38,26 +35,22 @@ class FormBuilderBase {
   }
 
   borderTopOn() {
-    // Встановлення верхньої межі
     if (this.container) {
       this.container.style.borderTop = `15px solid ${this.colors.borderTopColor}`;
     }
   }
 
   borderTopOff() {
-    // Видалення верхньої межі
     if (this.container) {
       this.container.style.borderTop = '0';
     }
   }
 
   checkTemplateAndContainer() {
-    // Перевірка наявності шаблону та контейнера
     return !!(this.template && this.container);
   }
 
   renderTemplate(customStyles = {}) {
-    // Рендеринг шаблону
     if (this.checkTemplateAndContainer()) {
       const clone = this.template.content.cloneNode(true);
       this.container.appendChild(clone);
@@ -68,12 +61,9 @@ class FormBuilderBase {
     }
   }
 
-  applyCustomStyles(customStyles) {
-    // Застосування власних стилів (порожній метод)
-  }
+  applyCustomStyles(customStyles) {}
 
   on(eventName, callback) {
-    // Реєстрація обробника подій
     this.eventHandlers[eventName] = callback;
   }
 }

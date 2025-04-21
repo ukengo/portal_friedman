@@ -4,28 +4,27 @@ class AWFormBuilder extends FormBuilderBase {
   defaultName = 'aw';
 
   attributes = {
-    wasteButton: 'data-button-waste', // Кнопка витрат
-    arrivalButton: 'data-button-arrival', // Кнопка надходжень
-    wasteTabButton: 'data-button-wastetab', // Вкладка витрат
-    arrivalTabButton: 'data-button-arrivaltab', // Вкладка надходжень
+    wasteButton: 'data-button-waste',
+    arrivalButton: 'data-button-arrival',
+    wasteTabButton: 'data-button-wastetab',
+    arrivalTabButton: 'data-button-arrivaltab',
   };
 
   selectors = {
-    form: '[data-form-aw]', // Селектор форми
-    dateInput: null, // Поле дати
-    dateButtonGroup: '.btn-group', // Група кнопок дати
-    yesterdayButton: '.btn-yft[value=" Y "]', // Кнопка "Вчора"
-    fridayButton: '.btn-yft[value="Fri"]', // Кнопка "П'ятниця"
-    todayButton: '.btn-yft[value=" T "]', // Кнопка "Сьогодні"
+    form: '[data-form-aw]',
+    dateInput: null,
+    dateButtonGroup: '.btn-group',
+    yesterdayButton: '.btn-yft[value=" Y "]',
+    fridayButton: '.btn-yft[value="Fri"]',
+    todayButton: '.btn-yft[value=" T "]',
   };
 
   constructor(name, templateSelector, containerSelector) {
     super(name, templateSelector, containerSelector);
-    this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`; // Встановлення селектора дати
+    this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`;
   }
 
   getFormFields() {
-    // Повертає ID полів форми
     return {
       date: this.name === 'aw' ? 'date' : `date-${this.name}`,
       summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
@@ -40,7 +39,6 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   render() {
-    // Рендеринг форми
     if (!this.checkTemplateAndContainer()) return;
     super.renderTemplate();
     this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form)).map(
@@ -55,7 +53,6 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   initEventListeners() {
-    // Обробники подій
     const events = [
       [`[${this.attributes.wasteButton}]`, this.handleWasteButtonClick],
       [`[${this.attributes.arrivalButton}]`, this.handleArrivalButtonClick],
@@ -63,7 +60,13 @@ class AWFormBuilder extends FormBuilderBase {
       [this.selectors.fridayButton, this.handleFridayButtonClick],
       [this.selectors.todayButton, this.handleTodayButtonClick],
     ];
-    events.forEach(([selector, handler]) => {
+
+    const tabEvents = [
+      [`[${this.attributes.wasteTabButton}]`, this.handleWasteTabButtonClick],
+      [`[${this.attributes.arrivalTabButton}]`, this.handleArrivalTabButtonClick],
+    ];
+
+    events.concat(tabEvents).forEach(([selector, handler]) => {
       const elements = this.container.querySelectorAll(selector);
       elements.forEach((element) => {
         element.addEventListener('click', (event) => handler.call(this, event));
@@ -72,7 +75,6 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   setDefaultDate() {
-    // Встановлення дати за замовчуванням
     const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
     dateInputs.forEach((dateInput) => {
       const today = new Date();
@@ -82,28 +84,24 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   handleYesterdayButtonClick(event) {
-    // Обробка кнопки "Вчора"
     this.setDate('yesterday');
     this.updateLabelColors(this.getFormFields());
     this.eventHandlers.yesterdayButton?.(event);
   }
 
   handleFridayButtonClick(event) {
-    // Обробка кнопки "П'ятниця"
     this.setDate('friday');
     this.updateLabelColors(this.getFormFields());
     this.eventHandlers.fridayButton?.(event);
   }
 
   handleTodayButtonClick(event) {
-    // Обробка кнопки "Сьогодні"
     this.setDate('today');
     this.updateLabelColors(this.getFormFields());
     this.eventHandlers.todayButton?.(event);
   }
 
   setDate(type) {
-    // Встановлення дати
     const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
     dateInputs.forEach((dateInput) => {
       let targetDate = new Date();
@@ -119,7 +117,6 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   updateLabelColors(fields) {
-    // Оновлення кольорів міток
     Object.entries(fields).forEach(([key, id]) => {
       const input = this.container.querySelector(`#${id}`);
       const label = this.container.querySelector(`label[for="${id}"]`);
@@ -133,12 +130,10 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   resetLabelColors(fields) {
-    // Скидання кольорів міток
     this.updateLabelColors(fields);
   }
 
   toggleButtons(disabled) {
-    // Перемикання стану кнопок
     const buttons = [
       `[${this.attributes.wasteTabButton}]`,
       `[${this.attributes.arrivalTabButton}]`,
@@ -150,21 +145,22 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   handleWasteButtonClick(event) {
-    // Обробка кнопки "Витрата"
     const wasteButton = event.target;
     if (wasteButton.disabled) return;
     wasteButton.disabled = true;
 
     const rowData = this.getRowData();
-    const termkarVal = this.container.querySelector(`#termkar`)?.value || '';
-    const wasteVal = this.container.querySelector(`#waste`)?.value || '';
+    const termkarVal = this.container.querySelector(`#${this.getFormFields().termkar}`)?.value || '';
+    const wasteVal = this.container.querySelector(`#${this.getFormFields().waste}`)?.value || '';
 
-    if (!rowData[1] && !wasteVal && !termkarVal) {
+    // Перевірка, чи заповнена стаття витрат або термінал-карантин
+    if (!wasteVal && !termkarVal) {
       alert('Не заповнена стаття витрат');
       wasteButton.disabled = false;
       return;
     }
 
+    // Валідація даних
     if (this.validateRowData(rowData)) {
       wasteButton.disabled = false;
       return;
@@ -190,12 +186,15 @@ class AWFormBuilder extends FormBuilderBase {
       wasteButton.disabled = false;
     };
 
+    startArrivalWaste();
     if (!termKarData[4]) {
+      // Відправка даних без termkar
       google.script.run
         .withSuccessHandler(successCallback)
         .withFailureHandler(failureCallback)
         .addNewRowWaste(rowData);
     } else {
+      // Відправка даних із termkar
       google.script.run
         .withSuccessHandler(() => {
           google.script.run
@@ -214,39 +213,106 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   handleArrivalButtonClick(event) {
-    // Обробка кнопки "Прихід"
-    const rowData = this.getRowData();
-    if (this.validateRowData(rowData)) return;
+    const arrivalButton = event.target;
+    if (arrivalButton.disabled) return;
+    arrivalButton.disabled = true;
 
+    const rowData = this.getRowData();
+    if (this.validateRowData(rowData)) {
+      arrivalButton.disabled = false;
+      return;
+    }
+
+    startArrivalWaste();
     this.clearForm();
     this.updateLabelColors(this.getFormFields());
 
+    const successCallback = (result) => {
+      createTableArriwalWaste(result);
+      const header = this.container.querySelector('#vrabotevseArriwalWaste');
+      if (header) header.innerHTML = 'Інші надходження';
+      const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
+      if (tableDiv) {
+        tableDiv.style.height = 'auto';
+        tableDiv.style.display = 'block';
+        tableDiv.style.visibility = 'visible';
+      }
+      arrivalButton.disabled = false;
+    };
+
+    const failureCallback = (error) => {
+      alert('Помилка збереження надходжень: ' + error);
+      arrivalButton.disabled = false;
+    };
+
     google.script.run
-      .withSuccessHandler((result) => {
-        createTableArriwalWaste(result);
-        const header = this.container.querySelector('#vrabotevseArriwalWaste');
-        if (header) header.innerHTML = 'Інші надходження';
-        const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
-        if (tableDiv) {
-          tableDiv.style.height = 'auto';
-          tableDiv.style.display = 'block';
-          tableDiv.style.visibility = 'visible';
-        }
-      })
-      .withFailureHandler((error) => {
-        alert('Помилка збереження надходжень: ' + error);
-      })
+      .withSuccessHandler(successCallback)
+      .withFailureHandler(failureCallback)
       .addNewRowArrival(rowData);
 
     google.script.run
       .withSuccessHandler(createTableArriwalWaste)
+      .withFailureHandler(failureCallback)
       .addNewTableArriwal(rowData);
 
     this.eventHandlers.arrivalButton?.(event);
   }
 
+  handleWasteTabButtonClick(event) {
+    const header = this.container.querySelector('#vrabotevseArriwalWaste');
+    const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
+    const tableContainer = this.container.querySelector('#dataTableArriwalWaste');
+    if (!header || !tableDiv || !tableContainer) return;
+
+    const dataWaste = JSON.parse(localStorage.getItem('dataWaste'));
+    if (!dataWaste || !dataWaste.data || !dataWaste.data.length) {
+      header.innerHTML = 'Інші витрати';
+      tableContainer.innerHTML = '<p>Немає даних для відображення</p>';
+      return;
+    }
+
+    header.innerHTML = 'Інші витрати';
+    tableDiv.style.height = 'auto';
+    tableDiv.style.display = 'block';
+    tableDiv.style.visibility = 'visible';
+    tableContainer.style.display = 'block';
+    spinner('dataTableArriwalWaste', true);
+    if (!tableContainer.querySelector('#table-aw')) {
+      createTableArriwalWaste(dataWaste);
+    }
+    spinner('dataTableArriwalWaste', false);
+
+    this.eventHandlers.wasteTabButton?.(event);
+  }
+
+  handleArrivalTabButtonClick(event) {
+    const header = this.container.querySelector('#vrabotevseArriwalWaste');
+    const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
+    const tableContainer = this.container.querySelector('#dataTableArriwalWaste');
+    if (!header || !tableDiv || !tableContainer) return;
+
+    const dataArrival = JSON.parse(localStorage.getItem('dataArrival'));
+    if (!dataArrival || !dataArrival.data || !dataArrival.data.length) {
+      header.innerHTML = 'Інші надходження';
+      tableContainer.innerHTML = '<p>Немає даних для відображення</p>';
+      return;
+    }
+
+    header.innerHTML = 'Інші надходження';
+    tableDiv.style.height = 'auto';
+    tableDiv.style.display = 'block';
+    tableDiv.style.visibility = 'visible';
+    tableContainer.style.display = 'block';
+    spinner('dataTableArriwalWaste', true);
+    if (!tableContainer.querySelector('#table-aw')) {
+      createTableArriwalWaste(dataArrival);
+    }
+    spinner('dataTableArriwalWaste', false);
+
+    this.eventHandlers.arrivalTabButton?.(event);
+  }
+
   getRowData() {
-    // Отримання даних форми
     const fields = this.getFormFields();
     const values = Object.fromEntries(
       Object.entries(fields).map(([key, id]) => [
@@ -261,7 +327,8 @@ class AWFormBuilder extends FormBuilderBase {
     summaPrivat = summaPrivat && summaPrivat !== '' ? +summaPrivat : undefined;
     costPrivat = costPrivat && costPrivat !== '' ? +costPrivat : undefined;
 
-    waste = '';
+    // Зберігаємо оригінальне значення waste для відправки
+    const originalWaste = waste;
 
     if (!summaPrivat && !summa) {
       summa = '';
@@ -281,11 +348,11 @@ class AWFormBuilder extends FormBuilderBase {
       waste = 'Заповнені обидва поля суми';
     }
 
-    return [date, summa || 0, forma, firmaArrivalWaste, waste];
+    // Повертаємо оригінальне значення waste, якщо воно було заповнене
+    return [date, summa || 0, forma, firmaArrivalWaste, originalWaste || waste];
   }
 
   getTermKarData() {
-    // Дані для карантину
     const fields = this.getFormFields();
     const values = Object.fromEntries(
       Object.entries(fields).map(([key, id]) => [
@@ -305,12 +372,10 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   validateRowData(rowData) {
-    // Валідація даних
     const messages = {
       'Не заповнено ні одного поля суми': 'Не заповнено ні одного поля суми',
       'Заповнені обидва поля суми': 'Заповнені обидва поля суми',
       'Не заповнено вартості комісії приват': 'Не заповнено вартості комісії приват',
-      'Не заповнена ціна привату': 'Не заповнена ціна привату',
     };
 
     if (messages[rowData[4]]) {
@@ -321,7 +386,6 @@ class AWFormBuilder extends FormBuilderBase {
   }
 
   clearForm() {
-    // Очищення форми
     const fields = this.getFormFields();
     const fieldsToClear = [
       fields.summa,
@@ -341,4 +405,5 @@ class AWFormBuilder extends FormBuilderBase {
   }
 }
 
+  
 </script>

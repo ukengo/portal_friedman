@@ -3,12 +3,7 @@
 class AWFormBuilder extends FormBuilderBase {
   defaultName = 'aw';
 
-  attributes = {
-    wasteButton: 'data-button-waste',
-    arrivalButton: 'data-button-arrival',
-    wasteTabButton: 'data-button-wastetab',
-    arrivalTabButton: 'data-button-arrivaltab',
-  };
+  attributes = {};
 
   selectors = {
     form: '[data-form-aw]',
@@ -54,19 +49,12 @@ class AWFormBuilder extends FormBuilderBase {
 
   initEventListeners() {
     const events = [
-      [`[${this.attributes.wasteButton}]`, this.handleWasteButtonClick],
-      [`[${this.attributes.arrivalButton}]`, this.handleArrivalButtonClick],
       [this.selectors.yesterdayButton, this.handleYesterdayButtonClick],
       [this.selectors.fridayButton, this.handleFridayButtonClick],
       [this.selectors.todayButton, this.handleTodayButtonClick],
     ];
 
-    const tabEvents = [
-      [`[${this.attributes.wasteTabButton}]`, this.handleWasteTabButtonClick],
-      [`[${this.attributes.arrivalTabButton}]`, this.handleArrivalTabButtonClick],
-    ];
-
-    events.concat(tabEvents).forEach(([selector, handler]) => {
+    events.forEach(([selector, handler]) => {
       const elements = this.container.querySelectorAll(selector);
       elements.forEach((element) => {
         element.addEventListener('click', (event) => handler.call(this, event));
@@ -133,258 +121,6 @@ class AWFormBuilder extends FormBuilderBase {
     this.updateLabelColors(fields);
   }
 
-  toggleButtons(disabled) {
-    const buttons = [
-      `[${this.attributes.wasteTabButton}]`,
-      `[${this.attributes.arrivalTabButton}]`,
-    ];
-    buttons.forEach((selector) => {
-      const button = this.container.querySelector(selector);
-      if (button) button.disabled = disabled;
-    });
-  }
-
-  handleWasteButtonClick(event) {
-    const wasteButton = event.target;
-    if (wasteButton.disabled) return;
-    wasteButton.disabled = true;
-
-    const rowData = this.getRowData();
-    const termkarVal = this.container.querySelector(`#${this.getFormFields().termkar}`)?.value || '';
-    const wasteVal = this.container.querySelector(`#${this.getFormFields().waste}`)?.value || '';
-
-    // Перевірка, чи заповнена стаття витрат або термінал-карантин
-    if (!wasteVal && !termkarVal) {
-      alert('Не заповнена стаття витрат');
-      wasteButton.disabled = false;
-      return;
-    }
-
-    // Валідація даних
-    if (this.validateRowData(rowData)) {
-      wasteButton.disabled = false;
-      return;
-    }
-
-    const termKarData = this.getTermKarData();
-    const successCallback = (result) => {
-      this.clearForm();
-      createTableArriwalWaste(result);
-      const header = this.container.querySelector('#vrabotevseArriwalWaste');
-      if (header) header.innerHTML = 'Інші витрати';
-      const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
-      if (tableDiv) {
-        tableDiv.style.height = 'auto';
-        tableDiv.style.display = 'block';
-        tableDiv.style.visibility = 'visible';
-      }
-      wasteButton.disabled = false;
-    };
-
-    const failureCallback = (error) => {
-      alert('Помилка збереження витрат: ' + error.message);
-      wasteButton.disabled = false;
-    };
-
-    startArrivalWaste();
-    if (!termKarData[4]) {
-      // Відправка даних без termkar
-      google.script.run
-        .withSuccessHandler(successCallback)
-        .withFailureHandler(failureCallback)
-        .addNewRowWaste(rowData);
-    } else {
-      // Відправка даних із termkar
-      google.script.run
-        .withSuccessHandler(() => {
-          google.script.run
-            .withSuccessHandler(() => {
-              startDataWaste();
-              successCallback(null);
-            })
-            .withFailureHandler(failureCallback)
-            .vReestrTerminalKarantin(termKarData);
-        })
-        .withFailureHandler(failureCallback)
-        .insertTermKar(termKarData);
-    }
-
-    this.eventHandlers.wasteButton?.(event);
-  }
-
-  handleArrivalButtonClick(event) {
-    const arrivalButton = event.target;
-    if (arrivalButton.disabled) return;
-    arrivalButton.disabled = true;
-
-    const rowData = this.getRowData();
-    if (this.validateRowData(rowData)) {
-      arrivalButton.disabled = false;
-      return;
-    }
-
-    startArrivalWaste();
-    this.clearForm();
-    this.updateLabelColors(this.getFormFields());
-
-    const successCallback = (result) => {
-      createTableArriwalWaste(result);
-      const header = this.container.querySelector('#vrabotevseArriwalWaste');
-      if (header) header.innerHTML = 'Інші надходження';
-      const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
-      if (tableDiv) {
-        tableDiv.style.height = 'auto';
-        tableDiv.style.display = 'block';
-        tableDiv.style.visibility = 'visible';
-      }
-      arrivalButton.disabled = false;
-    };
-
-    const failureCallback = (error) => {
-      alert('Помилка збереження надходжень: ' + error);
-      arrivalButton.disabled = false;
-    };
-
-    google.script.run
-      .withSuccessHandler(successCallback)
-      .withFailureHandler(failureCallback)
-      .addNewRowArrival(rowData);
-
-    google.script.run
-      .withSuccessHandler(createTableArriwalWaste)
-      .withFailureHandler(failureCallback)
-      .addNewTableArriwal(rowData);
-
-    this.eventHandlers.arrivalButton?.(event);
-  }
-
-  handleWasteTabButtonClick(event) {
-    const header = this.container.querySelector('#vrabotevseArriwalWaste');
-    const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
-    const tableContainer = this.container.querySelector('#dataTableArriwalWaste');
-    if (!header || !tableDiv || !tableContainer) return;
-
-    const dataWaste = JSON.parse(localStorage.getItem('dataWaste'));
-    if (!dataWaste || !dataWaste.data || !dataWaste.data.length) {
-      header.innerHTML = 'Інші витрати';
-      tableContainer.innerHTML = '<p>Немає даних для відображення</p>';
-      return;
-    }
-
-    header.innerHTML = 'Інші витрати';
-    tableDiv.style.height = 'auto';
-    tableDiv.style.display = 'block';
-    tableDiv.style.visibility = 'visible';
-    tableContainer.style.display = 'block';
-    spinner('dataTableArriwalWaste', true);
-    if (!tableContainer.querySelector('#table-aw')) {
-      createTableArriwalWaste(dataWaste);
-    }
-    spinner('dataTableArriwalWaste', false);
-
-    this.eventHandlers.wasteTabButton?.(event);
-  }
-
-  handleArrivalTabButtonClick(event) {
-    const header = this.container.querySelector('#vrabotevseArriwalWaste');
-    const tableDiv = this.container.querySelector('#divDataTableArriwalWaste');
-    const tableContainer = this.container.querySelector('#dataTableArriwalWaste');
-    if (!header || !tableDiv || !tableContainer) return;
-
-    const dataArrival = JSON.parse(localStorage.getItem('dataArrival'));
-    if (!dataArrival || !dataArrival.data || !dataArrival.data.length) {
-      header.innerHTML = 'Інші надходження';
-      tableContainer.innerHTML = '<p>Немає даних для відображення</p>';
-      return;
-    }
-
-    header.innerHTML = 'Інші надходження';
-    tableDiv.style.height = 'auto';
-    tableDiv.style.display = 'block';
-    tableDiv.style.visibility = 'visible';
-    tableContainer.style.display = 'block';
-    spinner('dataTableArriwalWaste', true);
-    if (!tableContainer.querySelector('#table-aw')) {
-      createTableArriwalWaste(dataArrival);
-    }
-    spinner('dataTableArriwalWaste', false);
-
-    this.eventHandlers.arrivalTabButton?.(event);
-  }
-
-  getRowData() {
-    const fields = this.getFormFields();
-    const values = Object.fromEntries(
-      Object.entries(fields).map(([key, id]) => [
-        key,
-        this.container.querySelector(`#${id}`)?.value || '',
-      ])
-    );
-
-    let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste } = values;
-
-    summa = summa && summa !== '' ? +summa : undefined;
-    summaPrivat = summaPrivat && summaPrivat !== '' ? +summaPrivat : undefined;
-    costPrivat = costPrivat && costPrivat !== '' ? +costPrivat : undefined;
-
-    // Зберігаємо оригінальне значення waste для відправки
-    const originalWaste = waste;
-
-    if (!summaPrivat && !summa) {
-      summa = '';
-      waste = 'Не заповнено ні одного поля суми';
-      firmaArrivalWaste = '';
-    } else if (summaPrivat && !summa) {
-      if (!costPrivat) {
-        waste = 'Не заповнено вартості комісії приват';
-      } else {
-        localStorage.setItem('costPrivat', costPrivat);
-        summa = summaPrivat * costPrivat;
-        waste = 'Приват комісія';
-        forma = 'тов';
-        firmaArrivalWaste = '';
-      }
-    } else if (summa && summaPrivat) {
-      waste = 'Заповнені обидва поля суми';
-    }
-
-    // Повертаємо оригінальне значення waste, якщо воно було заповнене
-    return [date, summa || 0, forma, firmaArrivalWaste, originalWaste || waste];
-  }
-
-  getTermKarData() {
-    const fields = this.getFormFields();
-    const values = Object.fromEntries(
-      Object.entries(fields).map(([key, id]) => [
-        key,
-        this.container.querySelector(`#${id}`)?.value,
-      ])
-    );
-
-    return [
-      values.date,
-      values.summa * 1,
-      values.forma,
-      values.waste,
-      values.termkar,
-      values.sftermkar,
-    ];
-  }
-
-  validateRowData(rowData) {
-    const messages = {
-      'Не заповнено ні одного поля суми': 'Не заповнено ні одного поля суми',
-      'Заповнені обидва поля суми': 'Заповнені обидва поля суми',
-      'Не заповнено вартості комісії приват': 'Не заповнено вартості комісії приват',
-    };
-
-    if (messages[rowData[4]]) {
-      alert(messages[rowData[4]]);
-      return true;
-    }
-    return false;
-  }
-
   clearForm() {
     const fields = this.getFormFields();
     const fieldsToClear = [
@@ -405,5 +141,4 @@ class AWFormBuilder extends FormBuilderBase {
   }
 }
 
-  
 </script>

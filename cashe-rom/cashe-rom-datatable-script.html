@@ -47,63 +47,96 @@
   }
 
   // Побудова таблиці
+  // Функція для побудови таблиці з даними
   function buildDataTableCasherom(data) {
-    // Оновлюємо localStorage з отриманими даними
+    // Збереження даних у localStorage
     localStorage.setItem('casheRom1', JSON.stringify(data.casheRom1));
     localStorage.setItem('casheRom2', JSON.stringify(data.casheRom2));
 
-    const casheRom1 = JSON.parse(data.casheRom1);
-    const casheRom2 = JSON.parse(data.casheRom2);
+    // Парсинг даних із JSON
+    let casheRom1, casheRom2;
+    try {
+      casheRom1 = JSON.parse(data.casheRom1);
+      if (!Array.isArray(casheRom1)) {
+        casheRom1 = []; // Якщо casheRom1 не масив, ініціалізуємо порожнім масивом
+      }
+    } catch (e) {
+      casheRom1 = []; // У разі помилки парсингу ініціалізуємо порожнім масивом
+    }
+
+    try {
+      casheRom2 = JSON.parse(data.casheRom2);
+      if (!Array.isArray(casheRom2)) {
+        casheRom2 = []; // Якщо casheRom2 не масив, ініціалізуємо порожнім масивом
+      }
+    } catch (e) {
+      casheRom2 = []; // У разі помилки парсингу ініціалізуємо порожнім масивом
+    }
+
+    // Фільтрація рядків casheRom1 для забезпечення правильної структури (6 колонок)
+    casheRom1 = casheRom1.filter(row => Array.isArray(row) && row.length === 6);
+
+    // Очищення контейнера таблиці перед рендерингом
     utils.clearContainer(document.querySelector('#tableCaheRom'));
 
+    // Ініціалізація DataTable
     const table = new DataTable('#tableCaheRom', {
-      destroy: true,
-      data: casheRom1,
-      columns: ["1", "Дата", "Стаття", "Витрата", "Прихід", "Примітки"].map(title => ({ title })),
-      lengthMenu: [[50, 100, 500, -1, 0], [50, 100, 500, "Все", "Пусто"]],
-      order: [[0, 'desc']],
-      select: true,
-      autoWidth: true,
+      destroy: true, // Знищення попередньої таблиці, якщо вона існує
+      data: casheRom1, // Дані для таблиці
+      columns: ["1", "Дата", "Стаття", "Витрата", "Прихід", "Примітки"].map(title => ({ title })), // Колонки таблиці
+      lengthMenu: [[50, 100, 500, -1, 0], [50, 100, 500, "Все", "Пусто"]], // Налаштування кількості записів на сторінці
+      order: [[0, 'desc']], // Сортування за першою колонкою за спаданням
+      select: true, // Увімкнення вибору рядків
+      autoWidth: true, // Автоматична ширина колонок
       columnDefs: [
         {
-          targets: [0, 2, 3, 4, 5], // Всі стовпці, крім "Дата"
+          // Налаштування для всіх колонок, крім "Дата"
+          targets: [0, 2, 3, 4, 5],
           width: 'auto',
           render: function (data, type, row, meta) {
+            // Відображення даних у стилізованому div
             return '<div style="white-space: nowrap; width: 100%; height: 100%; display: block; line-height: 30px;">' + (data || '') + '</div>';
           }
         },
         {
-          targets: 1, // Стовпець "Дата" (індекс 1)
+          // Налаштування для колонки "Дата"
+          targets: 1,
           width: 'auto',
-          type: 'date', // Тип для сортування
+          type: 'date', // Тип даних для сортування
           render: function (data, type, row, meta) {
             if (type === 'sort') {
-              // Парсимо дату у форматі ДД.ММ.РРРР
+              // Форматування дати для сортування (YYYY-MM-DD)
               if (data && /^\d{2}\.\d{2}\.\d{4}$/.test(data)) {
                 const [day, month, year] = data.split('.');
-                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`; // Формат YYYY-MM-DD для сортування
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
               }
-              return ''; // Порожні або невалідні дати сортуються як найменші
+              return ''; // Порожні дати сортуються як найменші
             }
-            // Відображення в таблиці
+            // Відображення дати в таблиці
             return '<div style="white-space: nowrap; width: 100%; height: 100%; display: block; line-height: 30px;">' + (data || '') + '</div>';
           }
         }
       ],
       rowCallback: function (row, data) {
+        // Встановлення висоти рядка
         row.style.height = '30px';
       }
     });
 
+    // Активація кнопки вставки після рендерингу таблиці
     btnCasheromInsert.disabled = false;
-    const casheRom2F = casheRom2.filter(el => el[1]);
+
+    // Фільтрація casheRom2 для виділення рядків із непорожнім другим елементом
+    const casheRom2F = casheRom2.filter(el => Array.isArray(el) && el[1]);
+
+    // Зафарбовування рядків у червоний, якщо є відповідні записи в casheRom2F
     if (casheRom2F.length > 1) {
       document.querySelectorAll('#tableCaheRom tbody tr').forEach((el, ind) => {
         if (ind < casheRom2F.length - 1) el.style.color = 'red';
       });
     }
 
-    // Оновлюємо обробник кнопки "Up"
+    // Оновлення обробника кнопки "Up"
     addUpButtonDT(startDataTableCasherom, 'tableCaheRom', 'inputDtCashe');
   }
 
@@ -131,6 +164,12 @@
         'торопова': { value: 'викон Торопова', activateIspolu: true },
         'третьяк': { value: 'викон', activateIspolu: true },
         'токарев': { value: 'викон', activateIspolu: true },
+        'барановская': { value: 'викон', activateIspolu: true },
+        'кузьменко': { value: 'викон', activateIspolu: true },
+        'дидковский': { value: 'викон', activateIspolu: true },
+        'копач': { value: 'викон', activateIspolu: true },
+        'петренко': { value: 'викон', activateIspolu: true },
+        'городницкий': { value: 'викон', activateIspolu: true },
         'шалыга': { value: 'викон', activateIspolu: true },
         'чечеткин': { value: 'викон', activateIspolu: true },
         'косинский': { value: 'викон', activateIspolu: true },
@@ -177,11 +216,12 @@
         'Зіновкіна бонус': 'Зіновкіна бонус',
         'Зіновкіна ЗП': 'Зіновкіна ЗП',
         'Лазоренко ЗП': 'Лазоренко ЗП',
-        'Діланян ЗП': 'Діланян ЗП',
-        'Діланян ЗП': 'Діланян ЗП',
-        '0674021578': 'Київстар 0674021578',
-        'Радюк Ирина Александровна аванс': 'Радюк ЗП',
         'Лазоренко Д. Р.': 'Лазоренко ДР',
+        'Діланян ЗП': 'Діланян ЗП',
+        'Діланян бонус': 'Діланян бонус',
+        '0674021578': 'Київстар 0674021578',
+        '0675042079': 'Київстар 0675042079',
+        'Радюк Ирина Александровна аванс': 'Радюк ЗП',
         'zadarma': 'Задарма Zadarma'
       };
 

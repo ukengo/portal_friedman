@@ -15,79 +15,75 @@
 
 <script>
   const mypopup = document.getElementById("mypopup");
-  const dataTable = document.getElementById("data-table");
-  const rowdatafin = document.getElementById("rowdatafin");
+const rowdatafin = document.getElementById("rowdatafin");
 
-  // Додаємо слухачів подій один раз
-  dataTable.addEventListener("mouseover", showPopup);
-  dataTable.addEventListener("mouseout", () => {
+// Використовуємо делегування подій на document
+document.addEventListener("mouseover", (e) => {
+  if (e.target.closest('#data-table td')) {
+    showPopup(e);
+  }
+});
+
+document.addEventListener("mouseout", (e) => {
+  if (e.target.closest('#data-table td') && !e.relatedTarget?.closest('#mypopup')) {
     mypopup.style.display = "none";
+  }
+});
+
+function showPopup(e) {
+  const cell = e.target._DT_CellIndex;
+  if (!cell || cell.column !== 0) return;
+
+  const projectNum = getProjectNumberFromRow(e.target);
+  if (!projectNum) return;
+
+  const { right, top } = e.target.getBoundingClientRect();
+  mypopup.style.left = `${right - 20}px`;
+  mypopup.style.display = "block";
+
+  mypopup.innerHTML = popupInsertText(projectNum);
+  mypopup.querySelectorAll("input").forEach((el) => {
+    el.style.fontSize = "8pt";
   });
 
-  function showPopup(e) {
-    const cell = e.target._DT_CellIndex;
-    if (!cell || cell.column !== 0) return;
+  rowdatafin.innerHTML = "";
+  document.querySelectorAll(".delete-fin, .delete-fin-pop").forEach((elem) => {
+    elem.remove();
+  });
 
-    const projectNum = getProjectNumberFromRow(e.target);
-    if (!projectNum) return;
+  const height = mypopup.offsetHeight;
+  mypopup.style.top =
+    window.scrollY < 200
+      ? `${window.scrollY + top - 60}px`
+      : `${window.scrollY + top - height + 40}px`;
+}
 
-    // Позиціонування попапу
-    const { right, top } = e.target.getBoundingClientRect();
-    mypopup.style.left = `${right - 20}px`;
-    mypopup.style.display = "block";
+// Решта функцій залишаються без змін
+function popupInsertText(projectNum) {
+  localStorage.removeItem("test");
 
-    // Вставка вмісту
-    mypopup.innerHTML = popupInsertText(projectNum);
-    mypopup.querySelectorAll("input").forEach((el) => {
-      el.style.fontSize = "8pt";
-    });
+  const proektFin = projectNum || "";
+  const formattedProektFin = trimStrong(proektFin) || proektFin;
 
-    // Очищення інших елементів
-    rowdatafin.innerHTML = "";
-    document.querySelectorAll(".delete-fin, .delete-fin-pop").forEach((elem) => {
-      elem.remove();
-    });
+  updateInputValue("proektfin", formattedProektFin);
+  updateInputValue("searchFinance", formattedProektFin);
 
-    // Визначення позиції по Y
-    const height = mypopup.offsetHeight;
-    mypopup.style.top =
-      window.scrollY < 200
-        ? `${window.scrollY + top - 60}px`
-        : `${window.scrollY + top - height + 40}px`;
-  }
+  SearchRecordsFinProekt1(proektFin);
 
-  function popupInsertText(projectNum) {
-    localStorage.removeItem("test");
+  return localStorage.getItem("test") || "";
+}
 
-    // Форматування номера проєкту
-    const proektFin = projectNum || "";
-    const formattedProektFin = trimStrong(proektFin) || proektFin;
+function getProjectNumberFromRow(cell) {
+  const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
+  return projectCell?.innerHTML || "";
+}
 
-    // Оновлення полів вводу
-    updateInputValue("proektfin", formattedProektFin);
-    updateInputValue("searchFinance", formattedProektFin);
+function updateInputValue(id, value) {
+  const input = document.getElementById(id);
+  if (input) input.value = value;
+}
 
-    // Виклик пошуку
-    SearchRecordsFinProekt1(proektFin);
-
-    // Повернення результату
-    return localStorage.getItem("test") || "";
-  }
-
-  function getProjectNumberFromRow(cell) {
-    // Отримуємо номер проєкту з 5-ї колонки ("Проєкт", індекс 4)
-    const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
-    return projectCell?.innerHTML || "";
-  }
-
-  function updateInputValue(id, value) {
-    // Універсальна функція для оновлення значення input
-    const input = document.getElementById(id);
-    if (input) input.value = value;
-  }
-
-  function trimStrong(string) {
-    // Оптимізована версія: повертає очищений рядок або порожній
-    return typeof string === "string" && string.trim() || "";
-  }
+function trimStrong(string) {
+  return typeof string === "string" && string.trim() || "";
+}
 </script>

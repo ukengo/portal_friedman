@@ -11,6 +11,9 @@ if (btnCasheromInsert) {
       if (!casheRom2[i][1]) emptyBelow++;
       else break;
     }
+    console.log(casheRom2.length);
+    console.log(emptyBelow);
+    
     google.script.run.withSuccessHandler(() => {
       btnCasheromInsert.disabled = false;
       startDataTableCasherom();

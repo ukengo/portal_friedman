@@ -141,106 +141,116 @@
   }
 
   // Оновлення полів форм
-  const formUpdater = {
-    finance: () => {
-      const els = {
-        article: '#casheInputArticle', project: '#proektfin-casherom', prim: '#primfin-casherom',
-        ispolu: '#ispolufinance-casherom', waste: '#casheInputWaste', arrival: '#casheInputArrival',
-        summa: '#summafin-casherom', date: '#casheInputDate', dateOpl: '#dateoplfin-casherom',
-        oznaka: '#priznakfin-casherom'
-      };
-      const elements = Object.fromEntries(Object.entries(els).map(([k, v]) => [k, document.querySelector(v)]));
-      if (Object.values(elements).some(el => !el)) return;
+// Оновлення полів форм
+const formUpdater = {
+  finance: () => {
+    // Код функції finance залишається без змін
+    const els = {
+      article: '#casheInputArticle', project: '#proektfin-casherom', prim: '#primfin-casherom',
+      ispolu: '#ispolufinance-casherom', waste: '#casheInputWaste', arrival: '#casheInputArrival',
+      summa: '#summafin-casherom', date: '#casheInputDate', dateOpl: '#dateoplfin-casherom',
+      oznaka: '#priznakfin-casherom'
+    };
+    const elements = Object.fromEntries(Object.entries(els).map(([k, v]) => [k, document.querySelector(v)]));
+    if (Object.values(elements).some(el => !el)) return;
 
-      const articleValue = elements.article.value.trim().toLowerCase().replace(/\s+/g, ' ');
-      const projectNumber = utils.extractProjectNumber(articleValue);
-      if (projectNumber) utils.setInputValue(elements.project, projectNumber);
+    const articleValue = elements.article.value.trim().toLowerCase().replace(/\s+/g, ' ');
+    const projectNumber = utils.extractProjectNumber(articleValue);
+    if (projectNumber) utils.setInputValue(elements.project, projectNumber);
 
-      ['prim', 'summa', 'dateOpl', ...(elements.oznaka ? ['oznaka'] : [])].forEach(k => utils.setInputValue(elements[k], ''));
-      elements.ispolu.checked = false;
+    ['prim', 'summa', 'dateOpl', ...(elements.oznaka ? ['oznaka'] : [])].forEach(k => utils.setInputValue(elements[k], ''));
+    elements.ispolu.checked = false;
 
-      const inspectors = utils.extractInspectors(localStorage.getItem('dataInspektorZU'));
-      const keywordsConfig = {
-        'торопова': { value: 'викон Торопова', activateIspolu: true },
-        'третьяк': { value: 'викон', activateIspolu: true },
-        'токарев': { value: 'викон', activateIspolu: true },
-        'барановская': { value: 'викон', activateIspolu: true },
-        'кузьменко': { value: 'викон', activateIspolu: true },
-        'дидковский': { value: 'викон', activateIspolu: true },
-        'копач': { value: 'викон', activateIspolu: true },
-        'петренко': { value: 'викон', activateIspolu: true },
-        'городницкий': { value: 'викон', activateIspolu: true },
-        'шалыга': { value: 'викон', activateIspolu: true },
-        'чечеткин': { value: 'викон', activateIspolu: true },
-        'косинский': { value: 'викон', activateIspolu: true },
-        'корчинская': { value: 'викон', activateIspolu: true },
-        'опер': { value: 'викон', activateIspolu: true },
-        'досм': { value: 'викон термінал', activateIspolu: false },
-        'шелудько': { value: 'викон термінал', activateIspolu: false },
-        'грузчики': { value: 'вантажники термінал', activateIspolu: false },
-        'болик': { value: 'контр', activateIspolu: false },
-        'на карту': { value: 'від', activateIspolu: false }
-      };
+    const inspectors = utils.extractInspectors(localStorage.getItem('dataInspektorZU'));
+    const keywordsConfig = {
+      'торопова': { value: 'викон Торопова', activateIspolu: true },
+      'третьяк': { value: 'викон', activateIspolu: true },
+      'токарев': { value: 'викон', activateIspolu: true },
+      'барановская': { value: 'викон', activateIspolu: true },
+      'кузьменко': { value: 'викон', activateIspolu: true },
+      'дидковский': { value: 'викон', activateIspolu: true },
+      'копач': { value: 'викон', activateIspolu: true },
+      'петренко': { value: 'викон', activateIspolu: true },
+      'городницкий': { value: 'викон', activateIspolu: true },
+      'шалыга': { value: 'викон', activateIspolu: true },
+      'чечеткин': { value: 'викон', activateIspolu: true },
+      'косинский': { value: 'викон', activateIspolu: true },
+      'корчинская': { value: 'викон', activateIspolu: true },
+      'опер': { value: 'викон', activateIspolu: true },
+      'досм': { value: 'викон термінал', activateIspolu: false },
+      'шелудько': { value: 'викон термінал', activateIspolu: false },
+      'грузчики': { value: 'вантажники термінал', activateIspolu: false },
+      'болик': { value: 'контр', activateIspolu: false },
+      'на карту': { value: 'від', activateIspolu: false }
+    };
 
-      for (const [keyword, { value, activateIspolu }] of Object.entries(keywordsConfig)) {
-        if (articleValue.includes(keyword)) {
-          utils.setInputValue(elements.prim, value);
-          elements.ispolu.checked = activateIspolu;
+    for (const [keyword, { value, activateIspolu }] of Object.entries(keywordsConfig)) {
+      if (articleValue.includes(keyword)) {
+        utils.setInputValue(elements.prim, value);
+        elements.ispolu.checked = activateIspolu;
+        break;
+      }
+    }
+
+    if (!elements.prim.value && inspectors.length) {
+      for (const inspector of inspectors) {
+        if (articleValue.includes(inspector)) {
+          utils.setInputValue(elements.prim, 'викон');
+          elements.ispolu.checked = true;
           break;
         }
       }
-
-      if (!elements.prim.value && inspectors.length) {
-        for (const inspector of inspectors) {
-          if (articleValue.includes(inspector)) {
-            utils.setInputValue(elements.prim, 'викон');
-            elements.ispolu.checked = true;
-            break;
-          }
-        }
-      }
-
-      if (elements.oznaka) utils.setInputValue(elements.oznaka, 'гот');
-      const [wasteValue, arrivalValue] = [elements.waste, elements.arrival].map(el => parseFloat(el.value.trim()));
-      if (!isNaN(wasteValue) && wasteValue > 0) utils.setInputValue(elements.summa, wasteValue);
-      else if (!isNaN(arrivalValue) && arrivalValue > 0) utils.setInputValue(elements.summa, arrivalValue);
-      if (elements.date.value) utils.setInputValue(elements.dateOpl, elements.date.value);
-    },
-    aw: () => {
-      const els = {
-        waste: '#casheInputWaste', date: '#casheInputDate', summaAw: '#summa-casherom-aw',
-        dateAw: '#date-casherom-aw', article: '#casheInputArticle', wasteAw: '#waste-casherom-aw'
-      };
-      const elements = Object.fromEntries(Object.entries(els).map(([k, v]) => [k, document.querySelector(v)]));
-      const phoneConfig = {
-        'Зіновкіна бонус': 'Зіновкіна бонус',
-        'Зіновкіна ЗП': 'Зіновкіна ЗП',
-        'Лазоренко ЗП': 'Лазоренко ЗП',
-        'Лазоренко Д. Р.': 'Лазоренко ДР',
-        'Діланян ЗП': 'Діланян ЗП',
-        'Діланян бонус': 'Діланян бонус',
-        '0674021578': 'Київстар 0674021578',
-        '0675042079': 'Київстар 0675042079',
-        'Радюк Ирина Александровна аванс': 'Радюк ЗП',
-        'zadarma': 'Задарма Zadarma'
-      };
-
-      if (elements.article && elements.wasteAw) {
-        const articleValue = elements.article.value.trim().toLowerCase();
-        for (const [key, value] of Object.entries(phoneConfig)) {
-          if (articleValue.includes(key.toLowerCase())) {
-            utils.setInputValue(elements.wasteAw, value);
-            break;
-          }
-        }
-      }
-
-      const wasteValue = parseFloat(elements.waste.value.trim());
-      if (!isNaN(wasteValue) && wasteValue > 0) utils.setInputValue(elements.summaAw, wasteValue);
-      if (elements.date.value) utils.setInputValue(elements.dateAw, elements.date.value);
-      return elements;
     }
-  };
+
+    if (elements.oznaka) utils.setInputValue(elements.oznaka, 'гот');
+    const [wasteValue, arrivalValue] = [elements.waste, elements.arrival].map(el => parseFloat(el.value.trim()));
+    if (!isNaN(wasteValue) && wasteValue > 0) utils.setInputValue(elements.summa, wasteValue);
+    else if (!isNaN(arrivalValue) && arrivalValue > 0) utils.setInputValue(elements.summa, arrivalValue);
+    if (elements.date.value) utils.setInputValue(elements.dateOpl, elements.date.value);
+  },
+  aw: () => {
+    const els = {
+      waste: '#casheInputWaste', date: '#casheInputDate', summaAw: '#summa-casherom-aw',
+      dateAw: '#date-casherom-aw', article: '#casheInputArticle', wasteAw: '#waste-casherom-aw',
+      arrival: '#casheInputArrival' // Додано поле для Arrival
+    };
+    const elements = Object.fromEntries(Object.entries(els).map(([k, v]) => [k, document.querySelector(v)]));
+    const phoneConfig = {
+      'Зіновкіна бонус': 'Зіновкіна бонус',
+      'Зіновкіна ЗП': 'Зіновкіна ЗП',
+      'Лазоренко ЗП': 'Лазоренко ЗП',
+      'Лазоренко Д. Р.': 'Лазоренко ДР',
+      'Діланян ЗП': 'Діланян ЗП',
+      'Діланян бонус': 'Діланян бонус',
+      '0674021578': 'Київстар 0674021578',
+      '0675042079': 'Київстар 0675042079',
+      'Радюк Ирина Александровна аванс': 'Радюк ЗП',
+      'zadarma': 'Задарма Zadarma'
+    };
+
+    if (elements.article && elements.wasteAw) {
+      const articleValue = elements.article.value.trim().toLowerCase();
+      for (const [key, value] of Object.entries(phoneConfig)) {
+        if (articleValue.includes(key.toLowerCase())) {
+          utils.setInputValue(elements.wasteAw, value);
+          break;
+        }
+      }
+    }
+
+    // Оновлення summaAw на основі waste або arrival
+    const wasteValue = parseFloat(elements.waste.value.trim());
+    const arrivalValue = parseFloat(elements.arrival.value.trim());
+    if (!isNaN(wasteValue) && wasteValue > 0) {
+      utils.setInputValue(elements.summaAw, wasteValue);
+    } else if (!isNaN(arrivalValue) && arrivalValue > 0) {
+      utils.setInputValue(elements.summaAw, arrivalValue);
+    }
+
+    if (elements.date.value) utils.setInputValue(elements.dateAw, elements.date.value);
+    return elements;
+  }
+};
 
   // Стан форми
   const formState = { isFinanceVisible: false, isAwVisible: false };

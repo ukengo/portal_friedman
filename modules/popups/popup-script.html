@@ -8,82 +8,84 @@
     border-radius: 6px;
     position: absolute;
     display: none;
-    background-color: rgba(255, 255, 255, 0.8); /* Білий фон із 80% непрозорістю */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Додаємо тінь для кращого вигляду */
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Білий фон із 80% непрозорістю */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    /* Додаємо тінь для кращого вигляду */
   }
 </style>
 
 <script>
   const mypopup = document.getElementById("mypopup");
-const rowdatafin = document.getElementById("rowdatafin");
+  const rowdatafin = document.getElementById("rowdatafin");
 
-// Використовуємо делегування подій на document
-document.addEventListener("mouseover", (e) => {
-  if (e.target.closest('#data-table td')) {
-    showPopup(e);
-  }
-});
-
-document.addEventListener("mouseout", (e) => {
-  if (e.target.closest('#data-table td') && !e.relatedTarget?.closest('#mypopup')) {
-    mypopup.style.display = "none";
-  }
-});
-
-function showPopup(e) {
-  const cell = e.target._DT_CellIndex;
-  if (!cell || cell.column !== 0) return;
-
-  const projectNum = getProjectNumberFromRow(e.target);
-  if (!projectNum) return;
-
-  const { right, top } = e.target.getBoundingClientRect();
-  mypopup.style.left = `${right - 20}px`;
-  mypopup.style.display = "block";
-
-  mypopup.innerHTML = popupInsertText(projectNum);
-  mypopup.querySelectorAll("input").forEach((el) => {
-    el.style.fontSize = "8pt";
+  // Використовуємо делегування подій на document
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.closest('#data-table td')) {
+      showPopup(e);
+    }
   });
 
-  rowdatafin.innerHTML = "";
-  document.querySelectorAll(".delete-fin, .delete-fin-pop").forEach((elem) => {
-    elem.remove();
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.closest('#data-table td') && !e.relatedTarget?.closest('#mypopup')) {
+      mypopup.style.display = "none";
+    }
   });
 
-  const height = mypopup.offsetHeight;
-  mypopup.style.top =
-    window.scrollY < 200
-      ? `${window.scrollY + top - 60}px`
-      : `${window.scrollY + top - height + 40}px`;
-}
+  function showPopup(e) {
+    const cell = e.target._DT_CellIndex;
+    if (!cell || cell.column !== 0) return;
 
-// Решта функцій залишаються без змін
-function popupInsertText(projectNum) {
-  localStorage.removeItem("test");
+    const projectNum = getProjectNumberFromRow(e.target);
+    if (!projectNum) return;
 
-  const proektFin = projectNum || "";
-  const formattedProektFin = trimStrong(proektFin) || proektFin;
+    const { right, top } = e.target.getBoundingClientRect();
+    mypopup.style.left = `${right - 20}px`;
+    mypopup.style.display = "block";
 
-  updateInputValue("proektfin", formattedProektFin);
-  updateInputValue("searchFinance", formattedProektFin);
+    mypopup.innerHTML = popupInsertText(projectNum);
+    mypopup.querySelectorAll("input").forEach((el) => {
+      el.style.fontSize = "8pt";
+    });
 
-  SearchRecordsFinProekt1(proektFin);
+    rowdatafin.innerHTML = "";
+    document.querySelectorAll(".delete-fin, .delete-fin-pop").forEach((elem) => {
+      elem.remove();
+    });
 
-  return localStorage.getItem("test") || "";
-}
+    const height = mypopup.offsetHeight;
+    mypopup.style.top =
+      window.scrollY < 200
+        ? `${window.scrollY + top - 60}px`
+        : `${window.scrollY + top - height + 40}px`;
+  }
 
-function getProjectNumberFromRow(cell) {
-  const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
-  return projectCell?.innerHTML || "";
-}
+  // Решта функцій залишаються без змін
+  function popupInsertText(projectNum) {
+    localStorage.removeItem("test");
 
-function updateInputValue(id, value) {
-  const input = document.getElementById(id);
-  if (input) input.value = value;
-}
+    const proektFin = projectNum || "";
+    const formattedProektFin = trimStrong(proektFin) || proektFin;
 
-function trimStrong(string) {
-  return typeof string === "string" && string.trim() || "";
-}
+    updateInputValue("proektfin", formattedProektFin);
+    updateInputValue("searchFinance", formattedProektFin);
+
+    SearchRecordsFinProekt1(proektFin);
+
+    return localStorage.getItem("test") || "";
+  }
+
+  function getProjectNumberFromRow(cell) {
+    const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
+    return projectCell?.innerHTML || "";
+  }
+
+  function updateInputValue(id, value) {
+    const input = document.getElementById(id);
+    if (input) input.value = value;
+  }
+
+  function trimStrong(string) {
+    return typeof string === "string" && string.trim() || "";
+  }
 </script>

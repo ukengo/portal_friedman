@@ -1,144 +1,304 @@
 <script>
 
-class AWFormBuilder extends FormBuilderBase {
-  defaultName = 'aw';
+  class AWFormBuilder extends FormBuilderBase {
+    // Властивість, що визначає ім'я форми за замовчуванням
+    defaultName = 'aw';
 
-  attributes = {};
+    // Об'єкт для зберігання атрибутів форми, які можуть бути використані для конфігурації
+    attributes = {};
 
-  selectors = {
-    form: '[data-form-aw]',
-    dateInput: null,
-    dateButtonGroup: '.btn-group',
-    yesterdayButton: '.btn-yft[value=" Y "]',
-    fridayButton: '.btn-yft[value="Fri"]',
-    todayButton: '.btn-yft[value=" T "]',
-  };
-
-  constructor(name, templateSelector, containerSelector) {
-    super(name, templateSelector, containerSelector);
-    this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`;
-  }
-
-  getFormFields() {
-    return {
-      date: this.name === 'aw' ? 'date' : `date-${this.name}`,
-      summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`,
-      summaPrivat: this.name === 'aw' ? 'summaPrivat' : `summaPrivat-${this.name}`,
-      costPrivat: this.name === 'aw' ? 'costPrivat' : `costPrivat-${this.name}`,
-      forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`,
-      firmaArrivalWaste: this.name === 'aw' ? 'firmaArrivalWaste' : `firmaArrivalWaste-${this.name}`,
-      waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`,
-      termkar: this.name === 'aw' ? 'termkar' : `termkar-${this.name}`,
-      sftermkar: this.name === 'aw' ? 'sftermkar' : `sftermkar-${this.name}`,
+    // Об'єкт із CSS-селекторами для елементів форми, що використовуються для доступу до DOM-елементів
+    selectors = {
+      form: '[data-form-aw]', // Селектор для всієї форми
+      dateInput: null, // Селектор для поля введення дати (встановлюється в конструкторі)
+      dateButtonGroup: '.btn-group', // Селектор для групи кнопок вибору дати
+      yesterdayButton: '.btn-yft[value=" Y "]', // Селектор для кнопки "Вчора"
+      fridayButton: '.btn-yft[value="Fri"]', // Селектор для кнопки "П'ятниця"
+      todayButton: '.btn-yft[value=" T "]', // Селектор для кнопки "Сьогодні"
+      wasteButton: '[data-button-waste]', // Селектор для кнопки "Waste" (Витрати)
+      arrivalButton: '[data-button-arrival]', // Селектор для кнопки "Arrival" (Надходження)
     };
-  }
 
-  render() {
-    if (!this.checkTemplateAndContainer()) return;
-    super.renderTemplate();
-    this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form)).map(
-      (form, index) => {
-        form.id = form.id || `${this.name}-form-${index}`;
-        return new FormDataFromTables(`#${form.id}`);
-      }
-    );
-    this.initEventListeners();
-    this.setDefaultDate();
-    this.resetLabelColors(this.getFormFields());
-  }
+    // Конструктор класу, який ініціалізує базовий клас і налаштовує селектор для поля дати
+    // Приймає ім'я форми, селектор шаблону та селектор контейнера
+    constructor(name, templateSelector, containerSelector) {
+      super(name, templateSelector, containerSelector); // Виклик конструктора базового класу
+      // Встановлення селектора для поля дати залежно від імені форми
+      this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`;
+    }
 
-  initEventListeners() {
-    const events = [
-      [this.selectors.yesterdayButton, this.handleYesterdayButtonClick],
-      [this.selectors.fridayButton, this.handleFridayButtonClick],
-      [this.selectors.todayButton, this.handleTodayButtonClick],
-    ];
+    // Метод для отримання імен полів форми
+    // Повертає об'єкт із назвами полів, які адаптуються до імені форми
+    getFormFields() {
+      return {
+        date: this.name === 'aw' ? 'date' : `date-${this.name}`, // Поле для дати
+        summa: this.name === 'aw' ? 'summa' : `summa-${this.name}`, // Поле для загальної суми
+        summaPrivat: this.name === 'aw' ? 'summaPrivat' : `summaPrivat-${this.name}`, // Поле для суми Приват
+        costPrivat: this.name === 'aw' ? 'costPrivat' : `costPrivat-${this.name}`, // Поле для вартості комісії Приват
+        forma: this.name === 'aw' ? 'forma' : `forma-${this.name}`, // Поле для типу форми
+        firmaArrivalWaste: this.name === 'aw' ? 'firmaArrivalWaste' : `firmaArrivalWaste-${this.name}`, // Поле для компанії (надходження/витрати)
+        waste: this.name === 'aw' ? 'waste' : `waste-${this.name}`, // Поле для витрат
+        termkar: this.name === 'aw' ? 'termkar' : `termkar-${this.name}`, // Поле для терміну карантину
+        sftermkar: this.name === 'aw' ? 'sftermkar' : `sftermkar-${this.name}`, // Поле для статусу терміну карантину
+      };
+    }
 
-    events.forEach(([selector, handler]) => {
-      const elements = this.container.querySelectorAll(selector);
-      elements.forEach((element) => {
-        element.addEventListener('click', (event) => handler.call(this, event));
-      });
-    });
-  }
-
-  setDefaultDate() {
-    const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
-    dateInputs.forEach((dateInput) => {
-      const today = new Date();
-      dateInput.value = today.toISOString().split('T')[0];
-    });
-    this.updateLabelColors(this.getFormFields());
-  }
-
-  handleYesterdayButtonClick(event) {
-    this.setDate('yesterday');
-    this.updateLabelColors(this.getFormFields());
-    this.eventHandlers.yesterdayButton?.(event);
-  }
-
-  handleFridayButtonClick(event) {
-    this.setDate('friday');
-    this.updateLabelColors(this.getFormFields());
-    this.eventHandlers.fridayButton?.(event);
-  }
-
-  handleTodayButtonClick(event) {
-    this.setDate('today');
-    this.updateLabelColors(this.getFormFields());
-    this.eventHandlers.todayButton?.(event);
-  }
-
-  setDate(type) {
-    const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
-    dateInputs.forEach((dateInput) => {
-      let targetDate = new Date();
-      if (type === 'yesterday') {
-        targetDate.setDate(targetDate.getDate() - 1);
-      } else if (type === 'friday') {
-        while (targetDate.getDay() !== 5) {
-          targetDate.setDate(targetDate.getDate() - 1);
+    // Метод для отримання значень полів форми
+    // Збирає дані з усіх форм у контей -container та повертає масив значень
+    getFormValues() {
+      const forms = this.container.querySelectorAll(this.selectors.form); // Отримання всіх форм у контейнері
+      const formValues = [];
+      forms.forEach((form) => {
+        const formDataInstance = new FormDataFromTables(`#${form.id}`); // Створення екземпляра для обробки даних форми
+        const formData = formDataInstance.formaDataObj(); // Отримання даних форми у вигляді об'єкта
+        const fields = this.getFormFields(); // Отримання імен полів форми
+        // Деструктуризація даних форми з встановленням значень за замовчуванням
+        let {
+          date = formData[fields.date] || '',
+          summa = formData[fields.summa] || '',
+          summaPrivat = formData[fields.summaPrivat] || '',
+          costPrivat = formData[fields.costPrivat] || '',
+          forma = formData[fields.forma] || '',
+          firmaArrivalWaste = formData[fields.firmaArrivalWaste] || '',
+          waste = formData[fields.waste] || '',
+          termkar = formData[fields.termkar] || '',
+        } = formData;
+        summa = Math.abs(+summa || 0); // Перетворення суми в абсолютне число
+        summaPrivat = +summaPrivat || 0; // Перетворення суми Приват у число
+        costPrivat = +costPrivat || 0; // Перетворення вартості Приват у число
+        // Логіка для перевірки заповнення полів суми
+        if (!summaPrivat && !summa) {
+          summa = '';
+          waste = 'Не заповнено ні одного поля суми';
+          firmaArrivalWaste = '';
         }
+        // Логіка для обробки комісії Приват
+        if (summaPrivat && !summa) {
+          if (!costPrivat) {
+            waste = 'Не заповнено вартості комісії приват';
+          } else {
+            localStorage.setItem('costPrivat', costPrivat); // Збереження вартості комісії у локальному сховищі
+            summa = summaPrivat * costPrivat; // Розрахунок загальної суми
+            waste = 'Приват комісія';
+            forma = 'тов';
+            firmaArrivalWaste = '';
+          }
+        }
+        // Додавання даних форми до масиву
+        formValues.push([date, +summa, forma, firmaArrivalWaste, waste, termkar]);
+      });
+      return formValues; // Повернення масиву значень форм
+    }
+
+    // Метод для обробки кліків по кнопках Waste та Arrival
+    // Виконує валідацію даних і викликає відповідні дії
+    handleWasteAndArrivalButtonClick(event) {
+      const fields = this.getFormFields(); // Отримання імен полів форми   
+      const termkarVal = this.container.querySelector(`#${fields.termkar}`)?.value || ''; // Отримання значення терміну карантину
+      const formDataArray = this.getFormValues(); // Отримання значень форми
+      const formData = formDataArray[0] || []; // Припускаємо, що обробляємо першу форму
+
+      // Перевірка валідності даних
+      if (!formData[4] && !termkarVal) {
+        alert('Не заповнена стаття витрат');
+        return;
       }
-      dateInput.value = targetDate.toISOString().split('T')[0];
-    });
-  }
-
-  updateLabelColors(fields) {
-    Object.entries(fields).forEach(([key, id]) => {
-      const input = this.container.querySelector(`#${id}`);
-      const label = this.container.querySelector(`label[for="${id}"]`);
-      if (!input || !label) return;
-      if (['date', 'costPrivat', 'forma'].includes(key)) {
-        label.style.color = this.colors.errorColor;
-      } else {
-        label.style.removeProperty('color');
+      if (formData[4] === 'Не заповнено ні одного поля суми') {
+        alert('Не заповнено ні одного поля суми');
+        return;
       }
-    });
+      if (formData[4] === 'Заповнені обидва поля суми') {
+        alert('Заповнені обидва поля суми');
+        return;
+      }
+      if (formData[4] === 'Не заповнено вартості комісії приват') {
+        alert('Не заповнено вартості комісії приват');
+        return;
+      }
+      if (formData[4] === 'Не заповнена ціна привату') {
+        alert('Не заповнена ціна привату');
+        return;
+      }
+
+      startArrivalWaste(); // Виклик зовнішньої функції для початку обробки
+
+      const isWasteButton = event.target.closest(this.selectors.wasteButton); // Перевірка, чи натиснуто кнопку Waste
+      const isArrivalButton = event.target.closest(this.selectors.arrivalButton); // Перевірка, чи натиснуто кнопку Arrival
+
+      // Обробка кліку по кнопці Waste
+      if (isWasteButton) {
+        console.log('Waste button clicked');
+        
+        spinner('dataTableArriwalWaste'); // Відображення спінера для таблиці
+        if (!formData[5]) {
+          // Виклик серверної функції для додавання нового рядка витрат
+          google.script.run
+            .withSuccessHandler(createTableArriwalWaste)
+            .addNewRowWaste(formData.slice(0, 5));
+        } else {
+          // Вставка даних терміну карантину
+          google.script.run.insertTermKar(rowDataTermKar());
+          // Виклик серверної функції для обробки карантинних даних
+          google.script.run
+            .withSuccessHandler(startDataWaste)
+            .vReestrTerminalKarantin(rowDataTermKar());
+        }
+        const vrabotevseElement = this.container.querySelector('#vrabotevseArriwalWaste');
+        if (vrabotevseElement) {
+          vrabotevseElement.innerHTML = 'Інші витрати'; // Оновлення тексту елемента
+        }
+        buttonClickOchistkaAW(); // Очищення форми
+      } else if (isArrivalButton) {
+        spinner('dataTableArriwalWaste'); // Відображення спінера для таблиці
+        // Виклик серверної функції для додавання нового рядка надходжень
+        google.script.run
+          .withSuccessHandler(createTableArriwalWaste)
+          .addNewRowArrival(formData.slice(0, 5));
+        const vrabotevseElement = this.container.querySelector('#vrabotevseArriwalWaste');
+        if (vrabotevseElement) {
+          vrabotevseElement.innerHTML = 'Інші надходження'; // Оновлення тексту елемента
+        }
+        // Виклик серверної функції для додавання нової таблиці надходжень
+        google.script.run
+          .withSuccessHandler(createTableArriwalWaste)
+          .addNewTableArriwal(formData.slice(0, 5));
+        buttonClickOchistkaAW(); // Очищення форми
+      }
+
+      // Оновлення стилю контейнера таблиці
+      const divDataTable = this.container.querySelector('#divDataTableArriwalWaste');
+      if (divDataTable) {
+        divDataTable.style.height = '210%';
+      }
+    }
+
+    // Метод для рендерингу форми
+    // Ініціалізує форму, додає обробники подій і встановлює значення за замовчуванням
+    render() {
+      if (!this.checkTemplateAndContainer()) return; // Перевірка наявності шаблону та контейнера
+      super.renderTemplate(); // Виклик методу рендерингу базового класу
+      // Ініціалізація екземплярів форм
+      this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form)).map(
+        (form, index) => {
+          form.id = form.id || `${this.name}-form-${index}`; // Встановлення унікального ID для форми
+          return new FormDataFromTables(`#${form.id}`); // Створення екземпляра для обробки даних форми
+        }
+      );
+      this.initEventListeners(); // Ініціалізація обробників подій
+      this.setDefaultDate(); // Встановлення дати за замовчуванням
+      this.resetLabelColors(this.getFormFields()); // Скидання кольорів міток
+    }
+
+    // Метод для ініціалізації обробників подій
+    // Додає слухачі подій до кнопок форми
+    initEventListeners() {
+      const events = [
+        [this.selectors.yesterdayButton, this.handleYesterdayButtonClick], // Кнопка "Вчора"
+        [this.selectors.fridayButton, this.handleFridayButtonClick], // Кнопка "П'ятниця"
+        [this.selectors.todayButton, this.handleTodayButtonClick], // Кнопка "Сьогодні"
+        [this.selectors.wasteButton, this.handleWasteAndArrivalButtonClick], // Кнопка "Waste"
+        [this.selectors.arrivalButton, this.handleWasteAndArrivalButtonClick], // Кнопка "Arrival"
+      ];
+
+      // Додавання обробників подій до всіх елементів, що відповідають селекторам
+      events.forEach(([selector, handler]) => {
+        const elements = this.container.querySelectorAll(selector);
+        elements.forEach((element) => {
+          element.addEventListener('click', (event) => handler.call(this, event));
+        });
+      });
+    }
+
+    // Метод для встановлення дати за замовчуванням
+    // Встановлює поточну дату в усі поля введення дати
+    setDefaultDate() {
+      const dateInputs = this.container.querySelectorAll(this.selectors.dateInput); // Отримання всіх полів дати
+      dateInputs.forEach((dateInput) => {
+        const today = new Date(); // Поточна дата
+        dateInput.value = today.toISOString().split('T')[0]; // Встановлення дати у форматі YYYY-MM-DD
+      });
+      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+    }
+
+    // Обробник кліку на кнопку "Вчора"
+    // Встановлює дату на вчорашній день
+    handleYesterdayButtonClick(event) {
+      this.setDate('yesterday'); // Встановлення вчорашньої дати
+      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+      this.eventHandlers.yesterdayButton?.(event); // Виклик додаткового обробника, якщо він існує
+    }
+
+    // Обробник кліку на кнопку "П'ятниця"
+    // Встановлює дату на найближчу п'ятницю
+    handleFridayButtonClick(event) {
+      this.setDate('friday'); // Встановлення дати п'ятниці
+      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+      this.eventHandlers.fridayButton?.(event); // Виклик додаткового обробника, якщо він існує
+    }
+
+    // Обробник кліку на кнопку "Сьогодні"
+    // Встановлює поточну дату
+    handleTodayButtonClick(event) {
+      this.setDate('today'); // Встановлення поточної дати
+      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+      this.eventHandlers.todayButton?.(event); // Виклик додаткового обробника, якщо він існує
+    }
+
+    // Метод для встановлення дати в полях введення
+    // Приймає тип дати (today, yesterday, friday)
+    setDate(type) {
+      const dateInputs = this.container.querySelectorAll(this.selectors.dateInput); // Отримання всіх полів дати
+      dateInputs.forEach((dateInput) => {
+        let targetDate = new Date(); // Поточна дата
+        if (type === 'yesterday') {
+          targetDate.setDate(targetDate.getDate() - 1); // Вчорашня дата
+        } else if (type === 'friday') {
+          while (targetDate.getDay() !== 5) {
+            targetDate.setDate(targetDate.getDate() - 1); // Пошук найближчої п'ятниці
+          }
+        }
+        dateInput.value = targetDate.toISOString().split('T')[0]; // Встановлення дати
+      });
+    }
+
+    // Метод для оновлення кольорів міток полів
+    // Змінює колір міток для певних полів на червоний (помилка)
+    updateLabelColors(fields) {
+      Object.entries(fields).forEach(([key, id]) => {
+        const input = this.container.querySelector(`#${id}`); // Отримання поля
+        const label = this.container.querySelector(`label[for="${id}"]`); // Отримання мітки
+        if (!input || !label) return; // Перевірка наявності елементів
+        if (['date', 'costPrivat', 'forma'].includes(key)) {
+          label.style.color = this.colors.errorColor; // Встановлення кольору помилки
+        } else {
+          label.style.removeProperty('color'); // Скидання кольору
+        }
+      });
+    }
+
+    // Метод для скидання кольорів міток
+    // Викликає оновлення кольорів для всіх полів
+    resetLabelColors(fields) {
+      this.updateLabelColors(fields); // Оновлення кольорів міток
+    }
+
+    // Метод для очищення форми
+    // Скидає значення певних полів форми
+    clearForm() {
+      const fields = this.getFormFields(); // Отримання імен полів форми
+      const fieldsToClear = [
+        fields.summa,
+        fields.summaPrivat,
+        fields.firmaArrivalWaste,
+        fields.waste,
+        fields.termkar,
+        fields.sftermkar,
+      ]; // Поля для очищення
+      fieldsToClear.forEach((id) => {
+        const element = this.container.querySelector(`#${id}`); // Отримання елемента
+        if (element) element.value = ''; // Очищення значення
+      });
+      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+    }
   }
-
-  resetLabelColors(fields) {
-    this.updateLabelColors(fields);
-  }
-
-  clearForm() {
-    const fields = this.getFormFields();
-    const fieldsToClear = [
-      fields.summa,
-      fields.summaPrivat,
-      fields.firmaArrivalWaste,
-      fields.waste,
-      fields.termkar,
-      fields.sftermkar,
-    ];
-
-    fieldsToClear.forEach((id) => {
-      const element = this.container.querySelector(`#${id}`);
-      if (element) element.value = '';
-    });
-
-    this.updateLabelColors(this.getFormFields());
-  }
-}
-
 </script>

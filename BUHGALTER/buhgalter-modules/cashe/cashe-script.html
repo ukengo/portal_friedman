@@ -50,7 +50,7 @@
 
   // обработка кнопки ввод
   const buttonInput = () => {
-    document.getElementById("button_cashe_input").disabled = true;
+   // document.getElementById("button_cashe_input").disabled = true;
     const description = document.querySelector('#summa_cashe').value;
     const waste = document.querySelector('#waste_cashe').value ? +document.querySelector('#waste_cashe').value : "";
     const arrival = document.querySelector('#arrival_cashe').value ? +document.querySelector('#arrival_cashe').value : "";
@@ -60,13 +60,13 @@
     // проверяем на пустые поля
     if (searchStop(data.flat())) {
       alert('Не внесені дані для пошуку')
-      document.getElementById("button_cashe_input").disabled = false;
+    //  document.getElementById("button_cashe_input").disabled = false;
       return;
     }
     // конец проверки на пустые поля
 
     google.script.run.withSuccessHandler(() => {
-      document.getElementById("button_cashe_input").disabled = false;
+    //  document.getElementById("button_cashe_input").disabled = false;
       startDataTableCasherom()
     }).insertRowCache(data);
   }

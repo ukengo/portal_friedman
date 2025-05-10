@@ -1,1 +1,16 @@
-{"scriptId":"1stGuyk3nomGKclaMaDdPsMOCoRZnWmsMmMOH6QnISSkdiw3Igg-HzU1D","rootDir":"G:\\Мій диск\\Контора\\Фридман ООО\\Управление лайт\\Скрипты\\Portal Friedman реинжиниринг"}
+{
+  "scriptId": "1stGuyk3nomGKclaMaDdPsMOCoRZnWmsMmMOH6QnISSkdiw3Igg-HzU1D",
+  "rootDir": "",
+  "scriptExtensions": [
+    ".js",
+    ".gs"
+  ],
+  "htmlExtensions": [
+    ".html"
+  ],
+  "jsonExtensions": [
+    ".json"
+  ],
+  "filePushOrder": [],
+  "skipSubdirectories": false
+}

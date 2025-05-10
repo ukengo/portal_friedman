@@ -6,4 +6,5 @@ package.json
 .vscode/
 .claspignore
 clasp.json
+.clasp.json
 t

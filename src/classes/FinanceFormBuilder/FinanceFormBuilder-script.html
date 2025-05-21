@@ -1,211 +1,291 @@
 <script>
+  
+  // Клас FinanceFormBuilder розширює базовий клас FormBuilderBase для створення фінансових форм
   class FinanceFormBuilder extends FormBuilderBase {
-  static arrFinMulti = [];
-  static instances = [];
+    // Статичний масив для зберігання об'єктів фінансових даних перед їх додаванням
+    static arrFinMulti = [];
+    // Статичний масив для збереження всіх екземплярів класу FinanceFormBuilder
+    static instances = [];
 
-  defaultName = 'finance';
+    // Значення за замовчуванням для імені форми
+    defaultName = 'finance';
 
-  attributes = {
-    modContainerAttribute: 'data-cashe-rom-mod-container',
-    casheFinOverlayAttribute: 'cashe-fin-overlay',
-    buttonPMinusAttribute: 'data-js-fin-button-minus',
-    casheFinOverlay: 'cashe-fin-overlay',
-  };
+    // Об'єкт із атрибутами, які використовуються для позначення елементів DOM
+    attributes = {
+      modContainerAttribute: 'data-cashe-rom-mod-container', // Атрибут для контейнера модифікації
+      casheFinOverlayAttribute: 'cashe-fin-overlay', // Атрибут для оверлею
+      buttonPMinusAttribute: 'data-js-fin-button-minus', // Атрибут для кнопки мінус
+      casheFinOverlay: 'cashe-fin-overlay', // Клас для оверлею
+    };
 
-  selectors = {
-    form: '[data-form-finance]',
-    blockPlusMinus: '[data-js-fin-button-plus-minus]',
-    financeContainer: '[data-cashe-rom-finance-container]',
-    modContainer: `[${this.attributes.modContainerAttribute}]`,
-    buttonPlus: '[data-js-fin-button-plus]',
-    buttonPMinus: `[${this.attributes.buttonPMinusAttribute}]`,
-    buttonAdd: '[data-js-fin-button-add]',
-    buttonMod: '[data-js-fin-button-mod]',
-    casheFinOverlay: `[${this.attributes.casheFinOverlayAttribute}]`,
-    nameSummafin: '[name="summafin"]',
-    namePriznakfin: '[name="priznakfin"]',
-    nameDateoplfin: '[name="dateoplfin"]',
-    dateRegular: '[data-date-regular]',
-    dateRegularPlus: '[data-date-regular-plus]',
-    dateRegularMinus: '[data-date-regular-minus]',
-    finButtonsBlock: '[fin-buttons-block]',
-  };
+    // Об'єкт із селекторами для пошуку елементів у DOM
+    selectors = {
+      form: '[data-form-finance]', // Селектор форми
+      blockPlusMinus: '[data-js-fin-button-plus-minus]', // Селектор блоку кнопок плюс/мінус
+      financeContainer: '[data-cashe-rom-finance-container]', // Селектор контейнера фінансів
+      modContainer: `[${this.attributes.modContainerAttribute}]`, // Селектор контейнера модифікації
+      buttonPlus: '[data-js-fin-button-plus]', // Селектор кнопки плюс
+      buttonPMinus: `[${this.attributes.buttonPMinusAttribute}]`, // Селектор кнопки мінус
+      buttonAdd: '[data-js-fin-button-add]', // Селектор кнопки додавання
+      buttonMod: '[data-js-fin-button-mod]', // Селектор кнопки модифікації
+      casheFinOverlay: `[${this.attributes.casheFinOverlayAttribute}]`, // Селектор оверлею
+      nameSummafin: '[name="summafin"]', // Селектор поля суми
+      namePriznakfin: '[name="priznakfin"]', // Селектор поля ознаки
+      nameDateoplfin: '[name="dateoplfin"]', // Селектор поля дати оплати
+      dateRegular: '[data-date-regular]', // Селектор для регулярної дати
+      dateRegularPlus: '[data-date-regular-plus]', // Селектор для додавання днів до дати
+      dateRegularMinus: '[data-date-regular-minus]', // Селектор для віднімання днів від дати
+      finButtonsBlock: '[fin-buttons-block]', // Селектор блоку кнопок фінансів
+    };
 
-  constructor(name, templateSelector, containerSelector) {
-    super(name, templateSelector, containerSelector);
-    FinanceFormBuilder.instances.push(this);
-  }
-
-  build() {
-    if (this.checkTemplateAndContainer()) {
-      const clone = this.template.content.cloneNode(true);
-      this.container.appendChild(clone);
-      if (this.name !== this.defaultName) this.addIdToElements('input, select, datalist, button');
-      this.addClassToForm();
-
-      const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
-      instance.inputToFocus(this.selectors.nameSummafin, this.selectors.namePriznakfin, 'гот');
-      instance.todayDate(this.selectors.nameDateoplfin);
-      instance.datePlusMinusDays(this.selectors.nameDateoplfin, this.selectors.dateRegular, this.selectors.dateRegularPlus, this.selectors.dateRegularMinus);
-      this.buttonsClearFinanceEvents(instance);
-
-      this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinus);
-      this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
-      this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus, this.btnAdd);
-
-      this.btnMod = this.container.querySelector(this.selectors.buttonMod);
-      this.buttonMultipleFinanceMod(this.btnMod);
-      this.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
-      this.buttonMultipleFinanceAdd();
+    // Конструктор класу, приймає ім'я, селектор шаблону та селектор контейнера
+    constructor(name, templateSelector, containerSelector) {
+      super(name, templateSelector, containerSelector); // Виклик конструктора батьківського класу
+      FinanceFormBuilder.instances.push(this); // Додавання екземпляра до статичного масиву
     }
-  }
 
-  addClassToForm() {
-    const elementForm = this.container.querySelector('form');
-    const elementFormClassList = elementForm.classList.toString();
-    elementForm.classList.add(`${elementFormClassList}-${this.name}`);
-  }
+    // Основний метод для створення форми
+    build() {
+      // Перевірка наявності шаблону та контейнера
+      if (this.checkTemplateAndContainer()) {
+        // Клонування вмісту шаблону
+        const clone = this.template.content.cloneNode(true);
+        // Додавання клонованого вмісту до контейнера
+        this.container.appendChild(clone);
+        // Додавання ідентифікаторів до елементів, якщо ім'я форми не є стандартним
+        if (this.name !== this.defaultName) this.addIdToElements('input, select, datalist, button');
+        // Додавання класу до форми
+        this.addClassToForm();
 
-  static updateAllAddButtons() {
-    FinanceFormBuilder.instances.forEach(instance => {
-      if (instance.btnAdd) {
-        instance.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
-      }
-    });
-  }
+        // Створення екземпляра FormDataFromTables для роботи з даними форми
+        const instance = new FormDataFromTables(`.form-fin-start-${this.name}`);
+        // Встановлення фокусу на поле суми та ініціалізація поля ознаки
+        instance.inputToFocus(this.selectors.nameSummafin, this.selectors.namePriznakfin, 'гот');
+        // Встановлення поточної дати в поле дати оплати
+        instance.todayDate(this.selectors.nameDateoplfin);
+        // Налаштування функціоналу додавання/віднімання днів до дати
+        instance.datePlusMinusDays(this.selectors.nameDateoplfin, this.selectors.dateRegular, this.selectors.dateRegularPlus, this.selectors.dateRegularMinus);
+        // Налаштування обробників подій для кнопки очищення
+        this.buttonsClearFinanceEvents(instance);
 
-  buttonsClearFinanceEvents(instance) {
-    let btnClearFinanceId = '#btnClearFinance';
-    btnClearFinanceId = this.name !== this.defaultName ? `#btnClearFinance-${this.name}` : `#btnClearFinance`;
-    this.container.querySelector(btnClearFinanceId).addEventListener('click', () => instance.clearRecords());
-  }
+        // Отримання всіх кнопок плюс/мінус
+        this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinus);
+        // Отримання кнопки додавання
+        this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
+        // Налаштування обробників для кнопок плюс/мінус та додавання
+        this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus, this.btnAdd);
 
-  buttonsMultipleFinancePlusMinus(instance, btnPlusMinus, btnAdd) {
-    btnPlusMinus.forEach((btn) => {
-      btn.addEventListener('click', e => {
-        let obj = instance.formaDataObj();
-        if (obj.proektfin) {
-          obj.summafin *= (e.target.hasAttribute(this.attributes.buttonPMinusAttribute) ? -1 : +1);
-          FinanceFormBuilder.arrFinMulti.push(obj);
-          FinanceFormBuilder.updateAllAddButtons();
-        }
-      });
-    });
-  }
-
-  buttonMultipleFinanceAdd() {
-    this.btnAdd.addEventListener('click', () => {
-      if (FinanceFormBuilder.arrFinMulti && FinanceFormBuilder.arrFinMulti.length) {
-        this.btnAdd.disabled = true;
+        // Отримання кнопки модифікації
+        this.btnMod = this.container.querySelector(this.selectors.buttonMod);
+        // Налаштування обробника для кнопки модифікації
+        this.buttonMultipleFinanceMod(this.btnMod);
+        // Оновлення тексту кнопки додавання з кількістю елементів у масиві
         this.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
-        google.script.run.withSuccessHandler(() => {
-          google.script.run.withSuccessHandler((data) => {
-            localStorage.setItem('dataFin', JSON.stringify(data));
-          }).getRecordsFin();
-          FinanceFormBuilder.arrFinMulti = [];
-          FinanceFormBuilder.updateAllAddButtons();
+        // Налаштування обробника для кнопки додавання
+        this.buttonMultipleFinanceAdd();
+      }
+    }
+
+    // Метод для додавання класу до форми з унікальним ім'ям
+    addClassToForm() {
+      const elementForm = this.container.querySelector('form'); // Знаходження елемента форми
+      const elementFormClassList = elementForm.classList.toString(); // Отримання списку класів форми
+      // Додавання унікального класу на основі імені форми
+      elementForm.classList.add(`${elementFormClassList}-${this.name}`);
+    }
+
+    // Статичний метод для оновлення тексту всіх кнопок додавання у всіх екземплярах
+    static updateAllAddButtons() {
+      FinanceFormBuilder.instances.forEach(instance => {
+        if (instance.btnAdd) {
+          // Оновлення тексту кнопки з кількістю елементів у масиві
+          instance.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
+        }
+      });
+    }
+
+    // Метод для налаштування обробника подій кнопки очищення
+    buttonsClearFinanceEvents(instance) {
+      // Визначення ідентифікатора кнопки очищення залежно від імені форми
+      let btnClearFinanceId = '#btnClearFinance';
+      btnClearFinanceId = this.name !== this.defaultName ? `#btnClearFinance-${this.name}` : `#btnClearFinance`;
+      // Додавання обробника події для очищення записів
+      this.container.querySelector(btnClearFinanceId).addEventListener('click', () => instance.clearRecords());
+    }
+
+    // Метод для обробки подій кнопок плюс/мінус
+    buttonsMultipleFinancePlusMinus(instance, btnPlusMinus, btnAdd) {
+      btnPlusMinus.forEach((btn) => {
+        btn.addEventListener('click', e => {
+          // Отримання даних форми
+          let obj = instance.formaDataObj();
+          if (obj.proektfin) { // Перевірка наявності поля proektfin
+            // Зміна знаку суми залежно від натиснутої кнопки (плюс чи мінус)
+            obj.summafin *= (e.target.hasAttribute(this.attributes.buttonPMinusAttribute) ? -1 : +1);
+            // Додавання об'єкта до статичного масиву
+            FinanceFormBuilder.arrFinMulti.push(obj);
+            // Оновлення тексту всіх кнопок додавання
+            FinanceFormBuilder.updateAllAddButtons();
+          }
+        });
+      });
+    }
+
+    // Метод для обробки події кнопки додавання
+    buttonMultipleFinanceAdd() {
+      this.btnAdd.addEventListener('click', () => {
+        // Перевірка наявності даних у масиві
+        if (FinanceFormBuilder.arrFinMulti && FinanceFormBuilder.arrFinMulti.length) {
+          this.btnAdd.disabled = true; // Вимкнення кнопки під час обробки
+          // Оновлення тексту кнопки
+          this.btnAdd.innerText = `Add (${FinanceFormBuilder.arrFinMulti.length})`;
+          // Виклик Google Apps Script для додавання записів
+          google.script.run.withSuccessHandler(() => {
+            // Отримання даних після додавання
+            google.script.run.withSuccessHandler((data) => {
+              // Збереження отриманих даних у localStorage
+              localStorage.setItem('dataFin', JSON.stringify(data));
+            }).getRecordsFin();
+            // Очищення масиву після додавання
+            FinanceFormBuilder.arrFinMulti = [];
+            // Оновлення тексту всіх кнопок додавання
+            FinanceFormBuilder.updateAllAddButtons();
+            this.btnAdd.disabled = false; // Увімкнення кнопки
+            // Виклик функції для оновлення таблиці фінансів
+            btnTableFinance();
+          }).AddRecordFinMultiple(FinanceFormBuilder.arrFinMulti);
+        } else {
+          // Якщо масив порожній, скидаємо текст і стан кнопки
+          this.btnAdd.innerText = 'Add';
           this.btnAdd.disabled = false;
-          btnTableFinance();
-        }).AddRecordFinMultiple(FinanceFormBuilder.arrFinMulti);
-      } else {
-        this.btnAdd.innerText = 'Add';
-        this.btnAdd.disabled = false;
-      }
-    });
-  }
+        }
+      });
+    }
 
-  buttonMultipleFinanceMod(btnAdd) {
-    btnAdd.addEventListener('click', (event) => {
-      const parentElement = event.currentTarget.closest(this.selectors.finButtonsBlock);
-      const financeContainer = parentElement.nextElementSibling;
+    // Метод для обробки події кнопки модифікації
+    buttonMultipleFinanceMod(btnAdd) {
+      btnAdd.addEventListener('click', (event) => {
+        // Знаходження батьківського елемента блоку кнопок
+        const parentElement = event.currentTarget.closest(this.selectors.finButtonsBlock);
+        // Знаходження контейнера фінансів
+        const financeContainer = parentElement.nextElementSibling;
 
-      if (!financeContainer) {
-        console.error('Найближчий financeContainer не знайдено');
-        return;
-      }
+        // Перевірка наявності контейнера фінансів
+        if (!financeContainer) {
+          console.error('Найближчий financeContainer не знайдено');
+          return;
+        }
 
-      let modContainer = financeContainer.querySelector(this.selectors.modContainer);
+        // Знаходження або створення контейнера модифікації
+        let modContainer = financeContainer.querySelector(this.selectors.modContainer);
 
-      if (!FinanceFormBuilder.arrFinMulti.length) {
-        alert('Пусто');
-        return false;
-      }
+        // Перевірка, чи масив даних не порожній
+        if (!FinanceFormBuilder.arrFinMulti.length) {
+          alert('Пусто');
+          return false;
+        }
 
-      if (modContainer) modContainer.remove();
+        // Видалення старого контейнера модифікації, якщо він існує
+        if (modContainer) modContainer.remove();
 
-      modContainer = document.createElement('div');
-      modContainer.setAttribute(this.attributes.modContainerAttribute, '');
-      modContainer.style.display = 'block';
+        // Створення нового контейнера модифікації
+        modContainer = document.createElement('div');
+        modContainer.setAttribute(this.attributes.modContainerAttribute, '');
+        modContainer.style.display = 'block';
 
-      this.renderOverlay(modContainer, financeContainer);
-      financeContainer.appendChild(modContainer);
+        // Рендеринг оверлею для контейнера
+        this.renderOverlay(modContainer, financeContainer);
+        // Додавання контейнера модифікації до контейнера фінансів
+        financeContainer.appendChild(modContainer);
 
-      const tableMod = new CreateTableCross(FinanceFormBuilder.arrFinMulti, this.selectors.modContainer, this);
-      tableMod.createTableBodyCross();
-      tableMod.eventButtonsCross();
-      tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
+        // Створення таблиці для відображення даних
+        const tableMod = new CreateTableCross(FinanceFormBuilder.arrFinMulti, this.selectors.modContainer, this);
+        tableMod.createTableBodyCross(); // Створення тіла таблиці
+        tableMod.eventButtonsCross(); // Налаштування подій для кнопок таблиці
+        // Додавання стилів до таблиці
+        tableMod.table.classList.add('table', 'mt-3', 'table-bordered', 'table-hover', 'table-line-selection');
 
-      const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+        // Знаходження оверлею
+        const casheFinOverlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
 
-      new Button({
-        text: 'Clear',
-        classes: ['btn', 'btn-danger'],
-        onClick: () => {
-          FinanceFormBuilder.arrFinMulti.length = 0;
+        // Створення кнопки очищення
+        new Button({
+          text: 'Clear',
+          classes: ['btn', 'btn-danger'],
+          onClick: () => {
+            // Очищення масиву даних
+            FinanceFormBuilder.arrFinMulti.length = 0;
+            // Видалення контейнера модифікації
+            modContainer.remove();
+            // Оновлення тексту всіх кнопок додавання
+            FinanceFormBuilder.updateAllAddButtons();
+            // Видалення оверлею, якщо він існує
+            const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
+            if (overlayToRemove) overlayToRemove.remove();
+          },
+          parentElement: financeContainer.querySelector(this.selectors.modContainer),
+        });
+
+        // Налаштування обробника натискання клавіші Escape
+        this.setupEscapeHandler(modContainer);
+      });
+    }
+
+    // Метод для створення оверлею
+    renderOverlay(modContainer, financeContainer) {
+      // Знаходження або створення оверлею
+      let overlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.classList.add(this.attributes.casheFinOverlay);
+        overlay.setAttribute(this.attributes.casheFinOverlayAttribute, '');
+        // Додавання обробника події для видалення оверлею та контейнера при кліку
+        overlay.addEventListener('mousedown', () => {
+          overlay.remove();
           modContainer.remove();
-          FinanceFormBuilder.updateAllAddButtons();
-          const overlayToRemove = financeContainer.querySelector(this.selectors.casheFinOverlay);
-          if (overlayToRemove) overlayToRemove.remove();
-        },
-        parentElement: financeContainer.querySelector(this.selectors.modContainer),
-      });
+        });
+        // Додавання оверлею до контейнера фінансів
+        financeContainer.appendChild(overlay);
+      }
+    }
 
-      this.setupEscapeHandler(modContainer);
-    });
-  }
+    // Метод для налаштування обробника клавіші Escape
+    setupEscapeHandler(modContainer) {
+      const escapeHandler = (event) => {
+        // Перевірка натискання клавіші Escape
+        if (event.key === 'Escape' || event.keyCode === 27) {
+          if (modContainer && modContainer.style.display !== 'none') {
+            event.preventDefault();
+            event.stopPropagation();
+            // Видалення контейнера модифікації
+            modContainer.remove();
+            // Видалення оверлею
+            const overlay = document.querySelector(this.selectors.casheFinOverlay);
+            if (overlay) overlay.remove();
+            // Видалення обробника події
+            document.removeEventListener('keydown', escapeHandler);
+          }
+        }
+      };
 
-  renderOverlay(modContainer, financeContainer) {
-    let overlay = financeContainer.querySelector(this.selectors.casheFinOverlay);
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.classList.add(this.attributes.casheFinOverlay);
-      overlay.setAttribute(this.attributes.casheFinOverlayAttribute, '');
+      // Видалення старого обробника, якщо він існує
+      document.removeEventListener('keydown', escapeHandler);
+      // Додавання нового обробника для клавіші Escape
+      document.addEventListener('keydown', escapeHandler);
 
-      overlay.addEventListener('mousedown', () => {
-        overlay.remove();
-        modContainer.remove();
-      });
+      // Функція для очищення обробника
+      const cleanup = () => {
+        document.removeEventListener('keydown', escapeHandler);
+      };
 
-      financeContainer.appendChild(overlay);
+      // Знаходження оверлею
+      const overlay = document.querySelector(this.selectors.casheFinOverlay);
+      if (overlay) overlay.addEventListener('mousedown', cleanup, { once: true });
+
+      // Знаходження кнопки очищення
+      const clearButton = modContainer.querySelector('.btn-danger');
+      if (clearButton) clearButton.addEventListener('click', cleanup, { once: true });
     }
   }
 
-  setupEscapeHandler(modContainer) {
-    const escapeHandler = (event) => {
-      if (event.key === 'Escape' || event.keyCode === 27) {
-        if (modContainer && modContainer.style.display !== 'none') {
-          event.preventDefault();
-          event.stopPropagation();
-          modContainer.remove();
-          const overlay = document.querySelector(this.selectors.casheFinOverlay);
-          if (overlay) overlay.remove();
-          document.removeEventListener('keydown', escapeHandler);
-        }
-      }
-    };
-
-    document.removeEventListener('keydown', escapeHandler);
-    document.addEventListener('keydown', escapeHandler);
-
-    const cleanup = () => {
-      document.removeEventListener('keydown', escapeHandler);
-    };
-
-    const overlay = document.querySelector(this.selectors.casheFinOverlay);
-    if (overlay) overlay.addEventListener('mousedown', cleanup, { once: true });
-
-    const clearButton = modContainer.querySelector('.btn-danger');
-    if (clearButton) clearButton.addEventListener('click', cleanup, { once: true });
-  }
-}
 </script>

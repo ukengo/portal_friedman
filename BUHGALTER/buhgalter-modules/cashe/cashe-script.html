@@ -45,12 +45,13 @@
     }
     result.appendChild(clon);
     document.getElementById('button_cashe_input').addEventListener('click', buttonInput);
-    buildDatalistCashe();    
+    buildDatalistCashe();
   }
 
   // обработка кнопки ввод
   const buttonInput = () => {
-   // document.getElementById("button_cashe_input").disabled = true;
+    const btmInput = document.getElementById("button_cashe_input");
+    btmInput.disabled = true;
     const description = document.querySelector('#summa_cashe').value;
     const waste = document.querySelector('#waste_cashe').value ? +document.querySelector('#waste_cashe').value : "";
     const arrival = document.querySelector('#arrival_cashe').value ? +document.querySelector('#arrival_cashe').value : "";
@@ -60,13 +61,13 @@
     // проверяем на пустые поля
     if (searchStop(data.flat())) {
       alert('Не внесені дані для пошуку')
-    //  document.getElementById("button_cashe_input").disabled = false;
+      btmInput.disabled = false;
       return;
     }
     // конец проверки на пустые поля
 
     google.script.run.withSuccessHandler(() => {
-    //  document.getElementById("button_cashe_input").disabled = false;
+      btmInput.disabled = false;
       startDataTableCasherom()
     }).insertRowCache(data);
   }

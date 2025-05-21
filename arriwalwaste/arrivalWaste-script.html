@@ -1,71 +1,105 @@
 <script>
 
 
+  // Ініціалізація конструктора форми з бібліотеки AWFormBuilder
+  // 'aw' — ідентифікатор форми, '#AwMainForma' — селектор контейнера форми, '[data-form-fin-main]' — селектор елементів форми
   const aWForm = new AWFormBuilder('aw', '#AwMainForma', '[data-form-fin-main]');
+  // Виклик методу для рендерингу форми на сторінці
   aWForm.render();
 
+  // Ініціалізація обробника даних форми з таблиць, який працює з елементами, позначеними атрибутом [data-form-aw]
   const formDataHandler = new FormDataFromTables('[data-form-aw]');
 
-  // Обробка натискання клавіші Enter
+  // Обробник події натискання клавіші Enter
+  // Якщо натиснута клавіша Enter (код 13), викликається функція збереження даних модального вікна
   function clickPressAW(event) {
     if (event.keyCode == 13) {
       btnSaveModalAW();
     }
   }
 
-  // Обробка натискання Enter для витрат Приват
+  // Обробник події натискання клавіші Enter для форми витрат Приват
+  // Якщо натиснута клавіша Enter, викликається функція обробки витрат
   function clickPressAwPrivat(event) {
     if (event.keyCode == 13) {
       buttonClickWaste();
     }
   }
 
+  // Очищення списків для випадаючих меню
+  // Видаляє всі елементи з випадаючих списків з ідентифікаторами firmaArrivalWaste-datalist та waste-datalist
   function startArrivalWasteClear() {
     $("#firmaArrivalWaste-datalist").empty();
     $("#waste-datalist").empty();
   }
 
-  // Отримання списку статей для випадаючого меню
+  // Отримання унікального списку статей для випадаючого меню
   function getDropDownArrayStatyaArrivalWaste() {
+    // Отримання даних з localStorage для надходжень та витрат
     const storageDataArrival = localStorage.getItem('dataArrival');
     const storageDataAWaste = localStorage.getItem('dataWaste');
+
+    // Якщо дані відсутні, повертаємо false
     if (!storageDataArrival || !storageDataAWaste) return false;
+
+    // Парсинг JSON-даних та витягнення відповідних полів (статті доходів та витрат)
     const dohod = (JSON.parse(storageDataArrival).data).map(x => [x[4]]);
     const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
+
+    // Об'єднання списків доходів та витрат, видалення дублікатів та порожніх значень
     const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
+
+    // Отримання списку виключень (стоп-слів) з localStorage
     const stopAw = JSON.parse(localStorage.getItem('stopAw'));
+
+    // Фільтрація списку статей з урахуванням стоп-слів
     return searchingSubstringInArrayStrings(dohodRashod, stopAw, 0);
   }
 
+  // Ініціалізація випадаючих меню для надходжень та витрат
   function startArrivalWaste() {
+    // Очищення списків перед заповненням
     startArrivalWasteClear();
+
+    // Заповнення випадаючого списку для фірм (надходження) даними з localStorage
     afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
+
+    // Заповнення випадаючого списку для статей витрат
     afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
   }
 
-  // Встановлення значення costPrivat
+  // Встановлення значення поля costPrivat з localStorage
+  // Конвертує значення в число та встановлює в поле з ідентифікатором costPrivat
   document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
 
-  // Збирання даних з форми за допомогою FormDataFromTables
+  // Збирання та обробка даних з форми
   function getFormDataArrivalWaste() {
+    // Отримання даних форми через FormDataFromTables
     const formData = formDataHandler.formaDataObj();
+
+    // Деструктуризація об'єкта даних форми
     let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste, termkar } = formData;
 
+    // Конвертація числових значень, якщо вони є, інакше 0
     summa = Math.abs(+summa || 0);
     summaPrivat = +summaPrivat || 0;
     costPrivat = +costPrivat || 0;
 
+    // Логіка обробки заповнення полів суми
     if (!summaPrivat && !summa) {
       summa = "";
       waste = "Не заповнено ні одного поля суми";
       firmaArrivalWaste = "";
     }
 
+    // Логіка для приватної комісії
     if (summaPrivat && !summa) {
       if (!costPrivat) {
         waste = "Не заповнено вартості комісії приват";
       } else {
+        // Збереження вартості комісії в localStorage
         localStorage.setItem('costPrivat', costPrivat);
+        // Розрахунок суми з урахуванням комісії
         summa = summaPrivat * costPrivat;
         waste = "Приват комісія";
         forma = "тов";
@@ -73,18 +107,24 @@
       }
     }
 
+    // Повернення масиву даних форми
     return [date, +summa, forma, firmaArrivalWaste, waste, termkar];
   }
 
+  // Обробка натискання кнопок для витрат та надходжень
   function buttonClickWasteAndArival() {
+    // Отримання значення поля termkar
     const termkarVal = document.getElementById("termkar").value;
+    // Отримання даних форми
     const formData = getFormDataArrivalWaste();
 
+    // Перевірка заповнення статті витрат
     if (!formData[4] && !termkarVal) {
       alert('Не заповнена стаття витрат');
       return;
     }
 
+    // Перевірка помилок заповнення полів суми
     if (formData[4] === "Не заповнено ні одного поля суми") {
       alert("Не заповнено ні одного поля суми");
       return false;
@@ -102,90 +142,131 @@
       return false;
     }
 
+    // Оновлення випадаючих списків
     startArrivalWaste();
+
+    // Обробка кнопки для витрат
     if (this.id === "buttonWaste") {
+      // Відображення спінера під час обробки
       spinner("dataTableArriwalWaste");
       if (!formData[5]) {
+        // Виклик серверної функції для додавання нового рядка витрат
         google.script.run
           .withSuccessHandler(createTableArriwalWaste)
           .addNewRowWaste(formData.slice(0, 5));
       } else {
+        // Додавання даних для терміналу-карантину
         google.script.run.insertTermKar(rowDataTermKar());
         google.script.run
           .withSuccessHandler(startDataWaste)
           .vReestrTerminalKarantin(rowDataTermKar());
       }
+      // Оновлення тексту для відображення
       document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
+      // Очищення форми
       buttonClickOchistkaAW();
     }
+
+    // Обробка кнопки для надходжень
     if (this.id === "buttonArrival") {
       spinner("dataTableArriwalWaste");
+      // Додавання нового рядка надходжень
       google.script.run
         .withSuccessHandler(createTableArriwalWaste)
         .addNewRowArrival(formData.slice(0, 5));
+      // Оновлення тексту для відображення
       document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
+      // Додавання нового рядка в таблицю
       google.script.run
         .withSuccessHandler(createTableArriwalWaste)
         .addNewTableArriwal(formData.slice(0, 5));
+      // Очищення форми
       buttonClickOchistkaAW();
     }
+
+    // Зміна висоти контейнера таблиці
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
   }
 
+  // Очищення даних форми
   function buttonClickOchistkaAW() {
     formDataHandler.clearRecords();
   }
 
   // Обробка кнопок "вчора", "п'ятниця", "сьогодні"
+  // Додає обробники подій для встановлення дати в поле #date
   document.querySelectorAll(".btn-yft").forEach(elem => {
     const date = document.querySelector("#date");
     elem.addEventListener('click', e => {
+      // Виклик функції для встановлення відповідної дати
       yesterdayFridayToday1(e.target.value, date);
     });
   });
 
-  // Прив'язка подій до кнопок
+  // Прив'язка обробників подій до кнопок вкладок
   // document.getElementById("buttonWaste").addEventListener("click", buttonClickWasteAndArival);
   // document.getElementById("buttonArrival").addEventListener("click", buttonClickWasteAndArival);
   document.getElementById("buttonWasteTab").addEventListener("click", startDataWaste);
   document.getElementById("buttonArrivalTab").addEventListener("click", startDataArriwal);
 
+  // Встановлення поточної дати в поле #date
   document.getElementById("date").valueAsDate = new Date();
 
+  // Ініціалізація даних для вкладки витрат
   function startDataWaste() {
+    // Відображення спінера
     spinner("dataTableArriwalWaste");
+    // Оновлення тексту для відображення
     document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
+    // Рендеринг таблиці з даними витрат з localStorage
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataWaste')));
+    // Зміна висоти контейнера таблиці
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
+    // Оновлення випадаючих списків
     startArrivalWaste();
   }
 
+  // Ініціалізація даних для вкладки надходжень
   function startDataArriwal() {
+    // Відображення спінера
     spinner("dataTableArriwalWaste");
+    // Оновлення тексту для відображення
     document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
+    // Рендеринг таблиці з даними надходжень з localStorage
     createTableArriwalWaste(JSON.parse(localStorage.getItem('dataArrival')));
+    // Зміна висоти контейнера таблиці
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
+    // Оновлення випадаючих списків
     startArrivalWaste();
   }
 
-  // Побудова таблиці
+  // Побудова HTML-таблиці на основі масиву даних
   const buildTableAw = dataArray => {
     if (dataArray) {
+      // Початок таблиці з класами для стилізації
       let result = `<table class='table table-bordered table-hover table-line-selection' id='table-aw' style='table-layout: auto;'>`;
       const dataArrayData = dataArray;
+
+      // Якщо є дані
       if (dataArrayData[0]) {
+        // Визначення кількості стовпців (мінус останній, який зазвичай є ідентифікатором)
         const numId = +dataArrayData[0].length - 1;
+        // Проходження по рядках у зворотному порядку
         for (let i = dataArrayData.length - 1; i >= 0; i--) {
           result += "<tr>";
+          // Проходження по стовпцях
           for (let j = 0; j < dataArrayData[i].length; j++) {
+            // Пропуск останнього стовпця (ідентифікатора)
             if (j === numId) continue;
             result += "<td>" + dataArrayData[i][j] + "</td>";
           }
+          // Додавання кнопки для редагування рядка
           result += `<td>
-          <button type="button" id="buttonModalFinance${dataArrayData[i][numId]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
-        </td>`;
+                    <button type="button" id="buttonModalFinance${dataArrayData[i][numId]}" class="btn btn-sm btn-light btnbtn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                </td>`;
         }
         result += `</tr></table>`;
+        // Додавання обробника кліків по таблиці
         clickTables('#table-aw', () => {
           if (event.target.tagName !== 'TD') return false;
           const dataTarget = event.target.textContent;
@@ -196,17 +277,24 @@
     }
   };
 
-  // Відкриття модального вікна
+  // Відкриття модального вікна для редагування рядка
   function btnOpenModal(arr, id) {
+    // Отримання ідентифікатора рядка з id кнопки
     const row = Number(id.match(/\d+/));
+    // Фільтрація даних для потрібного рядка
     const allModal = arr.filter(el => Number(el[+arr[0].length - 1]) === Number(row)).flat();
+    // Форматування дати
     const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0]));
+    // Конвертація суми в число
     const summaModal = strongToNumber(allModal[1]);
+    // Визначення значень залежно від кількості стовпців
     let fIrmaModal = arr[0].length === 6 ? allModal[3] : '';
     let wasteModal = arr[0].length === 6 ? allModal[4] : allModal[3];
     const formaModal = allModal[2];
 
+    // Обробка події відкриття модального вікна
     $("#exampleModal").on("shown.bs.modal", () => {
+      // Заповнення полів модального вікна
       $("#dateModal").val(dateModal);
       $("#summaModal").val(summaModal);
       $("#formaModal").val(formaModal);
@@ -216,45 +304,56 @@
     });
   }
 
-  // Рендеринг таблиці
+  // Рендеринг таблиці з даними
   function createTableArriwalWaste(dataArray) {
     const div = document.getElementById("dataTableArriwalWaste");
+    // Перевірка наявності даних
     if (!dataArray || !dataArray.data) {
       alert('storage пустий');
       return false;
     }
 
     const searhValueNode = document.querySelector('#search');
+    // Ініціалізація пошуку
     searchValueAw();
+    // Додавання обробників подій для пошуку
     searhValueNode.addEventListener('click', searchValueAw);
     searhValueNode.addEventListener('keyup', searchValueAw);
     searhValueNode.addEventListener('input', searchValueAw);
 
+    // Функція обробки пошуку
     function searchValueAw() {
       if (!$("#vrabotevseArriwalWaste").text()) return;
       const dataSearchValue = searhValueNode.value;
+      // Рендеринг таблиці з урахуванням пошукового запиту
       div.innerHTML = dataSearchValue
         ? buildTableAw(findInTable(dataArray.data, dataSearchValue))
         : buildTableAw(dataArray.data);
 
+      // Додавання обробників для кнопок редагування
       $(".btnbtn").click(function () {
         btnOpenModal(dataArray.data, this.id);
       });
 
+      // Додавання обробника кліків по таблиці
       clickTables('#table-aw', searchToClick);
     }
 
+    // Автоматичний пошук при відкритті
     autoSearchOnOpen(".input-search");
 
+    // Отримання останніх 10 рядків витрат з сервера
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataWaste', JSON.stringify(data));
       document.querySelector('#buttonWasteTab').disabled = false;
     }).getLastTenRowsWaste();
 
+    // Отримання даних для кешу випадаючих списків
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataCashe', JSON.stringify(data));
     }).getDropDownArrayCashe();
 
+    // Обробка кліків по комірках таблиці
     function searchToClick() {
       if (event.target.tagName !== 'TD') return false;
       const dataTarget = event.target.textContent;
@@ -263,7 +362,7 @@
     clickTables('#table-aw', searchToClick);
   }
 
-  // Термінал-карантин
+  // Формування даних для терміналу-карантину
   function rowDataTermKar() {
     const formData = formDataHandler.formaDataObj();
     return [
@@ -276,10 +375,13 @@
     ];
   }
 
-  // Видалення запису в модальному вікні
+  // Видалення рядка в модальному вікні
   $("#btnDeleteModalAW").on("click", () => {
+    // Підтвердження видалення
     if (!window.confirm("Удалить запись?")) return;
     const id = $("#awModalLabel").text();
+
+    // Видалення рядка залежно від активної вкладки
     if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
       google.script.run
         .withSuccessHandler(startDataArriwal)
@@ -293,10 +395,11 @@
     }
   });
 
-  // Збереження в модальному вікні
+  // Збереження змін у модальному вікні
   $("#btnSaveModalAW").on("click", btnSaveModalAW);
   function btnSaveModalAW() {
     const id = $("#awModalLabel").text();
+    // Формування даних для збереження
     const data = [[
       $("#dateModal").val(),
       +$("#summaModal").val(),
@@ -305,7 +408,10 @@
       $("#wasteModal").val(),
     ]];
 
+    // Закриття модального вікна
     $("#exampleModal").modal("hide");
+
+    // Збереження змін залежно від активної вкладки
     if ($("#vrabotevseArriwalWaste").text() === "Інші надходження") {
       google.script.run
         .withSuccessHandler(() => {
@@ -329,18 +435,21 @@
     }
   }
 
-  // Спостерігач за змінами для суми
+  // Спостерігач за змінами в таблиці для підрахунку суми
   const mutationObserverAw = () => {
     const observer = new MutationObserver(mutations => {
       mutations.forEach(() => {
         const searsh = document.querySelector('#search');
         const summa = document.querySelector('#vrabotevse-arriwalwaste-summa');
+        // Оновлення суми у відфільтрованій таблиці
         summaTrFiltered('#dataTableArriwalWaste', '#vrabotevse-arriwalwaste-summa');
+        // Очищення суми, якщо немає пошуку, таблиці або сума дорівнює 0
         if (!searsh.value || !document.getElementById('dataTableArriwalWaste').hasChildNodes() || summa.innerHTML === 'Разом: 0.00 грн') {
           summa.innerHTML = '';
         }
       });
     });
+    // Налаштування спостерігача за змінами в таблиці
     observer.observe(document.getElementById('dataTableArriwalWaste'), {
       attributes: true,
       childList: true,
@@ -349,14 +458,17 @@
   };
   mutationObserverAw();
 
-  // Колір для costPrivat
+  // Зміна кольору фону для поля costPrivat залежно від значення
   const costPrivatColor = () => {
     const costpriv = document.querySelector('#costPrivat');
+    // Якщо значення порожнє, встановлюється червоний фон
     if (!+costpriv.value) {
       costpriv.style.backgroundColor = '#dc35457a';
     } else {
+      // Інакше видаляється колір фону
       costpriv.style.removeProperty('background-color');
     }
+    // Додавання обробника події input для динамічної зміни кольору
     costpriv.addEventListener('input', costPrivatColor);
   };
   costPrivatColor();

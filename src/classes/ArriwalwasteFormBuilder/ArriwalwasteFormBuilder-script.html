@@ -124,12 +124,12 @@
 
       const isWasteButton = event.target.closest(this.selectors.wasteButton); // Перевірка, чи натиснуто кнопку Waste
       const isArrivalButton = event.target.closest(this.selectors.arrivalButton); // Перевірка, чи натиснуто кнопку Arrival
-
+      const vrabotevseElement = document.querySelector('#vrabotevseArriwalWaste');
       // Обробка кліку по кнопці Waste
+
+      spinner('dataTableArriwalWaste'); // Відображення спінера для таблиці
+
       if (isWasteButton) {
-        console.log('Waste button clicked');
-        
-        spinner('dataTableArriwalWaste'); // Відображення спінера для таблиці
         if (!formData[5]) {
           // Виклик серверної функції для додавання нового рядка витрат
           google.script.run
@@ -143,18 +143,16 @@
             .withSuccessHandler(startDataWaste)
             .vReestrTerminalKarantin(rowDataTermKar());
         }
-        const vrabotevseElement = this.container.querySelector('#vrabotevseArriwalWaste');
         if (vrabotevseElement) {
           vrabotevseElement.innerHTML = 'Інші витрати'; // Оновлення тексту елемента
         }
         buttonClickOchistkaAW(); // Очищення форми
       } else if (isArrivalButton) {
-        spinner('dataTableArriwalWaste'); // Відображення спінера для таблиці
+
         // Виклик серверної функції для додавання нового рядка надходжень
         google.script.run
           .withSuccessHandler(createTableArriwalWaste)
           .addNewRowArrival(formData.slice(0, 5));
-        const vrabotevseElement = this.container.querySelector('#vrabotevseArriwalWaste');
         if (vrabotevseElement) {
           vrabotevseElement.innerHTML = 'Інші надходження'; // Оновлення тексту елемента
         }

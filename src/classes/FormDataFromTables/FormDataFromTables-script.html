@@ -31,10 +31,25 @@
     }
 
     /**
-    * Метод очистки полів форми. Також міняє колір лабела на чорний
-    */
+ * Метод очищення полів форми. Також змінює колір label на чорний.
+ * Якщо у елемента встановлено дата-атрибут data-no-clear, то його не очищає.
+ */
     clearRecords() {
-      this.$form.reset();
+      // Отримуємо всі елементи форми
+      const formElements = this.$form.querySelectorAll('input, textarea, select');
+
+      // Очищаємо поля, ігноруючи елементи з data-no-clear
+      formElements.forEach(element => {
+        if (!element.hasAttribute('data-no-clear')) {
+          if (element.type === 'checkbox' || element.type === 'radio') {
+            element.checked = false;
+          } else {
+            element.value = '';
+          }
+        }
+      });
+
+      // Викликаємо метод для зміни кольору label на чорний
       this.labelred();
     }
 

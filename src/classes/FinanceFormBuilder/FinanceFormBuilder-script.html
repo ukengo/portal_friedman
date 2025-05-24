@@ -1,5 +1,5 @@
 <script>
-  
+
   // Клас FinanceFormBuilder розширює базовий клас FormBuilderBase для створення фінансових форм
   class FinanceFormBuilder extends FormBuilderBase {
     // Статичний масив для зберігання об'єктів фінансових даних перед їх додаванням
@@ -73,7 +73,7 @@
         // Отримання кнопки додавання
         this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
         // Налаштування обробників для кнопок плюс/мінус та додавання
-        this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus, this.btnAdd);
+        this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus);
 
         // Отримання кнопки модифікації
         this.btnMod = this.container.querySelector(this.selectors.buttonMod);
@@ -114,7 +114,7 @@
     }
 
     // Метод для обробки подій кнопок плюс/мінус
-    buttonsMultipleFinancePlusMinus(instance, btnPlusMinus, btnAdd) {
+    buttonsMultipleFinancePlusMinus(instance, btnPlusMinus) {
       btnPlusMinus.forEach((btn) => {
         btn.addEventListener('click', e => {
           // Отримання даних форми

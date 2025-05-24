@@ -130,17 +130,24 @@
       spinner('dataTableArriwalWaste'); // Відображення спінера для таблиці
 
       if (isWasteButton) {
+        isWasteButton.disabled = true;
         if (!formData[5]) {
           // Виклик серверної функції для додавання нового рядка витрат
           google.script.run
-            .withSuccessHandler(createTableArriwalWaste)
+            .withSuccessHandler((data) => {
+              createTableArriwalWaste(data);
+              isWasteButton.disabled = false;
+            })
             .addNewRowWaste(formData.slice(0, 5));
         } else {
           // Вставка даних терміну карантину
           google.script.run.insertTermKar(rowDataTermKar());
           // Виклик серверної функції для обробки карантинних даних
           google.script.run
-            .withSuccessHandler(startDataWaste)
+            .withSuccessHandler(() => {
+              startDataWaste();
+              isWasteButton.disabled = false;
+            })
             .vReestrTerminalKarantin(rowDataTermKar());
         }
         if (vrabotevseElement) {
@@ -148,17 +155,23 @@
         }
         buttonClickOchistkaAW(); // Очищення форми
       } else if (isArrivalButton) {
-
+        isArrivalButton.disabled = true;
         // Виклик серверної функції для додавання нового рядка надходжень
         google.script.run
-          .withSuccessHandler(createTableArriwalWaste)
+          .withSuccessHandler((data) => {
+            createTableArriwalWaste(data);
+            isArrivalButton.disabled = false;
+          })
           .addNewRowArrival(formData.slice(0, 5));
         if (vrabotevseElement) {
           vrabotevseElement.innerHTML = 'Інші надходження'; // Оновлення тексту елемента
         }
         // Виклик серверної функції для додавання нової таблиці надходжень
         google.script.run
-          .withSuccessHandler(createTableArriwalWaste)
+          .withSuccessHandler((data) => {
+            createTableArriwalWaste(data);
+            isArrivalButton.disabled = false;
+          })
           .addNewTableArriwal(formData.slice(0, 5));
         buttonClickOchistkaAW(); // Очищення форми
       }
@@ -184,7 +197,7 @@
       );
       this.initEventListeners(); // Ініціалізація обробників подій
       this.setDefaultDate(); // Встановлення дати за замовчуванням
-      this.resetLabelColors(this.getFormFields()); // Скидання кольорів міток
+      // this.resetLabelColors(this.getFormFields()); // Скидання кольорів міток
     }
 
     // Метод для ініціалізації обробників подій
@@ -215,14 +228,14 @@
         const today = new Date(); // Поточна дата
         dateInput.value = today.toISOString().split('T')[0]; // Встановлення дати у форматі YYYY-MM-DD
       });
-      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+      //     this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
     }
 
     // Обробник кліку на кнопку "Вчора"
     // Встановлює дату на вчорашній день
     handleYesterdayButtonClick(event) {
       this.setDate('yesterday'); // Встановлення вчорашньої дати
-      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+      //    this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
       this.eventHandlers.yesterdayButton?.(event); // Виклик додаткового обробника, якщо він існує
     }
 
@@ -230,7 +243,7 @@
     // Встановлює дату на найближчу п'ятницю
     handleFridayButtonClick(event) {
       this.setDate('friday'); // Встановлення дати п'ятниці
-      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+      //  this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
       this.eventHandlers.fridayButton?.(event); // Виклик додаткового обробника, якщо він існує
     }
 
@@ -238,7 +251,7 @@
     // Встановлює поточну дату
     handleTodayButtonClick(event) {
       this.setDate('today'); // Встановлення поточної дати
-      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+      // this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
       this.eventHandlers.todayButton?.(event); // Виклик додаткового обробника, якщо він існує
     }
 
@@ -261,28 +274,28 @@
 
     // Метод для оновлення кольорів міток полів
     // Змінює колір міток для певних полів на червоний (помилка)
-    updateLabelColors(fields) {
-      Object.entries(fields).forEach(([key, id]) => {
-        const input = this.container.querySelector(`#${id}`); // Отримання поля
-        const label = this.container.querySelector(`label[for="${id}"]`); // Отримання мітки
-        if (!input || !label) return; // Перевірка наявності елементів
-        if (['date', 'costPrivat', 'forma'].includes(key)) {
-          label.style.color = this.colors.errorColor; // Встановлення кольору помилки
-        } else {
-          label.style.removeProperty('color'); // Скидання кольору
-        }
-      });
-    }
+    /*      updateLabelColors(fields) {
+          Object.entries(fields).forEach(([key, id]) => {
+            const input = this.container.querySelector(`#${id}`); // Отримання поля
+            const label = this.container.querySelector(`label[for="${id}"]`); // Отримання мітки
+            if (!input || !label) return; // Перевірка наявності елементів
+            if (['date', 'costPrivat', 'forma'].includes(key)) {
+              label.style.color = this.colors.errorColor; // Встановлення кольору помилки
+            } else {
+              label.style.removeProperty('color'); // Скидання кольору
+            }
+          });
+        }  */
 
     // Метод для скидання кольорів міток
     // Викликає оновлення кольорів для всіх полів
-    resetLabelColors(fields) {
-      this.updateLabelColors(fields); // Оновлення кольорів міток
-    }
+    /*   resetLabelColors(fields) {
+        this.updateLabelColors(fields); // Оновлення кольорів міток
+      } */
 
     // Метод для очищення форми
     // Скидає значення певних полів форми
-    clearForm() {
+    /* clearForm() {
       const fields = this.getFormFields(); // Отримання імен полів форми
       const fieldsToClear = [
         fields.summa,
@@ -296,7 +309,7 @@
         const element = this.container.querySelector(`#${id}`); // Отримання елемента
         if (element) element.value = ''; // Очищення значення
       });
-      this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
-    }
+    //  this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
+    } */
   }
 </script>

@@ -98,11 +98,11 @@
     <form action="#" data-form-aw>
       <div class="form mb-1 col-6">
         <label for="date">Дата</label>
-        <div class="btn-group" role="group" aria-label="">
-          <input type="date" class="form-control" id="date" name="date" />
-          <input type="button" id="btnArriwalwasteY" value=" Y " class="btn btn-danger btn-sm ms-1 btn-yft">
-          <input type="button" id="btnArriwalwasteFri" value="Fri" class="btn btn-danger btn-sm ms-1 btn-yft">
-          <input type="button" id="btnArriwalwasteT" value=" T " class="btn btn-danger btn-sm ms-1 btn-yft">
+        <div class="btn-group" role="group" aria-label="" >
+          <input type="date" class="form-control" id="date" name="date" data-no-clear>
+          <input type="button" id="btnArriwalwasteY" value=" Y " class="btn btn-danger btn-sm ms-1 btn-yft" data-no-clear>
+          <input type="button" id="btnArriwalwasteFri" value="Fri" class="btn btn-danger btn-sm ms-1 btn-yft" data-no-clear>
+          <input type="button" id="btnArriwalwasteT" value=" T " class="btn btn-danger btn-sm ms-1 btn-yft" data-no-clear>
         </div>
       </div>
 
@@ -124,7 +124,7 @@
                   <div class="col-4 g-0">
                     <label for="costPrivat" class="text-nowrap">Ціна Прив</label>
                     <input type="number" class="form-control num-plus" id="costPrivat" name="costPrivat"
-                      onkeypress="clickPressAwPrivat(event)" />
+                      onkeypress="clickPressAwPrivat(event)" data-no-clear/>
                   </div>
                 </div>
               </div>

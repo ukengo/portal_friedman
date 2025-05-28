@@ -1,3 +1,4 @@
+<!-- Попап-вікно -->
 <div id="mypopup"></div>
 
 <style>
@@ -9,83 +10,129 @@
     position: absolute;
     display: none;
     background-color: rgba(255, 255, 255, 0.8);
-    /* Білий фон із 80% непрозорістю */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    /* Додаємо тінь для кращого вигляду */
+    z-index: 1000; /* Додано для коректного відображення над іншими елементами */
   }
 </style>
 
 <script>
-  const mypopup = document.getElementById("mypopup");
-  const rowdatafin = document.getElementById("rowdatafin");
+// Отримуємо елементи DOM
+const mypopup = document.getElementById("mypopup");
+const rowdatafin = document.getElementById("rowdatafin");
+const table = document.getElementById("data-table");
 
-  // Використовуємо делегування подій на document
-  document.addEventListener("mouseover", (e) => {
-    if (e.target.closest('#data-table td')) {
-      showPopup(e);
+// Перевірка наявності таблиці
+if (!table) {
+  console.error("Таблиця з id='data-table' не знайдена");
+} else {
+  // Обробник події mouseover для таблиці
+  table.addEventListener("mouseover", (e) => {
+    const cell = e.target.closest('#data-table td');
+    if (!cell) return; // Захист від некоректних елементів
+
+    const cellIndex = e.target._DT_CellIndex;
+    if (cellIndex?.column === 0) {
+      showPopup(e); // Показуємо попап для першого стовпця
+    } else {
+      mypopup.style.display = "none"; // Ховаємо попап для інших стовпців
     }
   });
 
-  document.addEventListener("mouseout", (e) => {
-    if (e.target.closest('#data-table td') && !e.relatedTarget?.closest('#mypopup')) {
+  // Обробник події mouseleave для таблиці
+  table.addEventListener("mouseleave", (e) => {
+    // Ховаємо попап, якщо курсор не перейшов на нього
+    if (!e.relatedTarget || !mypopup.contains(e.relatedTarget)) {
       mypopup.style.display = "none";
     }
   });
+}
 
-  function showPopup(e) {
-    const cell = e.target._DT_CellIndex;
-    if (!cell || cell.column !== 0) return;
+// Обробник mouseover для попапу
+mypopup.addEventListener("mouseover", () => {
+  mypopup.style.display = "block"; // Залишаємо попап видимим
+});
 
-    const projectNum = getProjectNumberFromRow(e.target);
-    if (!projectNum) return;
+// Обробник mouseleave для попапу
+mypopup.addEventListener("mouseleave", (e) => {
+  // Ховаємо попап, якщо курсор не повертається до таблиці
+  if (!e.relatedTarget || !table.contains(e.relatedTarget)) {
+    mypopup.style.display = "none";
+  }
+});
 
-    const { right, top } = e.target.getBoundingClientRect();
-    mypopup.style.left = `${right - 20}px`;
-    mypopup.style.display = "block";
+// Функція для відображення попапу
+function showPopup(e) {
+  const cellIndex = e.target._DT_CellIndex;
+  if (!cellIndex || cellIndex.column !== 0) return; // Захист від некоректних клітинок
 
-    mypopup.innerHTML = popupInsertText(projectNum);
-    mypopup.querySelectorAll("input").forEach((el) => {
-      el.style.fontSize = "8pt";
-    });
+  const projectNum = getProjectNumberFromRow(e.target);
+  if (!projectNum) {
+    console.warn("Номер проєкту не знайдено");
+    return;
+  }
 
+  // Позиціонування попапу
+  const { right, top } = e.target.getBoundingClientRect();
+  mypopup.style.left = `${right - 20}px`;
+  mypopup.style.display = "block";
+
+  // Вставка контенту в попап
+  mypopup.innerHTML = popupInsertText(projectNum);
+  
+  // Стилізація всіх input у попапі
+  mypopup.querySelectorAll("input").forEach((el) => {
+    el.style.fontSize = "8pt";
+  });
+
+  // Очищення rowdatafin та видалення елементів з класами
+  if (rowdatafin) {
     rowdatafin.innerHTML = "";
-    document.querySelectorAll(".delete-fin, .delete-fin-pop").forEach((elem) => {
-      elem.remove();
-    });
-
-    const height = mypopup.offsetHeight;
-    mypopup.style.top =
-      window.scrollY < 200
-        ? `${window.scrollY + top - 60}px`
-        : `${window.scrollY + top - height + 40}px`;
   }
+  document.querySelectorAll(".delete-fin, .delete-fin-pop").forEach((elem) => {
+    elem.remove();
+  });
 
-  // Решта функцій залишаються без змін
-  function popupInsertText(projectNum) {
-    localStorage.removeItem("test");
+  // Встановлення позиції по Y з урахуванням прокрутки
+  const height = mypopup.offsetHeight;
+  mypopup.style.top =
+    window.scrollY < 200
+      ? `${window.scrollY + top - 60}px`
+      : `${window.scrollY + top - height + 40}px`;
+}
 
-    const proektFin = projectNum || "";
-    const formattedProektFin = trimStrong(proektFin) || proektFin;
+// Функція для генерації вмісту попапу
+function popupInsertText(projectNum) {
+  localStorage.removeItem("test"); // Очищення localStorage
+  const formattedProektFin = trimStrong(projectNum) || projectNum;
 
-    updateInputValue("proektfin", formattedProektFin);
-    updateInputValue("searchFinance", formattedProektFin);
+  // Оновлення значень input-полів
+  updateInputValue("proektfin", formattedProektFin);
+  updateInputValue("searchFinance", formattedProektFin);
 
-    SearchRecordsFinProekt1(proektFin);
+  // Виклик пошуку даних
+  SearchRecordsFinProekt1(projectNum);
 
-    return localStorage.getItem("test") || "";
+  return localStorage.getItem("test") || ""; // Повертаємо дані з localStorage
+}
+
+// Функція для отримання номера проєкту з рядка таблиці
+function getProjectNumberFromRow(cell) {
+  const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
+  return projectCell?.innerHTML || "";
+}
+
+// Функція для оновлення значення input-поля
+function updateInputValue(id, value) {
+  const input = document.getElementById(id);
+  if (input) {
+    input.value = value;
+  } else {
+    console.warn(`Елемент з id='${id}' не знайдено`);
   }
+}
 
-  function getProjectNumberFromRow(cell) {
-    const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
-    return projectCell?.innerHTML || "";
-  }
-
-  function updateInputValue(id, value) {
-    const input = document.getElementById(id);
-    if (input) input.value = value;
-  }
-
-  function trimStrong(string) {
-    return typeof string === "string" && string.trim() || "";
-  }
+// Функція для очищення рядка
+function trimStrong(string) {
+  return typeof string === "string" ? string.trim() : "";
+}
 </script>

@@ -1,7 +1,6 @@
 // отримуємо всі дані з таблиці КЕШ Рома
 function getRecordsCashe(key, spredSheet, rangeStart) {
   const lr = cellIndex(spredSheet, key);
-  console.log(`A${rangeStart}:E${lr - 1}`);
   const dataRecordsCashe = spredSheet.getRange(`A${rangeStart}:E${lr - 1}`).getValues();
   return dataRecordsCashe
 }
@@ -13,7 +12,9 @@ function getRecordsCashe1() {
   const dataRecordsCashe = getRecordsCashe(key, dataCashe(), rangeStart)
   const dataMapCashe = delSpaceCol(dataRecordsCashe).map((x, i) =>
     [+rangeStart + i, formatDateDDdotMMdotYYYY(x[0]), x[1], x[2], x[3], x[4]]);
-  return JSON.stringify(dataMapCashe.filter(el => el[2] != ''));
+  const res = dataMapCashe.filter(el => el[2] != '');
+
+  return res
 }
 
 //отримуємо всі дані з таблиці КЕШ Рома Аркуш1 (копия)
@@ -21,16 +22,17 @@ function getRecordsCashe2() {
   const rangeStart = '1'
   const key = 'PRHisAGc'
   const dataRecordsCashe = getRecordsCashe(key, dataCashe_2(), rangeStart)
-  //return JSON.stringify(dataRecordsCashe.filter(el => el[1] != ''));
-  return JSON.stringify(dataRecordsCashe);
+  const res = dataRecordsCashe.filter(el => el[1] != '');
+
+   return dataRecordsCashe;
 }
 
 function getRecordsCasheAll() {
-  
-  return {
+
+  return JSON.stringify({
     casheRom1: getRecordsCashe1(),
     casheRom2: getRecordsCashe2(),
-  }
+  })
 }
 
 //функція розмножує дані першого стовбця на пустоти знизу в першому стовбці і видаляє строки із пустим другим стовбцем
@@ -58,7 +60,6 @@ function setRecordsCasheRom(dataModal) {
 
 //insert
 function insertRowCasheRom(row) {
-  console.log(row)
   const ss = dataCashe_2()
   const A1Range = ss.getRange(`A1`)
   const C1Range = ss.getRange(`C1`)

@@ -49,28 +49,21 @@
   // Побудова таблиці
   // Функція для побудови таблиці з даними
   function buildDataTableCasherom(data) {
+
     // Збереження даних у localStorage
-    localStorage.setItem('casheRom1', JSON.stringify(data.casheRom1));
-    localStorage.setItem('casheRom2', JSON.stringify(data.casheRom2));
+    localStorage.setItem('casheRom', data);
 
-    // Парсинг даних із JSON
-    let casheRom1, casheRom2;
-    try {
-      casheRom1 = JSON.parse(data.casheRom1);
-      if (!Array.isArray(casheRom1)) {
-        casheRom1 = []; // Якщо casheRom1 не масив, ініціалізуємо порожнім масивом
-      }
-    } catch (e) {
-      casheRom1 = []; // У разі помилки парсингу ініціалізуємо порожнім масивом
+    const casheRom = JSON.parse(localStorage.getItem('casheRom'));
+    let casheRom1 = casheRom.casheRom1;
+    let casheRom2 = casheRom.casheRom2;
+
+    // Якщо casheRom1 є рядком, розпарсити його
+    if (typeof casheRom1 === 'string') {
+      casheRom1 = JSON.parse(casheRom1);
     }
-
-    try {
-      casheRom2 = JSON.parse(data.casheRom2);
-      if (!Array.isArray(casheRom2)) {
-        casheRom2 = []; // Якщо casheRom2 не масив, ініціалізуємо порожнім масивом
-      }
-    } catch (e) {
-      casheRom2 = []; // У разі помилки парсингу ініціалізуємо порожнім масивом
+    // Те саме для casheRom2
+    if (typeof casheRom2 === 'string') {
+      casheRom2 = JSON.parse(casheRom2);
     }
 
     // Фільтрація рядків casheRom1 для забезпечення правильної структури (6 колонок)
@@ -91,7 +84,7 @@
       columnDefs: [
         {
           // Налаштування для всіх колонок, крім "Дата"
-          targets: [0, 2, 3, 4, 5],
+          targets: [0, 3, 4, 5],
           width: 'auto',
           render: function (data, type, row, meta) {
             // Відображення даних у стилізованому div
@@ -115,7 +108,8 @@
             // Відображення дати в таблиці
             return '<div style="white-space: nowrap; width: 100%; height: 100%; display: block; line-height: 30px;">' + (data || '') + '</div>';
           }
-        }
+        },
+        { targets: 2, width: '50%' }, // Третій стовпець
       ],
       rowCallback: function (row, data) {
         // Встановлення висоти рядка
@@ -380,5 +374,5 @@
   });
 
   // Ініціалізація таблиці
-  buildDataTableCasherom({ casheRom1: localStorage.getItem('casheRom1') || '[]', casheRom2: localStorage.getItem('casheRom2') || '[]' });
+  startDataTableCasherom();
 </script>

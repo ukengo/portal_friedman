@@ -83,12 +83,15 @@
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('stopAw', JSON.stringify(data));
     }).stopArrivalWaste();
-     google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('casheRom1', (data));
+    /*  google.script.run.withSuccessHandler((data) => {
+      localStorage.setItem('casheRom1', JSON.stringify(data));
     }).getRecordsCashe1();
     google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('casheRom2', (data));
-    }).getRecordsCashe2();
+      localStorage.setItem('casheRom2', JSON.stringify(data));
+    }).getRecordsCashe2(); */
+/*     google.script.run.withSuccessHandler((data) => {
+      localStorage.setItem('casheRom', JSON.stringify(data));
+    }).getRecordsCasheAll(); */
   }
  // onlineDownloads();
 

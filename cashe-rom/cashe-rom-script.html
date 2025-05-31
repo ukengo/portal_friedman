@@ -1,84 +1,84 @@
 <script>
 
-// Обираємо елемент кнопки з класом 'btn-casherom__insert' з DOM
-const btnCasheromInsert = document.querySelector('.btn-casherom__insert');
+  // Обираємо елемент кнопки з класом 'btn-casherom__insert' з DOM
+  const btnCasheromInsert = document.querySelector('.btn-casherom__insert');
 
-// Перевіряємо, чи кнопка існує, щоб уникнути помилок
-if (btnCasheromInsert) {
-  // Додаємо обробник події 'click' для кнопки
-  btnCasheromInsert.addEventListener('click', () => {
-    // Вимикаємо кнопку, щоб уникнути повторних натискань під час виконання
-    btnCasheromInsert.disabled = true;
+  // Перевіряємо, чи кнопка існує, щоб уникнути помилок
+  if (btnCasheromInsert) {
+    // Додаємо обробник події 'click' для кнопки
+    btnCasheromInsert.addEventListener('click', () => {
+      // Вимикаємо кнопку, щоб уникнути повторних натискань під час виконання
+      btnCasheromInsert.disabled = true;
 
-    // Отримуємо дані з localStorage з ключем 'casheRom2' і розпарсуємо їх із JSON
-    const casheRom2 = JSON.parse(localStorage.getItem('casheRom2'));
+      const casheRom = JSON.parse(localStorage.getItem('casheRom'));
+      let casheRom2 = casheRom.casheRom2;
 
-    // Ініціалізуємо лічильник для порожніх рядків знизу масиву
-    let emptyBelow = 0;
-
-    // Проходимо по масиву casheRom2 з кінця, щоб підрахувати порожні рядки
-    for (let i = casheRom2.length - 1; i > 0; i--) {
-      // Перевіряємо, чи елемент masivu на позиції [i][1] є порожнім (не існує або null)
-      if (!casheRom2[i][1]) emptyBelow++;
-      // Якщо знайдено непорожній елемент, припиняємо цикл
-      else break;
-    }
-
-    // Виводимо в консоль загальну довжину масиву casheRom2
-    console.log(casheRom2.length);
-    // Виводимо в консоль кількість порожніх рядків знизу
-    console.log(emptyBelow);
-
-    // Викликаємо серверну функцію Google Apps Script для вставки нового рядка
-    google.script.run
-      // Обробник успішного виконання серверної функції
-      .withSuccessHandler(() => {
-        // Повторно активуємо кнопку після завершення операції
-        btnCasheromInsert.disabled = false;
-        // Викликаємо функцію для оновлення таблиці даних
-        startDataTableCasherom();
-      })
-      // Передаємо індекс рядка для вставки, враховуючи порожні рядки
-      .insertRowCasheRom((casheRom2.length - 2) - emptyBelow);
-  });
-}
-
-// Функція для ініціалізації обробки даних
-function startova() {
-  // Викликаємо серверну функцію Google Apps Script для отримання останніх 10 рядків
-  google.script.run
-    // Обробник успішного виконання, який отримує масив даних
-    .withSuccessHandler((dataArray) => {
-      // Створюємо масив arrWaste, де кожен елемент містить поля [x[3], x[2]]
-      const arrWaste = dataArray[0].data.map(x => [x[3], x[2]]);
-      // Створюємо масив arrArrival, де кожен елемент містить поля [x[4], x[2]]
-      const arrArrival = dataArray[1].data.map(x => [x[4], x[2]]);
-      // Об'єднуємо масиви arrWaste та arrArrival в один масив
-      const arr = [...arrWaste, ...arrArrival];
-
-      // Обираємо елемент із ідентифікатором 'waste' з DOM
-      const elemWaste = document.querySelector('#waste');
-
-      // Перевіряємо, чи елемент існує
-      if (elemWaste) {
-        // Додаємо обробник події 'input' для елемента waste
-        elemWaste.oninput = () => {
-          // Проходимо по кожному елементу об'єднаного масиву
-          arr.forEach(el => {
-            // Якщо значення поля вводу збігається з першим елементом масиву el
-            if (elemWaste.value == el[0]) {
-              // Встановлюємо значення елемента з ідентифікатором 'forma' на el[1]
-              document.querySelector('#forma').value = el[1];
-            }
-          });
-        };
+      // Якщо casheRom1 є рядком, розпарсити його   
+      if (typeof casheRom2 === 'string') {
+        casheRom2 = JSON.parse(casheRom2);
       }
-    })
-    // Викликаємо серверну функцію для отримання останніх 10 рядків даних
-    .getLastTenRowsWasteAndArriwal();
-}
 
-// Викликаємо функцію startova одразу після завантаження скрипта
-startova();
+      // Ініціалізуємо лічильник для порожніх рядків знизу масиву
+      let emptyBelow = 0;
+
+      // Проходимо по масиву casheRom2 з кінця, щоб підрахувати порожні рядки
+      for (let i = casheRom2.length - 1; i > 0; i--) {
+        // Перевіряємо, чи елемент masivu на позиції [i][1] є порожнім (не існує або null)
+        if (!casheRom2[i][1]) emptyBelow++;
+        // Якщо знайдено непорожній елемент, припиняємо цикл
+        else break;
+      }
+
+      // Викликаємо серверну функцію Google Apps Script для вставки нового рядка
+      google.script.run
+        // Обробник успішного виконання серверної функції
+        .withSuccessHandler(() => {
+          // Повторно активуємо кнопку після завершення операції
+          btnCasheromInsert.disabled = false;
+          // Викликаємо функцію для оновлення таблиці даних
+          startDataTableCasherom();
+        })
+        // Передаємо індекс рядка для вставки, враховуючи порожні рядки
+        .insertRowCasheRom(casheRom2.length - emptyBelow - 2);
+    });
+  }
+
+  // Функція для ініціалізації обробки даних
+  function startova() {
+    // Викликаємо серверну функцію Google Apps Script для отримання останніх 10 рядків
+    google.script.run
+      // Обробник успішного виконання, який отримує масив даних
+      .withSuccessHandler((dataArray) => {
+        // Створюємо масив arrWaste, де кожен елемент містить поля [x[3], x[2]]
+        const arrWaste = dataArray[0].data.map(x => [x[3], x[2]]);
+        // Створюємо масив arrArrival, де кожен елемент містить поля [x[4], x[2]]
+        const arrArrival = dataArray[1].data.map(x => [x[4], x[2]]);
+        // Об'єднуємо масиви arrWaste та arrArrival в один масив
+        const arr = [...arrWaste, ...arrArrival];
+
+        // Обираємо елемент із ідентифікатором 'waste' з DOM
+        const elemWaste = document.querySelector('#waste');
+
+        // Перевіряємо, чи елемент існує
+        if (elemWaste) {
+          // Додаємо обробник події 'input' для елемента waste
+          elemWaste.oninput = () => {
+            // Проходимо по кожному елементу об'єднаного масиву
+            arr.forEach(el => {
+              // Якщо значення поля вводу збігається з першим елементом масиву el
+              if (elemWaste.value == el[0]) {
+                // Встановлюємо значення елемента з ідентифікатором 'forma' на el[1]
+                document.querySelector('#forma').value = el[1];
+              }
+            });
+          };
+        }
+      })
+      // Викликаємо серверну функцію для отримання останніх 10 рядків даних
+      .getLastTenRowsWasteAndArriwal();
+  }
+
+  // Викликаємо функцію startova одразу після завантаження скрипта
+  startova();
 
 </script>

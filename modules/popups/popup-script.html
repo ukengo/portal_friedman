@@ -11,59 +11,57 @@
     display: none;
     background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Додано для коректного відображення над іншими елементами */
+    z-index: 1000;
   }
 </style>
 
 <script>
-// Отримуємо елементи DOM
-const mypopup = document.getElementById("mypopup");
-const rowdatafin = document.getElementById("rowdatafin");
-const table = document.getElementById("data-table");
+// Функція для ініціалізації обробників подій попапу
+function initializePopupHandlers() {
+  const mypopup = document.getElementById("mypopup");
+  const rowdatafin = document.getElementById("rowdatafin");
+  const table = document.getElementById("data-table");
 
-// Перевірка наявності таблиці
-if (!table) {
-  console.error("Таблиця з id='data-table' не знайдена");
-} else {
-  // Обробник події mouseover для таблиці
+  if (!table) {
+    console.error("Таблиця з id='data-table' не знайдена");
+    return;
+  }
+
+  // Використовуємо делегування подій для таблиці
   table.addEventListener("mouseover", (e) => {
     const cell = e.target.closest('#data-table td');
-    if (!cell) return; // Захист від некоректних елементів
+    if (!cell) return;
 
     const cellIndex = e.target._DT_CellIndex;
     if (cellIndex?.column === 0) {
-      showPopup(e); // Показуємо попап для першого стовпця
+      showPopup(e);
     } else {
-      mypopup.style.display = "none"; // Ховаємо попап для інших стовпців
+      mypopup.style.display = "none";
     }
   });
 
-  // Обробник події mouseleave для таблиці
   table.addEventListener("mouseleave", (e) => {
-    // Ховаємо попап, якщо курсор не перейшов на нього
     if (!e.relatedTarget || !mypopup.contains(e.relatedTarget)) {
+      mypopup.style.display = "none";
+    }
+  });
+
+  // Обробники для самого попапу
+  mypopup.addEventListener("mouseover", () => {
+    mypopup.style.display = "block";
+  });
+
+  mypopup.addEventListener("mouseleave", (e) => {
+    if (!e.relatedTarget || !table.contains(e.relatedTarget)) {
       mypopup.style.display = "none";
     }
   });
 }
 
-// Обробник mouseover для попапу
-mypopup.addEventListener("mouseover", () => {
-  mypopup.style.display = "block"; // Залишаємо попап видимим
-});
-
-// Обробник mouseleave для попапу
-mypopup.addEventListener("mouseleave", (e) => {
-  // Ховаємо попап, якщо курсор не повертається до таблиці
-  if (!e.relatedTarget || !table.contains(e.relatedTarget)) {
-    mypopup.style.display = "none";
-  }
-});
-
 // Функція для відображення попапу
 function showPopup(e) {
   const cellIndex = e.target._DT_CellIndex;
-  if (!cellIndex || cellIndex.column !== 0) return; // Захист від некоректних клітинок
+  if (!cellIndex || cellIndex.column !== 0) return;
 
   const projectNum = getProjectNumberFromRow(e.target);
   if (!projectNum) {
@@ -71,20 +69,18 @@ function showPopup(e) {
     return;
   }
 
-  // Позиціонування попапу
+  const mypopup = document.getElementById("mypopup");
   const { right, top } = e.target.getBoundingClientRect();
   mypopup.style.left = `${right - 20}px`;
   mypopup.style.display = "block";
 
-  // Вставка контенту в попап
   mypopup.innerHTML = popupInsertText(projectNum);
   
-  // Стилізація всіх input у попапі
   mypopup.querySelectorAll("input").forEach((el) => {
     el.style.fontSize = "8pt";
   });
 
-  // Очищення rowdatafin та видалення елементів з класами
+  const rowdatafin = document.getElementById("rowdatafin");
   if (rowdatafin) {
     rowdatafin.innerHTML = "";
   }
@@ -92,7 +88,6 @@ function showPopup(e) {
     elem.remove();
   });
 
-  // Встановлення позиції по Y з урахуванням прокрутки
   const height = mypopup.offsetHeight;
   mypopup.style.top =
     window.scrollY < 200
@@ -102,20 +97,18 @@ function showPopup(e) {
 
 // Функція для генерації вмісту попапу
 function popupInsertText(projectNum) {
-  localStorage.removeItem("test"); // Очищення localStorage
+  localStorage.removeItem("test");
   const formattedProektFin = trimStrong(projectNum) || projectNum;
 
-  // Оновлення значень input-полів
   updateInputValue("proektfin", formattedProektFin);
   updateInputValue("searchFinance", formattedProektFin);
 
-  // Виклик пошуку даних
   SearchRecordsFinProekt1(projectNum);
 
-  return localStorage.getItem("test") || ""; // Повертаємо дані з localStorage
+  return localStorage.getItem("test") || "";
 }
 
-// Функція для отримання номера проєкту з рядка таблиці
+// Функція для отримання номера проєкту
 function getProjectNumberFromRow(cell) {
   const projectCell = cell.parentNode.querySelector("td:nth-child(5)");
   return projectCell?.innerHTML || "";
@@ -134,5 +127,49 @@ function updateInputValue(id, value) {
 // Функція для очищення рядка
 function trimStrong(string) {
   return typeof string === "string" ? string.trim() : "";
+}
+
+// Ініціалізація обробників при завантаженні сторінки
+document.addEventListener("DOMContentLoaded", initializePopupHandlers);
+
+// Оновлений скрипт для datatables-script
+function addUpButtonDT(fUp, idName, stor) {
+  const searcBlockDT = document.getElementById(`${idName}_filter`);
+  const inputSearcBlockDT = searcBlockDT.querySelector('input');
+  inputSearcBlockDT.classList.add("form-control");
+  inputSearcBlockDT.style = `
+    border-radius: 20px;
+    width: 400px;
+    padding: 5px 14px;
+    font-size: inherit;
+  `;
+  inputSearcBlockDT.placeholder = 'Пошук по таблиці';
+
+  const labelSearcBlockDT = searcBlockDT.querySelector('label');
+
+  let btnUpDT = document.createElement("button");
+  let btnUpDTText = document.createTextNode("Up");
+  btnUpDT.appendChild(btnUpDTText);
+  btnUpDT.classList.add('btn', 'btn-light', 'me-2', 'align-baseline');
+
+  searcBlockDT.insertBefore(btnUpDT, labelSearcBlockDT);
+
+  btnUpDT.addEventListener('click', () => {
+    localStorage.setItem(stor, inputSearcBlockDT.value);
+    fUp();
+    // Повторно ініціалізуємо обробники попапу після оновлення таблиці
+    setTimeout(initializePopupHandlers, 1000); // Використовуємо setTimeout для асинхронного оновлення
+  });
+
+  inputSearcBlockDT.value = localStorage.getItem(stor);
+  autoSearchOnOpenNew(inputSearcBlockDT);
+
+  labelSearcBlockDT.addEventListener('click', (e) => {
+    if (e.srcElement.innerText) {
+      inputSearcBlockDT.value = '';
+      autoSearchOnOpenNew(inputSearcBlockDT);
+    }
+    localStorage.removeItem(stor);
+  });
 }
 </script>

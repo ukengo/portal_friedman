@@ -2,13 +2,15 @@
 
 
   // Ініціалізація конструктора форми з бібліотеки AWFormBuilder
-  // 'aw' — ідентифікатор форми, '#AwMainForma' — селектор контейнера форми, '[data-form-fin-main]' — селектор елементів форми
-  const aWForm = new AWFormBuilder('aw', '#AwMainForma', '[data-form-fin-main]');
+  // 'aw' — ідентифікатор форми, '#AwMainForma' — селектор контейнера форми, '[data-form-aw-main]' — селектор елементів форми
+
+  const aWForm = new AWFormBuilder('aw', '#AwMainForma', '[data-form-aw-main]', startDataWaste, startDataArriwal);
+
   // Виклик методу для рендерингу форми на сторінці
   aWForm.render();
 
-  // Ініціалізація обробника даних форми з таблиць, який працює з елементами, позначеними атрибутом [data-form-aw]
-  const formDataHandler = new FormDataFromTables('[data-form-aw]');
+  /* // Ініціалізація обробника даних форми з таблиць, який працює з елементами, позначеними атрибутом [data-form-aw]
+  const formDataHandler = new FormDataFromTables('[data-form-aw]'); */
 
   // Обробник події натискання клавіші Enter
   // Якщо натиснута клавіша Enter (код 13), викликається функція збереження даних модального вікна
@@ -16,21 +18,6 @@
     if (event.keyCode == 13) {
       btnSaveModalAW();
     }
-  }
-
-  // Обробник події натискання клавіші Enter для форми витрат Приват
-  // Якщо натиснута клавіша Enter, викликається функція обробки витрат
-  function clickPressAwPrivat(event) {
-    if (event.keyCode == 13) {
-      buttonClickWaste();
-    }
-  }
-
-  // Очищення списків для випадаючих меню
-  // Видаляє всі елементи з випадаючих списків з ідентифікаторами firmaArrivalWaste-datalist та waste-datalist
-  function startArrivalWasteClear() {
-    $("#firmaArrivalWaste-datalist").empty();
-    $("#waste-datalist").empty();
   }
 
   // Отримання унікального списку статей для випадаючого меню
@@ -59,7 +46,7 @@
   // Ініціалізація випадаючих меню для надходжень та витрат
   function startArrivalWaste() {
     // Очищення списків перед заповненням
-    startArrivalWasteClear();
+    // startArrivalWasteClear();
 
     // Заповнення випадаючого списку для фірм (надходження) даними з localStorage
     afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
@@ -68,152 +55,9 @@
     afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
   }
 
-  // Встановлення значення поля costPrivat з localStorage
-  // Конвертує значення в число та встановлює в поле з ідентифікатором costPrivat
-  document.querySelector('#costPrivat').value = +localStorage.getItem('costPrivat');
-
-  // Збирання та обробка даних з форми
-  function getFormDataArrivalWaste() {
-    // Отримання даних форми через FormDataFromTables
-    const formData = formDataHandler.formaDataObj();
-
-    // Деструктуризація об'єкта даних форми
-    let { date, summa, summaPrivat, costPrivat, forma, firmaArrivalWaste, waste, termkar } = formData;
-
-    // Конвертація числових значень, якщо вони є, інакше 0
-    summa = Math.abs(+summa || 0);
-    summaPrivat = +summaPrivat || 0;
-    costPrivat = +costPrivat || 0;
-
-    // Логіка обробки заповнення полів суми
-    if (!summaPrivat && !summa) {
-      summa = "";
-      waste = "Не заповнено ні одного поля суми";
-      firmaArrivalWaste = "";
-    }
-
-    // Логіка для приватної комісії
-    if (summaPrivat && !summa) {
-      if (!costPrivat) {
-        waste = "Не заповнено вартості комісії приват";
-      } else {
-        // Збереження вартості комісії в localStorage
-        localStorage.setItem('costPrivat', costPrivat);
-        // Розрахунок суми з урахуванням комісії
-        summa = summaPrivat * costPrivat;
-        waste = "Приват комісія";
-        forma = "тов";
-        firmaArrivalWaste = "";
-      }
-    }
-
-    // Повернення масиву даних форми
-    return [date, +summa, forma, firmaArrivalWaste, waste, termkar];
-  }
-
-  // Обробка натискання кнопок для витрат та надходжень
-  /* function buttonClickWasteAndArival() {
-    // Отримання значення поля termkar
-    const termkarVal = document.getElementById("termkar").value;
-    // Отримання даних форми
-    const formData = getFormDataArrivalWaste();
-
-    // Перевірка заповнення статті витрат
-    if (!formData[4] && !termkarVal) {
-      alert('Не заповнена стаття витрат');
-      return;
-    }
-
-    // Перевірка помилок заповнення полів суми
-    if (formData[4] === "Не заповнено ні одного поля суми") {
-      alert("Не заповнено ні одного поля суми");
-      return false;
-    }
-    if (formData[4] === "Заповнені обидва поля суми") {
-      alert("Заповнені обидва поля суми");
-      return false;
-    }
-    if (formData[4] === "Не заповнено вартості комісії приват") {
-      alert("Не заповнено вартості комісії приват");
-      return false;
-    }
-    if (formData[4] === "Не заповнена ціна привату") {
-      alert("Не заповнена ціна привату");
-      return false;
-    }
-
-    // Оновлення випадаючих списків
-    startArrivalWaste();
-
-    // Обробка кнопки для витрат
-    if (this.id === "buttonWaste") {
-      // Відображення спінера під час обробки
-      spinner("dataTableArriwalWaste");
-      if (!formData[5]) {
-        // Виклик серверної функції для додавання нового рядка витрат
-        google.script.run
-          .withSuccessHandler(createTableArriwalWaste)
-          .addNewRowWaste(formData.slice(0, 5));
-      } else {
-        // Додавання даних для терміналу-карантину
-        google.script.run.insertTermKar(rowDataTermKar());
-        google.script.run
-          .withSuccessHandler(startDataWaste)
-          .vReestrTerminalKarantin(rowDataTermKar());
-      }
-      // Оновлення тексту для відображення
-      document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші витрати";
-      // Очищення форми
-      buttonClickOchistkaAW();
-    }
-
-    // Обробка кнопки для надходжень
-    if (this.id === "buttonArrival") {
-      spinner("dataTableArriwalWaste");
-      // Додавання нового рядка надходжень
-      google.script.run
-        .withSuccessHandler(createTableArriwalWaste)
-        .addNewRowArrival(formData.slice(0, 5));
-      // Оновлення тексту для відображення
-      document.getElementById("vrabotevseArriwalWaste").innerHTML = "Інші надходження";
-      // Додавання нового рядка в таблицю
-      google.script.run
-        .withSuccessHandler(createTableArriwalWaste)
-        .addNewTableArriwal(formData.slice(0, 5));
-      // Очищення форми
-      buttonClickOchistkaAW();
-    }
-
-    // Зміна висоти контейнера таблиці
-    document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
-  } */
-
-  // Очищення даних форми
-  function buttonClickOchistkaAW() {
-    formDataHandler.clearRecords();
-  }
-
-  // Обробка кнопок "вчора", "п'ятниця", "сьогодні"
-  // Додає обробники подій для встановлення дати в поле #date
-  document.querySelectorAll(".btn-yft").forEach(elem => {
-    const date = document.querySelector("#date");
-    elem.addEventListener('click', e => {
-      // Виклик функції для встановлення відповідної дати
-      yesterdayFridayToday1(e.target.value, date);
-    });
-  });
-
-  // Прив'язка обробників подій до кнопок вкладок
-  // document.getElementById("buttonWaste").addEventListener("click", buttonClickWasteAndArival);
-  // document.getElementById("buttonArrival").addEventListener("click", buttonClickWasteAndArival);
-  document.getElementById("buttonWasteTab").addEventListener("click", startDataWaste);
-  document.getElementById("buttonArrivalTab").addEventListener("click", startDataArriwal);
-
-  // Встановлення поточної дати в поле #date
-  document.getElementById("date").valueAsDate = new Date();
-
   // Ініціалізація даних для вкладки витрат
   function startDataWaste() {
+
     // Відображення спінера
     spinner("dataTableArriwalWaste");
     // Оновлення тексту для відображення
@@ -363,7 +207,7 @@
   }
 
   // Формування даних для терміналу-карантину
-  function rowDataTermKar() {
+/*   function rowDataTermKar() {
     const formData = formDataHandler.formaDataObj();
     return [
       formData.date,
@@ -373,7 +217,7 @@
       formData.termkar,
       formData.sftermkar,
     ];
-  }
+  } */
 
   // Видалення рядка в модальному вікні
   $("#btnDeleteModalAW").on("click", () => {
@@ -458,19 +302,5 @@
   };
   mutationObserverAw();
 
-  // Зміна кольору фону для поля costPrivat залежно від значення
-  const costPrivatColor = () => {
-    const costpriv = document.querySelector('#costPrivat');
-    // Якщо значення порожнє, встановлюється червоний фон
-    if (!+costpriv.value) {
-      costpriv.style.backgroundColor = '#dc35457a';
-    } else {
-      // Інакше видаляється колір фону
-      costpriv.style.removeProperty('background-color');
-    }
-    // Додавання обробника події input для динамічної зміни кольору
-    costpriv.addEventListener('input', costPrivatColor);
-  };
-  costPrivatColor();
 
 </script>

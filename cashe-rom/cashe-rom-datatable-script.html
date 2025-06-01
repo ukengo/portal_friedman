@@ -1,4 +1,48 @@
 <script>
+
+  const keywordsConfig = {
+    'торопова': { value: 'викон Торопова', activateIspolu: true },
+    'третьяк': { value: 'викон', activateIspolu: true },
+    'токарев': { value: 'викон', activateIspolu: true },
+    'барановская': { value: 'викон', activateIspolu: true },
+    'дробот': { value: 'викон', activateIspolu: true },
+    'кузьменко': { value: 'викон', activateIspolu: true },
+    'дидковский': { value: 'викон', activateIspolu: true },
+    'копач': { value: 'викон', activateIspolu: true },
+    'петренко': { value: 'викон', activateIspolu: true },
+    'городницкий': { value: 'викон', activateIspolu: true },
+    'шалыга': { value: 'викон', activateIspolu: true },
+    'чечеткин': { value: 'викон', activateIspolu: true },
+    'косинский': { value: 'викон', activateIspolu: true },
+    'корчинская': { value: 'викон', activateIspolu: true },
+    'шелудько': { value: 'викон термінал', activateIspolu: false },
+    'болик': { value: 'контр', activateIspolu: false },
+    'красуля': { value: 'красуля 100$', activateIspolu: false },
+    'акредитація': { value: 'викон акредитація', activateIspolu: true },
+    'досм': { value: 'викон термінал', activateIspolu: false },
+    'грузчики': { value: 'вантажники термінал', activateIspolu: false },
+    'на карту': { value: 'від', activateIspolu: false },
+    'опер': { value: 'викон', activateIspolu: true },
+
+  };
+
+  const phoneConfig = {
+    'Зіновкіна бонус': 'Зіновкіна бонус',
+    'Зіновкіна ЗП': 'Зіновкіна ЗП',
+    'Лазоренко ЗП': 'Лазоренко ЗП',
+    'Лазоренко Д. Р.': 'Лазоренко ДР',
+    'Діланян ЗП': 'Діланян ЗП',
+    'Діланян бонус': 'Діланян бонус',
+    'Радюк Ирина Александровна аванс': 'Радюк ЗП',
+    'Радюк ЗП': 'Радюк ЗП',
+    '0674021578': 'Київстар 0674021578',
+    '0675042079': 'Київстар 0675042079',
+    'zadarma': 'Задарма Zadarma',
+    'ВСУ': 'на армію',
+    'Сайт роботи Сітер': 'Сайт роботи Сітер',
+    'Сітер': 'Сітер',
+  };
+
   // Утилітні функції
   const utils = {
     setInputValue: (element, value) => {
@@ -30,7 +74,7 @@
       awContainer.querySelectorAll('section.workers.radius.p-1')
         .forEach(section => utils.applyStyles(section, { display: 'none' }));
     }
-    const mainFormContainer = document.querySelector('[data-form-fin-main]');
+    const mainFormContainer = document.querySelector('[data-form-aw-main]');
     if (mainFormContainer) {
       const mainWorkers = mainFormContainer.querySelector('section.workers.radius.p-1');
       if (mainWorkers) {
@@ -156,27 +200,6 @@
       elements.ispolu.checked = false;
 
       const inspectors = utils.extractInspectors(localStorage.getItem('dataInspektorZU'));
-      const keywordsConfig = {
-        'торопова': { value: 'викон Торопова', activateIspolu: true },
-        'третьяк': { value: 'викон', activateIspolu: true },
-        'токарев': { value: 'викон', activateIspolu: true },
-        'барановская': { value: 'викон', activateIspolu: true },
-        'кузьменко': { value: 'викон', activateIspolu: true },
-        'дидковский': { value: 'викон', activateIspolu: true },
-        'копач': { value: 'викон', activateIspolu: true },
-        'петренко': { value: 'викон', activateIspolu: true },
-        'городницкий': { value: 'викон', activateIspolu: true },
-        'шалыга': { value: 'викон', activateIspolu: true },
-        'чечеткин': { value: 'викон', activateIspolu: true },
-        'косинский': { value: 'викон', activateIspolu: true },
-        'корчинская': { value: 'викон', activateIspolu: true },
-        'опер': { value: 'викон', activateIspolu: true },
-        'досм': { value: 'викон термінал', activateIspolu: false },
-        'шелудько': { value: 'викон термінал', activateIspolu: false },
-        'грузчики': { value: 'вантажники термінал', activateIspolu: false },
-        'болик': { value: 'контр', activateIspolu: false },
-        'на карту': { value: 'від', activateIspolu: false }
-      };
 
       for (const [keyword, { value, activateIspolu }] of Object.entries(keywordsConfig)) {
         if (articleValue.includes(keyword)) {
@@ -209,19 +232,6 @@
         arrival: '#casheInputArrival' // Додано поле для Arrival
       };
       const elements = Object.fromEntries(Object.entries(els).map(([k, v]) => [k, document.querySelector(v)]));
-      const phoneConfig = {
-        'Зіновкіна бонус': 'Зіновкіна бонус',
-        'Зіновкіна ЗП': 'Зіновкіна ЗП',
-        'Лазоренко ЗП': 'Лазоренко ЗП',
-        'Лазоренко Д. Р.': 'Лазоренко ДР',
-        'Діланян ЗП': 'Діланян ЗП',
-        'Діланян бонус': 'Діланян бонус',
-        'Радюк Ирина Александровна аванс': 'Радюк ЗП',
-        'Радюк ЗП': 'Радюк ЗП',
-        '0674021578': 'Київстар 0674021578',
-        '0675042079': 'Київстар 0675042079',
-        'zadarma': 'Задарма Zadarma'
-      };
 
       if (elements.article && elements.wasteAw) {
         const articleValue = elements.article.value.trim().toLowerCase();

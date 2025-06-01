@@ -5,9 +5,13 @@
 
   class FormDataFromTables {
     constructor(selector) {
-      this.$form = document.querySelector(selector);
-      this.setup();
+    this.$form = document.querySelector(selector);
+    if (!this.$form) {
+      console.error(`Element with selector "${selector}" not found in DOM`);
+      return;
     }
+    this.setup();
+  }
 
 
     setup() {

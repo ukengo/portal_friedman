@@ -15,16 +15,26 @@
       yesterdayButton: '.btn-yft[value=" Y "]', // Селектор для кнопки "Вчора"
       fridayButton: '.btn-yft[value="Fri"]', // Селектор для кнопки "П'ятниця"
       todayButton: '.btn-yft[value=" T "]', // Селектор для кнопки "Сьогодні"
-      wasteButton: '[data-button-waste]', // Селектор для кнопки "Waste" (Витрати)
-      arrivalButton: '[data-button-arrival]', // Селектор для кнопки "Arrival" (Надходження)
+      wasteButton: '[data-button-waste]', // Селектор для кнопки "Waste" (Витрата)
+      arrivalButton: '[data-button-arrival]', // Селектор для кнопки "Arrival" (Прихід)
+      wasteButtonTab: '[data-button-wastetab]', // Селектор для кнопки "Waste-tab" (Трати)
+      arrivalButtonTab: '[data-button-arrivaltab]', // Селектор для кнопки "Arrival-Tab" (Надходження)
+      costPriv: '[data-arriwalwaste-costprivat]', // Селектор для поля ціни привата
+      date: '[data-arriwalwaste-date]', // Селектор для поля ціни привата
+      firmaArrivalWasteDatalist: '[data-firmaarrivalwaste-datalist]',
+      wasteDatalist: '[data-waste-datalist]',
     };
 
     // Конструктор класу, який ініціалізує базовий клас і налаштовує селектор для поля дати
     // Приймає ім'я форми, селектор шаблону та селектор контейнера
-    constructor(name, templateSelector, containerSelector) {
+    constructor(name, templateSelector, containerSelector, funcWasteTab, funcArrivalTab) {
       super(name, templateSelector, containerSelector); // Виклик конструктора базового класу
       // Встановлення селектора для поля дати залежно від імені форми
       this.selectors.dateInput = name === 'aw' ? '#date' : `#date-${name}`;
+
+      // Зберігаємо функції як властивості екземпляра
+      this.funcWasteTab = typeof funcWasteTab === 'function' ? funcWasteTab : () => console.warn('funcWasteTab is not a function');
+      this.funcArrivalTab = typeof funcArrivalTab === 'function' ? funcArrivalTab : () => console.warn('funcArrivalTab is not a function');
     }
 
     // Метод для отримання імен полів форми
@@ -62,6 +72,7 @@
           firmaArrivalWaste = formData[fields.firmaArrivalWaste] || '',
           waste = formData[fields.waste] || '',
           termkar = formData[fields.termkar] || '',
+          sftermkar = formData[fields.sftermkar] || '',
         } = formData;
         summa = Math.abs(+summa || 0); // Перетворення суми в абсолютне число
         summaPrivat = +summaPrivat || 0; // Перетворення суми Приват у число
@@ -85,7 +96,7 @@
           }
         }
         // Додавання даних форми до масиву
-        formValues.push([date, +summa, forma, firmaArrivalWaste, waste, termkar]);
+        formValues.push([date, +summa, forma, firmaArrivalWaste, waste, termkar, sftermkar]);
       });
       return formValues; // Повернення масиву значень форм
     }
@@ -131,6 +142,7 @@
 
       if (isWasteButton) {
         isWasteButton.disabled = true;
+            
         if (!formData[5]) {
           // Виклик серверної функції для додавання нового рядка витрат
           google.script.run
@@ -140,20 +152,23 @@
             })
             .addNewRowWaste(formData.slice(0, 5));
         } else {
+    
+        console.log(this.rowDataTermKar());
           // Вставка даних терміну карантину
-          google.script.run.insertTermKar(rowDataTermKar());
+          google.script.run.insertTermKar(this.rowDataTermKar());
           // Виклик серверної функції для обробки карантинних даних
           google.script.run
             .withSuccessHandler(() => {
               startDataWaste();
               isWasteButton.disabled = false;
             })
-            .vReestrTerminalKarantin(rowDataTermKar());
+            .vReestrTerminalKarantin(this.rowDataTermKar());
         }
         if (vrabotevseElement) {
           vrabotevseElement.innerHTML = 'Інші витрати'; // Оновлення тексту елемента
         }
-        buttonClickOchistkaAW(); // Очищення форми
+        this.formDataHandler.clearRecords();// Очищення форми
+        //buttonClickOchistkaAW(); // Очищення форми
       } else if (isArrivalButton) {
         isArrivalButton.disabled = true;
         // Виклик серверної функції для додавання нового рядка надходжень
@@ -173,7 +188,8 @@
             isArrivalButton.disabled = false;
           })
           .addNewTableArriwal(formData.slice(0, 5));
-        buttonClickOchistkaAW(); // Очищення форми
+        this.formDataHandler.clearRecords(); // Очищення форми
+       // buttonClickOchistkaAW(); // Очищення форми
       }
 
       // Оновлення стилю контейнера таблиці
@@ -186,8 +202,11 @@
     // Метод для рендерингу форми
     // Ініціалізує форму, додає обробники подій і встановлює значення за замовчуванням
     render() {
-      if (!this.checkTemplateAndContainer()) return; // Перевірка наявності шаблону та контейнера
+
+      // Перевірка наявності шаблону та контейнера
+      if (!this.checkTemplateAndContainer()) return;
       super.renderTemplate(); // Виклик методу рендерингу базового класу
+
       // Ініціалізація екземплярів форм
       this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form)).map(
         (form, index) => {
@@ -197,7 +216,28 @@
       );
       this.initEventListeners(); // Ініціалізація обробників подій
       this.setDefaultDate(); // Встановлення дати за замовчуванням
-      // this.resetLabelColors(this.getFormFields()); // Скидання кольорів міток
+
+      // Встановлення значення поля costPrivat з localStorage
+      // Конвертує значення в число та встановлює в поле з ідентифікатором costPrivat
+      this.container.querySelector(this.selectors.costPriv).value = +localStorage.getItem('costPrivat');
+
+      // Встановлення поточної дати в поле #date
+      this.container.querySelector(this.selectors.date).valueAsDate = new Date();
+
+      //Очищення списків для випадаючих меню
+      this.clearingListsDropdownMenus();
+
+      //Зміна кольору фону для поля costPrivat
+      this.costPrivatColor();
+
+      this.rowDataTermKar();
+
+      // Ініціалізація FormDataFromTables після рендерингу форми
+      this.formDataHandler = new FormDataFromTables(this.selectors.form);
+      if (!this.formDataHandler.$form) {
+        console.error('Form element not found after rendering');
+        return;
+      }
     }
 
     // Метод для ініціалізації обробників подій
@@ -209,13 +249,24 @@
         [this.selectors.todayButton, this.handleTodayButtonClick], // Кнопка "Сьогодні"
         [this.selectors.wasteButton, this.handleWasteAndArrivalButtonClick], // Кнопка "Waste"
         [this.selectors.arrivalButton, this.handleWasteAndArrivalButtonClick], // Кнопка "Arrival"
+        [this.selectors.wasteButtonTab, this.funcWasteTab], // Кнопка "WasteTab"
+        [this.selectors.arrivalButtonTab, this.funcArrivalTab], // Кнопка "ArrivalTab"
+        [this.selectors.costPriv, this.costPrivatColor], // costPrivat
       ];
 
       // Додавання обробників подій до всіх елементів, що відповідають селекторам
       events.forEach(([selector, handler]) => {
+
         const elements = this.container.querySelectorAll(selector);
         elements.forEach((element) => {
-          element.addEventListener('click', (event) => handler.call(this, event));
+
+          element.addEventListener('click', (event) => {
+            if (typeof handler === 'function') {
+              handler.call(this, event); // Викликаємо обробник із контекстом this
+            } else {
+              console.warn(`Handler for selector ${selector} is not a function`);
+            }
+          });
         });
       });
     }
@@ -264,52 +315,43 @@
         if (type === 'yesterday') {
           targetDate.setDate(targetDate.getDate() - 1); // Вчорашня дата
         } else if (type === 'friday') {
-          while (targetDate.getDay() !== 5) {
-            targetDate.setDate(targetDate.getDate() - 1); // Пошук найближчої п'ятниці
-          }
+          targetDate.setDate(targetDate.getDate() - 3); // Пошук найближчої п'ятниці
         }
         dateInput.value = targetDate.toISOString().split('T')[0]; // Встановлення дати
       });
     }
 
-    // Метод для оновлення кольорів міток полів
-    // Змінює колір міток для певних полів на червоний (помилка)
-    /*      updateLabelColors(fields) {
-          Object.entries(fields).forEach(([key, id]) => {
-            const input = this.container.querySelector(`#${id}`); // Отримання поля
-            const label = this.container.querySelector(`label[for="${id}"]`); // Отримання мітки
-            if (!input || !label) return; // Перевірка наявності елементів
-            if (['date', 'costPrivat', 'forma'].includes(key)) {
-              label.style.color = this.colors.errorColor; // Встановлення кольору помилки
-            } else {
-              label.style.removeProperty('color'); // Скидання кольору
-            }
-          });
-        }  */
+    // Очищення списків для випадаючих меню
+    // Видаляє всі елементи з випадаючих списків з ідентифікаторами firmaArrivalWaste-datalist та waste-datalist
+    clearingListsDropdownMenus() {
+      document.querySelector(this.selectors.firmaArrivalWasteDatalist).innerHTML = '';
+      this.container.querySelector(this.selectors.wasteDatalist).innerHTML = '';
+    }
 
-    // Метод для скидання кольорів міток
-    // Викликає оновлення кольорів для всіх полів
-    /*   resetLabelColors(fields) {
-        this.updateLabelColors(fields); // Оновлення кольорів міток
-      } */
+    // Зміна кольору фону для поля costPrivat залежно від значення
+    costPrivatColor() {
+      const costpriv = document.querySelector(this.selectors.costPriv);
+      // Якщо значення порожнє, встановлюється червоний фон
+      if (!+costpriv.value) {
+        costpriv.classList.add("aw-cost-privat--bc-red");
+      } else {
+        // Інакше видаляється колір фону
+        costpriv.classList.remove("aw-cost-privat--bc-red");
+      }
+    }
 
-    // Метод для очищення форми
-    // Скидає значення певних полів форми
-    /* clearForm() {
-      const fields = this.getFormFields(); // Отримання імен полів форми
-      const fieldsToClear = [
-        fields.summa,
-        fields.summaPrivat,
-        fields.firmaArrivalWaste,
-        fields.waste,
-        fields.termkar,
-        fields.sftermkar,
-      ]; // Поля для очищення
-      fieldsToClear.forEach((id) => {
-        const element = this.container.querySelector(`#${id}`); // Отримання елемента
-        if (element) element.value = ''; // Очищення значення
-      });
-    //  this.updateLabelColors(this.getFormFields()); // Оновлення кольорів міток
-    } */
+    // Формування даних для терміналу-карантину
+    rowDataTermKar() {
+     
+      return [
+        this.getFormValues()[0][0],
+        +this.getFormValues()[0][1],
+        this.getFormValues()[0][2],
+        this.getFormValues()[0][5],
+        this.getFormValues()[0][6],
+      ];
+    }
   }
+
+
 </script>

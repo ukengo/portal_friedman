@@ -5,7 +5,7 @@
   <div class="row">
 
     <div class="col-xl-5">
-      <div data-form-fin-main></div>
+      <div data-form-aw-main></div>
 
     </div>
     <div class="col-xl radius mouse-aw height_height" style="height: 646px;">
@@ -57,7 +57,7 @@
           <div class="form mb-1 mt-1">
             <label for="firmaArrivalWasteModal">Фірма</label>
             <input type="text" class="form-control" list="firmaArrivalWaste-datalist" id="firmaArrivalWasteModal" />
-            <datalist id="firmaArrivalWaste-datalist"></datalist>
+            <datalist id="firmaArrivalWaste-datalist" data-firmaarrivalwaste-datalist></datalist>
           </div>
 
           <div class="form mb-1 mt-1">
@@ -98,11 +98,14 @@
     <form action="#" data-form-aw>
       <div class="form mb-1 col-6">
         <label for="date">Дата</label>
-        <div class="btn-group" role="group" aria-label="" >
-          <input type="date" class="form-control" id="date" name="date" data-no-clear>
-          <input type="button" id="btnArriwalwasteY" value=" Y " class="btn btn-danger btn-sm ms-1 btn-yft" data-no-clear>
-          <input type="button" id="btnArriwalwasteFri" value="Fri" class="btn btn-danger btn-sm ms-1 btn-yft" data-no-clear>
-          <input type="button" id="btnArriwalwasteT" value=" T " class="btn btn-danger btn-sm ms-1 btn-yft" data-no-clear>
+        <div class="btn-group" role="group" aria-label="">
+          <input type="date" class="form-control" id="date" name="date" data-no-clear data-arriwalwaste-date>
+          <input type="button" id="btnArriwalwasteY" value=" Y " class="btn btn-danger btn-sm ms-1 btn-yft"
+            data-no-clear>
+          <input type="button" id="btnArriwalwasteFri" value="Fri" class="btn btn-danger btn-sm ms-1 btn-yft"
+            data-no-clear>
+          <input type="button" id="btnArriwalwasteT" value=" T " class="btn btn-danger btn-sm ms-1 btn-yft"
+            data-no-clear>
         </div>
       </div>
 
@@ -118,13 +121,12 @@
                 <div class="input-group">
                   <div class="col-8 g-0">
                     <label for="summaPrivat" class="text-nowrap">К-сть Прив</label>
-                    <input type="number" class="form-control num-plus" id="summaPrivat" name="summaPrivat"
-                      onkeypress="clickPressAwPrivat(event)" />
+                    <input type="number" class="form-control num-plus" id="summaPrivat" name="summaPrivat">
                   </div>
                   <div class="col-4 g-0">
                     <label for="costPrivat" class="text-nowrap">Ціна Прив</label>
-                    <input type="number" class="form-control num-plus" id="costPrivat" name="costPrivat"
-                      onkeypress="clickPressAwPrivat(event)" data-no-clear/>
+                    <input type="number" class="aw-cost-privat form-control num-plus" id="costPrivat" name="costPrivat"
+                      onkeypress="clickPressAwPrivat(event)" data-no-clear data-arriwalwaste-costprivat>
                   </div>
                 </div>
               </div>
@@ -153,7 +155,7 @@
         <div class="form mb-1 mt-1">
           <label for="waste">Стаття витрат</label>
           <input type="text" class="form-control" list="waste-datalist" id="waste" name="waste" />
-          <datalist id="waste-datalist"></datalist>
+          <datalist id="waste-datalist" data-waste-datalist></datalist>
         </div>
 
         <div class="form-group mt-1">

@@ -1,21 +1,19 @@
-<!-- jQuery -->
+<!-- Підключення бібліотек -->
+<!-- jQuery для спрощення роботи з DOM та AJAX -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<!-- Bootstrap -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous">
-  </script> -->
+<!-- Bootstrap CSS для стилізації інтерфейсу -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
   integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<!-- Bootstrap JS для інтерактивних компонентів, таких як модальні вікна, випадаючі списки тощо -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-<!-- dataTables2 -->
+<!-- DataTables для створення інтерактивних таблиць (версія 2) -->
 <link href="https://cdn.datatables.net/v/dt/dt-2.1.8/b-3.2.1/sl-2.1.0/datatables.min.css" rel="stylesheet">
 <script src="https://cdn.datatables.net/v/dt/dt-2.1.8/b-3.2.1/sl-2.1.0/datatables.min.js"></script>
-<!-- dataTables2 end-->
 
-<!-- dataTables -->
+<!-- DataTables (старіша версія) для додаткових функцій, таких як адаптивність -->
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
@@ -26,95 +24,90 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
 <script>
-
-
+  // Псевдонім для console.log для зручності використання
   const k = console.log.bind(document);
 
+  // Відображає анімацію завантаження у вказаному елементі
   function spinner(elemId, text = 'Іде пошук...') {
     document.getElementById(elemId).innerHTML = `
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border text-danger mb-4 mt-2" role="status">
-            <span class="visually-hidden"></span>
-            </div>
-            ${text}
-          </div>
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-danger mb-4 mt-2" role="status">
+          <span class="visually-hidden"></span>
+        </div>
+        ${text}
+      </div>
     `;
   }
 
+  // Заповнює елемент <datalist> опціями на основі масиву
   function afterDropDownReturned(arrayOfArrays, datalist) {
     if (!arrayOfArrays) return false;
     let selectorDatalist = document.getElementById(datalist);
     if (selectorDatalist) {
-      selectorDatalist.innerHTML = null;
+      selectorDatalist.innerHTML = ''; // Очищаємо вміст datalist
       arrayOfArrays.forEach((r) => {
-        const selectorOption = document.createElement('option');
-        selectorOption.textContent = r;
-        selectorDatalist.appendChild(selectorOption)
+        const selectorOption = document.createElement('option'); // Створюємо новий елемент <option>
+        selectorOption.textContent = r; // Встановлюємо текст опції
+        selectorDatalist.appendChild(selectorOption); // Додаємо опцію до datalist
       });
     }
   }
 
-  //автоскрытие разворачивающегося меню 
+  // Автосховання розгортаючогося меню при кліку на посилання
   $(function () {
-    var navMain = $(".navbar-collapse");
-    navMain.on("click", "a:not([data-toggle])", null, function () {
-      navMain.collapse('hide');
+    var navMain = $('.navbar-collapse');
+    navMain.on('click', 'a:not([data-toggle])', null, function () {
+      navMain.collapse('hide'); // Ховаємо меню
     });
   });
 
+  // Ховає кнопку з ID "btnBuh" на мобільних пристроях
   function hideBtnBuh() {
-    searchMobileNot(() => $('#btnBuh').hide(1000)
-
-    );
+    searchMobileNot(() => $('#btnBuh').hide(1000)); // Ховаємо кнопку з анімацією
   }
 
+  // Показує кнопку з ID "btnBuh"
   function showBtnBuh() {
-    $('#btnBuh').show(500)
+    $('#btnBuh').show(500); // Показуємо кнопку з анімацією
   }
 
-  // остановка скриипта, если не выбраны критерии поиска в инпутах
+  // Перевіряє, чи всі критерії пошуку порожні, зупиняє пошук якщо так
   function searchStop(dataArr) {
     let evalRows = [];
     dataArr.forEach(elem => {
-      if (elem === '' || elem === false) {
-        evalRows.push('no')
-      } else {
-        evalRows.push('yes')
-      }
-    })
-    if (evalRows.indexOf('yes') === -1) {
-      return true
-    }
+      evalRows.push(elem === '' || elem === false ? 'no' : 'yes'); // Формуємо масив 'yes'/'no'
+    });
+    return evalRows.indexOf('yes') === -1; // Повертаємо true, якщо немає 'yes'
   }
 
-  // текст в дату 
+  // Перетворює рядок дати "dd.mm.yyyy" в об’єкт Date
   function strongToDate(st) {
     const pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-    return new Date(st.replace(pattern, '$3-$2-$1'));
+    return new Date(st.replace(pattern, '$3-$2-$1')); // Перетворюємо у формат yyyy-mm-dd
   }
 
-  //форматирование даты в вид гггг-mm-dd 
+  // Форматує дату у "yyyy-mm-dd"
   function formatDateYYYYtireMMtireDD(date) {
-    return date.getFullYear() + '-'
-      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
-      + ((date.getDate()) < 10 ? '0' : '') + (date.getDate());
+    return date.getFullYear() + '-' +
+      ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-' +
+      (date.getDate() < 10 ? '0' : '') + date.getDate();
   }
 
-  //форматирование даты в вид dd-mm-гггг 
+  // Форматує дату у "dd-mm-yyyy"
   function formatDateDDtireMMtireYYYY(date) {
-    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '-'
-      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
-      + date.getFullYear();
+    return (date.getDate() < 10 ? '0' : '') + date.getDate() + '-' +
+      ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-' +
+      date.getFullYear();
   }
 
-  //форматирование даты в вид dd.mm.гггг 
+  // Форматує дату у "dd.mm.yyyy"
   function formatDateDDpointMMpointYYYY(date) {
-    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '.'
-      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '.'
-      + date.getFullYear();
+    return (date.getDate() < 10 ? '0' : '') + date.getDate() + '.' +
+      ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '.' +
+      date.getFullYear();
   }
 
-  // універсальне форматування дати і часу
+  // Універсальне форматування дати та часу
   const formatDateTime = (date, repay, dayW = 1) => {
     let dateTime = new Date(date);
 
@@ -125,160 +118,131 @@
     const min = dateTime.getMinutes();
     const sec = dateTime.getSeconds();
 
-    const yearGood = year.toString().padStart(4, "0");
-    const monthGood = month.toString().padStart(2, "0");
-    const dayGood = day.toString().padStart(2, "0");
-    const hourGood = hour.toString().padStart(2, "0");
-    const minGood = min.toString().padStart(2, "0");
-    const secGood = sec.toString().padStart(2, "0");
+    const yearGood = year.toString().padStart(4, '0');
+    const monthGood = month.toString().padStart(2, '0');
+    const dayGood = day.toString().padStart(2, '0');
+    const hourGood = hour.toString().padStart(2, '0');
+    const minGood = min.toString().padStart(2, '0');
+    const secGood = sec.toString().padStart(2, '0');
 
     switch (repay) {
       case 'dd.mm.yyyy':
         return dayW ? `${dayGood}.${monthGood}.${yearGood}, ${DayDate(date)}` : `${dayGood}.${monthGood}.${yearGood}`;
-        break;
       case 'hh:mm:ss':
         return `${hourGood}:${minGood}:${secGood}`;
-        break;
       case 'hh:mm':
         return `${hourGood}:${minGood}`;
-        break;
     }
-    //return `${yearGood}/${monthGood}/${dayGood} ${hourGood}:${minGood}:${secGood}`;
-  }
+  };
 
-  // формування дня тижня
+  // Повертає скорочену назву дня тижня
   function DayDate(d) {
     const days = {
-      0: "нд",
-      1: "пн",
-      2: "вт",
-      3: "ср",
-      4: "чт",
-      5: "пт",
-      6: "сб",
+      0: 'нд',
+      1: 'пн',
+      2: 'вт',
+      3: 'ср',
+      4: 'чт',
+      5: 'пт',
+      6: 'сб',
     };
-    if (d == undefined) d = new Date();
-    return days[d.getDay()]
+    if (!d) d = new Date();
+    return days[d.getDay()];
   }
 
-  /* // функция поиска по таблице
-  $(document).ready(readyTable);
-  function readyTable() {
-      $(".input-search").keyup(function () {
-          var value = this.value.toLowerCase().trim();
-  
-          $("table tr").each(function (index) {
-              if (!index) return;
-              $(this).find("td").each(function () {
-                  var id = $(this).text().toLowerCase().trim();
-                  var not_found = (id.indexOf(value) == -1);
-                  $(this).closest('tr').toggle(!not_found);
-                  return not_found;
-              });
-          });
-      });
-  }
-   */
-
-  // функция поиска по таблице
+  // Налаштовує пошук по таблиці при введенні тексту
   $(document).ready(readyTable);
   function readyTable() {
     $('.input-search').on('keyup mouseup', function () {
-      _this = this;
-      $.each($(this.getAttribute('somethingSearch')), function () {
-        if ($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1) {
-          $(this).hide();
-        } else {
-          $(this).show();
-        }
+      const _this = this;
+      const selector = this.getAttribute('somethingSearch'); // Отримуємо селектор елементів для пошуку
+      $.each($(selector), function () {
+        const text = $(this).text().toLowerCase();
+        const searchVal = $(_this).val().toLowerCase();
+        $(this).toggle(text.includes(searchVal)); // Показати/сховати елемент
       });
     });
-  };
+  }
 
-  //строка в число
+  // Перетворює рядок у число з двома знаками після коми
   function strongToNumber(str) {
-    const replaceSpace = str.replace(/\s+/g, ''); // удаляем пробелы
-    const replacePoint = replaceSpace.replace(/,/, '.'); // запятую на точку
-    const parsFlo = parseFloat(replacePoint); // строка в число
-    const toFixTwu = parsFlo.toFixed(2); // округляем до 2 знаков после запятой
-    return toFixTwu
+    const replaceSpace = str.replace(/\s+/g, ''); // Видаляємо пробели
+    const replacePoint = replaceSpace.replace(',', '.'); // Заміняємо кому на крапку
+    const parsFlo = parseFloat(replacePoint); // Переводимо у число
+    return parsFlo.toFixed(2); // Округляємо до 2 знаків
   }
 
-  // функция проверяет устройство и срабатывает, если не мобильное
+  // Виконує передану функцію, якщо пристрій не мобільний
   function searchMobile(func) {
-    if (!navigator.userAgent.toLowerCase().match(/mobile/i)) {
+    if (!navigator.userAgent.toLowerCase().includes('mobile')) {
       func();
-    } else {
-      return;
     }
   }
 
-  // функция проверяет устройство и срабатывает, если мобильное
+  // Виконує передану функцію, якщо пристрій мобільний
   function searchMobileNot(func) {
-    if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
+    if (navigator.userAgent.toLowerCase().includes('mobile')) {
       func();
-    } else {
-      return;
     }
   }
 
-  //полосы в таблице
+  // Додає виділення рядків таблиці при кліку
   function tableLineSelection() {
-    $(".table-line-selection tr").click(function () {
-      if (this.style.background != "rgb(255, 228, 225)") {
-        $(this).css("background", "#FFE4E1"); //apply the new color  
+    $('.table-line-selection tr').click(function () {
+      const currentColor = this.style.backgroundColor;
+      if (currentColor !== 'rgb(255, 228, 225)') {
+        $(this).css('background', '#FFE4E1'); // Встановлюємо рожевий колір
       } else {
-        $(this).css("background", 'transparent');
+        $(this).css('background', 'transparent'); // Повертаємо прозорий фон
       }
     });
   }
 
-  // обработка кнопок Edit для перекидки данных в инпуты  
+  // Обробляє редагування даних у таблиці та заповнює поля вводу
   function editReestrFinance(data, col) {
     switch (+col) {
       case 1:
-        formaReestr.clearRecords();
-        $('.input-paste-reestr').val(data);
-        $('#data-table_filter input').val(data);
-        $('#nav-reestr-tab')[0].click();
+        formaReestr.clearRecords(); // Очищаємо форму реєстру
+        $('.input-paste-reestr').val(data); // Вставляємо дані в поле
+        $('#data-table_filter input').val(data); // Вставляємо дані в поле пошуку
+        $('#nav-reestr-tab')[0].click(); // Перемикаємося на вкладку реестра
         break;
       case 2:
-        formaFin.clearRecords();
-        $('.input-paste-finance').val(data);
-        $('#nav-fin-tab')[0].click();
+        formaFin.clearRecords(); // Очищаємо форму фінансів
+        $('.input-paste-finance').val(data); // Вставляємо дані в поле
+        $('#nav-fin-tab')[0].click(); // Перемикаємося на вкладку фінансів
         break;
-    };
-  };
+    }
+  }
 
-  //обрабатывает клик и тап на таблице для возврата текста из ячейки
+  // Додає обробники подій кліку та торкання для таблиць
   function clickTables(sel, fun) {
     const el = document.querySelector(sel);
     if (el) {
-      el.addEventListener("click", fun);
-      el.addEventListener('touchcancel', fun);
-    };
+      el.addEventListener('click', fun); // Додаємо обробник кліку
+      el.addEventListener('touchend', fun); // Додаємо обробник торкання
+    }
   }
 
-  // достаем текст из набора TD
+  // Витягує текстовий вміст із набору елементів <td>
   function getDataFromTd(tdArr) {
-    return tdArr.map(item => item.textContent);
+    return tdArr.map(item => item.textContent); // Перетворюємо <td> у текст
   }
 
-  // достаем все числа с концы строки
+  // Витягує число з кінця рядка
   function numEndStrong(string) {
-    const res = string.match(/\d+$/);
-    return res[0];
+    const res = string.match(/\d+$/); // Шукаємо цифри в кінці рядка
+    return res[0]; // Повертаємо знайдене число
   }
 
-  // эмуляция отпускания кнопки, при щелчке Пошук по таблиці (автопоиск при открытии)
+  // Імітує подію keyup для автоматичного пошуку
   function autoSearchOnOpen(selektor) {
-    $(selektor).triggerHandler('keyup');
-  }
-  //эмуляция отпускания кнопки, при щелчке Пошук по таблиці (автопоиск при открытии)
-  //але передаємо не клас, а сам елемент
-  function autoSearchOnOpenNew(elem) {
-    let event = new Event('keyup')
-    elem.dispatchEvent(event)
+    $(selektor).triggerHandler('keyup'); // Імітуємо подію keyup
   }
 
+  // Імітує подію keyup для елемента
+  function autoSearchOnOpenNew(elem) {
+    const event = new Event('keyup'); // Створюємо подію keyup
+    elem.dispatchEvent(event); // Викликаємо подію на елементі
+  }
 </script>

@@ -21,7 +21,7 @@
   }
 
   // Отримання унікального списку статей для випадаючого меню
-  function getDropDownArrayStatyaArrivalWaste() {
+/*    function getDropDownArrayStatyaArrivalWaste() {
     // Отримання даних з localStorage для надходжень та витрат
     const storageDataArrival = localStorage.getItem('dataArrival');
     const storageDataAWaste = localStorage.getItem('dataWaste');
@@ -41,10 +41,10 @@
 
     // Фільтрація списку статей з урахуванням стоп-слів
     return searchingSubstringInArrayStrings(dohodRashod, stopAw, 0);
-  }
+  }  */
 
   // Ініціалізація випадаючих меню для надходжень та витрат
-  function startArrivalWaste() {
+/*    function startArrivalWaste() {
     // Очищення списків перед заповненням
     // startArrivalWasteClear();
 
@@ -53,7 +53,7 @@
 
     // Заповнення випадаючого списку для статей витрат
     afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
-  }
+  }  */
 
   // Ініціалізація даних для вкладки витрат
   function startDataWaste() {
@@ -67,7 +67,7 @@
     // Зміна висоти контейнера таблиці
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     // Оновлення випадаючих списків
-    startArrivalWaste();
+    aWForm.startArrivalWaste();
   }
 
   // Ініціалізація даних для вкладки надходжень
@@ -81,7 +81,7 @@
     // Зміна висоти контейнера таблиці
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     // Оновлення випадаючих списків
-    startArrivalWaste();
+    aWForm.startArrivalWaste();
   }
 
   // Побудова HTML-таблиці на основі масиву даних
@@ -205,19 +205,6 @@
     }
     clickTables('#table-aw', searchToClick);
   }
-
-  // Формування даних для терміналу-карантину
-/*   function rowDataTermKar() {
-    const formData = formDataHandler.formaDataObj();
-    return [
-      formData.date,
-      +formData.summa,
-      formData.forma,
-      formData.waste,
-      formData.termkar,
-      formData.sftermkar,
-    ];
-  } */
 
   // Видалення рядка в модальному вікні
   $("#btnDeleteModalAW").on("click", () => {

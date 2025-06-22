@@ -22,7 +22,7 @@
       costPriv: '[data-arriwalwaste-costprivat]', // Селектор для поля ціни привата
       date: '[data-arriwalwaste-date]', // Селектор для поля ціни привата
       firmaArrivalWasteDatalist: '[data-firmaarrivalwaste-datalist]',
-      wasteDatalist: '[data-waste-datalist]',
+      wasteArrivalWasteDatalist: '[data-wastearrivalwaste-datalist]',
     };
 
     // Конструктор класу, який ініціалізує базовий клас і налаштовує селектор для поля дати
@@ -327,8 +327,8 @@
     // Очищення списків для випадаючих меню
     // Видаляє всі елементи з випадаючих списків з ідентифікаторами firmaArrivalWaste-datalist та waste-datalist
     clearingListsDropdownMenus() {
-      document.querySelector(this.selectors.firmaArrivalWasteDatalist).innerHTML = '';
-      this.container.querySelector(this.selectors.wasteDatalist).innerHTML = '';
+      this.container.querySelector(this.selectors.firmaArrivalWasteDatalist).innerHTML = '';
+      this.container.querySelector(this.selectors.wasteArrivalWasteDatalist).innerHTML = '';
     }
 
     // Зміна кольору фону для поля costPrivat залежно від значення
@@ -377,17 +377,17 @@
       // Фільтрація списку статей з урахуванням стоп-слів
       return searchingSubstringInArrayStrings(dohodRashod, stopAw, 0);
     }
-//******************************
+    //******************************
     // Ініціалізація випадаючих меню для надходжень та витрат
     startArrivalWaste() {
       // Очищення списків перед заповненням
       // startArrivalWasteClear();
 
       // Заповнення випадаючого списку для фірм (надходження) даними з localStorage
-      afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
+      afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), this.selectors.firmaArrivalWasteDatalist);
 
       // Заповнення випадаючого списку для статей витрат
-      afterDropDownReturned(this.getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
+      afterDropDownReturned(this.getDropDownArrayStatyaArrivalWaste(), this.selectors.wasteArrivalWasteDatalist);
     }
   }
 

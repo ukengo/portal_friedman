@@ -1,6 +1,4 @@
 <script>
-
-
   // Ініціалізація конструктора форми з бібліотеки AWFormBuilder
   // 'aw' — ідентифікатор форми, '#AwMainForma' — селектор контейнера форми, '[data-form-aw-main]' — селектор елементів форми
 
@@ -9,51 +7,11 @@
   // Виклик методу для рендерингу форми на сторінці
   aWForm.render();
 
-  /* // Ініціалізація обробника даних форми з таблиць, який працює з елементами, позначеними атрибутом [data-form-aw]
-  const formDataHandler = new FormDataFromTables('[data-form-aw]'); */
-
-  // Обробник події натискання клавіші Enter
-  // Якщо натиснута клавіша Enter (код 13), викликається функція збереження даних модального вікна
   function clickPressAW(event) {
     if (event.keyCode == 13) {
       btnSaveModalAW();
     }
   }
-
-  // Отримання унікального списку статей для випадаючого меню
-/*    function getDropDownArrayStatyaArrivalWaste() {
-    // Отримання даних з localStorage для надходжень та витрат
-    const storageDataArrival = localStorage.getItem('dataArrival');
-    const storageDataAWaste = localStorage.getItem('dataWaste');
-
-    // Якщо дані відсутні, повертаємо false
-    if (!storageDataArrival || !storageDataAWaste) return false;
-
-    // Парсинг JSON-даних та витягнення відповідних полів (статті доходів та витрат)
-    const dohod = (JSON.parse(storageDataArrival).data).map(x => [x[4]]);
-    const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
-
-    // Об'єднання списків доходів та витрат, видалення дублікатів та порожніх значень
-    const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
-
-    // Отримання списку виключень (стоп-слів) з localStorage
-    const stopAw = JSON.parse(localStorage.getItem('stopAw'));
-
-    // Фільтрація списку статей з урахуванням стоп-слів
-    return searchingSubstringInArrayStrings(dohodRashod, stopAw, 0);
-  }  */
-
-  // Ініціалізація випадаючих меню для надходжень та витрат
-/*    function startArrivalWaste() {
-    // Очищення списків перед заповненням
-    // startArrivalWasteClear();
-
-    // Заповнення випадаючого списку для фірм (надходження) даними з localStorage
-    afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
-
-    // Заповнення випадаючого списку для статей витрат
-    afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
-  }  */
 
   // Ініціалізація даних для вкладки витрат
   function startDataWaste() {

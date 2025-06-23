@@ -59,16 +59,144 @@
 
 
 
-        <!-- верхня форма -->
-        <form action="" class="form-fin-start">
-          <div class="row g-1 mt-1">
+          <!-- верхня форма -->
+          <form action="" class="form-fin-start">
+            <div class="row g-1 mt-1">
 
-          <div class="col-md-2">
-            <div class="form ">
-              <label for="dateoplfin">Дата оплати</label>
-              <input type="date" name="dateoplfin" id="dateoplfin" class="form-control form-control-sm" />
+              <div class="col-md-2">
+                <div class="form ">
+                  <label for="dateoplfin">Дата оплати</label>
+                  <input type="date" name="dateoplfin" id="dateoplfin" class="form-control form-control-sm" />
+                </div>
+              </div>
+
+              <div class="col-md-1 date-regular" data-date-regular>
+
+                <div class="date-regular__plus date-regular-plus" data-date-regular-plus>
+
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                    <path fill="#6b6b6b"
+                      d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                  </svg>
+                </div>
+
+
+                <div class="date-regular__minus date-regular-minus" data-date-regular-minus>
+
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5"
+                    viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                    <path fill="#6b6b6b"
+                      d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM152 232l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
+                  </svg>
+
+                </div>
+
+              </div>
+
+              <div class="col-md-2">
+                <div class="form">
+                  <label for="sffin">Рф</label>
+                  <input type="text" name="sffin" id="sffin" list="sffin-datalist" class="form-control form-control-sm"
+                    tabindex="1" />
+                  <datalist id="sffin-datalist"></datalist>
+                </div>
+              </div>
+
+              <div class="col-md-2">
+                <div class="form">
+                  <label for="idfin">id</label>
+                  <input type="text" name="idfin" id="idfin" class="form-control form-control-sm" tabindex="1" />
+                </div>
+              </div>
             </div>
-          </div>
+            <div class="row g-1 mt-1">
+              <div class="col-md-6">
+                <div class="form">
+                  <label for="primfin">Примітка</label>
+                  <input type="text" name="primfin" id="primfin" list="primfin-datalist"
+                    class="form-control form-control-sm" />
+                  <datalist id="primfin-datalist"></datalist>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form">
+                  <label for="firmafin">Фірма</label>
+                  <input type="text" name="firmafin" id="firmafin" list="firmafin-datalist"
+                    class="form-control form-control-sm" />
+                  <datalist id="firmafin-datalist"></datalist>
+                </div>
+              </div>
+            </div>
+            <div class="row g-1 mt-1 checkbox-finance">
+              <div class="col-md-auto">
+                <div class="form-check">
+                  <span class="check-style"></span>
+                  <label for="issuepartfinance" class="form-check-label">Виставлено частково</label>
+                  <input type="checkbox" name="issuepartfinance" id="issuepartfinance" class="form-check-input"
+                    value="part" />
+                </div>
+              </div>
+              <div class="col-md-auto">
+                <div class="form-check">
+                  <span class="check-style"></span>
+                  <label for="issuecompletfinance" class="form-check-label">Виставлено повністю</label>
+                  <input type="checkbox" name="issuecompletfinance" id="issuecompletfinance" class="form-check-input"
+                    value="complet" />
+                </div>
+              </div>
+              <div class="col-md-auto">
+                <div class="form-check">
+                  <span class="check-style"></span>
+                  <label for="ispolufinance" class="form-check-label">Викону</label>
+                  <input type="checkbox" name="ispolufinance" id="ispolufinance" class="form-check-input"
+                    value="ispolu" />
+                </div>
+              </div>
+            </div>
+
+            <!-- блок кнопок -->
+            <div class="row mb-2 mt-2" fin-buttons-block>
+
+              <div class="col">
+                <div class="btn-group my-1" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-primary btn-danger shadow-none"
+                    id="btnSearchFinance">Search</button>
+                  <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
+                    id="btnClearFinance">Clear
+                    Record</button>
+                </div>
+                <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
+                  <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinancePlus">Add
+                    R+</button>
+                  <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinanceMinus">Add
+                    R-</button>
+                </div>
+                <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
+                  data-js-fin-buttons-plus-minus-add>
+                  <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
+                    id="btnFimMultiplePlus" data-js-fin-button-plus-minus data-js-fin-button-plus>+</button>
+                  <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
+                    id="btnFimMultipleMinus" data-js-fin-button-plus-minus data-js-fin-button-minus>--</button>
+                  <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd"
+                    data-js-fin-button-add>Add</button>
+                </div>
+
+                <div class="col-md-1">
+                  <div class="form">
+                    <label for="priznakfin">Ознака</label>
+                    <input type="text" name="priznakfin" id="priznakfin" list="priznakfin-datalist"
+                      class="form-control form-control-sm" />
+                    <datalist id="priznakfin-datalist"></datalist>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- блок кнопок END-->
+            <div class="finance-mod-container" finance-mod-container> </div>
+          </form>
+          <!-- верхня форма END-->
 
           <div class="col-md-1 date-regular" data-date-regular>
 
@@ -79,280 +207,122 @@
                 <path fill="#6b6b6b"
                   d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
               </svg>
-            </div>
+              
+              <div class="col-md-1 date-regular" data-date-regular>
+
+                <div class="date-regular__plus date-regular-plus" data-date-regular-plus>
+
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                    <path fill="#6b6b6b"
+                      d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                  </svg>
+
+                </div>
 
 
-            <div class="date-regular__minus date-regular-minus" data-date-regular-minus>
+                <div class="date-regular__minus date-regular-minus" data-date-regular-minus>
 
-              <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5"
-                viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                <path fill="#6b6b6b"
-                  d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM152 232l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-              </svg>
-
-            </div>
-
-          </div>
-
-          <div class="col-md-2">
-            <div class="form">
-              <label for="sffin">Рф</label>
-              <input type="text" name="sffin" id="sffin" list="sffin-datalist" class="form-control form-control-sm"
-                tabindex="1" />
-              <datalist id="sffin-datalist"></datalist>
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <div class="form">
-              <label for="idfin">id</label>
-              <input type="text" name="idfin" id="idfin" class="form-control form-control-sm" tabindex="1" />
-            </div>
-          </div>
-        </div>
-        <div class="row g-1 mt-1">
-          <div class="col-md-6">
-            <div class="form">
-              <label for="primfin">Примітка</label>
-              <input type="text" name="primfin" id="primfin" list="primfin-datalist"
-                class="form-control form-control-sm" />
-              <datalist id="primfin-datalist"></datalist>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="form">
-              <label for="firmafin">Фірма</label>
-              <input type="text" name="firmafin" id="firmafin" list="firmafin-datalist"
-                class="form-control form-control-sm" />
-              <datalist id="firmafin-datalist"></datalist>
-            </div>
-          </div>
-        </div>
-        <div class="row g-1 mt-1 checkbox-finance">
-          <div class="col-md-auto">
-            <div class="form-check">
-              <span class="check-style"></span>
-              <label for="issuepartfinance" class="form-check-label">Виставлено частково</label>
-              <input type="checkbox" name="issuepartfinance" id="issuepartfinance" class="form-check-input"
-                value="part" />
-            </div>
-          </div>
-          <div class="col-md-auto">
-            <div class="form-check">
-              <span class="check-style"></span>
-              <label for="issuecompletfinance" class="form-check-label">Виставлено повністю</label>
-              <input type="checkbox" name="issuecompletfinance" id="issuecompletfinance" class="form-check-input"
-                value="complet" />
-            </div>
-          </div>
-          <div class="col-md-auto">
-            <div class="form-check">
-              <span class="check-style"></span>
-              <label for="ispolufinance" class="form-check-label">Викону</label>
-              <input type="checkbox" name="ispolufinance" id="ispolufinance" class="form-check-input" value="ispolu" />
-            </div>
-          </div>
-        </div>
-
-        <!-- блок кнопок -->
-        <div class="row mb-2 mt-2" fin-buttons-block>
-
-          <div class="col">
-            <div class="btn-group my-1" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnSearchFinance">Search</button>
-              <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
-                id="btnClearFinance">Clear
-                Record</button>
-            </div>
-            <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
-              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinancePlus">Add
-                R+</button>
-              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinanceMinus">Add
-                R-</button>
-            </div>
-            <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
-              data-js-fin-buttons-plus-minus-add>
-              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
-                id="btnFimMultiplePlus" data-js-fin-button-plus-minus data-js-fin-button-plus>+</button>
-              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
-                id="btnFimMultipleMinus" data-js-fin-button-plus-minus data-js-fin-button-minus>--</button>
-              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd"
-                data-js-fin-button-add>Add</button>
-            </div>
-
-            <div class="col-md-1">
-              <div class="form">
-                <label for="priznakfin">Ознака</label>
-                <input type="text" name="priznakfin" id="priznakfin" list="priznakfin-datalist"
-                  class="form-control form-control-sm" />
-                <datalist id="priznakfin-datalist"></datalist>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- блок кнопок END-->
-        <div class="finance-mod-container" finance-mod-container> </div>
-      </form>
-      <!-- верхня форма END-->
-
-          <div class="col-md-1 date-regular" data-date-regular>
-
-              <div class="date-regular__plus date-regular-plus" data-date-regular-plus>
-
-                <svg xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                  <path fill="#6b6b6b"
-                    d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
-                </svg>
-                =======
-                <div class="col-md-1 date-regular" data-date-regular>
-
-                  <div class="date-regular__plus date-regular-plus" data-date-regular-plus>
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                      <path fill="#6b6b6b"
-                        d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
+                    <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                    <path fill="#6b6b6b"
+                      d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM152 232l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
                     </svg>
 
-                  </div>
+                </div>
 
 
-                  <div class="date-regular__minus date-regular-minus" data-date-regular-minus>
-
-                    <<<<<<< HEAD <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
-                      <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                      <path fill="#6b6b6b"
-                        d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM152 232l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-                      </svg>
-
-                  </div>
+                <div class="col-md-1 date-regular">
+                  <div class="date-regular__plus date-regular-plus">+</div>
+                  <div class="date-regular__minus date-regular-minus">-</div>
 
 
-                  <div class="col-md-1 date-regular">
-                    <div class="date-regular__plus date-regular-plus">+</div>
-                    <div class="date-regular__minus date-regular-minus">-</div>
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5"
-                      viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                      <path fill="#6b6b6b"
-                        d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM152 232l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
-                    </svg>
-
-                  </div>
-
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5"
+                    viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                    <path fill="#6b6b6b"
+                      d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM152 232l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
+                  </svg>
 
                 </div>
 
-                <div class="col-md-2">
-                  <div class="form">
-                    <label for="sffin">Рф</label>
-                    <input type="text" name="sffin" id="sffin" list="sffin-datalist"
-                      class="form-control form-control-sm" tabindex="1" />
-                    <datalist id="sffin-datalist"></datalist>
-                  </div>
-                </div>
 
-                <div class="col-md-2">
-                  <div class="form">
-                    <label for="idfin">id</label>
-                    <input type="text" name="idfin" id="idfin" class="form-control form-control-sm" tabindex="1" />
-                  </div>
-                </div>
               </div>
-              <div class="row g-1 mt-1">
-                <div class="col-md-6">
-                  <div class="form">
-                    <label for="primfin">Примітка</label>
-                    <input type="text" name="primfin" id="primfin" list="primfin-datalist"
-                      class="form-control form-control-sm" />
-                    <datalist id="primfin-datalist"></datalist>
-                  </div>
-                </div>
 
-                <div class="col-md-6">
-                  <div class="form">
-                    <label for="firmafin">Фірма</label>
-                    <input type="text" name="firmafin" id="firmafin" list="firmafin-datalist"
-                      class="form-control form-control-sm" />
-                    <datalist id="firmafin-datalist"></datalist>
-                  </div>
-                </div>
-              </div>
-              <div class="row g-1 mt-1 checkbox-finance">
-                <div class="col-md-auto">
-                  <div class="form-check">
-                    <span class="check-style"></span>
-                    <label for="issuepartfinance" class="form-check-label">Виставлено частково</label>
-                    <input type="checkbox" name="issuepartfinance" id="issuepartfinance" class="form-check-input"
-                      value="part" />
-                  </div>
-                </div>
-                <div class="col-md-auto">
-                  <div class="form-check">
-                    <span class="check-style"></span>
-                    <label for="issuecompletfinance" class="form-check-label">Виставлено повністю</label>
-                    <input type="checkbox" name="issuecompletfinance" id="issuecompletfinance" class="form-check-input"
-                      value="complet" />
-                  </div>
-                </div>
-                <div class="col-md-auto">
-                  <div class="form-check">
-                    <span class="check-style"></span>
-                    <label for="ispolufinance" class="form-check-label">Викону</label>
-                    <input type="checkbox" name="ispolufinance" id="ispolufinance" class="form-check-input"
-                      value="ispolu" />
-                  </div>
+              <div class="col-md-2">
+                <div class="form">
+                  <label for="sffin">Рф</label>
+                  <input type="text" name="sffin" id="sffin" list="sffin-datalist" class="form-control form-control-sm"
+                    tabindex="1" />
+                  <datalist id="sffin-datalist"></datalist>
                 </div>
               </div>
 
-              <!-- блок кнопок -->
-              <div class="row mb-2 mt-2" fin-buttons-block>
+              <div class="col-md-2">
+                <div class="form">
+                  <label for="idfin">id</label>
+                  <input type="text" name="idfin" id="idfin" class="form-control form-control-sm" tabindex="1" />
+                </div>
+              </div>
+            </div>
+            <div class="row g-1 mt-1">
+              <div class="col-md-6">
+                <div class="form">
+                  <label for="primfin">Примітка</label>
+                  <input type="text" name="primfin" id="primfin" list="primfin-datalist"
+                    class="form-control form-control-sm" />
+                  <datalist id="primfin-datalist"></datalist>
+                </div>
+              </div>
 
-                <div class="row mb-2 mt-2 ">
+              <div class="col-md-6">
+                <div class="form">
+                  <label for="firmafin">Фірма</label>
+                  <input type="text" name="firmafin" id="firmafin" list="firmafin-datalist"
+                    class="form-control form-control-sm" />
+                  <datalist id="firmafin-datalist"></datalist>
+                </div>
+              </div>
+            </div>
+            <div class="row g-1 mt-1 checkbox-finance">
+              <div class="col-md-auto">
+                <div class="form-check">
+                  <span class="check-style"></span>
+                  <label for="issuepartfinance" class="form-check-label">Виставлено частково</label>
+                  <input type="checkbox" name="issuepartfinance" id="issuepartfinance" class="form-check-input"
+                    value="part" />
+                </div>
+              </div>
+              <div class="col-md-auto">
+                <div class="form-check">
+                  <span class="check-style"></span>
+                  <label for="issuecompletfinance" class="form-check-label">Виставлено повністю</label>
+                  <input type="checkbox" name="issuecompletfinance" id="issuecompletfinance" class="form-check-input"
+                    value="complet" />
+                </div>
+              </div>
+              <div class="col-md-auto">
+                <div class="form-check">
+                  <span class="check-style"></span>
+                  <label for="ispolufinance" class="form-check-label">Викону</label>
+                  <input type="checkbox" name="ispolufinance" id="ispolufinance" class="form-check-input"
+                    value="ispolu" />
+                </div>
+              </div>
+            </div>
+
+            <!-- блок кнопок -->
+            <div class="row mb-2 mt-2" fin-buttons-block>
+
+              <div class="row mb-2 mt-2 ">
 
 
-                  <div class="col">
-                    <div class="btn-group my-1" role="group" aria-label="Basic example">
-                      <button type="button" class="btn btn-primary btn-danger shadow-none"
-                        id="btnSearchFinance">Search</button>
-                      <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
-                        id="btnClearFinance">Clear
-                        Record</button>
-                    </div>
-                    <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
-                      <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinancePlus">Add
-                        R+</button>
-                      <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinanceMinus">Add
-                        R-</button>
-                    </div>
-                    <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
-                      data-js-fin-buttons-plus-minus-add>
-                      <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
-                        id="btnFimMultiplePlus" data-js-fin-button-plus-minus data-js-fin-button-plus>+</button>
-                      <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple" HEAD
-                        id="btnFimMultipleMinus" data-js-fin-button-plus-minus data-js-fin-button-minus>--</button>
-
-                      id="btnFimMultipleMinus" data-js-fin-button-plus-minus data-js-fin-button-minus >--</button>
-                      
-                      <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd"
-                        data-js-fin-button-add>Add</button>
-                    </div>
-
+                <div class="col">
+                  <div class="btn-group my-1" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-primary btn-danger shadow-none"
-                      data-js-fin-button-mod>Mod</button>
-
-                    <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnStartTableFinance">Up
-
-                      <button type="button" class="btn btn-primary btn-danger shadow-none"
-                        onclick="formaFin.clearRecords()">Clear
-
-                        <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
-                          id="btnClearFinance">Clear
-
-                          Record</button>
+                      id="btnSearchFinance">Search</button>
+                    <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
+                      id="btnClearFinance">Clear
+                      Record</button>
                   </div>
                   <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
                     <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinancePlus">Add
@@ -360,30 +330,67 @@
                     <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinanceMinus">Add
                       R-</button>
                   </div>
-                  <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin">
+                  <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
+                    data-js-fin-buttons-plus-minus-add>
+                    <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
+                      id="btnFimMultiplePlus" data-js-fin-button-plus-minus data-js-fin-button-plus>+</button>
+                    <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple" HEAD
+                      id="btnFimMultipleMinus" data-js-fin-button-plus-minus data-js-fin-button-minus>--</button>
 
+                    id="btnFimMultipleMinus" data-js-fin-button-plus-minus data-js-fin-button-minus >--</button>
+
+                    <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd"
+                      data-js-fin-button-add>Add</button>
+                  </div>
+
+                  <button type="button" class="btn btn-primary btn-danger shadow-none"
+                    data-js-fin-button-mod>Mod</button>
+
+                  <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnStartTableFinance">Up
+
+                    <button type="button" class="btn btn-primary btn-danger shadow-none"
+                      onclick="formaFin.clearRecords()">Clear
+
+                      <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
+                        id="btnClearFinance">Clear
+
+                        Record</button>
+                </div>
+                <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
+                  <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinancePlus">Add
+                    R+</button>
+                  <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinanceMinus">Add
+                    R-</button>
+                </div>
+                <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin">
+
+                  <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
+                    data-js-fin-buttons-plus-minus-add>
                     <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
                       data-js-fin-buttons-plus-minus-add>
-                      <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
-                        data-js-fin-buttons-plus-minus-add>
 
-                        <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
-                          id="btnFimMultiplePlus" data-js-fin-button-plus>+</button>
-                        <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
-                          id="btnFimMultipleMinus" data-js-fin-button-minus>--</button>
-                        <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd"
-                          data-js-fin-button-add>Add</button>
-                      </div>
-                      <button type="button" id="btnModalMultiple" class="btn btn-primary btn-danger shadow-none"
-                        data-bs-toggle="modal" data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple">Mod</button>
-                      <!-- <button type="button" class="btn btn-primary btn-danger shadow-none"
+                      <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
+                        id="btnFimMultiplePlus" data-js-fin-button-plus>+</button>
+                      <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
+                        id="btnFimMultipleMinus" data-js-fin-button-minus>--</button>
+                      <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd"
+                        data-js-fin-button-add>Add</button>
+                    </div>
+                    <button type="button" id="btnModalMultiple" class="btn btn-primary btn-danger shadow-none"
+                      data-bs-toggle="modal" data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple">Mod</button>
+                    <!-- <button type="button" class="btn btn-primary btn-danger shadow-none"
                         id="btnClearSearchFinance">Clear</button> -->
-                      <button type="button" class="btn btn-primary btn-danger shadow-none"
-                        onclick="startTableFinance()">Up
+                    <button type="button" class="btn btn-primary btn-danger shadow-none"
+                      onclick="startTableFinance()">Up
+
+                      <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnStartTableFinance">Up
+
+
+                        <button type="button" class="btn btn-primary btn-danger shadow-none"
+                          data-js-fin-button-mod>Mod</button>
 
                         <button type="button" class="btn btn-primary btn-danger shadow-none"
                           id="btnStartTableFinance">Up
-
 
                           <button type="button" class="btn btn-primary btn-danger shadow-none"
                             data-js-fin-button-mod>Mod</button>
@@ -391,32 +398,26 @@
                           <button type="button" class="btn btn-primary btn-danger shadow-none"
                             id="btnStartTableFinance">Up
 
+                            Record</button>
+                          <div class="btn-group my-1" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-primary btn-danger shadow-none search-t-finance"
+                              id="btnTableАFinance">Table</button>
                             <button type="button" class="btn btn-primary btn-danger shadow-none"
-                              data-js-fin-button-mod>Mod</button>
-
-                            <button type="button" class="btn btn-primary btn-danger shadow-none"
-                              id="btnStartTableFinance">Up
-
-                              Record</button>
-                            <div class="btn-group my-1" role="group" aria-label="Basic example">
-                              <button type="button" class="btn btn-primary btn-danger shadow-none search-t-finance"
-                                id="btnTableАFinance">Table</button>
-                              <button type="button" class="btn btn-primary btn-danger shadow-none"
-                                id="clearBtnTableFinance">Clear</button>
-                            </div>
-                    </div>
+                              id="clearBtnTableFinance">Clear</button>
+                          </div>
                   </div>
-                  <!-- блок кнопок END-->
-                  <div class="finance-mod-container" finance-mod-container>
-                  </div>
+                </div>
+                <!-- блок кнопок END-->
+                <div class="finance-mod-container" finance-mod-container>
+                </div>
 
 
 
-        </form>
-        <!-- верхня форма END-->
+      </form>
+      <!-- верхня форма END-->
 
-      </div>
-      <!-- https://www.youtube.com/shorts/pznMUqqotpk -->
+    </div>
+    <!-- https://www.youtube.com/shorts/pznMUqqotpk -->
 
   </template>
 
@@ -517,11 +518,10 @@
   </div>
 
   <!-- Modal Multiple-->
-  <div class="modal fade" id="ModalFinanceMultiple" tabindex="-1" aria-labelledby="ModalLabelFinanceMultiple">>>>>>>
+  <div class="modal fade" id="ModalFinanceMultiple" tabindex="-1" aria-labelledby="ModalLabelFinanceMultiple">
 
     <!-- Modal Multiple-->
     <!-- <div class="modal fade" id="ModalFinanceMultiple" tabindex="-1" aria-labelledby="ModalLabelFinanceMultiple"
->>>>>>> 4134be6 (add button Mod event)
     aria-hidden="true" data-modal-finance-multiple>
     <div class="container">
       <div class="modal-dialog modal-lg">
@@ -533,11 +533,5 @@
       </div>
     </div>
   </div> -->
-
-
   </div>
-
-
-
-
 </div>

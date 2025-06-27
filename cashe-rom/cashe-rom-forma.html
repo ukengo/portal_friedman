@@ -16,9 +16,8 @@
     casheCol.appendChild(casheLabel)
     casheCol.appendChild(casheInput)
     return casheCol
-  };
+  }
 
-  // рендеринг форми
   // рендеринг форми
   function renderFormsCasheRom(selectorBody, selector, value) {
     // створюємо контейнер для розміщення форми
@@ -51,8 +50,8 @@
   function renderContainerFinanceCasheRom() {
     const casheRomFormaContainer = document.createElement('div')
     casheRomFormaContainer.setAttribute('data-cashe-rom-finance-container', '')
-    casheRomFormaContainer.style.marginTop = '50px'
-    casheRomFormaContainer.style.paddingTop = '15px'
+   // casheRomFormaContainer.style.marginTop = '50px'
+   // casheRomFormaContainer.style.paddingTop = '15px'
     const dataDialogBody = document.querySelector('[data-dialog-body]');
     dataDialogBody.appendChild(casheRomFormaContainer)
   }
@@ -83,5 +82,6 @@
     const dataDialogFooter = document.querySelector('[data-cashe-rom-buttons-container]');
     !dataDialogFooter.hasChildNodes() ? dataDialogFooter.appendChild(clone) : null;
   }
+
 
 </script>

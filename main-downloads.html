@@ -65,11 +65,11 @@
     }).startDataVraboteT();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataArrival', JSON.stringify(data));
-      aWForm.startArrivalWaste();
+      startArrivalWaste();
     }).getLastTenRowsArriwal();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataWaste', JSON.stringify(data));
-      aWForm.startArrivalWaste();
+      startArrivalWaste();
     }).getLastTenRowsWaste();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataCashe', JSON.stringify(data));

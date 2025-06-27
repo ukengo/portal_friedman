@@ -35,7 +35,7 @@
       dateRegular: '[data-date-regular]', // Селектор для регулярної дати
       dateRegularPlus: '[data-date-regular-plus]', // Селектор для додавання днів до дати
       dateRegularMinus: '[data-date-regular-minus]', // Селектор для віднімання днів від дати
-      finButtonsBlock: '[data-fin-buttons-block]', // Селектор блоку кнопок фінансів
+      finButtonsBlock: '[fin-buttons-block]', // Селектор блоку кнопок фінансів
     };
 
     // Конструктор класу, приймає ім'я, селектор шаблону та селектор контейнера
@@ -72,7 +72,6 @@
         this.btnPlusMinus = this.container.querySelectorAll(this.selectors.blockPlusMinus);
         // Отримання кнопки додавання
         this.btnAdd = this.container.querySelector(this.selectors.buttonAdd);
-        
         // Налаштування обробників для кнопок плюс/мінус та додавання
         this.buttonsMultipleFinancePlusMinus(instance, this.btnPlusMinus);
 
@@ -165,7 +164,6 @@
 
     // Метод для обробки події кнопки модифікації
     buttonMultipleFinanceMod(btnAdd) {
-
       btnAdd.addEventListener('click', (event) => {
         // Знаходження батьківського елемента блоку кнопок
         const parentElement = event.currentTarget.closest(this.selectors.finButtonsBlock);

@@ -22,7 +22,7 @@
       costPriv: '[data-arriwalwaste-costprivat]', // Селектор для поля ціни привата
       date: '[data-arriwalwaste-date]', // Селектор для поля ціни привата
       firmaArrivalWasteDatalist: '[data-firmaarrivalwaste-datalist]',
-      wasteArrivalWasteDatalist: '[data-wastearrivalwaste-datalist]',
+      wasteDatalist: '[data-waste-datalist]',
     };
 
     // Конструктор класу, який ініціалізує базовий клас і налаштовує селектор для поля дати
@@ -35,50 +35,6 @@
       // Зберігаємо функції як властивості екземпляра
       this.funcWasteTab = typeof funcWasteTab === 'function' ? funcWasteTab : () => console.warn('funcWasteTab is not a function');
       this.funcArrivalTab = typeof funcArrivalTab === 'function' ? funcArrivalTab : () => console.warn('funcArrivalTab is not a function');
-    }
-
-    // Метод для рендерингу форми
-    // Ініціалізує форму, додає обробники подій і встановлює значення за замовчуванням
-    render() {
-
-      // Перевірка наявності шаблону та контейнера
-      if (!this.checkTemplateAndContainer()) return;
-      super.renderTemplate(); // Виклик методу рендерингу базового класу
-
-      // Ініціалізація екземплярів форм
-      this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form)).map(
-        (form, index) => {
-          form.id = form.id || `${this.name}-form-${index}`; // Встановлення унікального ID для форми
-          return new FormDataFromTables(`#${form.id}`); // Створення екземпляра для обробки даних форми
-        }
-      );
-      this.initEventListeners(); // Ініціалізація обробників подій
-      this.setDefaultDate(); // Встановлення дати за замовчуванням
-
-      // Встановлення значення поля costPrivat з localStorage
-      // Конвертує значення в число та встановлює в поле з ідентифікатором costPrivat
-      this.container.querySelector(this.selectors.costPriv).value = +localStorage.getItem('costPrivat');
-
-      // Встановлення поточної дати в поле #date
-      this.container.querySelector(this.selectors.date).valueAsDate = new Date();
-
-      //Очищення списків для випадаючих меню
-      this.clearingListsDropdownMenus();
-
-      //Зміна кольору фону для поля costPrivat
-      this.costPrivatColor();
-
-      this.rowDataTermKar();
-
-      // Ініціалізація FormDataFromTables після рендерингу форми
-      this.formDataHandler = new FormDataFromTables(this.selectors.form);
-      if (!this.formDataHandler.$form) {
-        console.error('Form element not found after rendering');
-        return;
-      }
-
-      // Ініціалізація випадаючих меню для надходжень та витрат
-      this.startArrivalWaste()
     }
 
     // Метод для отримання імен полів форми
@@ -175,7 +131,7 @@
         return;
       }
 
-      //startArrivalWaste(); // Виклик зовнішньої функції для початку обробки
+      startArrivalWaste(); // Виклик зовнішньої функції для початку обробки
 
       const isWasteButton = event.target.closest(this.selectors.wasteButton); // Перевірка, чи натиснуто кнопку Waste
       const isArrivalButton = event.target.closest(this.selectors.arrivalButton); // Перевірка, чи натиснуто кнопку Arrival
@@ -186,7 +142,7 @@
 
       if (isWasteButton) {
         isWasteButton.disabled = true;
-
+            
         if (!formData[5]) {
           // Виклик серверної функції для додавання нового рядка витрат
           google.script.run
@@ -196,8 +152,8 @@
             })
             .addNewRowWaste(formData.slice(0, 5));
         } else {
-
-          console.log(this.rowDataTermKar());
+    
+        console.log(this.rowDataTermKar());
           // Вставка даних терміну карантину
           google.script.run.insertTermKar(this.rowDataTermKar());
           // Виклик серверної функції для обробки карантинних даних
@@ -233,13 +189,54 @@
           })
           .addNewTableArriwal(formData.slice(0, 5));
         this.formDataHandler.clearRecords(); // Очищення форми
-        // buttonClickOchistkaAW(); // Очищення форми
+       // buttonClickOchistkaAW(); // Очищення форми
       }
 
       // Оновлення стилю контейнера таблиці
       const divDataTable = this.container.querySelector('#divDataTableArriwalWaste');
       if (divDataTable) {
         divDataTable.style.height = '210%';
+      }
+    }
+
+    // Метод для рендерингу форми
+    // Ініціалізує форму, додає обробники подій і встановлює значення за замовчуванням
+    render() {
+
+      // Перевірка наявності шаблону та контейнера
+      if (!this.checkTemplateAndContainer()) return;
+      super.renderTemplate(); // Виклик методу рендерингу базового класу
+
+      // Ініціалізація екземплярів форм
+      this.formInstances = Array.from(this.container.querySelectorAll(this.selectors.form)).map(
+        (form, index) => {
+          form.id = form.id || `${this.name}-form-${index}`; // Встановлення унікального ID для форми
+          return new FormDataFromTables(`#${form.id}`); // Створення екземпляра для обробки даних форми
+        }
+      );
+      this.initEventListeners(); // Ініціалізація обробників подій
+      this.setDefaultDate(); // Встановлення дати за замовчуванням
+
+      // Встановлення значення поля costPrivat з localStorage
+      // Конвертує значення в число та встановлює в поле з ідентифікатором costPrivat
+      this.container.querySelector(this.selectors.costPriv).value = +localStorage.getItem('costPrivat');
+
+      // Встановлення поточної дати в поле #date
+      this.container.querySelector(this.selectors.date).valueAsDate = new Date();
+
+      //Очищення списків для випадаючих меню
+      this.clearingListsDropdownMenus();
+
+      //Зміна кольору фону для поля costPrivat
+      this.costPrivatColor();
+
+      this.rowDataTermKar();
+
+      // Ініціалізація FormDataFromTables після рендерингу форми
+      this.formDataHandler = new FormDataFromTables(this.selectors.form);
+      if (!this.formDataHandler.$form) {
+        console.error('Form element not found after rendering');
+        return;
       }
     }
 
@@ -327,8 +324,8 @@
     // Очищення списків для випадаючих меню
     // Видаляє всі елементи з випадаючих списків з ідентифікаторами firmaArrivalWaste-datalist та waste-datalist
     clearingListsDropdownMenus() {
-      this.container.querySelector(this.selectors.firmaArrivalWasteDatalist).innerHTML = '';
-      this.container.querySelector(this.selectors.wasteArrivalWasteDatalist).innerHTML = '';
+      document.querySelector(this.selectors.firmaArrivalWasteDatalist).innerHTML = '';
+      this.container.querySelector(this.selectors.wasteDatalist).innerHTML = '';
     }
 
     // Зміна кольору фону для поля costPrivat залежно від значення
@@ -345,7 +342,7 @@
 
     // Формування даних для терміналу-карантину
     rowDataTermKar() {
-
+     
       return [
         this.getFormValues()[0][0],
         +this.getFormValues()[0][1],
@@ -353,41 +350,6 @@
         this.getFormValues()[0][5],
         this.getFormValues()[0][6],
       ];
-    }
-
-    // Отримання унікального списку статей для випадаючого меню
-    getDropDownArrayStatyaArrivalWaste() {
-      // Отримання даних з localStorage для надходжень та витрат
-      const storageDataArrival = localStorage.getItem('dataArrival');
-      const storageDataAWaste = localStorage.getItem('dataWaste');
-
-      // Якщо дані відсутні, повертаємо false
-      if (!storageDataArrival || !storageDataAWaste) return false;
-
-      // Парсинг JSON-даних та витягнення відповідних полів (статті доходів та витрат)
-      const dohod = (JSON.parse(storageDataArrival).data).map(x => [x[4]]);
-      const rashod = (JSON.parse(storageDataAWaste).data).map(x => [x[3]]);
-
-      // Об'єднання списків доходів та витрат, видалення дублікатів та порожніх значень
-      const dohodRashod = [...new Set(rashod.concat(dohod).filter(String).flat())];
-
-      // Отримання списку виключень (стоп-слів) з localStorage
-      const stopAw = JSON.parse(localStorage.getItem('stopAw'));
-
-      // Фільтрація списку статей з урахуванням стоп-слів
-      return searchingSubstringInArrayStrings(dohodRashod, stopAw, 0);
-    }
-    //******************************
-    // Ініціалізація випадаючих меню для надходжень та витрат
-    startArrivalWaste() {
-      // Очищення списків перед заповненням
-      // startArrivalWasteClear();
-
-      // Заповнення випадаючого списку для фірм (надходження) даними з localStorage
-      afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), this.selectors.firmaArrivalWasteDatalist);
-
-      // Заповнення випадаючого списку для статей витрат
-      afterDropDownReturned(this.getDropDownArrayStatyaArrivalWaste(), this.selectors.wasteArrivalWasteDatalist);
     }
   }
 

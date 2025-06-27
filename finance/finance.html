@@ -4,7 +4,7 @@
 <div class="container">
 
   <!-- вставляємо основну форму Finance -->
-  <div class="form-fin-main"></div>
+  <div class="form-fin-main radius col-xl-10 px-4 py-2"></div>
 
   <div class="container">
     <div class="row radius mb-4 mt-4">
@@ -50,11 +50,12 @@
 
   <!-- Шаблон основної форми Finance -->
   <template id="finMainForma">
-    <div class="col-xl-10 radius px-4 py-2 form-background-color">
+    <div class="form-background-color">
 
       <!-- верхня форма -->
-      <form action="" class="form-fin-start">
+      <form action="" class="form-fin-start" data-form-finance>
         <div class="row g-1 mt-1">
+
           <div class="col-md-2">
             <div class="form">
               <label for="proektfin">Проєкт</label>
@@ -88,8 +89,27 @@
           </div>
 
           <div class="col-md-1 date-regular" data-date-regular>
-            <div class="date-regular__plus date-regular-plus" data-date-regular-plus>+</div>
-            <div class="date-regular__minus date-regular-minus" data-date-regular-minus>-</div>
+
+            <div class="date-regular__plus date-regular-plus" data-date-regular-plus>
+
+              <svg xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#6b6b6b"
+                  d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+              </svg>
+            </div>
+
+
+            <div class="date-regular__minus date-regular-minus" data-date-regular-minus>
+
+              <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5"
+                viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#6b6b6b"
+                  d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM152 232l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z" />
+              </svg>
+
+            </div>
+
           </div>
 
           <div class="col-md-2">
@@ -154,30 +174,34 @@
         </div>
 
         <!-- блок кнопок -->
-        <div class="row mb-2 mt-2" data-fin-buttons-block>
+        <div class="row mb-2 mt-2" fin-buttons-block>
 
           <div class="col">
             <div class="btn-group my-1" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnSearchFinance">Search</button>
-              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnClearFinance"
-                onclick="formaFin.clearRecords()">Clear
+              <button type="button" class="btn btn-primary btn-danger shadow-none btn-clear-finance-main"
+                id="btnClearFinance">Clear
                 Record</button>
             </div>
             <div class="btn-group my-1" role="group" aria-label="Basic example" id="add_button_fin">
-              <button type="button" class="btn btn-primary btn-danger shadow-none">Add R+</button>
-              <button type="button" class="btn btn-primary btn-danger shadow-none">Add R-</button>
+              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinancePlus">Add
+                R+</button>
+              <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnAddFinanceMinus">Add
+                R-</button>
             </div>
-            <div class="btn-group my-1" role="group" aria-label="Multiple">
-              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple">+</button>
-              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple">--</button>
+            <div class="btn-group my-1" role="group" aria-label="Multiple" id="multiple_button_fin"
+              data-js-fin-buttons-plus-minus-add>
+              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
+                id="btnFimMultiplePlus" data-js-fin-button-plus-minus data-js-fin-button-plus>+</button>
+              <button type="button" class="btn btn-primary btn-danger shadow-none btn-fim-multiple"
+                id="btnFimMultipleMinus" data-js-fin-button-plus-minus data-js-fin-button-minus>--</button>
               <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnFimMultipleAdd"
                 data-js-fin-button-add>Add</button>
             </div>
-            <button type="button" id="btnModalMultiple" class="btn btn-primary btn-danger shadow-none"
-              data-bs-toggle="modal" data-bs-target="#ModalFinanceMultiple" id="btnModalMultiple"
-              data-js-fin-button-mod>Mod</button>
-            <!-- <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnClearSearchFinance">Clear</button> -->
-            <button type="button" class="btn btn-primary btn-danger shadow-none" onclick="startTableFinance()">Up
+
+            <button type="button" class="btn btn-primary btn-danger shadow-none" data-js-fin-button-mod>Mod</button>
+
+            <button type="button" class="btn btn-primary btn-danger shadow-none" id="btnStartTableFinance">Up
               Record</button>
             <div class="btn-group my-1" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-primary btn-danger shadow-none search-t-finance"
@@ -188,11 +212,16 @@
           </div>
         </div>
         <!-- блок кнопок END-->
+        <div class="finance-mod-container" finance-mod-container> </div>
       </form>
       <!-- верхня форма END-->
 
     </div>
+
+    <!-- https://www.youtube.com/shorts/pznMUqqotpk -->
+
   </template>
+
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModalFinance" tabindex="-1" aria-labelledby="exampleModalLabelFinance"
@@ -287,18 +316,5 @@
       </div>
     </div>
   </div>
-</div>
 
-
-<!-- Modal Multiple-->
-<div class="modal fade" id="ModalFinanceMultiple" tabindex="-1" aria-labelledby="ModalLabelFinanceMultiple">
-  <div class="container">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="modal-body-multiple"></div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

@@ -11,58 +11,6 @@
     }
   }
 
-  // Отримання унікального списку статей для випадаючого меню
-  function getDropDownArrayStatyaArrivalWaste() {
-    try {
-      // Отримання даних із localStorage
-      const arrivals = localStorage.getItem('dataArrival');
-      const wastes = localStorage.getItem('dataWaste');
-
-      // Повернення порожнього масиву, якщо дані відсутні
-      if (!arrivals || !wastes) {
-        return [];
-      }
-
-      // Парсинг JSON-даних
-      const parsedArrivals = JSON.parse(arrivals);
-      const parsedWastes = JSON.parse(wastes);
-
-      // Перевірка структури даних
-      if (!parsedArrivals?.data || !parsedWastes?.data) {
-        return [];
-      }
-
-      // Витягнення статей доходів та витрат
-      const incomeItems = parsedArrivals.data.map(item => item[4]).filter(Boolean);
-      const expenseItems = parsedWastes.data.map(item => item[3]).filter(Boolean);
-
-      // Об'єднання та видалення дублікатів
-      const uniqueItems = [...new Set([...incomeItems, ...expenseItems])];
-
-      // Отримання стоп-слів із localStorage
-      const stopWords = JSON.parse(localStorage.getItem('stopAw')) || [];
-
-      // Фільтрація статей за стоп-словами
-      return searchingSubstringInArrayStrings(uniqueItems, stopWords, 0);
-    } catch (error) {
-      // Логування помилки
-      console.error('Помилка у getDropDownArrayStatyaArrivalWaste:', error);
-      return [];
-    }
-  }
-
-  // Ініціалізація випадаючих меню для надходжень та витрат
-  function startArrivalWaste() {
-    // Очищення списків перед заповненням
-    // startArrivalWasteClear();
-
-    // Заповнення випадаючого списку для фірм (надходження) даними з localStorage
-    afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
-
-    // Заповнення випадаючого списку для статей витрат
-    afterDropDownReturned(getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
-  }
-
   // Ініціалізація даних для вкладки витрат
   function startDataWaste() {
 
@@ -75,7 +23,7 @@
     // Зміна висоти контейнера таблиці
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     // Оновлення випадаючих списків
-    startArrivalWaste();
+    aWForm.startArrivalWaste();
   }
 
   // Ініціалізація даних для вкладки надходжень
@@ -89,7 +37,7 @@
     // Зміна висоти контейнера таблиці
     document.querySelector("#divDataTableArriwalWaste").style.height = "210%";
     // Оновлення випадаючих списків
-    startArrivalWaste();
+    aWForm.startArrivalWaste();
   }
 
   // Побудова HTML-таблиці на основі масиву даних
@@ -213,19 +161,6 @@
     }
     clickTables('#table-aw', searchToClick);
   }
-
-  // Формування даних для терміналу-карантину
-  /*   function rowDataTermKar() {
-      const formData = formDataHandler.formaDataObj();
-      return [
-        formData.date,
-        +formData.summa,
-        formData.forma,
-        formData.waste,
-        formData.termkar,
-        formData.sftermkar,
-      ];
-    } */
 
   // Видалення рядка в модальному вікні
   $("#btnDeleteModalAW").on("click", () => {

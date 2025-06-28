@@ -131,7 +131,7 @@
         return;
       }
 
-      startArrivalWaste(); // Виклик зовнішньої функції для початку обробки
+      this.startArrivalWaste(); // Виклик зовнішньої функції для початку обробки
 
       const isWasteButton = event.target.closest(this.selectors.wasteButton); // Перевірка, чи натиснуто кнопку Waste
       const isArrivalButton = event.target.closest(this.selectors.arrivalButton); // Перевірка, чи натиснуто кнопку Arrival
@@ -142,7 +142,7 @@
 
       if (isWasteButton) {
         isWasteButton.disabled = true;
-            
+
         if (!formData[5]) {
           // Виклик серверної функції для додавання нового рядка витрат
           google.script.run
@@ -152,8 +152,8 @@
             })
             .addNewRowWaste(formData.slice(0, 5));
         } else {
-    
-        console.log(this.rowDataTermKar());
+
+          console.log(this.rowDataTermKar());
           // Вставка даних терміну карантину
           google.script.run.insertTermKar(this.rowDataTermKar());
           // Виклик серверної функції для обробки карантинних даних
@@ -189,7 +189,7 @@
           })
           .addNewTableArriwal(formData.slice(0, 5));
         this.formDataHandler.clearRecords(); // Очищення форми
-       // buttonClickOchistkaAW(); // Очищення форми
+        // buttonClickOchistkaAW(); // Очищення форми
       }
 
       // Оновлення стилю контейнера таблиці
@@ -342,7 +342,7 @@
 
     // Формування даних для терміналу-карантину
     rowDataTermKar() {
-     
+
       return [
         this.getFormValues()[0][0],
         +this.getFormValues()[0][1],
@@ -350,6 +350,58 @@
         this.getFormValues()[0][5],
         this.getFormValues()[0][6],
       ];
+    }
+
+    // Отримання унікального списку статей для випадаючого меню
+    getDropDownArrayStatyaArrivalWaste() {
+      try {
+        // Отримання даних із localStorage
+        const arrivals = localStorage.getItem('dataArrival');
+        const wastes = localStorage.getItem('dataWaste');
+
+        // Повернення порожнього масиву, якщо дані відсутні
+        if (!arrivals || !wastes) {
+          return [];
+        }
+
+        // Парсинг JSON-даних
+        const parsedArrivals = JSON.parse(arrivals);
+        const parsedWastes = JSON.parse(wastes);
+
+        // Перевірка структури даних
+        if (!parsedArrivals?.data || !parsedWastes?.data) {
+          return [];
+        }
+
+        // Витягнення статей доходів та витрат
+        const incomeItems = parsedArrivals.data.map(item => item[4]).filter(Boolean);
+        const expenseItems = parsedWastes.data.map(item => item[3]).filter(Boolean);
+
+        // Об'єднання та видалення дублікатів
+        const uniqueItems = [...new Set([...incomeItems, ...expenseItems])];
+
+        // Отримання стоп-слів із localStorage
+        const stopWords = JSON.parse(localStorage.getItem('stopAw')) || [];
+
+        // Фільтрація статей за стоп-словами
+        return searchingSubstringInArrayStrings(uniqueItems, stopWords, 0);
+      } catch (error) {
+        // Логування помилки
+        console.error('Помилка у getDropDownArrayStatyaArrivalWaste:', error);
+        return [];
+      }
+    }
+
+    // Ініціалізація випадаючих меню для надходжень та витрат
+    startArrivalWaste() {
+      // Очищення списків перед заповненням
+      // startArrivalWasteClear();
+
+      // Заповнення випадаючого списку для фірм (надходження) даними з localStorage
+      afterDropDownReturned(getDropDownArrayOnline('dataArrival', 3), "firmaArrivalWaste-datalist");
+
+      // Заповнення випадаючого списку для статей витрат
+      afterDropDownReturned(this.getDropDownArrayStatyaArrivalWaste(), "waste-datalist");
     }
   }
 

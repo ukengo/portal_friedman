@@ -19,20 +19,6 @@
     const refreshLong = setTimeout(refreshCacheLong, minLongStart * 1000 * 60);
   }
 
-  /*   document.addEventListener('click', (event) => {
-      if (event.target.tagName === 'INPUT') {
-        const minShortStart = 10;
-        const minShortStop = 15;
-        const refreshShort = setTimeout(() => {
-          onlineDownloads(); console.log('refreshShort');
-        }, minShortStart * 1000 * 60);
-        const refreshShortStop = setTimeout(() => {
-          clearInterval(refreshShort)
-          console.log('refreshShortStop');
-        }, minShortStop * 1000 * 60);
-      }
-    }); */
-
   // завантаженя в локал
   function onlineDownloads() {
 
@@ -65,11 +51,11 @@
     }).startDataVraboteT();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataArrival', JSON.stringify(data));
-      startArrivalWaste();
+      aWForm.startArrivalWaste();
     }).getLastTenRowsArriwal();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataWaste', JSON.stringify(data));
-      startArrivalWaste();
+      aWForm.startArrivalWaste();
     }).getLastTenRowsWaste();
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('dataCashe', JSON.stringify(data));
@@ -89,11 +75,11 @@
     google.script.run.withSuccessHandler((data) => {
       localStorage.setItem('casheRom2', JSON.stringify(data));
     }).getRecordsCashe2(); */
-/*     google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('casheRom', JSON.stringify(data));
-    }).getRecordsCasheAll(); */
+    /*     google.script.run.withSuccessHandler((data) => {
+          localStorage.setItem('casheRom', JSON.stringify(data));
+        }).getRecordsCasheAll(); */
   }
- // onlineDownloads();
+  // onlineDownloads();
 
 
 </script>

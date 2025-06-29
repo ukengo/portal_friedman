@@ -1,0 +1,149 @@
+<script>
+  
+  /**
+   * Клас для форматування дати та часу з підтримкою різних шаблонів і локалізацій.
+   */
+  class DateTimeFormatter {
+    /**
+     * Конструктор класу.
+     * @param {Date|string} [date=new Date()] - Об'єкт Date або рядок, який можна перетворити на Date. За замовчуванням: поточна дата.
+     * @param {string} [locale='uk'] - Локалізація для назв днів тижня та місяців (наприклад, 'uk' для української, 'en' для англійської).
+     * @throws {Error} Якщо передано невалідну дату.
+     */
+    constructor(date = new Date(), locale = 'uk') {
+      this.date = date instanceof Date ? date : new Date(date);
+      if (isNaN(this.date.getTime())) {
+        throw new Error('Невалідна дата');
+      }
+      this.locale = locale;
+
+      // Об'єкт із назвами днів тижня та місяців для різних локалізацій
+      this.daysOfWeek = {
+        uk: {
+          short: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+          long: ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П’ятниця', 'Субота']
+        },
+        en: {
+          short: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          long: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        }
+      };
+
+      this.months = {
+        uk: {
+          short: ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер', 'Лип', 'Сер', 'Вер', 'Жов', 'Лис', 'Гру'],
+          long: ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень']
+        },
+        en: {
+          short: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          long: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        }
+      };
+    }
+
+    /**
+     * Форматує дату та час відповідно до заданого шаблону.
+     * @param {string} [format='YYYY-MM-DD'] - Шаблон формату. Підтримувані токени:
+     *   - YYYY: рік (4 цифри, наприклад, 2025)
+     *   - MM: місяць (2 цифри, наприклад, 06)
+     *   - DD: день (2 цифри, наприклад, 26)
+     *   - HH: години (2 цифри, наприклад, 12)
+     *   - mm: хвилини (2 цифри, наприклад, 12)
+     *   - ss: секунди (2 цифри, наприклад, 33)
+     *   - ddd: скорочена назва дня тижня (наприклад, Чт)
+     *   - dddd: повна назва дня тижня (наприклад, Четвер)
+     *   - MMM: скорочена назва місяця (наприклад, Чер)
+     *   - MMMM: повна назва місяця (наприклад, Червень)
+     * @returns {string} Відформатована дата та/або час.
+     */
+    format(format = 'YYYY-MM-DD') {
+      // Отримання компонентів дати та часу
+      const year = this.date.getFullYear();
+      const monthIdx = this.date.getMonth();
+      const month = String(monthIdx + 1).padStart(2, '0');
+      const day = String(this.date.getDate()).padStart(2, '0');
+      const hours = String(this.date.getHours()).padStart(2, '0');
+      const minutes = String(this.date.getMinutes()).padStart(2, '0');
+      const seconds = String(this.date.getSeconds()).padStart(2, '0');
+      const dayOfWeekIdx = this.date.getDay();
+      const dayOfWeekShort = this.daysOfWeek[this.locale]?.short?.[dayOfWeekIdx] || this.daysOfWeek.uk.short[dayOfWeekIdx];
+      const dayOfWeekLong = this.daysOfWeek[this.locale]?.long?.[dayOfWeekIdx] || this.daysOfWeek.uk.long[dayOfWeekIdx];
+      const monthShort = this.months[this.locale]?.short?.[monthIdx] || this.months.uk.short[monthIdx];
+      const monthLong = this.months[this.locale]?.long?.[monthIdx] || this.months.uk.long[monthIdx];
+
+      // Форматування рядка відповідно до шаблону з правильним порядком заміни токенів
+      return format
+        .replace('dddd', dayOfWeekLong) // Спочатку замінюємо довші токени
+        .replace('MMM', monthShort)
+        .replace('MMMM', monthLong)
+        .replace('ddd', dayOfWeekShort)
+        .replace('YYYY', year)
+        .replace('MM', month)
+        .replace('DD', day)
+        .replace('HH', hours)
+        .replace('mm', minutes)
+        .replace('ss', seconds);
+    }
+
+    /**
+     * Змінює дату для форматування.
+     * @param {Date|string} date - Нова дата (об'єкт Date або рядок).
+     * @throws {Error} Якщо передано невалідну дату.
+     */
+    setDate(date) {
+      this.date = date instanceof Date ? date : new Date(date);
+      if (isNaN(this.date.getTime())) {
+        throw new Error('Невалідна дата');
+      }
+    }
+
+    /**
+     * Змінює локалізацію.
+     * @param {string} locale - Нова локалізація (наприклад, 'uk', 'en').
+     */
+    setLocale(locale) {
+      this.locale = locale;
+    }
+
+    /**
+     * Повертає відформатовану дату відносно поточної (сьогодні, вчора, п'ятниця минулого тижня).
+     * @param {string} relative - Тип відносної дати: 'today', 'yesterday', 'lastFriday'.
+     * @param {string} [format='YYYY-MM-DD'] - Шаблон формату (той самий, що використовується в методі format).
+     * @returns {string} Відформатована відносна дата.
+     * @throws {Error} Якщо передано невалідний тип відносної дати.
+     */
+    getRelativeDate(relative, format = 'YYYY-MM-DD') {
+      const today = new Date();
+      let targetDate;
+
+      switch (relative.toLowerCase()) {
+        case 'today':
+          targetDate = today;
+          break;
+        case 'yesterday':
+          targetDate = new Date(today);
+          targetDate.setDate(today.getDate() - 1);
+          break;
+        case 'lastfriday':
+          targetDate = new Date(today);
+          const currentDay = today.getDay();
+          // П'ятниця - це 5-й день тижня (0 - неділя, 1 - понеділок, ..., 5 - п'ятниця)
+          const daysToLastFriday = (currentDay >= 5 ? currentDay - 5 : currentDay + 2) + 7;
+          targetDate.setDate(today.getDate() - daysToLastFriday);
+          break;
+        default:
+          throw new Error('Невалідний тип відносної дати. Використовуйте: "today", "yesterday", "lastFriday"');
+      }
+
+      // Тимчасово змінюємо дату для форматування
+      const originalDate = this.date;
+      this.setDate(targetDate);
+      const formattedDate = this.format(format);
+      // Відновлюємо оригінальну дату
+      this.setDate(originalDate);
+
+      return formattedDate;
+    }
+  }
+
+</script>

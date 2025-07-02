@@ -125,14 +125,14 @@
           targetDate.setDate(today.getDate() - 1);
           break;
         case 'lastfriday':
-          targetDate = new Date(today);
-          const currentDay = today.getDay();
-          // П'ятниця - це 5-й день тижня (0 - неділя, 1 - понеділок, ..., 5 - п'ятниця)
-          const daysToLastFriday = (currentDay >= 5 ? currentDay - 5 : currentDay + 2) + 7;
-          targetDate.setDate(today.getDate() - daysToLastFriday);
-          break;
-        default:
-          throw new Error('Невалідний тип відносної дати. Використовуйте: "today", "yesterday", "lastFriday"');
+      targetDate = new Date(today);
+      const currentDay = today.getDay();
+      // Обчислюємо кількість днів до попередньої п’ятниці
+      const daysToLastFriday = (currentDay + 7 - 5) % 7 || 7;
+      targetDate.setDate(today.getDate() - daysToLastFriday);
+      break;
+    default:
+      throw new Error('Невалідний тип відносної дати. Використовуйте: "today", "yesterday", "lastFriday"');
       }
 
       // Тимчасово змінюємо дату для форматування
@@ -146,4 +146,5 @@
     }
   }
 
+  const DATE_TIME_FORMATTER = new DateTimeFormatter();
 </script>

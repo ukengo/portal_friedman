@@ -306,18 +306,32 @@
       this.eventHandlers.todayButton?.(event); // Виклик додаткового обробника, якщо він існує
     }
 
-    // Метод для встановлення дати в полях введення
-    // Приймає тип дати (today, yesterday, friday)
+    // Метод setDate встановлює значення дати у всі поля вводу дати в контейнері
+    // Параметр type визначає, яку саме дату потрібно встановити (наприклад, "yesterday", "friday" або іншу)
     setDate(type) {
-      const dateInputs = this.container.querySelectorAll(this.selectors.dateInput); // Отримання всіх полів дати
+      // Знаходимо всі елементи вводу дати в контейнері, використовуючи селектор, визначений у this.selectors.dateInput
+      const dateInputs = this.container.querySelectorAll(this.selectors.dateInput);
+
+      // Проходимо по кожному елементу вводу дати
       dateInputs.forEach((dateInput) => {
-        let targetDate = new Date(); // Поточна дата
+        // Оголошуємо змінну relativeType для зберігання типу відносної дати
+        let relativeType;
+
+        // Перевіряємо, який тип дати передано у параметрі type
         if (type === 'yesterday') {
-          targetDate.setDate(targetDate.getDate() - 1); // Вчорашня дата
+          // Якщо тип "yesterday", встановлюємо relativeType як 'yesterday' (вчорашня дата)
+          relativeType = 'yesterday';
         } else if (type === 'friday') {
-          targetDate.setDate(targetDate.getDate() - 3); // Пошук найближчої п'ятниці
+          // Якщо тип "friday", встановлюємо relativeType як 'lastFriday' (минулий п'ятничний день)
+          relativeType = 'lastFriday';
+        } else {
+          // Для всіх інших значень type (або якщо type не вказано), за замовчуванням використовуємо 'today' (сьогоднішня дата)
+          relativeType = 'today';
         }
-        dateInput.value = targetDate.toISOString().split('T')[0]; // Встановлення дати
+
+        // Встановлюємо значення поля вводу дати, використовуючи метод DATE_TIME_FORMATTER.getRelativeDate
+        // Метод отримує відносну дату (relativeType) і форматує її у форматі 'YYYY-MM-DD' (рік-місяць-день)
+        dateInput.value = DATE_TIME_FORMATTER.getRelativeDate(relativeType, 'YYYY-MM-DD');
       });
     }
 

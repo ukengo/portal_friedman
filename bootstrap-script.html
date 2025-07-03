@@ -93,93 +93,6 @@
     return new Date(st.replace(pattern, '$3-$2-$1'));
   }
 
-  //форматирование даты в вид гггг-mm-dd 
-  function formatDateYYYYtireMMtireDD(date) {
-    return date.getFullYear() + '-'
-      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
-      + ((date.getDate()) < 10 ? '0' : '') + (date.getDate());
-  }
-
-  //форматирование даты в вид dd-mm-гггг 
-  function formatDateDDtireMMtireYYYY(date) {
-    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '-'
-      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-'
-      + date.getFullYear();
-  }
-
-  //форматирование даты в вид dd.mm.гггг 
-  function formatDateDDpointMMpointYYYY(date) {
-    return ((date.getDate()) < 10 ? '0' : '') + (date.getDate()) + '.'
-      + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '.'
-      + date.getFullYear();
-  }
-
-  // універсальне форматування дати і часу
-  const formatDateTime = (date, repay, dayW = 1) => {
-    let dateTime = new Date(date);
-
-    const year = dateTime.getFullYear();
-    const month = dateTime.getMonth() + 1;
-    const day = dateTime.getDate();
-    const hour = dateTime.getHours();
-    const min = dateTime.getMinutes();
-    const sec = dateTime.getSeconds();
-
-    const yearGood = year.toString().padStart(4, "0");
-    const monthGood = month.toString().padStart(2, "0");
-    const dayGood = day.toString().padStart(2, "0");
-    const hourGood = hour.toString().padStart(2, "0");
-    const minGood = min.toString().padStart(2, "0");
-    const secGood = sec.toString().padStart(2, "0");
-
-    switch (repay) {
-      case 'dd.mm.yyyy':
-        return dayW ? `${dayGood}.${monthGood}.${yearGood}, ${DayDate(date)}` : `${dayGood}.${monthGood}.${yearGood}`;
-        break;
-      case 'hh:mm:ss':
-        return `${hourGood}:${minGood}:${secGood}`;
-        break;
-      case 'hh:mm':
-        return `${hourGood}:${minGood}`;
-        break;
-    }
-    //return `${yearGood}/${monthGood}/${dayGood} ${hourGood}:${minGood}:${secGood}`;
-  }
-
-  // формування дня тижня
-  function DayDate(d) {
-    const days = {
-      0: "нд",
-      1: "пн",
-      2: "вт",
-      3: "ср",
-      4: "чт",
-      5: "пт",
-      6: "сб",
-    };
-    if (d == undefined) d = new Date();
-    return days[d.getDay()]
-  }
-
-  /* // функция поиска по таблице
-  $(document).ready(readyTable);
-  function readyTable() {
-      $(".input-search").keyup(function () {
-          var value = this.value.toLowerCase().trim();
-  
-          $("table tr").each(function (index) {
-              if (!index) return;
-              $(this).find("td").each(function () {
-                  var id = $(this).text().toLowerCase().trim();
-                  var not_found = (id.indexOf(value) == -1);
-                  $(this).closest('tr').toggle(!not_found);
-                  return not_found;
-              });
-          });
-      });
-  }
-   */
-
   // функция поиска по таблице
   $(document).ready(readyTable);
   function readyTable() {
@@ -196,12 +109,9 @@
   };
 
   //строка в число
-  function strongToNumber(str) {
-    const replaceSpace = str.replace(/\s+/g, ''); // удаляем пробелы
-    const replacePoint = replaceSpace.replace(/,/, '.'); // запятую на точку
-    const parsFlo = parseFloat(replacePoint); // строка в число
-    const toFixTwu = parsFlo.toFixed(2); // округляем до 2 знаков после запятой
-    return toFixTwu
+  function stringToNumber(str) {
+    // Беремо рядок, видаляємо пробіли, замінюємо кому на крапку, перетворюємо в число і округляємо до 2 знаків після коми
+    return parseFloat(str.replace(/\s+/g, '').replace(',', '.')).toFixed(2);
   }
 
   // функция проверяет устройство и срабатывает, если не мобильное
@@ -279,6 +189,15 @@
   function autoSearchOnOpenNew(elem) {
     let event = new Event('keyup')
     elem.dispatchEvent(event)
+  }
+
+  //строка в число
+  function strongToNumber(str) {
+    const replaceSpace = str.replace(/\s+/g, ''); // удаляем пробелы
+    const replacePoint = replaceSpace.replace(/,/, '.'); // запятую на точку
+    const parsFlo = parseFloat(replacePoint); // строка в число
+    const toFixTwu = parsFlo.toFixed(2); // округляем до 2 знаков после запятой
+    return toFixTwu
   }
 
 </script>

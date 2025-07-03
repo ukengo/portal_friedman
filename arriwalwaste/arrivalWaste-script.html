@@ -84,7 +84,7 @@
     // Фільтрація даних для потрібного рядка
     const allModal = arr.filter(el => Number(el[+arr[0].length - 1]) === Number(row)).flat();
     // Форматування дати
-    const dateModal = formatDateYYYYtireMMtireDD(strongToDate(allModal[0]));
+    const dateModal = new DateTimeFormatter(strongToDate(allModal[0])).format();
     // Конвертація суми в число
     const summaModal = strongToNumber(allModal[1]);
     // Визначення значень залежно від кількості стовпців

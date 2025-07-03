@@ -550,10 +550,10 @@
     formaReestr.clearRecords();
     switch (col) {
       case 0:
-        $('#dateendreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[0])));
+        $('#dateendreestr').val(new DateTimeFormatter(strongToDate(text[0])).format());
         break;
       case 1:
-        $('#datestartreestr').val(formatDateYYYYtireMMtireDD(strongToDate(text[1])));
+        $('#datestartreestr').val(new DateTimeFormatter(strongToDate(text[1])).format());
         break;
       case 2:
         $('#firmareestr').val(text[2]);
@@ -723,26 +723,32 @@
     el.addEventListener("click", function () {
       this.disabled = true;
       formaReestr.clearRecords();
+
       switch (this.id) {
-        case 'btnReestrSY':
-          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-          SearchRecordsReestr(`Іде пошук на ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000))}`);
+        case 'btnReestrSY': // Yesterday
+          document.querySelector("#dateendreestr").value = DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD');
+          SearchRecordsReestr(`Іде пошук на ${DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'DD-MM-YYYY')}`);
           break;
-        case 'btnReestrSFri':
-          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-          document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+
+        case 'btnReestrSFri': // Last Friday
+          document.querySelector("#dateendreestr").value = DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD');
+          document.getElementById("datestartreestr").value = DATE_TIME_FORMATTER.getRelativeDate('lastFriday', 'YYYY-MM-DD');
           document.getElementById("checkDateReestr").value = '<';
-          SearchRecordsReestr(`Іде пошук з ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000 * 3))} по ${formatDateDDtireMMtireYYYY(new Date(Date.now() - 86400000))}`);
+          SearchRecordsReestr(
+            `Іде пошук з ${DATE_TIME_FORMATTER.getRelativeDate('lastFriday', 'DD-MM-YYYY')} по ${DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'DD-MM-YYYY')}`
+          );
           break;
-        case 'btnReestrST':
-          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
-          SearchRecordsReestr(`Іде пошук на ${formatDateDDtireMMtireYYYY(new Date(Date.now()))}`);
+
+        case 'btnReestrST': // Today
+          document.querySelector("#dateendreestr").value = DATE_TIME_FORMATTER.getRelativeDate('today', 'YYYY-MM-DD');
+          SearchRecordsReestr(`Іде пошук на ${DATE_TIME_FORMATTER.getRelativeDate('today', 'DD-MM-YYYY')}`);
           break;
       }
+
       formaReestr.clearRecords();
       this.disabled = false;
-    })
-  })
+    });
+  });
 
 
   $('#data-table').on('search.dt', function () {
@@ -757,8 +763,8 @@
   function permutationOfDates() {
     const dateendReestrElem = document.getElementById("dateendreestr");
     const datestartReestrElem = document.getElementById("datestartreestr");
-    const dateendReestr = formatDateYYYYtireMMtireDD(new Date(dateendReestrElem.value));
-    const datestartReestr = formatDateYYYYtireMMtireDD(new Date(datestartReestrElem.value));
+    const dateendReestr = new DateTimeFormatter(new Date(dateendReestrElem.value)).format();
+    const datestartReestr = new DateTimeFormatter(strongToDate(new Date(datestartReestrElem.value))).format();
 
     if (dateendReestr != 'NaN-NaN-NaN' && datestartReestr != 'NaN-NaN-NaN') {
       if (dateendReestr < datestartReestr) {

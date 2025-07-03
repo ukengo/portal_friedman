@@ -83,7 +83,7 @@
       displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
       displayTable += "<label for=\"up_dateoplfin\">Дата оплати</label> ";
-      displayTable += "<input type=\"date\" id=\"up_dateoplfin" + row_number_fin + "\" value=\"" + formatDateYYYYtireMMtireDD(strongToDate(item[3])) + "\" class=\"form-control form-control-sm\" /></div></div> ";
+      displayTable += "<input type=\"date\" id=\"up_dateoplfin" + row_number_fin + "\" value=\"" + new DateTimeFormatter(strongToDate(item[3])).format() + "\" class=\"form-control form-control-sm\" /></div></div> ";
 
       displayTable += "<div class=\"col-md-2\">"
       displayTable += "<div class=\"form-label\">"
@@ -360,7 +360,7 @@
           $('#firmafinModal').val(allModal[7]);
           $('#financeModalLabel').html(+row + 100);
           if (allModal[3]) {
-            $('#dateoplfinModal').val(formatDateYYYYtireMMtireDD(strongToDate(allModal[3]))); //формат даты
+            $('#dateoplfinModal').val(new DateTimeFormatter(strongToDate(allModal[3])).format()); //формат даты
           } else {
             $('#dateoplfinModal').val('');
           }
@@ -379,9 +379,9 @@
 
           // Визначаємо дату залежно від типу кнопки
           const dateMap = {
-            btnFinanceY: formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)), // Вчора
-            btnFinanceFri: formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3)), // 3 дні тому
-            btnFinanceT: formatDateYYYYtireMMtireDD(new Date()) // Сьогодні
+            btnFinanceY: DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD'), // Вчора
+            btnFinanceFri: DATE_TIME_FORMATTER.getRelativeDate('lastFriday', 'YYYY-MM-DD'), // Попередня п’ятниця
+            btnFinanceT: DATE_TIME_FORMATTER.getRelativeDate('today', 'YYYY-MM-DD') // Сьогодні
           };
 
           const selectedDate = dateMap[this.dataset.name];
@@ -415,12 +415,12 @@
 
   // вставка дата вчера в модалке
   document.querySelector('#btnyYesterdayDateFinanceModal').addEventListener('click', () => {
-    document.querySelector('#dateoplfinModal').value = (formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000)));
+    document.querySelector('#dateoplfinModal').value = DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD');
     document.querySelector('#dateoplfinModal').style.cssText = 'font-weight: bold';
   });
-  // вставка дата сегодня в модалке
+
   document.querySelector('#btnyTodayDateFinanceModal').addEventListener('click', () => {
-    document.querySelector('#dateoplfinModal').value = formatDateYYYYtireMMtireDD(new Date());
+    document.querySelector('#dateoplfinModal').value = DATE_TIME_FORMATTER.getRelativeDate('today', 'YYYY-MM-DD');
     document.querySelector('#dateoplfinModal').style.cssText = 'font-weight: bold';
   });
 
@@ -481,7 +481,7 @@
     if (col === 1) {
       document.getElementById(inputs[col]).value = Math.abs(rowData[col]);
     } else if (col === 3) {
-      document.getElementById(inputs[col]).value = formatDateYYYYtireMMtireDD(strongToDate(rowData[col]));
+      document.getElementById(inputs[col]).value = new DateTimeFormatter(strongToDate(rowData[col]).format());
     } else if (col < 7) {
       document.getElementById(inputs[col]).value = rowData[col];
     }

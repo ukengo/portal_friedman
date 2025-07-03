@@ -12,9 +12,9 @@
      */
     constructor(date = new Date(), locale = 'uk') {
       this.date = date instanceof Date ? date : new Date(date);
-      if (isNaN(this.date.getTime())) {
+      /* if (isNaN(this.date.getTime())) {
         throw new Error('Невалідна дата');
-      }
+      } */
       this.locale = locale;
 
       // Об'єкт із назвами днів тижня та місяців для різних локалізацій
@@ -92,9 +92,9 @@
      */
     setDate(date) {
       this.date = date instanceof Date ? date : new Date(date);
-      if (isNaN(this.date.getTime())) {
+      /* if (isNaN(this.date.getTime())) {
         throw new Error('Невалідна дата');
-      }
+      } */
     }
 
     /**

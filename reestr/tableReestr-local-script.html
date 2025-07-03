@@ -15,33 +15,44 @@
     SearchRecordsReestrLocal(JSON.parse(localStorage.getItem('dataReestr')));
   });
 
-  // кнопки вчора + п'ятниця + сьогодні онлайн
   document.querySelectorAll('.btn-reestr-yft-of').forEach(el => {
     el.addEventListener("click", function () {
-      
+      this.disabled = true;
       formaReestr.clearRecords();
+
       const dataReestr = JSON.parse(localStorage.getItem('dataReestr'));
-      if (!dataReestr) { alert('storage пустий'); return }
+      if (!dataReestr) {
+        alert('storage пустий');
+        this.disabled = false;
+        return;
+      }
+
       switch (this.id) {
-        case 'btnReestrSYOf':
-          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-          SearchRecordsReestrLocal(dataReestr, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+        case 'btnReestrSYOf': // Yesterday
+          document.querySelector("#dateendreestr").value = DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD');
+          SearchRecordsReestrLocal(dataReestr, `Іде пошук на ${DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD')}`);
           break;
-        case 'btnReestrSFriOf':
-          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000));
-          document.getElementById("datestartreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3));
+
+        case 'btnReestrSFriOf': // Last Friday
+          document.querySelector("#dateendreestr").value = DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD');
+          document.getElementById("datestartreestr").value = DATE_TIME_FORMATTER.getRelativeDate('lastFriday', 'YYYY-MM-DD');
           document.getElementById("checkDateReestr").value = '<';
-          SearchRecordsReestrLocal(dataReestr, `Іде пошук з ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000 * 3))} по ${formatDateYYYYtireMMtireDD(new Date(Date.now() - 86400000))}`);
+          SearchRecordsReestrLocal(
+            dataReestr,
+            `Іде пошук з ${DATE_TIME_FORMATTER.getRelativeDate('lastFriday', 'YYYY-MM-DD')} по ${DATE_TIME_FORMATTER.getRelativeDate('yesterday', 'YYYY-MM-DD')}`
+          );
           break;
-        case 'btnReestrSTOf':
-          document.querySelector("#dateendreestr").value = formatDateYYYYtireMMtireDD(new Date(Date.now()));
-          SearchRecordsReestrLocal(dataReestr, `Іде пошук на ${formatDateYYYYtireMMtireDD(new Date(Date.now()))}`);
+
+        case 'btnReestrSTOf': // Today
+          document.querySelector("#dateendreestr").value = DATE_TIME_FORMATTER.getRelativeDate('today', 'YYYY-MM-DD');
+          SearchRecordsReestrLocal(dataReestr, `Іде пошук на ${DATE_TIME_FORMATTER.getRelativeDate('today', 'YYYY-MM-DD')}`);
           break;
       }
+
       formaReestr.clearRecords();
-      //this.disabled = false;
-    })
-  })
+      this.disabled = false;
+    });
+  });
 
 
   function SearchRecordsReestrLocal(allRecords, spintext) {
@@ -98,9 +109,6 @@
     btnYFTReestr();
   }
 
-
-
-
   function searchRecordsReestrOnline(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, checkDateReestr, allRecords) {
 
     var returnRows = [];
@@ -111,8 +119,15 @@
       var evalRows = [];
 
       if (!checkDateReestr) {
+        const dateEnd = new Date(value[0]);
+        const dateStart = new Date(value[1]);
+        const dateEndReestr = new Date(dateendReestr);
+        const dateStartReestr = new Date(datestartReestr);
+
         if (dateendReestr != '') {
-          if (formatDateYYYYtireMMtireDD(new Date(value[0])) == formatDateYYYYtireMMtireDD(new Date(dateendReestr))) {
+
+
+          if (new DateTimeFormatter(dateEnd).format() == new DateTimeFormatter(dateEndReestr).format()) {
             evalRows.push('yes');
           } else {
             evalRows.push('no');
@@ -122,7 +137,7 @@
         }
 
         if (datestartReestr != '') {
-          if (formatDateYYYYtireMMtireDD(new Date(value[1])) == formatDateYYYYtireMMtireDD(new Date(datestartReestr))) {
+          if (new DateTimeFormatter(dateStart).format() == new DateTimeFormatter(dateStartReestr).format()) {
             evalRows.push('yes');
           } else {
             evalRows.push('no');

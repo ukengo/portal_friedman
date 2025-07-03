@@ -31,8 +31,8 @@
     const casheRow1 = document.createElement('div')
     casheRow1.classList.add("row")
     casheForm = document.querySelector(selector)
-    casheForm.innerHTML = null
-    const date = formatDateYYYYtireMMtireDD(strongToDate(value[1]))
+    casheForm.innerHTML = null    
+    const date = new DateTimeFormatter(strongToDate(value[1])).format()
     casheRow0.appendChild(createElementsFormsCasheRom('numberRow', 'number', '№', ['col-2'], value[0]))
     casheRow0.appendChild(createElementsFormsCasheRom('casheInputDate', 'date', 'Дата', ['col-2'], date))
     casheRow.appendChild(createElementsFormsCasheRom('casheInputArticle', 'text', 'Стаття', ['col'], value[2]))

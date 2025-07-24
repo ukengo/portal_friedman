@@ -39,9 +39,9 @@
     color: #ffffff
   }
 
-  .navbar-dark .navbar-nav .nav-link:hover {
+  /*   .navbar-dark .navbar-nav .nav-link:hover {
     color: hls(0, 2%, 12%);
-  }
+  } */
 
   .form-control:focus {
     /*border-color: white;*/
@@ -58,32 +58,34 @@
 
   .table-datatable {
     font-size: 13px;
-  }
 
-  .table-datatable tr td {
-    line-height: 12px;
+    & tr td {
+      line-height: 12px;
+    }
   }
 
   /*   .tablesotr2{
     width: 100%;
   }
  */
-  .tablesotr2 .tablesotr2col0 {
-    width: 8%;
-    text-align: center;
-  }
+  .tablesotr2 {
+    & .tablesotr2col0 {
+      width: 8%;
+      text-align: center;
+    }
 
-  .tablesotr2 .tablesotr2col1 {
-    width: 40%;
-  }
+    & .tablesotr2col1 {
+      width: 40%;
+    }
 
-  .tablesotr2 .tablesotr2col2 {
-    width: 20%;
-  }
+    & .tablesotr2col2 {
+      width: 20%;
+    }
 
-  .tablesotr2 .tablesotr2col3 {
-    width: 5%;
-    text-align: center;
+    & .tablesotr2col3 {
+      width: 5%;
+      text-align: center;
+    }
   }
 
   .accordion-button {
@@ -121,17 +123,17 @@
     font-weight: bold;
   }
 
-  .btn-buh:focus {
-    outline: 0 !important;
-    outline-color: transparent !important;
-    outline-width: 0 !important;
-    outline-style: none !important;
-    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0) !important;
+  .btn-buh {
+    &:focus {
+      border-color: #fff7f7 !important;
+    }
   }
 
-  .nav-buh:hover {
-    border-radius: 10px;
-    background-color: #fff7f7;
+  .nav-buh {
+    &:hover {
+      border-radius: 10px;
+      background-color: #fff7f7;
+    }
   }
 
   .col-sm-8.arrow {
@@ -177,16 +179,19 @@
   }
 
   /*перефарбовуємо іконку календаря в input date*/
-  #calendar::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    cursor: pointer;
-  }
-
   #calendar {
     border: none;
     width: 23% !important;
     font-size: 29px;
+    cursor: pointer;
   }
+
+  #calendar::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+
+  }
+
+
 
   #sendbuhcont {
     height: 6.25rem;

@@ -29,8 +29,11 @@ function addNewRowMinusThreee(rowData) {
 
 // отримуємо список стоп призначень і дохід витрати
 function stopArrivalWaste() {
-  const stopAw = dataSpiskiReestr().getRange('R2:R').getValues().flat();
-  return stopAw.filter(element => element !== '');
+  return dataSpiskiReestr()
+    .getRange('R2:R')
+    .getValues()
+    .flat()
+    .filter(Boolean);
 }
 
 // добавляємо рядок витрат на сторінку "Прочие траты"
@@ -851,7 +854,7 @@ function AddRecordFinMultiple(arrFinMulti) {
 
   const getLastRowReestr = dataBase().getLastRow();
   const tableValuesReestr = dataBase().getRange(2, 1, getLastRowReestr - 1, 24).getValues();
-  
+
   for (let i = 0; i < check.length; i++) {
     // виставлено частково
     if (check[i][0] && check[i][2] === true) {
@@ -872,7 +875,7 @@ function AddRecordFinMultiple(arrFinMulti) {
       }
     }
   }
-  
+
   removalDuplicates();
 }
 

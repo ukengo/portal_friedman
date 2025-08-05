@@ -794,6 +794,36 @@
     });
   }
 
+  ////////////////////////////////////////////////////////////////
+  /* Функція для обробки чекбоксів "Зупинено" та автоматичного заповнення/очищення дати */
+  function handleStoppedCheckboxes() {
+    // Отримуємо всі чекбокси з ідентифікатором, що починається на "up_stoppedreestr"
+    const stoppedCheckboxes = document.querySelectorAll('input[id^="up_stoppedreestr"]');
+    console.log(stoppedCheckboxes);
+
+    // Додаємо обробник подій для кожного чекбокса
+    stoppedCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        // Отримуємо номер рядка з ID чекбокса, видаляючи префікс "up_stoppedreestr"
+        const rowNumber = this.id.replace('up_stoppedreestr', '');
+        // Отримуємо відповідне поле для дати закінчення за номером рядка
+        const dateEndInput = document.getElementById(`up_dateendreestr${rowNumber}`);
+
+        if (this.checked) {
+          // Якщо чекбокс відмічений, встановлюємо сьогоднішню дату
+          const today = new Date();
+          const formattedDate = today.toISOString().split('T')[0]; // Формат дати YYYY-MM-DD
+          dateEndInput.value = formattedDate;
+        } else {
+          // Якщо чекбокс знятий, очищаємо поле дати
+          dateEndInput.value = '';
+        }
+      });
+    });
+  }
+
+
+
   // закриття блоку по Esc
   document.addEventListener("keydown", (e) => {
     console.log('Escape');

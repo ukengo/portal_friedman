@@ -143,7 +143,27 @@
 
     // відправка даних з модального вікна на бек для відправки пошти буху
     document.querySelector('#btnSendBuh').addEventListener('click', () => {
-      google.script.run.sendEmailBuhInvoice(buhproekt, sendMail);
+      google.script.run
+        .withFailureHandler((e) => {
+          try {
+            if (e && e.authUrl) {
+              window.open(e.authUrl, '_blank');
+              return;
+            }
+          } catch (_) {}
+          alert('Не вдалося надіслати лист: ' + (e && e.message ? e.message : e));
+        })
+        .withSuccessHandler(() => {
+          const sendTextElement = document.querySelector('.modal-mailbuh-mail-send-text');
+          if (sendTextElement) {
+            sendTextElement.innerHTML = `
+              <p style="font-size: 1.1rem; color: #198754; font-weight: 700; text-align: center;">
+                Відправлено
+              </p>
+            `;
+          }
+        })
+        .sendEmailBuhInvoice(buhproekt, sendMail);
     });
 
     // cрабатывание по кнопке Enter
@@ -157,6 +177,14 @@
                       Відправлено
                     </p>
                   `;
+        }).withFailureHandler((e) => {
+          try {
+            if (e && e.authUrl) {
+              window.open(e.authUrl, '_blank');
+              return;
+            }
+          } catch (_) {}
+          alert('Не вдалося надіслати лист: ' + (e && e.message ? e.message : e));
         }).sendEmailBuhInvoice(buhproekt, sendMail);
       }
     })

@@ -213,8 +213,9 @@
 
         // вставка дати на головну
         (function addDate() {
+          DATE_TIME_FORMATTER.setDate(new Date());
           document.querySelector('.nav-maim-data-date').innerText = DATE_TIME_FORMATTER.format();
-          document.querySelector('.nav-maim-data-time').innerText = DATE_TIME_FORMATTER.format('HH:mm');
+          document.querySelector('.nav-maim-data-time').innerText = DATE_TIME_FORMATTER.format('HH:mm');          
           setTimeout(addDate, 30000);
         })();
 

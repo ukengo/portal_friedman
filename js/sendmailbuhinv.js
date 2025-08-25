@@ -11,10 +11,10 @@ function sendEmailBuhInvoice(sendbuhproekt, sendMail) {
   Logger.log('start')
   try {
     if (sendbuhproekt) {
-      MailApp.sendEmail("friedmanukraine@gmail.com", `Виставити рахунок до пр${sendbuhproekt}`, "тіло електронного листа", {
+      MailApp.sendEmail("vat.friedman@gmail.com", `Виставити рахунок до пр${sendbuhproekt}`, "тіло електронного листа", {
         name: 'Віталий Мельник (Фрідман-Україна)',
         htmlBody: sendMail,
-       // cc: "vat.friedman@gmail.com"
+        cc: "friedmanukraine@gmail.com"
       });
       Logger.log("Лист успішно надіслано через MailApp");
     }

@@ -326,12 +326,23 @@
 
       utils.extractProjectNumber(articleValue) ? formActions.showFinance() : formActions.showAw();
 
+      // Обробники для існуючих кнопок
       document.querySelector('.modal-casherom__btn')?.addEventListener('click', formActions.save);
       document.querySelector('.modal-casherom__btn--close')?.addEventListener('click', formActions.close);
       document.querySelector('.modal-casherom__btn--monovit')?.addEventListener('click', () => {
         utils.setInputValue(document.querySelector('#casheInputNotes'), 'відшкодовано на МОНО ВІТ');
         formaCassheRom.labelred();
       });
+
+      // Новий обробник для кнопки Add
+      document.querySelector('#btnFimMultipleAdd-casherom')?.addEventListener('click', () => {
+        // Виконання збереження даних (як у save)
+        const dataModal = formaCassheRom.formaDataObj();
+        google.script.run.setRecordsCasheRom(dataModal);
+        // Закриття попапу
+        dialog.close();
+      });
+
       document.querySelector('[data-cashe-rom-forma-container]')?.addEventListener('keypress', e => {
         if (e.keyCode === 13) formActions.save();
       });

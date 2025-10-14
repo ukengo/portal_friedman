@@ -169,6 +169,11 @@
         }
         this.formDataHandler.clearRecords();// Очищення форми
         //buttonClickOchistkaAW(); // Очищення форми
+
+        // ЗАКРИТТЯ ДІАЛОГУ ПІСЛЯ УСПІШНОГО ВИКОНАННЯ
+        const popupEditing = new PopupEditing(); // Створюємо екземпляр для закриття
+        popupEditing.close();
+        
       } else if (isArrivalButton) {
         isArrivalButton.disabled = true;
         // Виклик серверної функції для додавання нового рядка надходжень

@@ -1,193 +1,285 @@
 <script>
   (function () {
-    const html = `
-        <form id="sendBuhModalForm">
-            <div class="row my-1">
-              <div class="col-2">
-                <label for="sendbuhproekt">Проєкт</label>
-                <input type="number" name="sendbuhproekt" id="sendbuhproekt" class="form-control fw-bold">
-              </div>
-              <div class="col-2">
-                <label for="sendbuhforma">Форма</label>
-                <select class="form-control" name="sendbuhforma" id="sendbuhforma">
-                  <option>ФОП</option>
-                  <option>ТОВ</option>
-                  <option></option>
-                </select>
-              </div>
-              <div class="col-auto">
-                <label for="sendbuhsumma">Сума</label>
-                <input type="number" name="sendbuhsumma" id="sendbuhsumma" class="form-control">
-              </div>
-              <div class="col-2">
-                <label for="sendbuhcurrency">Валюта</label>
-                <select class="form-control" name="sendbuhcurrency" id="sendbuhcurrency">
-                  <option>грн</option>
-                  <option>$</option>
-                  <option>євро</option>
-                  <option></option>
-                </select>
-              </div>
-              <div class="col-2">
-                <label for="sendbuhvat">ПДВ</label>
-                <select class="form-control" name="sendbuhvat" id="sendbuhvat">
-                  <option></option>
-                  <option>з ПДВ</option>
-                  <option>без ПДВ</option>
-                </select>
-              </div>
-              <div class="row">
-                <div class="col-10">
-                  <label for="sendbuhprim">Примітки</label>
-                  <input type="text" name="sendbuhprim" id="sendbuhprim" class="form-control">
-                </div>
-              </div>
-            </div>
-          <hr>
-          <div class="row mb-2">
-            <div class="col position-relative">
-              <label for="sendbuhcont">Контакти</label>
-              <textarea type="text" name="sendbuhcont" id="sendbuhcont" class="form-control mt-2"></textarea>
-              <div class="form-check position-absolute top-0 start-50">
-                  <span class="check-style"></span>
-                  <label for="free-text" class="form-check-label">Вільний текст</label>
-                  <input type="checkbox" name="free_text" id="free_text" class="form-check-input me-2">
-                </div>
-            </div>
-          </div>
-        </form>
-        <div class="modal-mailbuh-mail"></div>        
-        <div class="modal-mailbuh-mail-send-text" id="modalMailbuhMailSendText"></div>
-`
-
-    // відкриття модального вікна для відправки пошти буху
+    const CACHE_KEY = 'buhModalFormCache';
+    const modalBodySelector = '#sendBuhModal';
+    const formSelector = '#sendBuhModalForm';
+    const previewSelector = '.modal-mailbuh-mail';
+    const sendStatusSelector = '.modal-mailbuh-mail-send-text';
 
     let sendMail = '';
     let buhproekt = '';
+    let formDataInstance = null;
 
-    //отримуємо модалку
-    const modaMailbuhBody = document.querySelector('#sendBuhModal');
+    // HTML-шаблон форми
+    const htmlTemplate = `
+      <form id="sendBuhModalForm">
+        <div class="row my-1">
+          <div class="col-2">
+            <label for="sendbuhproekt">Проєкт</label>
+            <input type="number" name="sendbuhproekt" id="sendbuhproekt" class="form-control fw-bold">
+          </div>
+          <div class="col-2">
+            <label for="sendbuhforma">Форма</label>
+            <select class="form-control" name="sendbuhforma" id="sendbuhforma">
+              <option>ФОП</option>
+              <option>ТОВ</option>
+              <option></option>
+            </select>
+          </div>
+          <div class="col-auto">
+            <label for="sendbuhsumma">Сума</label>
+            <input type="number" name="sendbuhsumma" id="sendbuhsumma" class="form-control">
+          </div>
+          <div class="col-2">
+            <label for="sendbuhcurrency">Валюта</label>
+            <select class="form-control" name="sendbuhcurrency" id="sendbuhcurrency">
+              <option>грн</option>
+              <option>$</option>
+              <option>євро</option>
+              <option></option>
+            </select>
+          </div>
+          <div class="col-2">
+            <label for="sendbuhvat">ПДВ</label>
+            <select class="form-control" name="sendbuhvat" id="sendbuhvat">
+              <option></option>
+              <option>з ПДВ</option>
+              <option>без ПДВ</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10">
+            <label for="sendbuhprim">Примітки</label>
+            <input type="text" name="sendbuhprim" id="sendbuhprim" class="form-control">
+          </div>
+        </div>
+        <hr>
+        <div class="row mb-2">
+          <div class="col position-relative">
+            <label for="sendbuhcont">Контакти</label>
+            <textarea name="sendbuhcont" id="sendbuhcont" class="form-control mt-2"></textarea>
+            <div class="form-check position-absolute top-0 start-50">
+              <input type="checkbox" name="free_text" id="free_text" class="form-check-input">
+              <label for="free_text" class="form-check-label">Вільний текст</label>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="modal-mailbuh-mail"></div>        
+      <div class="modal-mailbuh-mail-send-text" id="modalMailbuhMailSendText"></div>
+    `;
 
-    //клік на кнопку mailххх
-    document.querySelector('#btnSendMail').addEventListener('click', event => {
+    // Утиліти
+    const $ = (selector, context = document) => context.querySelector(selector);
+    const $$ = (selector, context = document) => context.querySelectorAll(selector);
 
-      //отримуємо блок модалки
-      const buhModal = document.querySelector('.modal-mailbuh-body');
+    const saveToCache = (data) => {
+      const { sendbuhproekt, ...cacheableData } = data;
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cacheableData));
+    };
 
-      //будуємо модалку
-      buhModal.innerHTML = html;
+    const loadFromCache = () => {
+      const cached = localStorage.getItem(CACHE_KEY);
+      return cached ? JSON.parse(cached) : null;
+    };
 
-      //в поле проєкту вставляємо проєкт з кнопки
-      document.querySelector('#sendbuhproekt').value = numEndStrong(event.target.innerHTML);
+    const clearCache = () => localStorage.removeItem(CACHE_KEY);
 
-      //створюємо новий об'єкт із класу
-      new FormDataFromTables('#sendBuhModalForm');
+    const numEndStrong = (text) => {
+      const match = text.match(/(\d+)$/);
+      return match ? match[0] : '';
+    };
 
-      //для кожного натискання кнопок чи кліку
-      ['keyup', 'click'].forEach(e => {
+    const updatePreview = () => {
+      if (!formDataInstance) return;
+      const data = formDataInstance.formaDataObj();
+      const {
+        sendbuhproekt, sendbuhsumma, sendbuhcurrency, sendbuhforma,
+        sendbuhvat, sendbuhprim, sendbuhcont, free_text
+      } = data;
 
-        //навішуємо спрацювання по любій події
-        modaMailbuhBody.addEventListener(e, () => {
+      let body = `<p style="font-size: 1.1rem;">Проєкт: пр${sendbuhproekt}`;
 
-          //створюємо новий об'єкт із класу
-          const formaModalSendBuh = new FormDataFromTables('#sendBuhModalForm');
-
-          //збираємо всі дані з форми в константу
-          const data = formaModalSendBuh.formaDataObj();
-
-          //деконстуризація - розкидаємо дані по перемінних
-          let { sendbuhcurrency, sendbuhprim, sendbuhforma, sendbuhvat, sendbuhproekt, sendbuhsumma, sendbuhcont, free_text } = data;
-
-          //створємо контейнер
-          let body = '';
-
-          //навішуємо формат
-          body += `<p style="font-size: 1.1rem;">`;
-          body += `Проєкт: пр${sendbuhproekt}`;
-
-          //формуємо інформацію для показу і для відправки
-          if (!free_text) {
-
-            if (!sendbuhsumma) {
-              body += `<br>${sendbuhcont}`;
-              // sendbuhproekt = '';
-            } else {
-              body += `<br>${sendbuhsumma} ${sendbuhcurrency} з ${sendbuhforma}`;
-              if (sendbuhforma.toLowerCase() != 'фоп') {
-                body += ` ${sendbuhvat}`;
-              }
-            }
-            if (sendbuhprim) {
-              body += `<br>${sendbuhprim}`;
-            }
-
-            if (!sendbuhsumma) { return };
-
-            if (sendbuhcont && sendbuhsumma) {
-              body += `<br>${sendbuhcont.replace(new RegExp('--', 'g'), '<br>')}`;
-            }
-          } else {
-            body += ``;
-            body += `<br>${sendbuhcont.replace(new RegExp('--', 'g'), '<br>')}`;
+      if (!free_text) {
+        if (sendbuhsumma) {
+          body += `<br>${sendbuhsumma} ${sendbuhcurrency} з ${sendbuhforma}`;
+          if (sendbuhforma.toLowerCase() !== 'фоп') {
+            body += ` ${sendbuhvat}`;
           }
-          body += `</p>`;
+        } else {
+          body += `<br>${sendbuhcont}`;
+        }
+        if (sendbuhprim) body += `<br>${sendbuhprim}`;
+        if (sendbuhcont && sendbuhsumma) {
+          body += `<br>${sendbuhcont.replace(/--/g, '<br>')}`;
+        }
+      } else {
+        body += `<br>${sendbuhcont.replace(/--/g, '<br>')}`;
+      }
+      body += `</p>`;
 
-          const buhModalBody = document.querySelector('.modal-mailbuh-mail');
-          buhModalBody.innerHTML = body;
-          sendMail = body;
-          buhproekt = sendbuhproekt;
+      $(previewSelector).innerHTML = body;
+      sendMail = body;
+      buhproekt = sendbuhproekt;
+    };
+
+    const sendEmail = () => {
+      const statusEl = $(sendStatusSelector);
+      if (statusEl) statusEl.innerHTML = '<p style="color:#6c757d; text-align:center;">Відправляємо...</p>';
+
+      google.script.run
+        .withSuccessHandler(() => {
+          const modalBody = $('.modal-mailbuh-body');
+          const projectNumber = $('#sendbuhproekt', modalBody)?.value.trim();
+
+          const statusEl = $(sendStatusSelector);
+          if (statusEl) {
+            statusEl.innerHTML = `
+              <p style="font-size:1.1rem; color:#198754; font-weight:700; text-align:center;">
+                Відправлено
+              </p>`;
+          }
+
+          clearCache();
+
+          const form = $(formSelector, modalBody);
+          if (form) {
+            form.reset();
+            const projectInput = $('#sendbuhproekt', modalBody);
+            if (projectInput) projectInput.value = projectNumber;
+            const freeTextCheckbox = $('#free_text', modalBody);
+            if (freeTextCheckbox) freeTextCheckbox.checked = false;
+          }
+
+          $(previewSelector, modalBody).innerHTML = '';
+          formDataInstance = new FormDataFromTables(formSelector);
+          updatePreview();
+
+          setTimeout(() => {
+            const modalEl = $(modalBodySelector);
+            if (modalEl && bootstrap?.Modal) {
+              const modalInstance = bootstrap.Modal.getInstance(modalEl);
+              if (modalInstance) modalInstance.hide();
+            }
+          }, 1200);
+        })
+        .withFailureHandler((e) => {
+          try {
+            if (e?.authUrl) {
+              window.open(e.authUrl, '_blank');
+              return;
+            }
+          } catch (_) { }
+          alert('Не вдалося надіслати лист: ' + (e?.message || e));
+          $(sendStatusSelector).innerHTML = '';
+        })
+        .sendEmailBuhInvoice(buhproekt, sendMail);
+    };
+
+    // === Відкриття модального вікна ===
+    $('#btnSendMail').addEventListener('click', (event) => {
+      const modalBody = $('.modal-mailbuh-body');
+      modalBody.innerHTML = htmlTemplate;
+
+      // Вставляємо номер проєкту
+      $('#sendbuhproekt').value = numEndStrong(event.target.innerHTML);
+
+      // Ініціалізуємо форму
+      formDataInstance = new FormDataFromTables(formSelector);
+
+      // Відновлюємо кешовані дані (окрім проєкту)
+      const cached = loadFromCache();
+      if (cached) {
+        Object.keys(cached).forEach(key => {
+          const el = $(`[name="${key}"]`, modalBody);
+          if (el) {
+            if (el.type === 'checkbox') {
+              el.checked = cached[key];
+            } else {
+              el.value = cached[key];
+            }
+          }
+        });
+      }
+
+      // Оновлюємо прев’ю
+      updatePreview();
+
+      // Слухаємо зміни
+      const modal = $(modalBodySelector);
+      ['input', 'change', 'keyup'].forEach(evt => {
+        modal.addEventListener(evt, () => {
+          updatePreview();
+          saveToCache(formDataInstance.formaDataObj());
         });
       });
     });
 
-
-    // відправка даних з модального вікна на бек для відправки пошти буху
-    document.querySelector('#btnSendBuh').addEventListener('click', () => {
-      google.script.run
-        .withFailureHandler((e) => {
-          try {
-            if (e && e.authUrl) {
-              window.open(e.authUrl, '_blank');
-              return;
-            }
-          } catch (_) {}
-          alert('Не вдалося надіслати лист: ' + (e && e.message ? e.message : e));
-        })
-        .withSuccessHandler(() => {
-          const sendTextElement = document.querySelector('.modal-mailbuh-mail-send-text');
-          if (sendTextElement) {
-            sendTextElement.innerHTML = `
-              <p style="font-size: 1.1rem; color: #198754; font-weight: 700; text-align: center;">
-                Відправлено
-              </p>
-            `;
-          }
-        })
-        .sendEmailBuhInvoice(buhproekt, sendMail);
+    // === Кнопка відправки ===
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'btnSendBuh') {
+        sendEmail();
+      }
     });
 
-    // cрабатывание по кнопке Enter
-    modaMailbuhBody.addEventListener('keydown', event => {
-      const sendTextElement = document.querySelector('.modal-mailbuh-mail-send-text');
-      if (event.ctrlKey && event.keyCode == 13) {
-        spinner('modalMailbuhMailSendText', 'Відправляємо...');
-        google.script.run.withSuccessHandler(() => {
-          sendTextElement.innerHTML = `
-                    <p style="font-size: 1.1rem; color: #dc3545; font-weight: 700; text-align: center;">
-                      Відправлено
-                    </p>
-                  `;
-        }).withFailureHandler((e) => {
-          try {
-            if (e && e.authUrl) {
-              window.open(e.authUrl, '_blank');
-              return;
-            }
-          } catch (_) {}
-          alert('Не вдалося надіслати лист: ' + (e && e.message ? e.message : e));
-        }).sendEmailBuhInvoice(buhproekt, sendMail);
+    // === Ctrl + Enter ===
+    $(modalBodySelector)?.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        sendEmail();
       }
-    })
-  }());
+    });
 
+    // === Відстеження закриття модалки (Bootstrap) ===
+    $(modalBodySelector)?.addEventListener('hidden.bs.modal', () => {
+      if (formDataInstance) {
+        saveToCache(formDataInstance.formaDataObj());
+      }
+    });
+
+    /// === Кнопка очищення кешу ===//
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'btnClearBuhCache') {
+        const modalBody = $('.modal-mailbuh-body');
+        const projectNumber = $('#sendbuhproekt', modalBody)?.value.trim();
+
+        // 1. Очищаємо всі поля, крім проєкту
+        const form = $(formSelector, modalBody);
+        if (form) {
+          // Очищаємо всі поля
+          form.reset();
+
+          // Повертаємо номер проєкту
+          const projectInput = $('#sendbuhproekt', modalBody);
+          if (projectInput) projectInput.value = projectNumber;
+
+          // Скидаємо checkbox
+          const freeTextCheckbox = $('#free_text', modalBody);
+          if (freeTextCheckbox) freeTextCheckbox.checked = false;
+        }
+
+        // 2. Очищаємо прев’ю та статус
+        $(previewSelector, modalBody).innerHTML = '';
+        $(sendStatusSelector, modalBody).innerHTML = '';
+
+        // 3. Очищаємо кеш (localStorage)
+        clearCache();
+
+        // 4. Переініціалізуємо FormDataFromTables
+        formDataInstance = new FormDataFromTables(formSelector);
+
+        // 5. Оновлюємо прев’ю (тільки з номером проєкту)
+        updatePreview();
+
+        // 6. Повідомлення
+        const statusEl = $(sendStatusSelector, modalBody);
+        if (statusEl) {
+          statusEl.innerHTML = '<p style="color:#6c757d; text-align:center; font-size:0.9rem;">Поля очищено (проєкт збережено)</p>';
+          setTimeout(() => statusEl.innerHTML = '', 1800);
+        }
+      }
+    });
+
+  })();
 </script>

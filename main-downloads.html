@@ -25,7 +25,7 @@
     document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
 
     google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('dataReestr', JSON.stringify(data));
+      localStorage.setItem('dataReestr', data);
       document.querySelector('.bi-arrow-repeat').style.color = 'white';
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {

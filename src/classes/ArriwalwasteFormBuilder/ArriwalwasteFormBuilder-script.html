@@ -153,7 +153,6 @@
             .addNewRowWaste(formData.slice(0, 5));
         } else {
 
-          console.log(this.rowDataTermKar());
           // Вставка даних терміну карантину
           google.script.run.insertTermKar(this.rowDataTermKar());
           // Виклик серверної функції для обробки карантинних даних

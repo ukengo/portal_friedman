@@ -53,8 +53,7 @@ function setRecordsCasheRom(dataModal) {
     dataModal.casheInputWaste,
     dataModal.casheInputArrival,
     dataModal.casheInputNotes
-  ]];
-  console.log(data);
+  ]];  
   dataCashe().getRange(dataModal.numberRow, 2, 1, 4).setValues(data);
 }
 

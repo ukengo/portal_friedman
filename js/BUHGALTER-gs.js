@@ -60,10 +60,10 @@ function numSearh(numSf) {
   }
 }
 /* function numSearh(numSf) {
-  console.log("numSf "+numSf);
+  
   const regex = /([А-Я]+)/; //регулярное выражение для получения букв по номеру счета
   let res = numSf.match(regex)[0];//получаем буквы по номеру счета
-  console.log('res ' +res);
+  
   
   if (res == 'РФ' || res == 'РМ') {
     return 'фоп'

@@ -769,7 +769,7 @@ function getDateFin(date) {
 } */
 
 function UpdateRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFin, idFin, firmaFin, sumIspolFin, oplataIspolFin, checkBox) {
-  //console.log(checkBox)
+  
   var getLastRow = dataFinance().getDataRange().getValues().length;
   var table_values = dataFinance().getRange(100, 1, getLastRow, 15).getValues();
   const range = dataBase().getRange(1, 1, dataBase().getLastRow() + 1, dataBase().getLastColumn() + 1);
@@ -816,7 +816,7 @@ function AddRecordFin(proektFin, summaFin, priznakFin, dateoplFin, sfFin, primFi
 }
 
 function AddRecordFinMultiple(arrFinMulti) {
-  console.log(arrFinMulti);
+  
   const rows = arrFinMulti.length;
   dataFinance().insertRowsAfter(99, rows);
 
@@ -1229,13 +1229,13 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
 }
 
 function getRecordsReestr() {
-  const dateRee = dataBase().getDataRange().getValues().slice(1);
+  const dateRee = dataBase().getDataRange().getValues().slice(2000);
   const dataMapRee = dateRee.filter(x => x[5] != '')
     .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18], x[24]]);
   const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '');
   const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '');
   const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1);
-  return dataFilterMapReeDate.reverse();
+  return JSON.stringify(dataFilterMapReeDate.reverse());
 }
 
 function UpdateRecordReestrGs(dateendReestr, datestartReestr, firmaReestr, rabotaReestr, coderabotaReestr, proektReestr, sotrReestr, ispolReestr, sumispolReestr, sumoplataReestr, primReestr, primMoyoReestr, issuepartReestr, withoutaccountReestr, stoppedReestr, fullPaymentReestr) {
@@ -1558,7 +1558,7 @@ function numProekt() {
     sheetSpiski.getRange(lrSheetSpiski + 1, 1).setValue(firma);
     sheetSpiski.getRange(lrSheetSpiski + 1, 2).setValue(sheetSpiski.getRange(lrSheetSpiski, 2).getValue() + 1);
   }
-  //console.log(sheetSpiski.getRange(lrSheetSpiski, 2).getValue() + 1)
+  
 }
 
 

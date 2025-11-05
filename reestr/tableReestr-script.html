@@ -800,7 +800,7 @@
   function handleStoppedCheckboxes() {
     // Отримуємо всі чекбокси з ідентифікатором, що починається на "up_stoppedreestr"
     const stoppedCheckboxes = document.querySelectorAll('input[id^="up_stoppedreestr"]');
-    console.log(stoppedCheckboxes);
+    
 
     // Додаємо обробник подій для кожного чекбокса
     stoppedCheckboxes.forEach(checkbox => {
@@ -827,7 +827,7 @@
 
   // закриття блоку по Esc
   document.addEventListener("keydown", (e) => {
-    console.log('Escape');
+    
     if (e.code == "Escape" & (isElementVisible('#mainTableReestr') || isElementVisible('#SearchFinInReestr'))) {
       document.querySelector('#rowdatareestr').innerHTML = '';
       document.querySelector('#SearchFinInReestr').innerHTML = '';

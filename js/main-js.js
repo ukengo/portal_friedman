@@ -1,3 +1,4 @@
+//main-js.js
 //удаление элемента массива и замена его на форматированную дату
 // нумерация (numElement) с нуля
 /*  function formatDateElement(numElement, rowData){
@@ -1229,13 +1230,12 @@ function searchRecordsReestrGs(dateendReestr, datestartReestr, firmaReestr, rabo
 }
 
 function getRecordsReestr() {
-  const dateRee = dataBase().getDataRange().getValues().slice(5000);
+  const dateRee = dataBase().getDataRange().getValues().slice(2000);
   const dataMapRee = dateRee.filter(x => x[5] != '')
     .map(x => [getDateUprav(x[0]), getDateUprav(x[1]), x[2], x[3], x[4], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[23], x[22], x[18], x[24]]);
   const dataFilterMapRee0 = dataMapRee.filter(x => x[0] === '');
   const dataFilterMapRee1 = dataMapRee.filter(x => x[0] != '');
-  const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1);
-  console.log(JSON.stringify(dataFilterMapReeDate.reverse()));
+  const dataFilterMapReeDate = dataFilterMapRee0.concat(dataFilterMapRee1); 
   return JSON.stringify(dataFilterMapReeDate.reverse());
 }
 

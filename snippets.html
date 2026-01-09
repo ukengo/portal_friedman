@@ -149,7 +149,7 @@
     document.querySelectorAll('.btn-clear-search').forEach(elem => elem.addEventListener('click', (e) => {
       if (e.target.closest('.btn-delete')) {
         // document.querySelector('body').scrollIntoView();
-        
+
         e.target.closest('.btn-delete').innerHTML = '';
       }
       // якщо на кнопці є клас btn-clear-search-finance, то закрити блок і на сторінці фінансів
@@ -245,4 +245,76 @@
       right > 0 // Элемент не увеличивает границы справа
     );
   }
+
+
+
+//////////Розбиття та збірка масиву в localStorage//////////////////////////////////
+
+  // Функція для розбиття масиву на чанки
+  function splitArrayToChunks(array, chunksCount) {
+    if (chunksCount <= 0) {
+      throw new Error('Кількість чанків має бути більша за 0');
+    }
+    const chunks = [];
+    const chunkSize = Math.ceil(array.length / chunksCount);
+
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  }
+
+  // Функція для збереження всіх чанків у localStorage
+  function saveChunksToLocalStorage(array, chunksCount, baseKey = 'array_chunk') {
+    // Спочатку видаляємо старі чанки з цим базовим ключем (опціонально)
+    clearChunksFromLocalStorage(baseKey);
+
+    const chunks = splitArrayToChunks(array, chunksCount);
+
+    // Зберігаємо кількість чанків — це знадобиться при відновленні
+    localStorage.setItem(`${baseKey}_count`, chunks.length);
+
+    // Зберігаємо кожен чанк окремо
+    chunks.forEach((chunk, index) => {
+      // localStorage зберігає тільки рядки, тому серіалізуємо масив у JSON
+      localStorage.setItem(`${baseKey}_${index}`, JSON.stringify(chunk));
+    });
+
+    console.log(`Масив розбито на ${chunks.length} чанків і збережено в localStorage`);
+  }
+
+  // Функція для відновлення повного масиву з localStorage
+  function loadChunksFromLocalStorage(baseKey = 'array_chunk') {
+    const countStr = localStorage.getItem(`${baseKey}_count`);
+    if (!countStr) {
+      throw new Error('Чанки не знайдено в localStorage');
+    }
+
+    const count = parseInt(countStr, 10);
+    const chunks = [];
+
+    for (let i = 0; i < count; i++) {
+      const chunkStr = localStorage.getItem(`${baseKey}_${i}`);
+      if (chunkStr === null) {
+        throw new Error(`Чанк ${i} не знайдено`);
+      }
+      chunks.push(JSON.parse(chunkStr));
+    }
+
+    // З’єднуємо всі чанки назад у один масив
+    return chunks.flat();
+  }
+
+  // Опціонально: очищення всіх чанків з певним базовим ключем
+  function clearChunksFromLocalStorage(baseKey = 'array_chunk') {
+    const countStr = localStorage.getItem(`${baseKey}_count`);
+    if (countStr) {
+      const count = parseInt(countStr, 10);
+      for (let i = 0; i < count; i++) {
+        localStorage.removeItem(`${baseKey}_${i}`);
+      }
+    }
+    localStorage.removeItem(`${baseKey}_count`);
+  }
+
 </script>

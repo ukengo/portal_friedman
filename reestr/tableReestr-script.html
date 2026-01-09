@@ -369,7 +369,8 @@
       btnEnable(btnDE);
 
       google.script.run.withSuccessHandler((data) => {
-        localStorage.setItem('dataReestr', JSON.stringify(data));
+        const count = 3;
+        saveChunksToLocalStorage(JSON.parse(data), count, 'dataReestr');
       }).getRecordsReestr();
 
       google.script.run.withSuccessHandler((data) => {
@@ -434,6 +435,7 @@
 
   function showData(dataArray) {
     $(document).ready(function () {
+
       // localStorage.setItem('DataLength', dataArray.length);//записываем в кеш длину
       let oTable = $('#data-table').DataTable({
         data: dataArray.map(x => [x[0], x[1], x[2], x[3], x[5], x[6], x[15], x[16], x[17], x[21], x[20], x[25], x[18]]),
@@ -604,7 +606,7 @@
     const dataTable = document.querySelector('#data-table');
     if (dataTable) {
       document.querySelector('#data-table').addEventListener('dblclick', () => {
-        SearchRecordsReestrLocal(JSON.parse(localStorage.getItem('dataReestr')));
+        SearchRecordsReestrLocal(loadChunksFromLocalStorage('dataReestr'));
       })
     }
   }
@@ -800,7 +802,7 @@
   function handleStoppedCheckboxes() {
     // Отримуємо всі чекбокси з ідентифікатором, що починається на "up_stoppedreestr"
     const stoppedCheckboxes = document.querySelectorAll('input[id^="up_stoppedreestr"]');
-    
+
 
     // Додаємо обробник подій для кожного чекбокса
     stoppedCheckboxes.forEach(checkbox => {
@@ -827,7 +829,7 @@
 
   // закриття блоку по Esc
   document.addEventListener("keydown", (e) => {
-    
+
     if (e.code == "Escape" & (isElementVisible('#mainTableReestr') || isElementVisible('#SearchFinInReestr'))) {
       document.querySelector('#rowdatareestr').innerHTML = '';
       document.querySelector('#SearchFinInReestr').innerHTML = '';

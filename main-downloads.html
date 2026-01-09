@@ -1,4 +1,6 @@
 <script>
+/* main-downloads.html */
+
 
   document.querySelector('#delStorageAll').addEventListener('mouseup', () => {
     localStorage.clear();
@@ -25,7 +27,9 @@
     document.querySelector('.bi-arrow-repeat').style.color = '#ef7f7f';
 
     google.script.run.withSuccessHandler((data) => {
-      localStorage.setItem('dataReestr', data);
+      const count = 3;
+      saveChunksToLocalStorage(JSON.parse(data), count, 'dataReestr');
+     // localStorage.setItem('dataReestr', data);
       document.querySelector('.bi-arrow-repeat').style.color = 'white';
     }).getRecordsReestr();
     google.script.run.withSuccessHandler((data) => {

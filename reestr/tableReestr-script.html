@@ -605,7 +605,7 @@
   function dblClickTableReestr() {
     const dataTable = document.querySelector('#data-table');
     if (dataTable) {
-      document.querySelector('#data-table').addEventListener('dblclick', () => {
+      dataTable.addEventListener('dblclick', () => {
         SearchRecordsReestrLocal(loadChunksFromLocalStorage('dataReestr'));
       })
     }
